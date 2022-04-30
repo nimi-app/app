@@ -69,6 +69,7 @@ export function App() {
         <ApolloProvider client={subgraphClients[chainId as number] || defaultSubgraphClient}>
           <Routes>
             <Route element={<Landing />} path="/" />
+
             <Route element={<AppMain />} />
             <Route element={<NotFound />} path="*" />
           </Routes>

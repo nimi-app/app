@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { MEDIA_WIDTHS } from '../../theme';
 
 export const PageWrapper = styled.div`
   display: flex;
@@ -16,14 +15,6 @@ export const Header = styled.header`
   -webkit-box-pack: center;
   justify-content: center;
   padding-top: 62px;
-`;
-
-export const Footer = styled.footer`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  background: #fff;
-  min-height: 60px;
 `;
 
 export const Content = styled.main`
@@ -54,38 +45,4 @@ export const HeroLead = styled.div`
 
 export const HeroSub = styled.div`
   font-weight: 600;
-`;
-
-export const FooterWrapper = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-  flex-direction: column;
-  & > * {
-    width: 100%;
-  }
-  @media (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
-    flex-direction: row;
-  }
-`;
-
-export const FooterContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-export const FooterNav = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-content: center;
-  justify-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 12px;
-
-  & svg {
-    fill: #1f3e4f;
-  }
 `;
