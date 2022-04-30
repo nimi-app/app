@@ -12,6 +12,7 @@ import { Header } from '../components/Header';
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 import { Domains } from './Domains';
+import { Footer } from '../components/Footer';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ const AppMain = () => (
         </Routes>
       </Web3ReactManager>
     </BodyWrapper>
+    <Footer />
   </AppWrapper>
 );
 
