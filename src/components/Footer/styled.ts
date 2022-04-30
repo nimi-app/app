@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { MEDIA_WIDTHS } from '../../theme';
 import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
+
 export const FooterMain = styled.footer`
   display: flex;
   justify-content: space-between;
