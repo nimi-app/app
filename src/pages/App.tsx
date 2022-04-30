@@ -12,6 +12,7 @@ import { Header } from '../components/Header';
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 import { Domains } from './Domains';
+import { Footer } from '../components/Footer';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -51,11 +52,12 @@ const AppMain = () => (
     <BodyWrapper>
       <Web3ReactManager>
         <Routes>
-          <Route path="/domains/:name" element={<Domains />} />
-          <Route path="/domains" element={<Domains />} />
+          <Route path=":name" element={<Domains />} />
+          <Route path="/" element={<Domains />} />
         </Routes>
       </Web3ReactManager>
     </BodyWrapper>
+    <Footer />
   </AppWrapper>
 );
 
@@ -69,7 +71,7 @@ export function App() {
         <ApolloProvider client={subgraphClients[chainId as number] || defaultSubgraphClient}>
           <Routes>
             <Route element={<Landing />} path="/" />
-            <Route element={<AppMain />} />
+            <Route element={<AppMain />} path="domains/*" />
             <Route element={<NotFound />} path="*" />
           </Routes>
         </ApolloProvider>
