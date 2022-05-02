@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { MEDIA_WIDTHS } from '../../theme';
 export const FooterMain = styled.footer`
   display: flex;
-
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -35,7 +34,7 @@ export const FooterNav = styled.div`
   align-items: center;
   align-content: center;
   justify-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
   gap: 12px;
 

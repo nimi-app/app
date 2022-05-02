@@ -31,7 +31,11 @@ export const Content = styled.main`
 export const HeroText = styled.div`
   ${NimiSignatureColor};
   font-size: 72px;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    font-size:42px;
+  `};
   align-items: center;
+  margin-bottom: 20px;
   justify-content: start;
   > * {
     -webkit-text-fill-color: transparent;

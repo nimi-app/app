@@ -14,7 +14,6 @@ import { Footer } from '../../components/Footer';
 
 const CTAButtonWrapper = styled(Flex)`
   align-items: center;
-
   gap: 10px;
 `;
 
@@ -30,16 +29,15 @@ export function Landing() {
             <HeroLead>Your ENS deserves better.</HeroLead>
             <HeroSub>Nimi, new me.</HeroSub>
           </HeroText>
-          <div>
-            <Link to="/domains">
-              <ButtonPrimary>
-                <CTAButtonWrapper>
-                  <CTAButtonLogo />
-                  <span>Go to Nimi</span>
-                </CTAButtonWrapper>
-              </ButtonPrimary>
-            </Link>
-          </div>
+
+          <Link to="/domains">
+            <ButtonPrimary>
+              <CTAButtonWrapper>
+                <CTAButtonLogo />
+                <span>Go to Nimi</span>
+              </CTAButtonWrapper>
+            </ButtonPrimary>
+          </Link>
         </Container>
       </Content>
       <Footer />
