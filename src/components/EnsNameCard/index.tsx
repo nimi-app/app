@@ -1,6 +1,6 @@
 import { CardWrapper, DomainText, ProfilePic, StyledButton, StyledExternalLink } from './styleds';
 
-interface EnsCardProps {
+interface ENSCardProps {
   ensDomain: string;
   imageUrl?: string;
 }
