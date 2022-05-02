@@ -13,17 +13,18 @@ export const PageWrapper = styled.div`
 export const Header = styled.header`
   width: 100%;
   display: flex;
+  position: absolute;
+  margin-top: 60px;
+  top: 0;
   -webkit-box-pack: center;
   justify-content: center;
-  padding-top: 62px;
 `;
 
 export const Content = styled.main`
   display: flex;
   flex-direction: column;
   font-style: normal;
-  height: 800px;
-  margin-top: 160px;
+
   text-align: center;
 `;
 
