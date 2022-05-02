@@ -5,7 +5,7 @@ interface ENSCardProps {
   imageUrl?: string;
 }
 
-export default function EnsNameCard({ ensDomain, imageUrl }: EnsCardProps) {
+export default function ENSNameCard({ ensDomain, imageUrl }: ENSCardProps) {
   return (
     <CardWrapper>
       {imageUrl && <ProfilePic alt={imageUrl} src={imageUrl} />}
