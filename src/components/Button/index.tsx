@@ -1,13 +1,11 @@
 import styled from 'styled-components';
 
-import { Button as RebassButton, BaseProps } from 'rebass';
-
 const Base = styled.button`
   position: relative;
-  padding: 10px 25px;
-  text-transform: uppercase;
-  text-align: center;
+  padding: 10px 24px;
 
+  text-align: center;
+  font-family: 'Baloo 2', sans-serif;
   color: ${({ theme }) => theme.white};
 
   outline: none;

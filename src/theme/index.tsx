@@ -138,6 +138,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return <StyledComponentsThemeProvider theme={theme()}>{children}</StyledComponentsThemeProvider>;
 }
 
+export const NimiSignatureColor = css`
+  background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+`;
+
 const TextWrapper = styled(Text)<{ color: keyof Colors }>`
   color: ${({ color, theme }) => (theme as any)[color]};
 `;

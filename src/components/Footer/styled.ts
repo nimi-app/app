@@ -4,9 +4,10 @@ import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
 
 export const FooterMain = styled.footer`
   display: flex;
-  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
   width: 100%;
-  background: #fff;
+  background: transparent;
   min-height: 60px;
 `;
 
@@ -35,7 +36,7 @@ export const FooterNav = styled.div`
   align-items: center;
   align-content: center;
   justify-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
   gap: 12px;
 
