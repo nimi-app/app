@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { NimiSignatureColor } from '../../theme';
 
 export const PageWrapper = styled.div`
   display: flex;
@@ -27,12 +28,9 @@ export const Content = styled.main`
 `;
 
 export const HeroText = styled.div`
+  ${NimiSignatureColor};
   font-size: 72px;
   align-items: center;
-  background: linear-gradient(154.32deg, #4368ea 0.48%, #c490dd 85.86%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  text-fill-color: transparent;
   justify-content: start;
   > * {
     -webkit-text-fill-color: transparent;

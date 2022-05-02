@@ -2,9 +2,11 @@ import styled from 'styled-components';
 import { MEDIA_WIDTHS } from '../../theme';
 export const FooterMain = styled.footer`
   display: flex;
-  justify-content: space-between;
+
+  position: absolute;
+  bottom: 0;
   width: 100%;
-  background: #fff;
+  background: transparent;
   min-height: 60px;
 `;
 

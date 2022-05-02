@@ -27,13 +27,15 @@ const HeaderWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const BodyWrapper = styled.div`
+const BodyWrapper = styled.body`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   min-height: calc(100vh - 172px);
   width: 100%;
   padding-top: 60px;
   align-items: center;
+
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
