@@ -1,11 +1,11 @@
 // Styled components
-import { FooterMain, FooterContent, FooterNav, FooterWrapper } from './styled';
+import { TwitterLogo, FooterMain, FooterContent, FooterNav, FooterWrapper } from './styled';
 
 import { Container } from '../../components/Container';
 // SVGs
 
-import { ReactComponent as TwitterLogo } from '../../assets/svg/twitter-logo.svg';
 import { ReactComponent as GitHubLogo } from '../../assets/svg/github-logo.svg';
+import { ExternalLink } from '../../theme';
 
 export function Footer() {
   return (
@@ -18,12 +18,12 @@ export function Footer() {
             </span>
           </FooterContent>
           <FooterNav>
-            <a title="Nimi on Twitter" href="https://twitter.com/0xNimi">
+            <ExternalLink title="Nimi on Twitter" href="https://twitter.com/0xNimi">
               <TwitterLogo />
-            </a>
-            <a title="Nimi on GitHub" href="https://twitter.com/nimi-app">
+            </ExternalLink>
+            <ExternalLink title="Nimi on GitHub" href="https://twitter.com/nimi-app">
               <GitHubLogo fill="#1F3E4F" />
-            </a>
+            </ExternalLink>
           </FooterNav>
         </FooterWrapper>
       </Container>

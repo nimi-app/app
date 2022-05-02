@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { MEDIA_WIDTHS } from '../../theme';
+import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
+
 export const FooterMain = styled.footer`
   display: flex;
   position: absolute;
@@ -40,5 +42,10 @@ export const FooterNav = styled.div`
 
   & svg {
     fill: #1f3e4f;
+  }
+`;
+export const TwitterLogo = styled(Twitter)`
+  path {
+    fill: #56ccf2;
   }
 `;
