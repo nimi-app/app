@@ -14,10 +14,12 @@ const arrayOfEnsData = [
   { ensDomain: 'green.eth', imageUrl: '' },
   { ensDomain: 'red.eth', imageUrl: '' },
 ];
+
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
   gap: 19px;
 `;
+
 export function Domains() {
   return (
     <StyledDomainsWrapper>

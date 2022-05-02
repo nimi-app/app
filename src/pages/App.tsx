@@ -27,7 +27,7 @@ const HeaderWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const BodyWrapper = styled.body`
+const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
