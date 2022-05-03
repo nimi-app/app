@@ -17,10 +17,14 @@ export const FooterWrapper = styled(Container)`
   width: 100%;
   align-items: center;
   flex-direction: row;
+  text-align: center;
 
   & > * {
     width: 100%;
   }
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    flex-direction: column;
+  `};
 `;
 
 export const FooterContent = styled.div`
@@ -38,7 +42,9 @@ export const FooterNav = styled.div`
   justify-content: flex-end;
   width: 100%;
   gap: 12px;
-
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    justify-content: center;
+  `};
   & svg {
     fill: #1f3e4f;
   }
