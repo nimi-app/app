@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Container } from '../../components/Container';
 import { NimiSignatureColor } from '../../theme';
 
 export const PageWrapper = styled.div`
@@ -13,18 +14,19 @@ export const PageWrapper = styled.div`
 export const Header = styled.header`
   width: 100%;
   display: flex;
-  position: absolute;
+
   margin-top: 60px;
-  top: 0;
+  flex-grow: 0;
   -webkit-box-pack: center;
   justify-content: center;
 `;
 
-export const Content = styled.main`
+export const Content = styled(Container)`
   display: flex;
   flex-direction: column;
   font-style: normal;
-
+  justify-content: center;
+  flex-grow: 1;
   text-align: center;
 `;
 

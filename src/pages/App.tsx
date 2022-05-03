@@ -18,12 +18,15 @@ const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
   align-items: flex-start;
+  flex-direction: column;
   overflow: hidden;
+  min-height: 100%;
 `;
 
 const HeaderWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
+  flex-shrink: 0;
   justify-content: space-between;
 `;
 
@@ -31,9 +34,8 @@ const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: calc(100vh - 172px);
   width: 100%;
-  padding-top: 60px;
+
   align-items: center;
 
   flex: 1;

@@ -1,32 +1,31 @@
 import styled from 'styled-components';
-import { MEDIA_WIDTHS } from '../../theme';
+
 import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
+import { Container } from '../Container';
 
 export const FooterMain = styled.footer`
   display: flex;
-  position: absolute;
-  bottom: 0;
   width: 100%;
   background: transparent;
   min-height: 60px;
+  flex-shrink: 0;
 `;
 
-export const FooterWrapper = styled.div`
+export const FooterWrapper = styled(Container)`
   display: flex;
   height: 100%;
   width: 100%;
-  flex-direction: column;
+  align-items: center;
+  flex-direction: row;
+
   & > * {
     width: 100%;
-  }
-  @media (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
-    flex-direction: row;
   }
 `;
 
 export const FooterContent = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
 `;
 
