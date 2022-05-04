@@ -13,6 +13,7 @@ import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 import { Domains } from './Domains';
 import { Footer } from '../components/Footer';
+import { Template } from './Template';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -56,7 +57,7 @@ const AppMain = () => (
     <BodyWrapper>
       <Web3ReactManager>
         <Routes>
-          <Route path=":name" element={<Domains />} />
+          <Route path=":ensName" element={<Template />} />
           <Route path="/" element={<Domains />} />
         </Routes>
       </Web3ReactManager>
