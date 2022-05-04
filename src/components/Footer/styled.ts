@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
+import { MEDIA_WIDTHS } from '../../theme';
 import { Container } from '../Container';
 
 export const FooterMain = styled.footer`
@@ -22,9 +23,9 @@ export const FooterWrapper = styled(Container)`
   & > * {
     width: 100%;
   }
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  @media (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     flex-direction: column;
-  `};
+  }
 `;
 
 export const FooterContent = styled.div`

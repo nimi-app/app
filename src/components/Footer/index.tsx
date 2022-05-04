@@ -12,7 +12,6 @@ export function Footer() {
       <FooterWrapper>
         <FooterContent>
           <span>
-            {' '}
             Nimi.eth | <a href="https://amsterdam.ethglobal.com/">ETHAmsterdam 2022 Hackathon</a> winners
           </span>
         </FooterContent>
