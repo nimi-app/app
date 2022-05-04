@@ -8,9 +8,9 @@ import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo.svg';
 // Styled components
 import { PageWrapper, Header, Content, HeroLead, HeroSub, HeroText } from './styled';
 import { ButtonPrimary } from '../../components/Button';
-import { Container } from '../../components/Container';
 import styled from 'styled-components';
 import { Footer } from '../../components/Footer';
+import { Container } from '../../components/Container';
 
 const CTAButtonWrapper = styled(Flex)`
   align-items: center;

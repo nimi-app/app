@@ -6,6 +6,7 @@ import { MockENSData } from '../../mock_fixtures';
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
   gap: 19px;
+  justify-content: center;
 `;
 
 export function Domains() {

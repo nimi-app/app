@@ -1,11 +1,11 @@
 // Styled components
 import { TwitterLogo, FooterMain, FooterContent, FooterNav, FooterWrapper } from './styled';
 
-import { Container } from '../../components/Container';
 // SVGs
 
 import { ReactComponent as GitHubLogo } from '../../assets/svg/github-logo.svg';
 import { ExternalLink } from '../../theme';
+import { Container } from '../Container';
 
 export function Footer() {
   return (
@@ -14,7 +14,7 @@ export function Footer() {
         <FooterWrapper>
           <FooterContent>
             <span>
-              Nimi.eth | <a href="https://amsterdam.ethglobal.com/"> ETHAmsterdam 2022 Hackathon</a> winners
+              Nimi.eth | <a href="https://amsterdam.ethglobal.com/">ETHAmsterdam 2022 Hackathon</a> winners
             </span>
           </FooterContent>
           <FooterNav>
