@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Container } from '../../components/Container';
 import { NimiSignatureColor } from '../../theme';
 
 export const PageWrapper = styled.div`
@@ -21,7 +20,7 @@ export const Header = styled.header`
   justify-content: center;
 `;
 
-export const Content = styled(Container)`
+export const Content = styled.div`
   display: flex;
   flex-direction: column;
   font-style: normal;

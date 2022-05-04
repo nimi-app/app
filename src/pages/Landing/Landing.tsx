@@ -10,6 +10,7 @@ import { PageWrapper, Header, Content, HeroLead, HeroSub, HeroText } from './sty
 import { ButtonPrimary } from '../../components/Button';
 import styled from 'styled-components';
 import { Footer } from '../../components/Footer';
+import { Container } from '../../components/Container';
 
 const CTAButtonWrapper = styled(Flex)`
   align-items: center;
@@ -23,19 +24,21 @@ export function Landing() {
         <NimiLogo />
       </Header>
       <Content>
-        <HeroText>
-          <HeroLead>Your ENS deserves better.</HeroLead>
-          <HeroSub>Nimi, new me.</HeroSub>
-        </HeroText>
+        <Container>
+          <HeroText>
+            <HeroLead>Your ENS deserves better.</HeroLead>
+            <HeroSub>Nimi, new me.</HeroSub>
+          </HeroText>
 
-        <Link to="/domains">
-          <ButtonPrimary>
-            <CTAButtonWrapper>
-              <CTAButtonLogo />
-              <span>Go to Nimi</span>
-            </CTAButtonWrapper>
-          </ButtonPrimary>
-        </Link>
+          <Link to="/domains">
+            <ButtonPrimary>
+              <CTAButtonWrapper>
+                <CTAButtonLogo />
+                <span>Go to Nimi</span>
+              </CTAButtonWrapper>
+            </ButtonPrimary>
+          </Link>
+        </Container>
       </Content>
       <Footer />
     </PageWrapper>

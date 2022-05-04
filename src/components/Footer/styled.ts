@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
 import { MEDIA_WIDTHS } from '../../theme';
-import { Container } from '../Container';
 
 export const FooterMain = styled.footer`
   display: flex;
@@ -12,7 +11,7 @@ export const FooterMain = styled.footer`
   flex-shrink: 0;
 `;
 
-export const FooterWrapper = styled(Container)`
+export const FooterWrapper = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
@@ -23,7 +22,7 @@ export const FooterWrapper = styled(Container)`
   & > * {
     width: 100%;
   }
-  @media (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
+  @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
     flex-direction: column;
   }
 `;
