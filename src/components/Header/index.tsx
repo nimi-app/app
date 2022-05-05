@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 
 import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo.svg';
+import { ReactComponent as WalletConnect } from '../../mock_fixtures/images/connect-placeholder.svg';
 
-import { AccountAndLinks, HeaderWrapper, NavOption } from './styleds';
+import { AccountAndLinks, HeaderWrapper } from './styleds';
 
 export function Header() {
   return (
@@ -11,10 +12,7 @@ export function Header() {
         <NimiLogo />
       </Link>
       <AccountAndLinks>
-        <Link to="/">
-          <NavOption>Landing Page</NavOption>
-        </Link>
-        <NavOption>Dashboard</NavOption>
+        <WalletConnect />
       </AccountAndLinks>
     </HeaderWrapper>
   );
