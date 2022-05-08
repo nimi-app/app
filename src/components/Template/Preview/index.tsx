@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+// interface PreviewProps {
+//   fieldsArray: any;
+// }
+
 export function Preview(props) {
   const { watch } = useFormContext();
   const fields = useMemo(() => {

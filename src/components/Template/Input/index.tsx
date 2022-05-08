@@ -26,15 +26,24 @@ const StyledButton = styled(Button)`
   border-radius: 30px !important;
   padding: 10px 24px;
 `;
-export function Input(props) {
+const AddField = styled.button`
+  border-radius: 12px;
+  padding: 12px 16px;
+  width: 100%;
+  margin-top: 28px;
+  ${NimiSignatureColor};
+  border: 2px dotted rgba(67, 104, 234, 1);
+`;
+export function Input({ setModalState, ensName }) {
   return (
     <StyledCard>
       <TitleText>
-        Creating <NameTag>{props.ensName.split('.')[0]}'s</NameTag> Personal Nimi site.
+        Creating <NameTag>{ensName.split('.')[0]}'s</NameTag> Personal Nimi site.
       </TitleText>
       <ProfilePic />
       <StyledButton marginTop={'42px'}>Import Data from Twitter</StyledButton>
       <InputForm />
+      <AddField onClick={() => setModalState(true)}>+ ADD FIELDS</AddField>
     </StyledCard>
   );
 }

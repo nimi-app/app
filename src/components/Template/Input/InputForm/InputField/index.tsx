@@ -32,6 +32,7 @@ export interface InputFieldProps {
 
 export function InputField({ name, dataType, styleOverride, placeholder }: InputFieldProps) {
   const { register } = useFormContext();
+
   return (
     <StyledInputForm style={styleOverride}>
       <Label>{name}</Label>
