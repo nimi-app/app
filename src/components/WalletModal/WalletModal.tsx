@@ -28,7 +28,7 @@ import {
   ModalContent,
 } from './styled';
 
-const Modal: FC<PropsWithChildren<{}>> = ({ children }) => (
+const Modal: FC<PropsWithChildren<unknown>> = ({ children }) => (
   <StyledModalDialog>
     <StyledModalBackdrop>
       <StyledModalContent>

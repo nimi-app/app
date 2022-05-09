@@ -15,7 +15,7 @@ interface Ethereum {
 
 interface Window {
   ethereum?: Ethereum;
-  web3: Ethereum;
+  web3?: Ethereum;
 }
 
 declare module 'content-hash' {

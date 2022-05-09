@@ -124,7 +124,13 @@ export function AccountStatus({
       <div>
         <Web3StatusNetwork
           clickable={networkSwitchingActive}
-          onClick={networkSwitchingActive ? () => {} : undefined}
+          onClick={
+            networkSwitchingActive
+              ? () => {
+                  setNetworkSwitchingActive(false);
+                }
+              : undefined
+          }
           isConnected={!!account}
         >
           {account && (

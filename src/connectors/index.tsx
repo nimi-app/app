@@ -73,7 +73,7 @@ export const Web3ConnectorsContext = createContext<ConnectorsContext | null>(nul
 /**
  * Provides a list of connectors and their stores to the context.
  */
-export const Web3ConnectorsProvider: FC<PropsWithChildren<{}>> = ({ children }) => (
+export const Web3ConnectorsProvider: FC<PropsWithChildren<unknown>> = ({ children }) => (
   <Web3ConnectorsContext.Provider value={{ connectors }}>{children}</Web3ConnectorsContext.Provider>
 );
 

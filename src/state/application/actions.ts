@@ -12,6 +12,5 @@ export enum ApplicationModal {
 }
 
 export const setOpenModal = createAction<ApplicationModal | null>('application/setOpenModal');
-export const setConnectorInfo = createAction<Pick<ApplicationState, 'account' | 'chainId'>>(
-  'application/setConnectorInfo'
-);
+export const setConnectorInfo =
+  createAction<Pick<ApplicationState, 'account' | 'chainId'>>('application/setConnectorInfo');
