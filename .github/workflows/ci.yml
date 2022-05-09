@@ -23,12 +23,12 @@ jobs:
         with:
           node-version: '16'
       - name: Install
-        run: yarn install
+        run: npm ci
       - name: Lint
-        run: yarn lint
+        run: npm run lint
       - name: Check types
-        run: yarn tsc --noEmit
+        run: npx tsc --noEmit
       - name: Test
-        run: yarn test
+        run: npm run test
       - name: Build
-        run: yarn run build
+        run: npm run build
