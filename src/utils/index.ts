@@ -2,9 +2,7 @@ import { getAddress, isAddress } from '@ethersproject/address';
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
-import styled from 'styled-components';
 import { NetworkDetails } from '../constants';
-import { ReactComponent as ConnectedSvg } from '../assets/svg/connected.svg';
 
 const ETHERSCAN_PREFIXES: Record<number, string> = {
   1: '',
@@ -92,13 +90,3 @@ export const switchOrAddNetwork = (networkDetails?: NetworkDetails, account?: st
         });
     });
 };
-
-export const StyledConnectedIcon = styled(ConnectedSvg)<{
-  width?: string;
-  padding?: string;
-  margin?: string;
-}>`
-  min-width: ${(props) => (props.width ? props.width : '22px')};
-  padding: ${(props) => (props.padding ? props.padding : '0')};
-  margin: ${(props) => (props.margin ? props.margin : '0')};
-`;

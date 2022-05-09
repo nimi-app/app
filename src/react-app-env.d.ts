@@ -1,18 +1,18 @@
 /// <reference types="react-scripts" />
 
 interface EthereumProviderRequestArguments {
-  method: string
-  params?: unknown[] | object
+  method: string;
+  params?: unknown[] | object;
 }
 
 interface Window {
   ethereum?: {
-    isMetaMask?: true
-    on?: (...args: any[]) => void
-    removeListener?: (...args: any[]) => void
-    request?: (args: EthereumProviderRequestArguments) => Promise<unknown>
-    isCoinbaseWallet?: boolean
-  }
+    isMetaMask?: true;
+    on?: (...args: any[]) => void;
+    removeListener?: (...args: any[]) => void;
+    request?: (args: EthereumProviderRequestArguments) => Promise<unknown>;
+    isCoinbaseWallet?: boolean;
+  };
 }
 
 declare module 'content-hash' {
