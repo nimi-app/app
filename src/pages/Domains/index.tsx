@@ -13,7 +13,7 @@ export function Domains() {
   return (
     <StyledDomainsWrapper>
       {MockENSData.map(({ ensDomain, imageUrl }) => {
-        return <ENSNameCard ensDomain={ensDomain} imageUrl={imageUrl} />;
+        return <ENSNameCard key={`${ensDomain} + ${imageUrl}`} ensDomain={ensDomain} imageUrl={imageUrl} />;
       })}
     </StyledDomainsWrapper>
   );
