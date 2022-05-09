@@ -21,7 +21,7 @@ describe('utils', () => {
 
   describe('#shortenAddress', () => {
     it('throws on invalid address', () => {
-      expect(() => shortenAddress('abc')).toThrow("Invalid 'address'");
+      expect(() => shortenAddress('abc')).toThrow();
     });
 
     it('truncates middle characters', () => {
