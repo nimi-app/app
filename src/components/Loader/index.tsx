@@ -1,4 +1,4 @@
-import styled, { keyframes, useTheme } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const rotate = keyframes`
   to {
