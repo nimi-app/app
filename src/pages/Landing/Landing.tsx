@@ -14,7 +14,7 @@ import { Button } from '../../components/Button';
 import { Footer } from '../../components/Footer';
 
 export function Landing() {
-  const { t } = useTranslation('landing');
+  const { t } = useTranslation(['common', 'landing']);
 
   const { isActive, account, isActivating } = useWeb3React();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
@@ -27,8 +27,8 @@ export function Landing() {
       <Content>
         <Container>
           <HeroText>
-            <HeroLead>{t('hero.lead')}</HeroLead>
-            <HeroSub>{t('hero.sub')}</HeroSub>
+            <HeroLead>{t('hero.lead', { ns: 'landing' })}</HeroLead>
+            <HeroSub>{t('hero.sub', { ns: 'landing' })}</HeroSub>
           </HeroText>
           {isActive && account ? (
             <Button to="/domains">

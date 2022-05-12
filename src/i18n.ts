@@ -19,6 +19,7 @@ i18next
     preload: ['en'],
     keySeparator: false,
     interpolation: { escapeValue: false },
+    load: 'languageOnly',
     defaultNS: 'common',
   });
 
