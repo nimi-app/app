@@ -1,7 +1,8 @@
-import { Flex } from 'rebass';
 import styled from 'styled-components';
+import { Flex } from 'rebass';
+
 import { ExternalLink, NimiSignatureColor } from '../../theme';
-import { ButtonPrimary } from '../Button';
+import { Button } from '../Button';
 
 export const CardWrapper = styled(Flex)`
   align-items: center;
@@ -14,6 +15,7 @@ export const CardWrapper = styled(Flex)`
   border-radius: 25px;
   padding: 48px 32px;
 `;
+
 export const ProfilePic = styled.img`
   background-position: center, center;
   background-size: cover;
@@ -23,6 +25,7 @@ export const ProfilePic = styled.img`
   width: 83px;
   z-index: 1;
 `;
+
 export const DomainText = styled.div`
   ${NimiSignatureColor};
   margin-top: auto;
@@ -32,7 +35,8 @@ export const DomainText = styled.div`
   font-size: 32px;
   line-height: 100%;
 `;
-export const StyledButton = styled(ButtonPrimary)`
+
+export const StyledButton = styled(Button)`
   margin-top: auto;
 `;
 

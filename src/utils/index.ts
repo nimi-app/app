@@ -12,6 +12,7 @@ const ETHERSCAN_PREFIXES: Record<number, string> = {
 function getExplorerPrefix(chainId: number) {
   return `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`;
 }
+
 export function getExplorerLink(
   chainId: number,
   data: string,
@@ -52,19 +53,19 @@ export function getSigner(library: Web3Provider | JsonRpcProvider, account: stri
 
 // account is optional
 export function getProviderOrSigner(
-  library: Web3Provider | JsonRpcProvider,
+  provider: Web3Provider | JsonRpcProvider,
   account?: string
 ): Web3Provider | JsonRpcProvider | JsonRpcSigner {
-  return account ? getSigner(library, account) : library;
+  return account ? getSigner(provider, account) : provider;
 }
 
 // account is optional
-export function getContract(address: string, ABI: any, library: Web3Provider, account?: string): Contract {
+export function getContract(address: string, ABI: any, provider: Web3Provider, account?: string): Contract {
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
 
-  return new Contract(address, ABI, getProviderOrSigner(library, account) as any);
+  return new Contract(address, ABI, getProviderOrSigner(provider, account) as any);
 }
 
 export const switchOrAddNetwork = (networkDetails?: NetworkDetails, account?: string) => {

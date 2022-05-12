@@ -6,13 +6,13 @@ import { Suspense } from 'react';
 
 import { defaultClient as defaultSubgraphClient, clients as subgraphClients } from '../apollo/client';
 import { useActiveWeb3React } from '../hooks/useWeb3';
-import { Web3ReactManager } from '../components/Web3ReactManager';
 import { Header } from '../components/Header';
 
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 import { Domains } from './Domains';
 import { Footer } from '../components/Footer';
+import { WalletModal } from '../components/WalletModal';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -54,12 +54,10 @@ const AppMain = () => (
       <Header />
     </HeaderWrapper>
     <BodyWrapper>
-      <Web3ReactManager>
-        <Routes>
-          <Route path=":name" element={<Domains />} />
-          <Route path="/" element={<Domains />} />
-        </Routes>
-      </Web3ReactManager>
+      <Routes>
+        <Route path=":name" element={<Domains />} />
+        <Route path="/" element={<Domains />} />
+      </Routes>
     </BodyWrapper>
     <Footer />
   </AppWrapper>
@@ -73,6 +71,7 @@ export function App() {
     <Suspense fallback={null}>
       <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
         <ApolloProvider client={subgraphClients[chainId as number] || defaultSubgraphClient}>
+          <WalletModal />
           <Routes>
             <Route element={<Landing />} path="/" />
             <Route element={<AppMain />} path="domains/*" />

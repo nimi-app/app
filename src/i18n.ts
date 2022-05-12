@@ -8,8 +8,9 @@ i18next
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    ns: ['common', 'landing'],
     backend: {
-      loadPath: `./locales/{{lng}}.json`,
+      loadPath: `./locales/{{lng}}/{{ns}}.json`,
     },
     react: {
       useSuspense: true,
@@ -18,6 +19,7 @@ i18next
     preload: ['en'],
     keySeparator: false,
     interpolation: { escapeValue: false },
+    defaultNS: 'common',
   });
 
 export default i18next;

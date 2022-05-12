@@ -1,47 +1,9 @@
+import { useWeb3React as useWeb3ReactCore } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { UnsupportedChainIdError, useWeb3React as useWeb3ReactCore } from '@web3-react/core';
-import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
-import { useEffect, useState } from 'react';
-import { isMobile } from 'react-device-detect';
-import { injected } from '../connectors';
-import { NetworkContextName } from '../constants';
+import { useEffect } from 'react';
 
-export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> {
-  const context = useWeb3ReactCore<Web3Provider>();
-  const contextNetwork = useWeb3ReactCore<Web3Provider>(NetworkContextName);
-  return context.active ? context : contextNetwork;
-}
-
-export function useEagerConnect() {
-  const { activate, active } = useWeb3ReactCore(); // specifically using useWeb3ReactCore because of what this hook does
-  const [tried, setTried] = useState(false);
-
-  useEffect(() => {
-    injected.isAuthorized().then((isAuthorized) => {
-      if (isAuthorized) {
-        activate(injected, undefined, true).catch(() => {
-          setTried(true);
-        });
-      } else {
-        if (isMobile && window.ethereum) {
-          activate(injected, undefined, true).catch(() => {
-            setTried(true);
-          });
-        } else {
-          setTried(true);
-        }
-      }
-    });
-  }, [activate]); // intentionally only running on mount (make sure it's only mounted once :))
-
-  // if the connection worked, wait until we get confirmation of that to flip the flag
-  useEffect(() => {
-    if (active) {
-      setTried(true);
-    }
-  }, [active]);
-
-  return tried;
+export function useActiveWeb3React() {
+  return useWeb3ReactCore<Web3Provider>();
 }
 
 /**
@@ -49,15 +11,15 @@ export function useEagerConnect() {
  * and out after checking what network theyre on
  */
 export function useInactiveListener(suppress = false) {
-  const { active, error, activate } = useWeb3ReactCore(); // specifically using useWeb3React because of what this hook does
+  const { isActive, error, connector } = useWeb3ReactCore(); // specifically using useWeb3React because of what this hook does
 
   useEffect(() => {
     const { ethereum } = window;
 
-    if (ethereum && ethereum.on && !active && !error && !suppress) {
+    if (ethereum && ethereum.on && !isActive && !error && !suppress) {
       const handleChainChanged = () => {
         // eat errors
-        activate(injected, undefined, true).catch((error) => {
+        (connector.activate() as Promise<void>).catch((error) => {
           console.error('Failed to activate after chain changed', error);
         });
       };
@@ -65,7 +27,7 @@ export function useInactiveListener(suppress = false) {
       const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length > 0) {
           // eat errors
-          activate(injected, undefined, true).catch((error) => {
+          (connector.activate() as Promise<void>).catch((error) => {
             console.error('Failed to activate after accounts changed', error);
           });
         }
@@ -82,10 +44,5 @@ export function useInactiveListener(suppress = false) {
       };
     }
     return undefined;
-  }, [active, error, suppress, activate]);
-}
-
-export function useUnsupportedChainIdError(): boolean {
-  const { error } = useWeb3ReactCore();
-  return error instanceof UnsupportedChainIdError;
+  }, [isActive, connector, error, suppress]);
 }
