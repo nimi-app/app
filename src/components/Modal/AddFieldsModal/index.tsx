@@ -3,6 +3,8 @@ import { ModalMain } from '..';
 import { NimiSignatureColor } from '../../../theme';
 import { ButtonPrimary } from '../../Button';
 import { Checkbox } from './Checkbox';
+import { Fields } from '../../../constants';
+
 const Header = styled.div`
   ${NimiSignatureColor};
   font-weight: 700;
@@ -32,21 +34,9 @@ const FormStyled = styled.form`
   gap: 23px;
   margin-top: 36px;
 `;
-export enum Fields {
-  TWITTER,
-  TELEGRAM,
-  INSTAGRAM,
-  LINKEDIN,
-  EMAIL,
-  WEBSITE,
-}
 
 const ListOfFields = [Fields.TWITTER, Fields.TELEGRAM, Fields.INSTAGRAM, Fields.LINKEDIN, Fields.EMAIL, Fields.WEBSITE];
 export function AddFieldsModal(props) {
-  const onSubmit = (data, e) => {
-    console.log(data, e);
-    props.setModal(false);
-  };
   return (
     <ModalMain setModal={props.setModal} isOpen={props.isOpen}>
       <Header>Add fields</Header>
@@ -56,7 +46,7 @@ export function AddFieldsModal(props) {
       </UnderTitle>
       <SocialsText>Socials</SocialsText>
 
-      <FormStyled onSubmit={props.handleSubmit(onSubmit)}>
+      <FormStyled onSubmit={props.handleSubmit}>
         {ListOfFields.map((item) => (
           <Checkbox registerFields={props.registerFields} field={item} />
         ))}

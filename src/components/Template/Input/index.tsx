@@ -34,7 +34,7 @@ const AddField = styled.button`
   ${NimiSignatureColor};
   border: 2px dotted rgba(67, 104, 234, 1);
 `;
-export function Input({ setModalState, ensName }) {
+export function Input({ setModalState, ensName, inputFields }) {
   return (
     <StyledCard>
       <TitleText>
@@ -42,7 +42,7 @@ export function Input({ setModalState, ensName }) {
       </TitleText>
       <ProfilePic />
       <StyledButton marginTop={'42px'}>Import Data from Twitter</StyledButton>
-      <InputForm />
+      <InputForm inputFields={inputFields} />
       <AddField onClick={() => setModalState(true)}>+ ADD FIELDS</AddField>
     </StyledCard>
   );

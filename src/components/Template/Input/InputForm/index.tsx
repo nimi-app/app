@@ -42,10 +42,10 @@ const customInputFieldsObject = [
 // interface InputFormProps {
 
 // }
-export function InputForm(props) {
+export function InputForm({ inputFields }) {
   return (
     <StyledInputForm>
-      {customInputFieldsObject.map(({ name, dataType, placeholder, styleOverride }) => (
+      {inputFields.map(({ name, dataType, placeholder, styleOverride }) => (
         <InputField name={name} dataType={dataType} placeholder={placeholder} styleOverride={styleOverride} />
       ))}
       {/* <InputField name="Username" dataType="text" styleOverride={{ flexBasis: '100%' }} />
