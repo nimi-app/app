@@ -61,7 +61,7 @@
     "build:analyze": "cross-env REACT_APP_ANALYZE_BUNDLE=true yarn craco build && yarn writeVersion",
     "ipfs:build": "cross-env PUBLIC_URL=\".\" yarn build",
     "ipfs:publish": "ipfs-deploy build -p infura -O",
-    "postinstall": "npm run contracts:codegen",
+    "postinstall": "npm run contracts:codegen && npm run graphql:codegen",
     "graphql:codegen": "graphql-codegen --config graphql-codegen.yml"
   },
   "eslintConfig": {
