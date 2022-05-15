@@ -9,5 +9,5 @@ export const [coinbaseWallet, hooks, store] = initializeConnector<CoinbaseWallet
       url: URLS[ChainId.MAINNET][0],
       appName: 'web3-react',
     }),
-  [ChainId.MAINNET, ChainId.RINKEBY]
+  [ChainId.MAINNET, ChainId.RINKEBY, ChainId.GOERLI]
 );
