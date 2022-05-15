@@ -12,5 +12,8 @@
   "tryAgain": "Try Again",
   "close": "Close",
   "connectedViaConnector": "Connected via {{connectorName}}",
-  "switchToEither": "Switch to either"
+  "switchToEither": "Switch to either",
+  "setupANimiProfile": "Set up a Nimi Profile",
+  "goToDomainName": "Go to {{domainName}}",
+  "viewThisDomain": "View this Domain"
 }
