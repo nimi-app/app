@@ -7,7 +7,7 @@ import { Flex } from 'rebass';
 // Queries
 import { useGetDomainsQuery } from '../../generated/graphql';
 
-import { ENSNameCard } from '../../components/ENSNameCard/ENSNameCard';
+import { ENSNameCard } from '../../components/ENSNameCard';
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
 
