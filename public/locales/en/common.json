@@ -15,5 +15,6 @@
   "switchToEither": "Switch to either",
   "setupANimiProfile": "Set up a Nimi Profile",
   "goToDomainName": "Go to {{domainName}}",
-  "viewThisDomain": "View this Domain"
+  "viewThisDomain": "View this Domain",
+  "noDomains": "No Domains"
 }

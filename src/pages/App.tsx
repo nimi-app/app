@@ -10,7 +10,7 @@ import { Header } from '../components/Header';
 
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
-import { Domains } from './Domains';
+import { DomainsHome } from './Domains';
 import { Footer } from '../components/Footer';
 import { WalletModal } from '../components/WalletModal';
 
@@ -55,8 +55,8 @@ const AppMain = () => (
     </HeaderWrapper>
     <BodyWrapper>
       <Routes>
-        <Route path=":name" element={<Domains />} />
-        <Route path="/" element={<Domains />} />
+        <Route path=":name" element={<DomainsHome />} />
+        <Route path="/" element={<DomainsHome />} />
       </Routes>
     </BodyWrapper>
     <Footer />
