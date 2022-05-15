@@ -4,5 +4,5 @@ import { ChainId } from '../constants';
 
 export const [metaMask, hooks, store] = initializeConnector<MetaMask>(
   (actions) => new MetaMask(actions),
-  [ChainId.MAINNET, ChainId.RINKEBY]
+  [ChainId.MAINNET, ChainId.RINKEBY, ChainId.GOERLI]
 );
