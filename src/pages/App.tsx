@@ -10,7 +10,7 @@ import { Header } from '../components/Header';
 
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
-import { Domains } from './Domains';
+import { DomainsHome } from './Domains';
 import { Footer } from '../components/Footer';
 import { WalletModal } from '../components/WalletModal';
 
@@ -30,22 +30,16 @@ const HeaderWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const BodyWrapper = styled.div`
+const BodyWrapper = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
-
   align-items: center;
-
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   overflow: visible;
-  z-index: 10;
-  padding-left: 16px;
-  padding-right: 16px;
-  z-index: 1;
 `;
 
 const AppMain = () => (
@@ -55,8 +49,8 @@ const AppMain = () => (
     </HeaderWrapper>
     <BodyWrapper>
       <Routes>
-        <Route path=":name" element={<Domains />} />
-        <Route path="/" element={<Domains />} />
+        <Route path=":name" element={<DomainsHome />} />
+        <Route path="/" element={<DomainsHome />} />
       </Routes>
     </BodyWrapper>
     <Footer />

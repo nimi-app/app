@@ -22,4 +22,4 @@ tsconfig.json
 .vscode
 
 # generated stuff
-src/contracts/generated
+src/generated
