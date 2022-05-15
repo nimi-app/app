@@ -218,6 +218,11 @@ html, input, textarea, button {
   font-display: fallback;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Baloo 2', cursive;
+  font-display: fallback;
+}
+
 /** Full-width and height */
 body, html, #root {
   height: 100%;

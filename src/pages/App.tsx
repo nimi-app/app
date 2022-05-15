@@ -30,22 +30,16 @@ const HeaderWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const BodyWrapper = styled.div`
+const BodyWrapper = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
-
   align-items: center;
-
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   overflow: visible;
-  z-index: 10;
-  padding-left: 16px;
-  padding-right: 16px;
-  z-index: 1;
 `;
 
 const AppMain = () => (
