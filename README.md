@@ -19,10 +19,11 @@ Install dependencies
 npm i
 ```
 
-Some components, like contract factories and types, must be generated using:
+Some components, like contract factories and types and GrapQL queries must be generated using:
 
 ```bash
 npm run contracts:codegen
+npm run graphql:codegen
 ```
 
 ## Start
