@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { InputField } from './InputField';
 
-const StyledInputForm = styled.form`
+const StyledInputForm = styled.div`
   display: flex;
   width: 100%;
   gap: 28px;

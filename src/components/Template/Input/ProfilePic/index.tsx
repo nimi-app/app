@@ -3,6 +3,7 @@ import { ReactComponent as PlaceholderMini } from '../../../../assets/svg/profil
 
 const ImageWrapper = styled.div`
   margin-top: 42px;
+  margin-bottom: 28px;
 `;
 
 export function ProfilePic(props) {

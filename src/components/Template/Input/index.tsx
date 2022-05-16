@@ -1,11 +1,14 @@
+import { useFormContext } from 'react-hook-form';
 import { Button } from 'rebass';
 import styled from 'styled-components';
 import { NimiSignatureColor, WhiteCard } from '../../../theme';
+import { ButtonPrimary } from '../../Button';
 import { InputForm } from './InputForm';
 import { ProfilePic } from './ProfilePic';
 
 const StyledCard = styled(WhiteCard)`
   padding: 42px;
+  display: flex;
   max-width: 560px;
 `;
 const TitleText = styled.div`
@@ -34,16 +37,26 @@ const AddField = styled.button`
   ${NimiSignatureColor};
   border: 2px dotted rgba(67, 104, 234, 1);
 `;
+const StyledButtonPrimary = styled(ButtonPrimary)`
+  width: 100%;
+  margin-top: 32px;
+`;
+
 export function Input({ setModalState, ensName, inputFields }) {
+  const { handleSubmit } = useFormContext();
+  const onSubmit = (data, e) => console.log(data, e);
+  const onError = (errors, e) => console.log(errors, e);
   return (
-    <StyledCard>
+    <StyledCard as="form" onSubmit={handleSubmit(onSubmit, onError)}>
       <TitleText>
         Creating <NameTag>{ensName.split('.')[0]}'s</NameTag> Personal Nimi site.
       </TitleText>
       <ProfilePic />
-      <StyledButton marginTop={'42px'}>Import Data from Twitter</StyledButton>
+      <StyledButton marginBottom="28px">Import Data from Twitter</StyledButton>
+
       <InputForm inputFields={inputFields} />
       <AddField onClick={() => setModalState(true)}>+ ADD FIELDS</AddField>
+      <StyledButtonPrimary type="submit">Save &amp; Deploy Nimi Site </StyledButtonPrimary>
     </StyledCard>
   );
 }

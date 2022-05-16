@@ -1,9 +1,5 @@
 import { useFormContext } from 'react-hook-form';
 
-// interface PreviewProps {
-//   fieldsArray: any;
-// }
-
 export function Preview() {
   const { watch } = useFormContext();
 
