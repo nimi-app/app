@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { ModalMain } from '..';
 import { NimiSignatureColor } from '../../../theme';
-import { ButtonPrimary } from '../../Button';
+import { Button } from '../../Button';
 import { Checkbox } from './Checkbox';
 import { Fields } from '../../../constants';
 
@@ -49,9 +49,9 @@ export function AddFieldsModal(props) {
 
       <FormStyled onSubmit={props.handleSubmit}>
         {array.map((item, index) => (
-          <Checkbox registerFields={props.registerFields} field={index} />
+          <Checkbox key={index} registerFields={props.registerFields} field={index} />
         ))}
-        <ButtonPrimary type="submit">Add Fields</ButtonPrimary>
+        <Button type="submit">Add Fields</Button>
       </FormStyled>
     </ModalMain>
   );

@@ -1,0 +1,20 @@
+{
+  "wallet": "Wallet",
+  "connect": "Connect",
+  "disconnect": "Disconnect",
+  "disconnectWallet": "Disconnect Wallet",
+  "connectWallet": "Connect Wallet",
+  "goToDomains": "Go to Domains",
+  "connecting": "Connecting",
+  "error.wrongNetwork": "Wrong Network",
+  "switchNetwork": "Switch Network",
+  "error": "Error",
+  "tryAgain": "Try Again",
+  "close": "Close",
+  "connectedViaConnector": "Connected via {{connectorName}}",
+  "switchToEither": "Switch to either",
+  "setupANimiProfile": "Set up a Nimi Profile",
+  "goToDomainName": "Go to {{domainName}}",
+  "viewThisDomain": "View this Domain",
+  "noDomains": "No Domains"
+}

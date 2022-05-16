@@ -6,14 +6,14 @@ import { Suspense } from 'react';
 
 import { defaultClient as defaultSubgraphClient, clients as subgraphClients } from '../apollo/client';
 import { useActiveWeb3React } from '../hooks/useWeb3';
-import { Web3ReactManager } from '../components/Web3ReactManager';
 import { Header } from '../components/Header';
 
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
-import { Domains } from './Domains';
+import { DomainsHome } from './Domains';
 import { Footer } from '../components/Footer';
 import { Template } from './Template';
+import { WalletModal } from '../components/WalletModal';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -31,22 +31,16 @@ const HeaderWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const BodyWrapper = styled.div`
+const BodyWrapper = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
-
   align-items: center;
-
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   overflow: visible;
-  z-index: 10;
-  padding-left: 16px;
-  padding-right: 16px;
-  z-index: 1;
 `;
 
 const AppMain = () => (
@@ -55,12 +49,10 @@ const AppMain = () => (
       <Header />
     </HeaderWrapper>
     <BodyWrapper>
-      <Web3ReactManager>
-        <Routes>
-          <Route path=":ensName" element={<Template />} />
-          <Route path="/" element={<Domains />} />
-        </Routes>
-      </Web3ReactManager>
+      <Routes>
+        <Route path=":ensName" element={<Template />} />
+        <Route path="/" element={<DomainsHome />} />
+      </Routes>
     </BodyWrapper>
     <Footer />
   </AppWrapper>
@@ -74,6 +66,7 @@ export function App() {
     <Suspense fallback={null}>
       <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
         <ApolloProvider client={subgraphClients[chainId as number] || defaultSubgraphClient}>
+          <WalletModal />
           <Routes>
             <Route element={<Landing />} path="/" />
             <Route element={<AppMain />} path="domains/*" />

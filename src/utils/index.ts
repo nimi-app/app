@@ -2,9 +2,7 @@ import { getAddress, isAddress } from '@ethersproject/address';
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
-import styled from 'styled-components';
 import { NetworkDetails } from '../constants';
-import { ReactComponent as ConnectedSvg } from '../assets/svg/connected.svg';
 
 const ETHERSCAN_PREFIXES: Record<number, string> = {
   1: '',
@@ -14,6 +12,7 @@ const ETHERSCAN_PREFIXES: Record<number, string> = {
 function getExplorerPrefix(chainId: number) {
   return `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`;
 }
+
 export function getExplorerLink(
   chainId: number,
   data: string,
@@ -54,19 +53,19 @@ export function getSigner(library: Web3Provider | JsonRpcProvider, account: stri
 
 // account is optional
 export function getProviderOrSigner(
-  library: Web3Provider | JsonRpcProvider,
+  provider: Web3Provider | JsonRpcProvider,
   account?: string
 ): Web3Provider | JsonRpcProvider | JsonRpcSigner {
-  return account ? getSigner(library, account) : library;
+  return account ? getSigner(provider, account) : provider;
 }
 
 // account is optional
-export function getContract(address: string, ABI: any, library: Web3Provider, account?: string): Contract {
+export function getContract(address: string, ABI: any, provider: Web3Provider, account?: string): Contract {
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
 
-  return new Contract(address, ABI, getProviderOrSigner(library, account) as any);
+  return new Contract(address, ABI, getProviderOrSigner(provider, account) as any);
 }
 
 export const switchOrAddNetwork = (networkDetails?: NetworkDetails, account?: string) => {
@@ -92,13 +91,3 @@ export const switchOrAddNetwork = (networkDetails?: NetworkDetails, account?: st
         });
     });
 };
-
-export const StyledConnectedIcon = styled(ConnectedSvg)<{
-  width?: string;
-  padding?: string;
-  margin?: string;
-}>`
-  min-width: ${(props) => (props.width ? props.width : '22px')};
-  padding: ${(props) => (props.padding ? props.padding : '0')};
-  margin: ${(props) => (props.margin ? props.margin : '0')};
-`;

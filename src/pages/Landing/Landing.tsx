@@ -1,23 +1,24 @@
-import { Flex } from 'rebass';
-import { Link } from 'react-router-dom';
+import { useWeb3React } from '@web3-react/core';
+import { useTranslation } from 'react-i18next';
+
 // SVGs
 import { ReactComponent as CTAButtonLogo } from '../../assets/svg/wallet-connect.svg';
-
 import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo.svg';
 
 // Styled components
 import { PageWrapper, Header, Content, HeroLead, HeroSub, HeroText } from './styled';
-import { ButtonPrimary } from '../../components/Button';
-import styled from 'styled-components';
-import { Footer } from '../../components/Footer';
-import { Container } from '../../components/Container';
+import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 
-const CTAButtonWrapper = styled(Flex)`
-  align-items: center;
-  gap: 10px;
-`;
+import { Container } from '../../components/Container';
+import { Button } from '../../components/Button';
+import { Footer } from '../../components/Footer';
 
 export function Landing() {
+  const { t } = useTranslation(['common', 'landing']);
+
+  const { isActive, account, isActivating } = useWeb3React();
+  const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
+
   return (
     <PageWrapper>
       <Header>
@@ -26,18 +27,20 @@ export function Landing() {
       <Content>
         <Container>
           <HeroText>
-            <HeroLead>Your ENS deserves better.</HeroLead>
-            <HeroSub>Nimi, new me.</HeroSub>
+            <HeroLead>{t('hero.lead', { ns: 'landing' })}</HeroLead>
+            <HeroSub>{t('hero.sub', { ns: 'landing' })}</HeroSub>
           </HeroText>
-
-          <Link to="/domains">
-            <ButtonPrimary>
-              <CTAButtonWrapper>
-                <CTAButtonLogo />
-                <span>Go to Nimi</span>
-              </CTAButtonWrapper>
-            </ButtonPrimary>
-          </Link>
+          {isActive && account ? (
+            <Button to="/domains">
+              <CTAButtonLogo />
+              <span>{t('goToDomains')}</span>
+            </Button>
+          ) : (
+            <Button onClick={openWalletSwitcherPopover}>
+              <CTAButtonLogo />
+              {isActivating ? <span>{t('connecting')}</span> : <span>{t('connectWallet')}</span>}
+            </Button>
+          )}
         </Container>
       </Content>
       <Footer />

@@ -14,9 +14,10 @@ const TemplateWrapper = styled.div`
 
 export function Template() {
   const { ensName } = useParams();
+  console.log('ens name in template', ensName);
   const formMethods = useForm();
   const { register, handleSubmit } = useForm();
-  const [modalState, setModalState] = useState(true);
+  const [modalState, setModalState] = useState(false);
   const [inputFields, setInputFields] = useState<FieldType[]>(defaultFields);
 
   const onSubmit = (data) => {

@@ -1,0 +1,9 @@
+overwrite: true
+schema: "https://api.thegraph.com/subgraphs/name/ensdomains/ens"
+documents: 'src/**/!(*.d).{ts,tsx}'
+generates:
+  ./src/generated/graphql/index.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo

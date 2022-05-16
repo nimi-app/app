@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - development
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  CI:
+    name: Build
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        node_version: [16]
+
+    steps:
+
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Check types
+        run: npx tsc --noEmit
+      - name: Test
+        run: npm run test
+      - name: Build
+        run: npm run build

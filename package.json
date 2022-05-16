@@ -14,11 +14,20 @@
     "@types/react-dom": "^18.0.0",
     "@walletconnect/types": "^1.7.8",
     "@walletconnect/web3-provider": "^1.7.8",
-    "@web3-react/core": "^6.1.9",
+    "@web3-react/coinbase-wallet": "8.0.31-beta.0",
+    "@web3-react/core": "8.0.29-beta.0",
+    "@web3-react/eip1193": "8.0.23-beta.0",
+    "@web3-react/empty": "8.0.17-beta.0",
+    "@web3-react/gnosis-safe": "8.0.3-beta.0",
     "@web3-react/injected-connector": "^6.0.7",
+    "@web3-react/metamask": "8.0.24-beta.0",
+    "@web3-react/network": "8.0.23-beta.0",
+    "@web3-react/types": "8.0.17-beta.0",
+    "@web3-react/url": "8.0.22-beta.0",
+    "@web3-react/walletconnect": "8.0.31-beta.0",
     "cids": "^1.1.9",
     "ethers": "^5.6.4",
-    "graphql": "^16.4.0",
+    "graphql": "^15.8.0",
     "i18next": "^21.6.16",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-xhr-backend": "^3.2.2",
@@ -45,15 +54,17 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "contracts:codegen": "typechain --target ethers-v5 --out-dir src/contracts/generated './src/abis/*.json'",
+    "lint": "eslint \"./src/**/*.{ts,tsx,js}\"",
+    "contracts:codegen": "typechain --target ethers-v5 --out-dir src/generated/contracts './src/abis/*.json'",
     "build:analyze": "cross-env REACT_APP_ANALYZE_BUNDLE=true yarn craco build && yarn writeVersion",
     "ipfs:build": "cross-env PUBLIC_URL=\".\" yarn build",
     "ipfs:publish": "ipfs-deploy build -p infura -O",
-    "postinstall": "npm run contracts:codegen"
+    "postinstall": "npm run contracts:codegen && npm run graphql:codegen",
+    "graphql:codegen": "graphql-codegen --config graphql-codegen.yml"
   },
   "eslintConfig": {
     "extends": [
@@ -74,8 +85,27 @@
     ]
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.6.2",
+    "@graphql-codegen/introspection": "2.1.1",
+    "@graphql-codegen/typescript": "2.4.11",
+    "@graphql-codegen/typescript-operations": "^2.4.0",
+    "@graphql-codegen/typescript-react-apollo": "3.2.14",
+    "@graphql-codegen/typescript-rtk-query": "^2.2.12",
     "@typechain/ethers-v5": "^10.0.0",
     "@types/rebass": "^4.0.10",
-    "@types/styled-components": "^5.1.25"
+    "@types/styled-components": "^5.1.25",
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "prettier": "^2.6.2",
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0"
   }
 }
