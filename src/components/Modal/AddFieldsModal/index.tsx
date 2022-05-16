@@ -35,8 +35,9 @@ const FormStyled = styled.form`
   margin-top: 36px;
 `;
 
-const ListOfFields = [Fields.TWITTER, Fields.TELEGRAM, Fields.INSTAGRAM, Fields.LINKEDIN, Fields.EMAIL, Fields.WEBSITE];
 export function AddFieldsModal(props) {
+  const array = Object.values(Fields).filter((value) => typeof value === 'string');
+
   return (
     <ModalMain setModal={props.setModal} isOpen={props.isOpen}>
       <Header>Add fields</Header>
@@ -47,8 +48,8 @@ export function AddFieldsModal(props) {
       <SocialsText>Socials</SocialsText>
 
       <FormStyled onSubmit={props.handleSubmit}>
-        {ListOfFields.map((item) => (
-          <Checkbox registerFields={props.registerFields} field={item} />
+        {array.map((item, index) => (
+          <Checkbox registerFields={props.registerFields} field={index} />
         ))}
         <ButtonPrimary type="submit">Add Fields</ButtonPrimary>
       </FormStyled>

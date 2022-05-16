@@ -17,11 +17,15 @@ const customStyles = {
   },
   overlay: { zIndex: 1000 },
 };
+const StyledCloseIcon = styled(CloseIcon)`
+  display: flex;
+  margin-left: auto;
+`;
 
 export function ModalMain(props) {
   return (
     <Modal onRequestClose={() => props.setModal(false)} style={customStyles} isOpen={props.isOpen}>
-      <CloseIcon
+      <StyledCloseIcon
         onClick={() => {
           props.setModal(false);
         }}
