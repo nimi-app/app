@@ -1,6 +1,3 @@
-// interface PreviewProps {
-//   fieldsArray: any;
-// }
 import { ReactComponent as CloseIcon } from '../../assets/svg/close-icon.svg';
 import Modal from 'react-modal';
 import styled from 'styled-components';
@@ -21,16 +18,20 @@ const StyledCloseIcon = styled(CloseIcon)`
   display: flex;
   margin-left: auto;
 `;
-
-export function ModalMain(props) {
+interface ModalMainProps {
+  isOpen: boolean;
+  setModal: (state: boolean) => void;
+  children: React.ReactNode;
+}
+export function ModalMain({ setModal, children, isOpen }: ModalMainProps) {
   return (
-    <Modal onRequestClose={() => props.setModal(false)} style={customStyles} isOpen={props.isOpen}>
+    <Modal onRequestClose={() => setModal(false)} style={customStyles} isOpen={isOpen}>
       <StyledCloseIcon
         onClick={() => {
-          props.setModal(false);
+          setModal(false);
         }}
       />
-      {props.children}
+      {children}
     </Modal>
   );
 }

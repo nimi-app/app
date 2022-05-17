@@ -1,6 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { Button } from 'rebass';
 import styled from 'styled-components';
+import { FieldType } from '../../../constants';
 import { NimiSignatureColor, WhiteCard } from '../../../theme';
 import { Button as NimiButton } from '../../Button';
 import { InputForm } from './InputForm';
@@ -41,15 +42,20 @@ const StyledButtonPrimary = styled(NimiButton)`
   width: 100%;
   margin-top: 32px;
 `;
-
-export function Input({ setModalState, ensName, inputFields }) {
+interface InputProps {
+  setModalState: (state: boolean) => void;
+  ensName: string | undefined;
+  inputFields: FieldType[];
+}
+export function Input({ setModalState, ensName, inputFields }: InputProps) {
   const { handleSubmit } = useFormContext();
   const onSubmit = (data, e) => console.log(data, e);
   const onError = (errors, e) => console.log(errors, e);
+
   return (
     <StyledCard as="form" onSubmit={handleSubmit(onSubmit, onError)}>
       <TitleText>
-        Creating <NameTag>{ensName.split('.')[0]}&apos;s</NameTag> Personal Nimi site.
+        Creating <NameTag>{ensName?.split('.')[0]}&apos;s</NameTag> Personal Nimi site.
       </TitleText>
       <ProfilePic />
       <StyledButton marginBottom="28px">Import Data from Twitter</StyledButton>

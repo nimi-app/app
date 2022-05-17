@@ -14,7 +14,6 @@ const TemplateWrapper = styled.div`
 
 export function Template() {
   const { ensName } = useParams();
-  console.log('ens name in template', ensName);
   const formMethods = useForm();
   const { register, handleSubmit } = useForm();
   const [modalState, setModalState] = useState(false);

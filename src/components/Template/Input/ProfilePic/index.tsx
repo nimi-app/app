@@ -6,7 +6,7 @@ const ImageWrapper = styled.div`
   margin-bottom: 28px;
 `;
 
-export function ProfilePic(props) {
+export function ProfilePic() {
   return (
     <ImageWrapper>
       <PlaceholderMini />

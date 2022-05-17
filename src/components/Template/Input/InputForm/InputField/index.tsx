@@ -1,5 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
+import { FieldType } from '../../../../../constants';
 
 const StyledInputForm = styled.div`
   display: flex;
@@ -23,14 +24,8 @@ const Input = styled.input`
     color: #b1b5c3;
   }
 `;
-export interface InputFieldProps {
-  name: string;
-  dataType: string;
-  styleOverride?: React.CSSProperties;
-  placeholder?: string;
-}
 
-export function InputField({ name, dataType, styleOverride, placeholder }: InputFieldProps) {
+export function InputField({ name, dataType, styleOverride, placeholder }: FieldType) {
   const { register } = useFormContext();
 
   return (

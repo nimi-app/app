@@ -4,6 +4,7 @@ import { NimiSignatureColor } from '../../../theme';
 import { Button } from '../../Button';
 import { Checkbox } from './Checkbox';
 import { Fields } from '../../../constants';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 
 const Header = styled.div`
   ${NimiSignatureColor};
@@ -34,12 +35,19 @@ const FormStyled = styled.form`
   gap: 23px;
   margin-top: 36px;
 `;
+interface AddFieldsModalProps {
+  handleSubmit: (data: any) => void;
+  registerFields: UseFormRegister<FieldValues>;
+  setModal: (state: boolean) => void;
+  isOpen: boolean;
+}
 
-export function AddFieldsModal(props) {
+export function AddFieldsModal({ handleSubmit, registerFields, setModal, isOpen }: AddFieldsModalProps) {
+  //makes an array out of enum Fields so we can interate over the fields
   const array = Object.values(Fields).filter((value) => typeof value === 'string');
 
   return (
-    <ModalMain setModal={props.setModal} isOpen={props.isOpen}>
+    <ModalMain setModal={setModal} isOpen={isOpen}>
       <Header>Add fields</Header>
       <UnderTitle>
         Add the fields you want to be shown
@@ -47,9 +55,9 @@ export function AddFieldsModal(props) {
       </UnderTitle>
       <SocialsText>Socials</SocialsText>
 
-      <FormStyled onSubmit={props.handleSubmit}>
+      <FormStyled onSubmit={handleSubmit}>
         {array.map((item, index) => (
-          <Checkbox key={index} registerFields={props.registerFields} field={index} />
+          <Checkbox key={index} registerFields={registerFields} field={index} />
         ))}
         <Button type="submit">Add Fields</Button>
       </FormStyled>

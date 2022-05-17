@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FieldType } from '../../../../constants';
 import { InputField } from './InputField';
 
 const StyledInputForm = styled.div`
@@ -9,13 +10,13 @@ const StyledInputForm = styled.div`
   flex-wrap: wrap;
 `;
 
-// interface InputFormProps {
-
-// }
-export function InputForm({ inputFields }) {
+interface InputFormProps {
+  inputFields: FieldType[];
+}
+export function InputForm({ inputFields }: InputFormProps) {
   return (
     <StyledInputForm>
-      {inputFields.map(({ name, dataType, placeholder, styleOverride, index }) => (
+      {inputFields.map(({ name, dataType, placeholder, styleOverride }, index) => (
         <InputField
           key={index}
           name={name}
