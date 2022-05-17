@@ -75,6 +75,9 @@ export function getAddChainParameters(chainId: number): AddEthereumChainParamete
   }
 }
 
+/**
+ * List of chains and their information.
+ */
 export const CHAINS: Record<number, BasicChainInformation | ExtendedChainInformation> = {
   [ChainId.MAINNET]: {
     urls: [
@@ -113,3 +116,8 @@ export const URLS: { [chainId: number]: string[] } = Object.keys(CHAINS).reduce<
   },
   {}
 );
+
+/**
+ * List of chain IDs
+ */
+export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINS).map((key) => Number(key));
