@@ -21,7 +21,7 @@ const AppWrapper = styled.div`
   align-items: flex-start;
   flex-direction: column;
   overflow: hidden;
-  min-height: 100%;
+  min-height: 100vh;
 `;
 
 const HeaderWrapper = styled.div`
