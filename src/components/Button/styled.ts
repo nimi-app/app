@@ -4,13 +4,11 @@ import styled from 'styled-components';
 /**
  * Base Button frame
  */
-export const StyledBase = styled.div`
+export const StyledButtonStaticBase = styled.div`
   position: relative;
   overflow: hidden;
 
   background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
-  border-radius: 30px;
-  padding: 10px 24px;
 
   font-family: inherit;
   font-weight: 600;
@@ -22,7 +20,12 @@ export const StyledBase = styled.div`
   cursor: pointer;
   outline: none;
   border: none;
+`;
 
+/**
+ * Button frame with hover, focus and disabled state
+ */
+export const StyledButtonBase = styled(StyledButtonStaticBase)`
   /** Animations */
   animation-timing-function: ease-out;
   animation-duration: 300ms;
@@ -44,6 +47,14 @@ export const StyledBase = styled.div`
     box-shadow: none;
     outline: none;
   }
+`;
+
+export const StyledButtonBaseFrame = styled(StyledButtonBase)`
+  border-radius: 30px;
+`;
+
+export const StyledButtonFrame = styled(StyledButtonBaseFrame)`
+  padding: 10px 24px;
 `;
 
 export const StyledLink = styled(Link)`
