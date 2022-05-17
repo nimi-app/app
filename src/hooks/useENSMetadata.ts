@@ -68,7 +68,6 @@ export function useENSMetadata(): UseENSMetadataResult {
     axios
       .get<ENSMetadata>(`https://metadata.ens.domains/${networkName}/avatar/${ENSName}/meta`)
       .then(({ data }) => {
-        console.log(data);
         if ('image' in data && data.image) {
           if (data.image.startsWith('ipfs://ipfs/')) {
             data.image = data.image.replace('ipfs://ipfs/', IPFS_GATEWAY);
