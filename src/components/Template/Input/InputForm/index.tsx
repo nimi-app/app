@@ -1,14 +1,6 @@
-import styled from 'styled-components';
 import { FieldType } from '../../../../constants';
 import { InputField } from './InputField';
-
-const StyledInputForm = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 28px;
-  flex-flow: row-wrap;
-  flex-wrap: wrap;
-`;
+import { StyledInputForm } from './styleds';
 
 interface InputFormProps {
   inputFields: FieldType[];
