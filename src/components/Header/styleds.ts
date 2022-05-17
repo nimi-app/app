@@ -6,6 +6,7 @@ export const HeaderWrapper = styled(Flex)`
   padding: 27px 90px;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
 `;
 export const AccountAndLinks = styled(Flex)`
   align-items: center;
