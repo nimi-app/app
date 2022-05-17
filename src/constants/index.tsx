@@ -24,7 +24,7 @@ export enum Fields {
 export interface FieldType {
   name: string;
   dataType: string;
-  styleOverride?: Object;
+  styleOverride?: React.CSSProperties;
   placeholder: string;
 }
 export const defaultFields: FieldType[] = [
@@ -36,7 +36,7 @@ export const defaultFields: FieldType[] = [
   },
 ];
 
-export const FieldsMapping = [
+export const FieldsMapping: FieldType[] = [
   { name: 'Description', dataType: 'text', styleOverride: { flexBasis: '100%' }, placeholder: 'Some cdescription' },
   { name: 'Twitter', dataType: 'text', placeholder: 'Username' },
   { name: 'Telegram', dataType: 'text', placeholder: 'Username' },

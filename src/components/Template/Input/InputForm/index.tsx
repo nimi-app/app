@@ -15,8 +15,14 @@ const StyledInputForm = styled.div`
 export function InputForm({ inputFields }) {
   return (
     <StyledInputForm>
-      {inputFields.map(({ name, dataType, placeholder, styleOverride }) => (
-        <InputField name={name} dataType={dataType} placeholder={placeholder} styleOverride={styleOverride} />
+      {inputFields.map(({ name, dataType, placeholder, styleOverride, index }) => (
+        <InputField
+          key={index}
+          name={name}
+          dataType={dataType}
+          placeholder={placeholder}
+          styleOverride={styleOverride}
+        />
       ))}
     </StyledInputForm>
   );

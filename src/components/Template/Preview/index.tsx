@@ -7,9 +7,9 @@ export function Preview() {
 
   return (
     <div>
-      {Object.keys(arrayOfFormFields).map((item) => {
+      {Object.keys(arrayOfFormFields).map((item, index) => {
         return (
-          <div>
+          <div key={index}>
             <div> Field:{item}</div>
             <div> Value:{arrayOfFormFields[item]}</div>
           </div>

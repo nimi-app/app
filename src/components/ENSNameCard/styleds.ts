@@ -1,20 +1,8 @@
-import { Flex } from 'rebass';
 import styled from 'styled-components';
-import { ExternalLink, NimiSignatureColor } from '../../theme';
+import { ExternalLink, NimiSignatureColor, WhiteCard } from '../../theme';
 
-// export const StyledENSNameCardWrapper = styled(WhiteCard)`
-//   width: 337px;
-//   height: 348px;
-// `;
-
-export const StyledENSNameCardWrapper = styled(Flex)`
+export const StyledENSNameCardWrapper = styled(WhiteCard)`
   justify-content: center;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0px 5px 24px rgba(138, 143, 234, 0.12);
-  backdrop-filter: blur(20px);
-  flex-direction: column;
-  border-radius: 25px;
   padding: 48px 32px;
   max-width: 310px;
   min-height: 320px;

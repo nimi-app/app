@@ -29,7 +29,7 @@ const DomainName: FC<ENSDomainNameProps> = ({ name }) => (
 export function ENSNameCard({ name, labelName, imageUrl }: ENSNameCardProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  console.log('domain name', name);
+
   const handleSubmit = () => navigate(`/domains/${name}`);
   const domainLength = name.length;
   const domainHref = name ? `https://${name}.limo` : `https://${labelName}.eth.limo`;
@@ -38,7 +38,7 @@ export function ENSNameCard({ name, labelName, imageUrl }: ENSNameCardProps) {
     <StyledENSNameCardWrapper>
       {imageUrl && <ENSNameCardImage alt={imageUrl} src={imageUrl} />}
       <DomainName name={name} />
-      <Button onClick={() => handleSubmit()}>{t('setupANimiProfile')}</Button>
+      <Button onClick={handleSubmit}>{t('setupANimiProfile')}</Button>
       <StyledExternalLink
         href={domainHref}
         title={t('goToDomainName', {
