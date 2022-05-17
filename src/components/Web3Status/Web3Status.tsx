@@ -32,11 +32,6 @@ const StyledInnerWrapper = styled.div`
   width: 150px;
 `;
 
-const StyledWalletAvatar = styled.img`
-  border-radius: 50%;
-  max-height: 100%;
-`;
-
 const StyledTextContent = styled.span`
   max-width: 100%;
   overflow: hidden;
@@ -47,7 +42,7 @@ const StyledTextContent = styled.span`
 export function Web3Status() {
   const { t } = useTranslation();
   const { isActive, isActivating, account, error, chainId, ENSName } = useWeb3React();
-  const { loading: isAvatarLoading, avatar } = useENSAvatar();
+  const { avatar } = useENSAvatar();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
 
   const isWrongNetwork = error instanceof ChainIdNotAllowedError || SUPPORTED_CHAIN_IDS.includes(chainId as number);
