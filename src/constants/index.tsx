@@ -13,13 +13,13 @@ export interface NetworkDetails {
   blockExplorerUrls?: string[];
 }
 export enum Fields {
-  DESCRIPTION,
-  TWITTER,
-  TELEGRAM,
-  INSTAGRAM,
-  LINKEDIN,
-  EMAIL,
-  WEBSITE,
+  LENSTER = 'Lenster',
+  TWITTER = 'Twitter',
+  TELEGRAM = 'Telegram',
+  INSTAGRAM = 'Instagram',
+  LINKEDIN = 'LinkedIn',
+  EMAIL = 'Email',
+  WEBSITE = 'Website',
 }
 export interface FieldType {
   name: string;
@@ -34,10 +34,17 @@ export const defaultFields: FieldType[] = [
     styleOverride: { flexBasis: '100%' },
     placeholder: 'Username',
   },
+  {
+    name: 'Description',
+    dataType: 'text',
+    styleOverride: { flexBasis: '100%' },
+    placeholder:
+      'This is a test description. This field is filled in to show what happens. Two rows should be enough to show this state.',
+  },
 ];
 
 export const FieldsMapping: FieldType[] = [
-  { name: 'Description', dataType: 'text', styleOverride: { flexBasis: '100%' }, placeholder: 'Some cdescription' },
+  { name: 'Lenster', dataType: 'text', placeholder: 'Username' },
   { name: 'Twitter', dataType: 'text', placeholder: 'Username' },
   { name: 'Telegram', dataType: 'text', placeholder: 'Username' },
   { name: 'Instagram', dataType: 'text', placeholder: 'Username' },
