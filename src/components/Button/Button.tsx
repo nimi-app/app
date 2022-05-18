@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes } from 'react';
-import { StyledBase, StyledInnerWrapper, StyledLink } from './styled';
+import { StyledButtonFrame, StyledInnerWrapper, StyledLink } from './styled';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   to?: string;
@@ -10,9 +10,9 @@ export function Button({ children, to, href, ...props }: ButtonProps) {
   /**  */
   if (href) {
     return (
-      <StyledBase as="a" href={href}>
+      <StyledButtonFrame as="a" href={href}>
         <StyledInnerWrapper>{children}</StyledInnerWrapper>
-      </StyledBase>
+      </StyledButtonFrame>
     );
   }
 
@@ -20,17 +20,17 @@ export function Button({ children, to, href, ...props }: ButtonProps) {
   if (to) {
     return (
       <StyledLink to={to}>
-        <StyledBase>
+        <StyledButtonFrame>
           <StyledInnerWrapper>{children}</StyledInnerWrapper>
-        </StyledBase>
+        </StyledButtonFrame>
       </StyledLink>
     );
   }
 
   /** Default button */
   return (
-    <StyledBase as="button" {...props}>
+    <StyledButtonFrame as="button" {...props}>
       <StyledInnerWrapper>{children}</StyledInnerWrapper>
-    </StyledBase>
+    </StyledButtonFrame>
   );
 }
