@@ -84,6 +84,9 @@
       "last 1 safari version"
     ]
   },
+  "engines": {
+    "yarn": "use npm!"
+  },
   "devDependencies": {
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/introspection": "2.1.1",
