@@ -38,10 +38,10 @@ export const defaultFields: FieldType[] = [
 
 export const FieldsMapping: FieldType[] = [
   { name: 'Description', dataType: 'text', styleOverride: { flexBasis: '100%' }, placeholder: 'Some cdescription' },
-  { name: 'Twitter', dataType: 'text', placeholder: 'Username' },
-  { name: 'Telegram', dataType: 'text', placeholder: 'Username' },
-  { name: 'Instagram', dataType: 'text', placeholder: 'Username' },
-  { name: 'LinkedIn', dataType: 'text', placeholder: 'Username' },
+  { name: 'Twitter', dataType: 'text', placeholder: 'Twitter' },
+  { name: 'Telegram', dataType: 'text', placeholder: 'Telegram' },
+  { name: 'Instagram', dataType: 'text', placeholder: 'Instagram' },
+  { name: 'LinkedIn', dataType: 'text', placeholder: 'LinkedIn' },
   { name: 'Email', dataType: 'text', placeholder: 'email' },
   { name: 'Website', dataType: 'URL', placeholder: 'url' },
 ];
