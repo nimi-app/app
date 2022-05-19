@@ -20,13 +20,14 @@ export function Template() {
   const [inputFields, setInputFields] = useState<FieldType[]>(defaultFields);
 
   const onSubmit = (data) => {
-    formMethods.reset();
     const keysObject = Object.keys(data);
     setInputFields(defaultFields);
     keysObject.forEach((item, index) => {
+      const value = FieldsMapping[index];
       if (data[item] === true) {
-        const value = FieldsMapping[index];
         setInputFields((prevState) => [...prevState, value]);
+      } else {
+        formMethods.unregister(value.name);
       }
     });
     setModalState(false);
