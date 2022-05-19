@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   align-items: center;
   display: flex;
 `;
-export const StyledLabel = styled.div`
+export const StyledLabel = styled.label`
   margin-left: 14px;
   color: #8a94a6;
   font-weight: 500;
