@@ -15,6 +15,7 @@ interface AddFieldsModalProps {
 export function AddFieldsModal({ handleSubmit, registerFields, setModal, isOpen }: AddFieldsModalProps) {
   //makes an array out of enum Fields so we can interate over the fields
   const array = Object.values(Fields).filter((value) => typeof value === 'string');
+  console.log(array);
 
   return (
     <ModalMain setModal={setModal} isOpen={isOpen}>
@@ -27,7 +28,7 @@ export function AddFieldsModal({ handleSubmit, registerFields, setModal, isOpen 
 
       <FormStyled onSubmit={handleSubmit}>
         {array.map((item, index) => (
-          <Checkbox key={index} registerFields={registerFields} field={index} />
+          <Checkbox key={index} registerFields={registerFields} field={item} />
         ))}
         <Button type="submit">Add Fields</Button>
       </FormStyled>

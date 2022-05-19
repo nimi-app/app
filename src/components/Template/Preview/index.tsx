@@ -4,7 +4,8 @@ import { WhiteCard } from '../../../theme';
 import { ReactComponent as NimiText } from '../../../assets/svg/nimi-text.svg';
 import { useActiveWeb3React } from '../../../hooks/useWeb3';
 import { Flex } from 'rebass';
-import { defaultFields } from '../../../constants';
+import { defaultFields, FieldsMapping } from '../../../constants';
+import { shortenAddress } from '../../../utils';
 const StyledWhiteCard = styled(WhiteCard)`
   width: 372.87px;
 `;
@@ -70,7 +71,9 @@ const SocialsHeader = styled.div`
   color: #000000;
 `;
 const Description = styled.div``;
-const SocialWrapper = styled.div``;
+const SocialWrapper = styled.div`
+  display: flex;
+`;
 const BottomSection = styled.div`
   position: absolute;
   width: 372.87px;
@@ -104,8 +107,13 @@ export function Preview({ ensName }: PreviewProps) {
       </StyledUsername>
       <Flex>
         <EnsName>{ensName}</EnsName>
-        <Divider />
-        <Address>{account}</Address>
+
+        {account && (
+          <>
+            <Divider />
+            <Address>{shortenAddress(account, 2, 4)}</Address>
+          </>
+        )}
       </Flex>
       <Description>
         {arrayOfFormFields.Description ? arrayOfFormFields.Description : defaultFields[1].placeholder}
@@ -114,12 +122,15 @@ export function Preview({ ensName }: PreviewProps) {
         <SocialsHeader>Socials</SocialsHeader>
         {/* fix this object and shit when brain works better */}
         {Object.keys(arrayOfFormFields).map((item, index) => {
-          if (item)
+          if (FieldsMapping[item]?.logo)
             return (
               <div key={index}>
-                <SocialWrapper></SocialWrapper>
-                <div> Field:{item}</div>
-                <div> Value:{arrayOfFormFields[item]}</div>
+                <SocialWrapper>
+                  <img src={FieldsMapping[item].logo} />
+                  <div>{arrayOfFormFields[item]}</div>
+                </SocialWrapper>
+                {/* <div> Field:{item}</div>
+                <div> Value:{arrayOfFormFields[item]}</div> */}
               </div>
             );
         })}

@@ -1,5 +1,12 @@
 import type { AddEthereumChainParameter } from '@web3-react/types';
 export const NetworkContextName = 'NETWORK';
+import LensterLogo from '../assets/svg/socialIcons/lenster.svg';
+import InstagramLogo from '../assets/svg/socialIcons/instagram.svg';
+import TwitterLogo from '../assets/svg/socialIcons/twitter.svg';
+import EmailLogo from '../assets/svg/socialIcons/mail.svg';
+import LinkedInLogo from '../assets/svg/socialIcons/linkedIn.svg';
+import WebsiteLogo from '../assets/svg/socialIcons/website.svg';
+import TelegramLogo from '../assets/svg/socialIcons/telegram.svg';
 
 export interface NetworkDetails {
   chainId: string;
@@ -26,6 +33,7 @@ export interface FieldType {
   dataType: string;
   styleOverride?: React.CSSProperties;
   placeholder: string;
+  logo?: string;
 }
 export const defaultFields: FieldType[] = [
   {
@@ -43,15 +51,15 @@ export const defaultFields: FieldType[] = [
   },
 ];
 
-export const FieldsMapping: FieldType[] = [
-  { name: 'Lenster', dataType: 'text', placeholder: 'Username' },
-  { name: 'Twitter', dataType: 'text', placeholder: 'Username' },
-  { name: 'Telegram', dataType: 'text', placeholder: 'Username' },
-  { name: 'Instagram', dataType: 'text', placeholder: 'Username' },
-  { name: 'LinkedIn', dataType: 'text', placeholder: 'Username' },
-  { name: 'Email', dataType: 'text', placeholder: 'email' },
-  { name: 'Website', dataType: 'URL', placeholder: 'url' },
-];
+export const FieldsMapping = {
+  [Fields.LENSTER]: { name: 'Lenster', dataType: 'text', placeholder: 'Username', logo: LensterLogo },
+  [Fields.TWITTER]: { name: 'Twitter', dataType: 'text', placeholder: 'Username', logo: TwitterLogo },
+  [Fields.TELEGRAM]: { name: 'Telegram', dataType: 'text', placeholder: 'Username', logo: TelegramLogo },
+  [Fields.INSTAGRAM]: { name: 'Instagram', dataType: 'text', placeholder: 'Username', logo: InstagramLogo },
+  [Fields.LINKEDIN]: { name: 'LinkedIn', dataType: 'text', placeholder: 'Username', logo: LinkedInLogo },
+  [Fields.EMAIL]: { name: 'Email', dataType: 'text', placeholder: 'email', logo: EmailLogo },
+  [Fields.WEBSITE]: { name: 'Website', dataType: 'URL', placeholder: 'url', logo: WebsiteLogo },
+};
 
 export const MULTICALL2_ADDRESS: Record<number, string> = {
   100: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',

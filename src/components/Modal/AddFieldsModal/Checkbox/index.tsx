@@ -1,11 +1,11 @@
-import { FieldsMapping } from '../../../../constants';
+import { Fields, FieldsMapping } from '../../../../constants';
 
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { Wrapper, StyledCheckbox, StyledLabel } from './styleds';
 
 interface CheckboxProps {
   registerFields: UseFormRegister<FieldValues>;
-  field: number;
+  field: Fields;
 }
 
 export function Checkbox({ field, registerFields }: CheckboxProps) {

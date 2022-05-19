@@ -23,8 +23,8 @@ export function Template() {
   const onSubmit = (data) => {
     const keysObject = Object.keys(data);
     setInputFields(defaultFields);
-    keysObject.forEach((item, index) => {
-      const value = FieldsMapping[index];
+    keysObject.forEach((item) => {
+      const value = FieldsMapping[item];
       if (data[item] === true) {
         setInputFields((prevState) => [...prevState, value]);
       } else {
