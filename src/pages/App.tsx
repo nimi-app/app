@@ -12,6 +12,7 @@ import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 import { DomainsHome } from './Domains';
 import { Footer } from '../components/Footer';
+import { Template } from './Template';
 import { WalletModal } from '../components/WalletModal';
 
 const AppWrapper = styled.div`
@@ -20,7 +21,7 @@ const AppWrapper = styled.div`
   align-items: flex-start;
   flex-direction: column;
   overflow: hidden;
-  min-height: 100%;
+  min-height: 100vh;
 `;
 
 const HeaderWrapper = styled.div`
@@ -49,7 +50,7 @@ const AppMain = () => (
     </HeaderWrapper>
     <BodyWrapper>
       <Routes>
-        <Route path=":name" element={<DomainsHome />} />
+        <Route path=":ensName" element={<Template />} />
         <Route path="/" element={<DomainsHome />} />
       </Routes>
     </BodyWrapper>

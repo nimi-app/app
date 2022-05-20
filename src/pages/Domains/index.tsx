@@ -7,9 +7,9 @@ import { Flex } from 'rebass';
 // Queries
 import { useGetDomainsQuery } from '../../generated/graphql';
 
-import { ENSNameCard } from '../../components/ENSNameCard';
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
+import { ENSNameCard } from '../../components/ENSNameCard';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;

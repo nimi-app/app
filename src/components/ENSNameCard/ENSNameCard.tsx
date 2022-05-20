@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../Button';
 import {
   StyledENSNameCardWrapper,
@@ -27,7 +28,9 @@ const DomainName: FC<ENSDomainNameProps> = ({ name }) => (
 
 export function ENSNameCard({ name, labelName, imageUrl }: ENSNameCardProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
+  const handleSubmit = () => navigate(`/domains/${name}`);
   const domainLength = name.length;
   const domainHref = name ? `https://${name}.limo` : `https://${labelName}.eth.limo`;
 
@@ -35,7 +38,7 @@ export function ENSNameCard({ name, labelName, imageUrl }: ENSNameCardProps) {
     <StyledENSNameCardWrapper>
       {imageUrl && <ENSNameCardImage alt={imageUrl} src={imageUrl} />}
       <DomainName name={name} />
-      <Button>{t('setupANimiProfile')}</Button>
+      <Button onClick={handleSubmit}>{t('setupANimiProfile')}</Button>
       <StyledExternalLink
         href={domainHref}
         title={t('goToDomainName', {

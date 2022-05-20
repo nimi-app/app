@@ -225,7 +225,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /** Full-width and height */
 body, html, #root {
-  height: 100%;
+  min-height:100vh;
   width: 100%;
 }
 
