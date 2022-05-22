@@ -35,3 +35,17 @@ export const GET_DOMAINS_SUBGRAPH = gql`
     }
   }
 `;
+
+export const GET_DOMAIN_FROM_SUBGRAPH = gql`
+  query getDomainFromSubgraph($domainId: ID!) {
+    domain(id: $domainId) {
+      id
+      name
+      labelName
+      labelhash
+      owner {
+        id
+      }
+    }
+  }
+`;
