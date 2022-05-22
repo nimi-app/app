@@ -12,8 +12,8 @@ import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 import { DomainsHome } from './Domains';
 import { Footer } from '../components/Footer';
-import { Template } from './Template';
 import { WalletModal } from '../components/WalletModal';
+import { CreateNimiPage } from './CreateNimiPage';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -50,7 +50,7 @@ const AppMain = () => (
     </HeaderWrapper>
     <BodyWrapper>
       <Routes>
-        <Route path=":ensName" element={<Template />} />
+        <Route path=":ensName" element={<CreateNimiPage />} />
         <Route path="/" element={<DomainsHome />} />
       </Routes>
     </BodyWrapper>
