@@ -24,15 +24,6 @@ export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColo
   }
 `;
 
-export const WhiteCard = styled(Flex)`
-  align-items: center;
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0px 5px 24px rgba(138, 143, 234, 0.12);
-  backdrop-filter: blur(20px);
-  border-radius: 25px;
-  flex-direction: column;
-`;
-
 // A button that triggers some onClick result, but looks like a link.
 export const LinkStyledButton = styled.button<{ disabled?: boolean }>`
   border: none;
