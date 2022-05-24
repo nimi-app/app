@@ -1,0 +1,30 @@
+{
+  "addField": {
+    "fieldName": "fieldName",
+    "fieldType": "fieldType",
+    "fieldValue": "fieldValue"
+  },
+  "creatingSiteNamesPersonalSite": "Creating {{siteName}}'s Personal Nimi site",
+  "importDataFromTwitter": "Import Data from Twitter",
+  "importDataFromLensProtocol": "Import Data from Lens Protocol",
+  "addFields.title": "Add Fields",
+  "addLinksModal.title": "Add Links",
+  "addFields.description": "Add the fields you want to be shown in your Nimi Profile.",
+  "saveAndDeployNimiSite": "Save & Deploy Nimi Site",
+  "comingSoon": "Coming Soon",
+  "showcaseYourNFTs": "Show Case Your NFTs",
+  "showcaseYourPOAPs": "Show Case Your POAPs",
+  "preview": "Preview",
+  "links.instagram": "Instagram",
+  "links.twitter": "Twitter",
+  "links.facebook": "Facebook",
+  "links.youtube": "YouTube",
+  "links.github": "GitHub",
+  "links.reddit": "Reddit",
+  "links.telegram": "Telegram",
+  "links.medium": "Medium",
+  "links.linkedin": "LinkedIn",
+  "links.website": "Website",
+  "links.discord": "Discord",
+  "links.email": "Email"
+}

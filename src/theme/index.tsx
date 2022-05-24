@@ -214,7 +214,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-html, input, textarea, button {
+html, input, label, textarea, button {
   font-family: 'Baloo 2', cursive;
   font-display: fallback;
 }
@@ -242,6 +242,13 @@ button {
 
 a {
   text-decoration: none;
+}
+
+pre, code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: auto;
 }
 `;
 
