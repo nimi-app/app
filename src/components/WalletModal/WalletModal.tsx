@@ -1,4 +1,3 @@
-import { FC, PropsWithChildren, useEffect, useState } from 'react';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import { ChainIdNotAllowedError } from '@web3-react/store';
 import { WalletConnect } from '@web3-react/walletconnect';
@@ -6,6 +5,7 @@ import { MetaMask } from '@web3-react/metamask';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'react-i18next';
 import { Connector } from '@web3-react/types';
+import { useEffect, useState } from 'react';
 
 import { Button } from '../Button';
 import { Loader } from '../Loader';
@@ -16,27 +16,8 @@ import { ApplicationModal } from '../../state/application/actions';
 import { getName, useWeb3Connectors } from '../../connectors';
 import { shortenAddress } from '../../utils';
 
-import {
-  StyledModalInnerWrapper,
-  ConnectorListWrapper,
-  StyledModalBackdrop,
-  StyledModalContent,
-  StyledModalDialog,
-  StyledModalFooter,
-  StyledModalHeader,
-  LoaderWrapper,
-  ModalContent,
-} from './styled';
-
-const Modal: FC<PropsWithChildren<unknown>> = ({ children }) => (
-  <StyledModalDialog>
-    <StyledModalBackdrop>
-      <StyledModalContent>
-        <StyledModalInnerWrapper>{children}</StyledModalInnerWrapper>
-      </StyledModalContent>
-    </StyledModalBackdrop>
-  </StyledModalDialog>
-);
+import { Modal, Header, Footer, Content } from '../Modal';
+import { LoaderWrapper, ConnectorListWrapper } from './styled';
 
 export function WalletModal() {
   const { t } = useTranslation();
@@ -94,21 +75,21 @@ export function WalletModal() {
   if (account && isActive) {
     return (
       <Modal>
-        <StyledModalHeader>
+        <Header>
           <h2>{t('wallet')}</h2>
-        </StyledModalHeader>
-        <ModalContent>
+        </Header>
+        <Content>
           <p>
             {t('connectedViaConnector', {
               connectorName: getName(connector),
             })}
           </p>
           <p>{shortenAddress(account)}</p>
-        </ModalContent>
-        <StyledModalFooter>
+        </Content>
+        <Footer>
           <Button onClick={() => connector.deactivate()}>{t('disconnect')}</Button>
           <Button onClick={closeModal}>{t('close')}</Button>
-        </StyledModalFooter>
+        </Footer>
       </Modal>
     );
   }
@@ -117,19 +98,19 @@ export function WalletModal() {
   if (isWrongNetwork) {
     return (
       <Modal>
-        <StyledModalHeader>
+        <Header>
           <h2>{t('error.wrongNetwork')}</h2>
-        </StyledModalHeader>
-        <ModalContent>
+        </Header>
+        <Content>
           <p>
             {t('switchToEither')} {CHAINS[ChainId.MAINNET].name}, {CHAINS[ChainId.RINKEBY].name}, or{' '}
             {CHAINS[ChainId.GOERLI].name}
           </p>
-        </ModalContent>
-        <StyledModalFooter>
+        </Content>
+        <Footer>
           <Button onClick={() => activateConnector(connector)}>{t('switchNetwork')}</Button>
           <Button onClick={closeModal}>{t('close')}</Button>
-        </StyledModalFooter>
+        </Footer>
       </Modal>
     );
   }
@@ -138,14 +119,14 @@ export function WalletModal() {
   if (isActivatingAConnector) {
     return (
       <Modal>
-        <StyledModalHeader>
+        <Header>
           <h2>{t('error.wrongNetwork')}</h2>
-        </StyledModalHeader>
-        <ModalContent>
+        </Header>
+        <Content>
           <LoaderWrapper>
             <Loader size={72} />
           </LoaderWrapper>
-        </ModalContent>
+        </Content>
       </Modal>
     );
   }
@@ -153,10 +134,10 @@ export function WalletModal() {
   // A wallet is not connected, show the list of connectors
   return (
     <Modal>
-      <StyledModalHeader>
+      <Header>
         <h2>{t('connectWallet')}</h2>
-      </StyledModalHeader>
-      <ModalContent>
+      </Header>
+      <Content>
         <ConnectorListWrapper>
           {connectors.map(({ connector, name }) => {
             return (
@@ -166,10 +147,10 @@ export function WalletModal() {
             );
           })}
         </ConnectorListWrapper>
-      </ModalContent>
-      <StyledModalFooter>
+      </Content>
+      <Footer>
         <Button onClick={closeModal}>{t('close')}</Button>
-      </StyledModalFooter>
+      </Footer>
     </Modal>
   );
 }
