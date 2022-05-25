@@ -4,7 +4,7 @@ import { ChangeEventHandler, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { linkTypeList, Nimi, NimiBlockchainAddress, nimiCard, NimiLinkType } from '../../library';
+import { linkTypeList, Nimi, NimiBlockchainAddress, nimiCard, NimiLinkType } from 'nimi-card';
 import { Modal, Header as ModalHeader, Content as ModalContent, Footer as ModalFooter } from '../Modal';
 import { CommingSoonCards } from './sections';
 import { CardBody } from '../Card';
