@@ -59,7 +59,7 @@
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "test": "react-app-rewired test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "eslint \"./src/**/*.{ts,tsx,js}\"",
     "contracts:codegen": "typechain --target ethers-v5 --out-dir src/generated/contracts './src/abis/*.json'",
