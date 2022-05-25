@@ -2,11 +2,12 @@ import styled, { keyframes } from 'styled-components';
 
 export const StyledModalDialog = styled.div`
   scrollbar-width: none;
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
+  margin: auto;
   z-index: 989;
 `;
 
