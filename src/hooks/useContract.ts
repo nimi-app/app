@@ -1,7 +1,7 @@
 import { Contract } from '@ethersproject/contracts';
 import { useMemo } from 'react';
 
-import { MULTICALL2_ADDRESS } from '../constants';
+import { ChainId, MULTICALL2_ADDRESS, PUBLIC_RESOLVER_ADDRESSES } from '../constants';
 import MULTICALL2_ABI from '../abis/multicall2.json';
 import ENS_PUBLIC_RESOLVER_ABI from '../abis/ens-public-resolver.json';
 import ERC20_ABI from '../abis/erc20.json';
@@ -39,8 +39,14 @@ export function useENSRegistrarContract(withSignerIfPossible?: boolean): Contrac
   return useContract(address, ENS_ABI, withSignerIfPossible);
 }
 
-export function useENSResolverContract(address: string | undefined, withSignerIfPossible?: boolean): Contract | null {
-  return useContract(address, ENS_PUBLIC_RESOLVER_ABI, withSignerIfPossible);
+export function useENSResolverContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React();
+
+  return useContract(
+    PUBLIC_RESOLVER_ADDRESSES[chainId || ChainId.MAINNET],
+    ENS_PUBLIC_RESOLVER_ABI,
+    withSignerIfPossible
+  );
 }
 
 export function useBytes32TokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
