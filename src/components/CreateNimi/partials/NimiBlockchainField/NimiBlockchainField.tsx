@@ -21,7 +21,7 @@ export function NimiBlockchainField({ blockchain, label }: NimiBlockchainFieldPr
     const newState: NimiBlockchainAddress[] = hasLink
       ? prevState.map((curr) => {
           if (curr.blockchain === blockchain) {
-            return { ...curr, url: event.target.value };
+            return { ...curr, address: event.target.value };
           }
 
           return curr;
