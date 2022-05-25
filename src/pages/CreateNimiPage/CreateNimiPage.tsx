@@ -5,8 +5,10 @@ import { useGetDomainFromSubgraphQuery } from '../../generated/graphql';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
 import { Container } from '../../components/Container';
+import { useWeb3React } from '@web3-react/core';
 
 export function CreateNimiPage() {
+  const { account } = useWeb3React();
   const { ensName } = useParams();
   const nodeHash = ensNameHash(ensName as string);
 
@@ -29,7 +31,11 @@ export function CreateNimiPage() {
 
   return (
     <Container>
-      <CreateNimi name={data.domain.name as string} labelName={data.domain.labelName as string} />
+      <CreateNimi
+        ensAddress={account as string}
+        ensName={data.domain.name as string}
+        ensLabelName={data.domain.labelName as string}
+      />
     </Container>
   );
 }

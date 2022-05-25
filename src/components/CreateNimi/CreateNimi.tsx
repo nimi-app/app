@@ -1,10 +1,19 @@
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ChangeEventHandler, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { linkTypeList, Nimi, NimiBlockchainAddress, nimiCard, NimiLinkType } from 'nimi-card';
+import {
+  linkTypeList,
+  Nimi,
+  nimiCard,
+  NimiLinkType,
+  Blockchain,
+  NimiLink,
+  NimiBlockchainAddress,
+  blockchainList,
+} from 'nimi-card';
 import { Modal, Header as ModalHeader, Content as ModalContent, Footer as ModalFooter } from '../Modal';
 import { CommingSoonCards } from './sections';
 import { CardBody } from '../Card';
@@ -17,21 +26,92 @@ import { Input } from '../form/Input';
 import { Label } from '../form';
 
 interface CreateNimiProps {
-  name: string;
-  labelName: string;
+  ensAddress: string;
+  ensName: string;
+  ensLabelName: string;
 }
 
 const StyledGridList = styled.div`
-  @media (min-width: 1px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(1, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-  }
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
 `;
 
-export function CreateNimi({ labelName, name }: CreateNimiProps) {
+interface NimiLinkInputProps {
+  link: NimiLinkType;
+  label: string;
+}
+
+interface NimiBlockchainInputProps {
+  blockchain: Blockchain;
+}
+
+/**
+ * Handles the input for the link type
+ */
+function NimiLinkInput({ link, label }: NimiLinkInputProps) {
+  const { setValue, getValues } = useFormContext<Nimi>();
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const prevState = getValues('links') || [];
+    const hasLink = prevState.some((prevLink) => prevLink.type === link);
+    const newState: NimiLink[] = hasLink
+      ? prevState.map((curr) => {
+          if (curr.type === link) {
+            return { ...curr, url: event.target.value };
+          }
+
+          return curr;
+        })
+      : [...prevState, { type: link, label, url: event.target.value }];
+
+    setValue('links', newState);
+  };
+
+  return (
+    <FormGroup key={link}>
+      <Label htmlFor={link}>{label}</Label>
+      <Input type="text" id={link} onChange={onChange} />
+    </FormGroup>
+  );
+}
+
+/**
+ * Handles the input for blockchain address
+ */
+function NimiBlockchainInput({ blockchain }: NimiBlockchainInputProps) {
+  const { t } = useTranslation('nimi');
+
+  const { setValue, getValues } = useFormContext<Nimi>();
+  const i18nKey = `formLabel.${blockchain}`;
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const prevState = getValues('addresses') || [];
+    const hasLink = prevState.some((prevLink) => prevLink.blockchain === blockchain);
+    const newState: NimiBlockchainAddress[] = hasLink
+      ? prevState.map((curr) => {
+          if (curr.blockchain === blockchain) {
+            return { ...curr, url: event.target.value };
+          }
+
+          return curr;
+        })
+      : [...prevState, { blockchain, address: event.target.value }];
+
+    setValue('addresses', newState);
+  };
+
+  return (
+    <FormGroup key={blockchain}>
+      <Label htmlFor={blockchain}>{t(i18nKey)}</Label>
+      <Input type="text" id={blockchain} onChange={onChange} />
+    </FormGroup>
+  );
+}
+
+export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   /**
    * @todo replace this API
    */
@@ -40,15 +120,22 @@ export function CreateNimi({ labelName, name }: CreateNimiProps) {
   const { t } = useTranslation('nimi');
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiCard),
-    defaultValues: {},
+    defaultValues: {
+      displayName: ensName,
+      ensAddress: ensAddress,
+      ensName,
+      addresses: [],
+      links: [],
+    },
   });
 
   const { register, watch, handleSubmit } = useFormContext;
 
   const nimiPayload = watch();
 
+  // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLinkType[]>([]);
-  const [formAddressList, setFormAddressList] = useState<NimiBlockchainAddress[]>([]);
+  const [formAddressList, setFormAddressList] = useState<Blockchain[]>([]);
 
   const onSubmitValid = (data) => {
     console.log(data);
@@ -66,21 +153,28 @@ export function CreateNimi({ labelName, name }: CreateNimiProps) {
             <CardBody>
               <TitleText>
                 {t('creatingSiteNamesPersonalSite', {
-                  siteName: labelName,
+                  siteName: ensName,
                 })}
               </TitleText>
               <form onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
-                  <Label htmlFor="displayName">{t('displayName')}</Label>
+                  <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
                   <Input id="displayName" {...register('displayName')} />
                 </FormGroup>
                 <FormGroup>
-                  <Label htmlFor="description">{t('description')}</Label>
+                  <Label htmlFor="description">{t('formLabel.description')}</Label>
                   <TextArea id="description" {...register('description')}></TextArea>
                 </FormGroup>
+                {formLinkList.map((link) => {
+                  const i18nKey = `formLabel.${link}`;
+                  return <NimiLinkInput key={'link-input' + link} label={t(i18nKey)} link={link} />;
+                })}
+                {formAddressList.map((blockchain) => (
+                  <NimiBlockchainInput key={'blockchain-input-' + blockchain} blockchain={blockchain} />
+                ))}
                 <FormGroup>
-                  <Button onClick={() => setIsModalOpen(true)} type="submit">
-                    {t('addFields.title')}
+                  <Button type="button" onClick={() => setIsModalOpen(true)}>
+                    {t('buttonLabel.addNimis')}
                   </Button>
                 </FormGroup>
                 <FormGroup>
@@ -107,13 +201,14 @@ export function CreateNimi({ labelName, name }: CreateNimiProps) {
       {isModalOpen && (
         <Modal>
           <ModalHeader>
-            <h2>{t('addLinksModal.title')}</h2>
+            <h2>{t('modalTitle.addNimis')}</h2>
           </ModalHeader>
           <ModalContent>
             <StyledGridList>
               {linkTypeList.map((link) => {
                 const inputId = `modal-checkbox-${link}`;
-                const i18nKey = `links.${link}`;
+                const i18nKey = `formLabel.${link}`;
+                const checked = formLinkList.includes(link);
 
                 const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
                   if (event.target.checked) {
@@ -126,7 +221,29 @@ export function CreateNimi({ labelName, name }: CreateNimiProps) {
                 return (
                   <div key={inputId}>
                     <Label htmlFor={inputId}>
-                      <Input id={inputId} type="checkbox" name={link} onChange={onChange} />
+                      <Input id={inputId} type="checkbox" checked={checked} name={link} onChange={onChange} />
+                      {t(i18nKey)}
+                    </Label>
+                  </div>
+                );
+              })}
+              {blockchainList.map((blockchain) => {
+                const inputId = `modal-checkbox-${blockchain}`;
+                const i18nKey = `formLabel.${blockchain}`;
+                const checked = formAddressList.includes(blockchain);
+
+                const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+                  if (event.target.checked) {
+                    setFormAddressList([...formAddressList, blockchain]);
+                  } else {
+                    setFormAddressList(formAddressList.filter((item) => item !== blockchain));
+                  }
+                };
+
+                return (
+                  <div key={inputId}>
+                    <Label htmlFor={inputId}>
+                      <Input id={inputId} type="checkbox" checked={checked} name={blockchain} onChange={onChange} />
                       {t(i18nKey)}
                     </Label>
                   </div>
