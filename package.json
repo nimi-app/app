@@ -37,14 +37,13 @@
     "react": "^18.0.0",
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.0.0",
-    "react-feather": "^2.0.9",
     "react-hook-form": "^7.30.0",
     "react-i18next": "^11.16.7",
     "react-loading-skeleton": "^3.1.0",
     "react-modal": "^3.15.1",
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^4.0.3",
     "react-toastify": "^8.2.0",
     "rebass": "^4.0.7",
     "styled-components": "^5.3.5",
@@ -55,8 +54,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
-    "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
+    "start": "GENERATE_SOURCEMAP=false react-scripts start",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint": "eslint \"./src/**/*.{ts,tsx,js}\"",
@@ -98,18 +97,8 @@
     "@typechain/ethers-v5": "^10.0.0",
     "@types/rebass": "^4.0.10",
     "@types/styled-components": "^5.1.25",
-    "assert": "^2.0.0",
-    "buffer": "^6.0.3",
-    "crypto-browserify": "^3.12.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "https-browserify": "^1.0.0",
-    "os-browserify": "^0.3.0",
-    "prettier": "^2.6.2",
-    "process": "^0.11.10",
-    "react-app-rewired": "^2.2.1",
-    "stream-browserify": "^3.0.0",
-    "stream-http": "^3.2.0",
-    "url": "^0.11.0"
+    "prettier": "^2.6.2"
   }
 }
