@@ -22,8 +22,10 @@ const customStyles = {
 };
 
 const StyledCloseIcon = styled(CloseIcon)`
-  display: flex;
-  margin-left: auto;
+  position: absolute;
+  top: 41px;
+  right: 45px;
+  cursor: pointer;
 `;
 
 interface ModalMainProps {

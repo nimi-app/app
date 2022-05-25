@@ -11,8 +11,12 @@ interface CheckboxProps {
 export function Checkbox({ field, registerFields }: CheckboxProps) {
   return (
     <Wrapper>
-      <StyledCheckbox type="checkbox" {...registerFields(FieldsMapping[field].name)}></StyledCheckbox>
-      <StyledLabel>{FieldsMapping[field].name}</StyledLabel>
+      <StyledCheckbox
+        id={FieldsMapping[field].name}
+        type="checkbox"
+        {...registerFields(FieldsMapping[field].name)}
+      ></StyledCheckbox>
+      <StyledLabel htmlFor={FieldsMapping[field].name}>{FieldsMapping[field].name}</StyledLabel>
     </Wrapper>
   );
 }

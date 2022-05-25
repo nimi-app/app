@@ -5,6 +5,8 @@ import styled, {
   css,
   DefaultTheme,
 } from 'styled-components';
+import backgroundImageUrl from '../assets/images/nimi-header-background.png';
+
 import { Text, TextProps } from 'rebass';
 import { Colors } from './styled';
 
@@ -231,7 +233,7 @@ body, html, #root {
 }
 
 body {
-  background-image: url("${require('../assets/images/nimi-header-background.png')}");
+  background-image: url("${backgroundImageUrl}");
   background-position: center;
   background-size: cover;
 }

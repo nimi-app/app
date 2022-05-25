@@ -28,7 +28,8 @@ const StyledWrapper = styled(StyledButtonBaseFrame)<WrapperProps>(
 
 const StyledInnerWrapper = styled.div`
   display: flex;
-  padding: 0 16px;
+  padding: 0px 16px 0px 10px;
+  justify-content: center;
   width: 150px;
 `;
 
