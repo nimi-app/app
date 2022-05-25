@@ -1,114 +1,22 @@
-import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ChangeEventHandler, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
-import {
-  linkTypeList,
-  Nimi,
-  nimiCard,
-  NimiLinkType,
-  Blockchain,
-  NimiLink,
-  NimiBlockchainAddress,
-  blockchainList,
-} from 'nimi-card';
+import { linkTypeList, Nimi, nimiCard, NimiLinkType, Blockchain, blockchainList } from 'nimi-card';
 import { Modal, Header as ModalHeader, Content as ModalContent, Footer as ModalFooter } from '../Modal';
-import { CommingSoonCards } from './sections';
 import { CardBody } from '../Card';
-import { Card, InnerWrapper, MainContent, PreviewContent } from './styled';
-import { TitleText } from '../Template/Input/styleds';
-import { FormGroup } from '../form/FormGroup';
+import { Card, InnerWrapper, MainContent, PreviewContent, CardTitle, StyledGridList } from './styled';
 import { Button } from '../Button';
-import { TextArea } from '../form/TextArea/TextArea';
-import { Input } from '../form/Input';
-import { Label } from '../form';
+import { Label, Input, TextArea, FormGroup } from '../form';
+import { NimiBlockchainField } from './partials/NimiBlockchainField';
+import { NimiLinkField } from './partials/NimiLinkField';
+import { ComingSoonCards } from './partials/ComingSoonCards';
 
-interface CreateNimiProps {
+export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
   ensLabelName: string;
-}
-
-const StyledGridList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-`;
-
-interface NimiLinkInputProps {
-  link: NimiLinkType;
-  label: string;
-}
-
-interface NimiBlockchainInputProps {
-  blockchain: Blockchain;
-}
-
-/**
- * Handles the input for the link type
- */
-function NimiLinkInput({ link, label }: NimiLinkInputProps) {
-  const { setValue, getValues } = useFormContext<Nimi>();
-
-  const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const prevState = getValues('links') || [];
-    const hasLink = prevState.some((prevLink) => prevLink.type === link);
-    const newState: NimiLink[] = hasLink
-      ? prevState.map((curr) => {
-          if (curr.type === link) {
-            return { ...curr, url: event.target.value };
-          }
-
-          return curr;
-        })
-      : [...prevState, { type: link, label, url: event.target.value }];
-
-    setValue('links', newState);
-  };
-
-  return (
-    <FormGroup key={link}>
-      <Label htmlFor={link}>{label}</Label>
-      <Input type="text" id={link} onChange={onChange} />
-    </FormGroup>
-  );
-}
-
-/**
- * Handles the input for blockchain address
- */
-function NimiBlockchainInput({ blockchain }: NimiBlockchainInputProps) {
-  const { t } = useTranslation('nimi');
-
-  const { setValue, getValues } = useFormContext<Nimi>();
-  const i18nKey = `formLabel.${blockchain}`;
-
-  const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const prevState = getValues('addresses') || [];
-    const hasLink = prevState.some((prevLink) => prevLink.blockchain === blockchain);
-    const newState: NimiBlockchainAddress[] = hasLink
-      ? prevState.map((curr) => {
-          if (curr.blockchain === blockchain) {
-            return { ...curr, url: event.target.value };
-          }
-
-          return curr;
-        })
-      : [...prevState, { blockchain, address: event.target.value }];
-
-    setValue('addresses', newState);
-  };
-
-  return (
-    <FormGroup key={blockchain}>
-      <Label htmlFor={blockchain}>{t(i18nKey)}</Label>
-      <Input type="text" id={blockchain} onChange={onChange} />
-    </FormGroup>
-  );
 }
 
 export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
@@ -151,11 +59,11 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
         <MainContent>
           <Card variant="blurred">
             <CardBody>
-              <TitleText>
+              <CardTitle>
                 {t('creatingSiteNamesPersonalSite', {
                   siteName: ensName,
                 })}
-              </TitleText>
+              </CardTitle>
               <form onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
@@ -166,12 +74,23 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                   <TextArea id="description" {...register('description')}></TextArea>
                 </FormGroup>
                 {formLinkList.map((link) => {
-                  const i18nKey = `formLabel.${link}`;
-                  return <NimiLinkInput key={'link-input' + link} label={t(i18nKey)} link={link} />;
+                  const label = t(`formLabel.${link}`);
+
+                  return (
+                    <FormGroup key={'blockchain-input-' + link}>
+                      <NimiLinkField key={'link-input' + link} label={label} link={link} />
+                    </FormGroup>
+                  );
                 })}
-                {formAddressList.map((blockchain) => (
-                  <NimiBlockchainInput key={'blockchain-input-' + blockchain} blockchain={blockchain} />
-                ))}
+                {formAddressList.map((blockchain) => {
+                  const label = t(`formLabel.${blockchain}`);
+
+                  return (
+                    <FormGroup key={'blockchain-input-' + blockchain}>
+                      <NimiBlockchainField label={label} blockchain={blockchain} />
+                    </FormGroup>
+                  );
+                })}
                 <FormGroup>
                   <Button type="button" onClick={() => setIsModalOpen(true)}>
                     {t('buttonLabel.addNimis')}
@@ -183,12 +102,12 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               </form>
             </CardBody>
           </Card>
-          <CommingSoonCards />
+          <ComingSoonCards />
         </MainContent>
         <PreviewContent>
           <Card variant="blurred">
             <CardBody>
-              <TitleText>{t('preview')}</TitleText>
+              <CardTitle>{t('preview')}</CardTitle>
               {nimiPayload && (
                 <pre>
                   <code>{JSON.stringify(nimiPayload, null, 2)}</code>

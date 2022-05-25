@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Card, CardBodyTextCenter } from './styled';
+import { Card, CardBodyTextCenter } from '../../styled';
 
 /**
- *
+ * Coming soon cards partial
  */
-export const CommingSoonCards = () => {
+export const ComingSoonCards = () => {
   const { t } = useTranslation('nimi');
 
   return (
