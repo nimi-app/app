@@ -54,11 +54,8 @@ export const MULTICALL2_ADDRESS: Record<number, string> = {
 export enum ChainId {
   MAINNET = 1,
   RINKEBY = 4,
-  GOERLI = 5,
-  XDAI = 100,
   POLYGON = 137,
-  ARBITRUM_ONE = 42161,
-  ARBITRUM_RINKEBY = 421611,
+  GOERLI = 5,
 }
 
 export function getChainLabel(chainId: ChainId): string {

@@ -1,8 +1,10 @@
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
+import { Web3ContextType } from '@web3-react/core';
+
 import { useEffect } from 'react';
 
-export function useActiveWeb3React() {
+export function useActiveWeb3React(): Web3ContextType<Web3Provider> {
   return useWeb3ReactCore<Web3Provider>();
 }
 
