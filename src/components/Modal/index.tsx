@@ -1,11 +1,23 @@
 import { PropsWithChildren } from 'react';
-import styled from 'styled-components';
+import {} from 'styled-components/macro';
 import ReactModal from 'react-modal';
-import { ReactComponent as CloseIcon } from '../../assets/svg/close-icon.svg';
+import { Property } from 'csstype';
 // Import the the Modal components
-import { StyledModalBackdrop, StyledModalDialog, StyledModalInnerWrapper, StyledModalOutterWrapper } from './styled';
+import {
+  StyledModalBackdrop,
+  StyledModalDialog,
+  StyledModalInnerWrapper,
+  StyledModalOutterWrapper,
+  StyledCloseModalButton,
+} from './styled';
 // Export the three main modal elements
-export { StyledModalHeader as Header, StyledModalFooter as Footer, StyledModalContent as Content } from './styled';
+export {
+  StyledModalHeader as Header,
+  StyledModalFooter as Footer,
+  StyledModalContent as Content,
+  StyledCloseModalButton as CloseButton,
+  StyledModalTitle as Title,
+} from './styled';
 
 const customStyles = {
   content: {
@@ -21,13 +33,6 @@ const customStyles = {
   overlay: { zIndex: 1000 },
 };
 
-const StyledCloseIcon = styled(CloseIcon)`
-  position: absolute;
-  top: 41px;
-  right: 45px;
-  cursor: pointer;
-`;
-
 interface ModalMainProps {
   isOpen: boolean;
   setModal: (state: boolean) => void;
@@ -37,20 +42,24 @@ interface ModalMainProps {
 export function ModalMain({ setModal, children, isOpen }: ModalMainProps) {
   return (
     <ReactModal onRequestClose={() => setModal(false)} style={customStyles} isOpen={isOpen}>
-      <StyledCloseIcon onClick={() => setModal(false)} />
+      <StyledCloseModalButton onClick={() => setModal(false)} />
       {children}
     </ReactModal>
   );
 }
 
+export interface ModalProps {
+  maxWidth?: Property.MaxWidth;
+}
+
 /**
  * Modal main component. This is the main component that is used to render the modal.
  */
-export function Modal({ children }: PropsWithChildren<unknown>) {
+export function Modal({ children, maxWidth }: PropsWithChildren<ModalProps>) {
   return (
     <StyledModalDialog>
       <StyledModalBackdrop>
-        <StyledModalOutterWrapper>
+        <StyledModalOutterWrapper maxWidth={maxWidth}>
           <StyledModalInnerWrapper>{children}</StyledModalInnerWrapper>
         </StyledModalOutterWrapper>
       </StyledModalBackdrop>

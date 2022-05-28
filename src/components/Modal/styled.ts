@@ -1,4 +1,23 @@
 import styled, { keyframes } from 'styled-components';
+import { Property } from 'csstype';
+import { ReactComponent as CloseIcon } from '../../assets/svg/close-icon.svg';
+import { NimiSignatureColor } from '../../theme';
+
+/**
+ * Modal inner components default padding
+ */
+export const DEFAULT_INNER_COMPONENT_SPACING: Property.Padding = '24px';
+/**
+ * Modal component default width
+ */
+export const MODAL_MAX_WIDTH: Property.MaxWidth = '500px';
+
+/**
+ * Defines the base styles for the modal's inner component.
+ */
+export interface ModalInnerComponentProps {
+  padding?: Property.Padding;
+}
 
 export const StyledModalDialog = styled.div`
   scrollbar-width: none;
@@ -39,14 +58,23 @@ export const StyledModalBackdrop = styled.div`
   overflow-y: scroll;
 `;
 
-export const StyledModalOutterWrapper = styled.div`
+export interface StyledModalOutterWrapperProps {
+  maxWidth?: Property.MaxWidth;
+}
+
+/**
+ * Outter container/component for the modal.
+ */
+export const StyledModalOutterWrapper = styled.div<StyledModalOutterWrapperProps>(
+  ({ maxWidth = MODAL_MAX_WIDTH }) => `
   margin: auto;
   z-index: 1000;
   width: 100%;
-  max-width: 360px;
+  max-width: ${maxWidth};
   padding-left: 16px;
   padding-right: 16px;
-`;
+`
+);
 
 export const StyledModalInnerWrapper = styled.div`
   display: flex;
@@ -58,15 +86,21 @@ export const StyledModalInnerWrapper = styled.div`
   margin: auto;
 `;
 
-export const StyledModalHeader = styled.header`
+export const StyledModalHeader = styled.header<ModalInnerComponentProps>(
+  ({ padding = DEFAULT_INNER_COMPONENT_SPACING }) => `
   font-weight: 500;
   font-size: 20px;
   display: flex;
   align-items: center;
+  flex-direction: column;
   padding: 24px 28px 20px;
-`;
+  padding: ${padding};
+  position: relative;
+`
+);
 
-export const StyledModalFooter = styled.footer`
+export const StyledModalFooter = styled.footer<ModalInnerComponentProps>(
+  ({ padding = DEFAULT_INNER_COMPONENT_SPACING }) => `
   font-size: 15px;
   line-height: 20px;
   display: flex;
@@ -74,8 +108,26 @@ export const StyledModalFooter = styled.footer`
   justify-content: space-between;
   color: #6f6e84;
   padding: 0px 28px 20px;
+  pading: ${padding};
+`
+);
+
+export const StyledModalContent = styled.main<ModalInnerComponentProps>(
+  ({ padding = DEFAULT_INNER_COMPONENT_SPACING }) => `
+    padding: ${padding};
+`
+);
+
+export const StyledCloseModalButton = styled(CloseIcon)`
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  cursor: pointer;
 `;
 
-export const StyledModalContent = styled.main`
-  padding: 28px;
+/**
+ * Modal Title
+ */
+export const StyledModalTitle = styled.h2`
+  ${NimiSignatureColor}
 `;
