@@ -226,6 +226,10 @@ h1, h2, h3, h4, h5, h6 {
   font-display: fallback;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 24px;
+}
+
 /** Full-width and height */
 body, html, #root {
   min-height:100vh;

@@ -5,16 +5,18 @@ import { useMemo, useState } from 'react';
 
 import { Nimi, nimiCard, NimiLinkType, Blockchain, blockchainList, linkTypeList } from 'nimi-card';
 import { CardBody } from '../Card';
-import { Card, InnerWrapper, MainContent, PreviewContent, CardTitle } from './styled';
+import { Card, InnerWrapper, MainContent, PreviewContent, PageSectionTitle } from './styled';
 import { Button } from '../Button';
 import { Label, Input, TextArea, FormGroup } from '../form';
 
 // Partials
+import { ImportButtonsWrapper, ImportFromLensProtocolButton, ImportFromTwitterButton } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiLinkField } from './partials/NimiLinkField';
 import { ComingSoonCards } from './partials/ComingSoonCards';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
+import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -27,6 +29,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
    * @todo replace this API
    */
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
+  const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
 
   const { t } = useTranslation('nimi');
 
@@ -42,7 +45,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     },
   });
 
-  const { register, watch, handleSubmit } = useFormContext;
+  const { register, watch, handleSubmit, setValue } = useFormContext;
 
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLinkType[]>([]);
@@ -76,13 +79,15 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     <FormProvider {...useFormContext}>
       <InnerWrapper>
         <MainContent>
+          <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card variant="blurred">
             <CardBody>
-              <CardTitle>
-                {t('creatingSiteNamesPersonalSite', {
-                  siteName: ensName,
-                })}
-              </CardTitle>
+              <ImportButtonsWrapper>
+                <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
+                  {t('buttonLabel.importFromTwitter')}
+                </ImportFromTwitterButton>
+                <ImportFromLensProtocolButton>{t('buttonLabel.importFromLensProtocol')}</ImportFromLensProtocolButton>
+              </ImportButtonsWrapper>
               <form onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
@@ -124,6 +129,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           <ComingSoonCards />
         </MainContent>
         <PreviewContent>
+          <PageSectionTitle>{t('preview')}</PageSectionTitle>
           <NimiPreviewCard nimi={formWatchPayload} />
         </PreviewContent>
       </InnerWrapper>
@@ -138,6 +144,19 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
             setIsAddFieldsModalOpen(false);
             setFormLinkList(links);
             setFormAddressList(blockchainAddresses);
+          }}
+        />
+      )}
+      {isImportFromTwitterModalOpen && (
+        <ImportFromTwitterModal
+          onClose={() => setIsImportFromTwitterModalOpen(false)}
+          onDataImport={(data) => {
+            // Set the fields and close the modal
+            setValue('displayName', data.name);
+            setValue('description', data.description);
+            setValue('displayImageUrl', data.profileImageUrl);
+
+            setIsImportFromTwitterModalOpen(false);
           }}
         />
       )}

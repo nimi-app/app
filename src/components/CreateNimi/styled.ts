@@ -71,3 +71,8 @@ export const StyledGridList = styled.div`
   grid-column-gap: 0px;
   grid-row-gap: 0px;
 `;
+
+export const PageSectionTitle = styled.h1`
+  ${NimiSignatureColor}
+  font-size: 36px;
+`;
