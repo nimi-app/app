@@ -27,7 +27,7 @@ export function AddFieldsModal({ handleSubmit, registerFields, setModal, isOpen 
 
       <FormStyled onSubmit={handleSubmit}>
         {array.map((item, index) => (
-          <Checkbox key={index} registerFields={registerFields} field={index} />
+          <Checkbox key={index} registerFields={registerFields} field={item} />
         ))}
         <Button type="submit">Add Fields</Button>
       </FormStyled>
