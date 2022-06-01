@@ -1,8 +1,10 @@
 import styled from 'styled-components';
-import { ExternalLink, NimiSignatureColor, WhiteCard } from '../../theme';
+import { ExternalLink, NimiSignatureColor } from '../../theme';
+import { Card } from '../Card';
 
-export const StyledENSNameCardWrapper = styled(WhiteCard)`
+export const StyledENSNameCardWrapper = styled(Card)`
   justify-content: center;
+  align-items: center;
   padding: 48px 32px;
   max-width: 310px;
   min-height: 320px;

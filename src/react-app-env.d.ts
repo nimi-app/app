@@ -2,7 +2,7 @@
 
 interface EthereumProviderRequestArguments {
   method: string;
-  params?: unknown[] | object;
+  params?: unknown[] | Record<string, unknown>;
 }
 
 interface Ethereum {

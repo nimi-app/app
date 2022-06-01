@@ -1,8 +1,8 @@
 import React, { HTMLProps, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+import { Button as Base } from 'rebass';
 import { Colors } from './styled';
-import { Button as Base, Flex } from 'rebass';
 
 export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColor: string }>(({ warning, theme }) => ({
   backgroundColor: warning ? theme.red1 : theme.primary1,
@@ -22,15 +22,6 @@ export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColo
     color: ${({ theme }) => theme.text4};
     cursor: auto;
   }
-`;
-
-export const WhiteCard = styled(Flex)`
-  align-items: center;
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0px 5px 24px rgba(138, 143, 234, 0.12);
-  backdrop-filter: blur(20px);
-  border-radius: 25px;
-  flex-direction: column;
 `;
 
 // A button that triggers some onClick result, but looks like a link.

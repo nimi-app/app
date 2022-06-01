@@ -60,6 +60,7 @@ export interface Colors {
   purple4: Color;
   purple5: Color;
   boxShadow: Color;
+  shadow1: Color;
 
   // darkest // dark1.1
   darkest: Color;

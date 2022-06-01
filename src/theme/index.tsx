@@ -100,6 +100,7 @@ export function colors(darkMode = false): Colors {
     purple4: '#685EC6',
     purple5: '#464366',
     boxShadow: '#0A0A0F',
+    shadow1: '#2F80ED',
 
     // darkest // dark 1.1
     darkest: '#161721',
@@ -215,7 +216,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-html, input, textarea, button {
+html, input, label, textarea, button {
   font-family: 'Baloo 2', cursive;
   font-display: fallback;
 }
@@ -223,6 +224,10 @@ html, input, textarea, button {
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Baloo 2', cursive;
   font-display: fallback;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 24px;
 }
 
 /** Full-width and height */
@@ -243,6 +248,13 @@ button {
 
 a {
   text-decoration: none;
+}
+
+pre, code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: auto;
 }
 `;
 
