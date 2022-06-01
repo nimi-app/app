@@ -3,6 +3,8 @@ import { Flex } from 'rebass';
 
 import { Card as CardBase, CardBody } from '../Card';
 import { NimiSignatureColor } from '../../theme';
+import { ReactComponent as PlaceholderMini } from '../../assets/svg/profile-empty.svg';
+import { Button } from '../Button';
 
 /**
  * Defines the layout
@@ -75,4 +77,37 @@ export const StyledGridList = styled.div`
 export const PageSectionTitle = styled.h1`
   ${NimiSignatureColor}
   font-size: 36px;
+  line-height: 39px;
+  letter-spacing: -0.02em;
+`;
+export const ProfileImage = styled.img`
+  background-position: center, center;
+  background-size: cover;
+  align-self: center;
+  border: 8px solid #ffffff;
+  border-radius: 200px;
+  height: 209.8px;
+  width: 209.8px;
+  z-index: 1;
+`;
+export const ProfileImagePlaceholder = styled(PlaceholderMini)`
+  align-self: center;
+`;
+export const SaveAndDeployButton = styled(Button)`
+  background: linear-gradient(291.35deg, #4368ea -25.85%, #c490dd 73.38%);
+  opacity: 0.8;
+  border-radius: 50px;
+  padding: 25px 24px;
+  letter-spacing: -0.02em;
+`;
+export const AddFieldsButton = styled.button`
+  text-transform: upperCase;
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.1em;
+  ${NimiSignatureColor};
+  border: 2px dotted rgba(67, 104, 234, 1);
+  padding: 22px 16px;
+  border-radius: 12px;
 `;
