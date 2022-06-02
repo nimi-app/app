@@ -45,10 +45,6 @@ export function shortenAddress(address: string, charsBefore = 4, charsAfter = 4)
   }
   return `${parsed.substring(0, charsBefore + 2)}...${parsed.substring(42 - charsAfter)}`;
 }
-//capitalizes first letter
-export function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 // account is not optional
 export function getSigner(library: Web3Provider | JsonRpcProvider, account: string): JsonRpcSigner {

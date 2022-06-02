@@ -27,7 +27,6 @@ import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
-import { capitalizeFirstLetter } from '../../utils';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -48,7 +47,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiCard),
     defaultValues: {
-      displayName: capitalizeFirstLetter(ensName),
+      displayName: ensName,
       ensAddress: ensAddress,
       ensName,
       addresses: [],
