@@ -101,7 +101,7 @@ export const SaveAndDeployButton = styled(Button)`
   letter-spacing: -0.02em;
 `;
 export const AddFieldsButton = styled.button`
-  text-transform: upperCase;
+  text-transform: uppercase;
   cursor: pointer;
   font-weight: 600;
   line-height: 24px;
