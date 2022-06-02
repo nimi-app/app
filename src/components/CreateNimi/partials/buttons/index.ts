@@ -5,6 +5,7 @@ export const ImportButtonsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 32px;
+  margin-top: 41px;
 `;
 
 export const ImportFromTwitterButton = styled(Button)`

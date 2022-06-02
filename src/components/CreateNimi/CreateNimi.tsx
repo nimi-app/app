@@ -5,18 +5,28 @@ import { useMemo, useState } from 'react';
 
 import { Nimi, nimiCard, NimiLinkType, Blockchain, blockchainList, linkTypeList } from 'nimi-card';
 import { CardBody } from '../Card';
-import { Card, InnerWrapper, MainContent, PreviewContent, PageSectionTitle } from './styled';
-import { Button } from '../Button';
+import {
+  Card,
+  InnerWrapper,
+  MainContent,
+  PreviewContent,
+  PageSectionTitle,
+  ProfileImage,
+  ProfileImagePlaceholder,
+  AddFieldsButton,
+  SaveAndDeployButton,
+} from './styled';
+
 import { Label, Input, TextArea, FormGroup } from '../form';
 
 // Partials
 import { ImportButtonsWrapper, ImportFromLensProtocolButton, ImportFromTwitterButton } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiLinkField } from './partials/NimiLinkField';
-import { ComingSoonCards } from './partials/ComingSoonCards';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
+import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -80,15 +90,21 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       <InnerWrapper>
         <MainContent>
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
-          <Card variant="blurred">
+          <Card>
             <CardBody>
+              {formWatchPayload.displayImageUrl ? (
+                <ProfileImage src={formWatchPayload.displayImageUrl} />
+              ) : (
+                <ProfileImagePlaceholder />
+              )}
+
               <ImportButtonsWrapper>
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
                   {t('buttonLabel.importFromTwitter')}
                 </ImportFromTwitterButton>
                 <ImportFromLensProtocolButton>{t('buttonLabel.importFromLensProtocol')}</ImportFromLensProtocolButton>
               </ImportButtonsWrapper>
-              <form onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
+              <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
                   <Input id="displayName" {...register('displayName')} />
@@ -97,13 +113,14 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
                   <TextArea id="description" {...register('description')}></TextArea>
                 </FormGroup>
+
                 {selectedLinkFieldList.map((link) => {
                   const label = t(`formLabel.${link}`);
 
                   return (
-                    <FormGroup key={'blockchain-input-' + link}>
+                    <LinkFormGroup key={'blockchain-input-' + link}>
                       <NimiLinkField key={'link-input' + link} label={label} link={link} />
-                    </FormGroup>
+                    </LinkFormGroup>
                   );
                 })}
                 {selectedBlockchainAddressFieldList.map((blockchain) => {
@@ -115,18 +132,18 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                     </FormGroup>
                   );
                 })}
+
                 <FormGroup>
-                  <Button type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
-                    {t('buttonLabel.addFields')}
-                  </Button>
+                  <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
+                    + {t('buttonLabel.addFields')}
+                  </AddFieldsButton>
                 </FormGroup>
                 <FormGroup>
-                  <Button type="submit">{t('saveAndDeployNimiSite')}</Button>
+                  <SaveAndDeployButton type="submit">{t('saveAndDeployNimiSite')}</SaveAndDeployButton>
                 </FormGroup>
-              </form>
+              </FormWrapper>
             </CardBody>
           </Card>
-          <ComingSoonCards />
         </MainContent>
         <PreviewContent>
           <PageSectionTitle>{t('preview')}</PageSectionTitle>
