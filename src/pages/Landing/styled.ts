@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { NimiSignatureColor } from '../../theme';
 
 export const PageWrapper = styled.div`
