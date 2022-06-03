@@ -22,7 +22,7 @@ export function Landing() {
   return (
     <PageWrapper>
       <Header>
-        <NimiLogo />
+        <NimiLogo height="72px" />
       </Header>
       <Content>
         <Container>

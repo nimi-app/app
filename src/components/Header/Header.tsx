@@ -8,7 +8,7 @@ export function Header() {
   return (
     <HeaderWrapper>
       <Link to="/">
-        <NimiLogo />
+        <NimiLogo height="40px" />
       </Link>
       <AccountAndLinks>
         <Link to="/">
