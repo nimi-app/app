@@ -1,14 +1,15 @@
-import { Provider as ReduxStoreProvider } from 'react-redux';
+import './i18n';
+
 import { Web3ReactProvider } from '@web3-react/core';
-import { HashRouter } from 'react-router-dom';
-import { createRoot } from 'react-dom/client';
 import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Provider as ReduxStoreProvider } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
 
 import { getWeb3ReactProviderConnectors, Web3ConnectorsContext, Web3ConnectorsProvider } from './connectors';
-import { FixedGlobalStyle, ThemedGlobalStyle, ThemeProvider } from './theme';
 import { App } from './pages/App';
 import { store } from './state';
-import './i18n';
+import { FixedGlobalStyle, ThemedGlobalStyle, ThemeProvider } from './theme';
 
 if ('ethereum' in window) {
   (window.ethereum as any).autoRefreshOnNetworkChange = false;
