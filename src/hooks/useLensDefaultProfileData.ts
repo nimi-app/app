@@ -12,14 +12,12 @@ export interface LensDefaultProfileData {
 export function useLensDefaultProfileData(): { loading: boolean; defaultProfileData: LensDefaultProfileData | null } {
   const { account } = useActiveWeb3React();
   const lensSubgraph = useLensSubgraph();
-  const { data, loading, error } = useGetDefaultProfileQuery({
+  const { data, loading } = useGetDefaultProfileQuery({
     client: lensSubgraph,
     variables: {
       account,
     },
   });
-
-  console.log(error);
 
   const [defaultProfileData, setDefaultProfileData] = useState<LensDefaultProfileData | null>(null);
 
