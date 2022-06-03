@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { Suspense } from 'react';
 
-import { defaultClient as defaultSubgraphClient, clients as subgraphClients } from '../apollo/client';
+import { defaultEnsClient, ensClients } from '../apollo/client';
 import { useActiveWeb3React } from '../hooks/useWeb3';
 import { Header } from '../components/Header';
 
@@ -65,7 +65,7 @@ export function App() {
   return (
     <Suspense fallback={null}>
       <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
-        <ApolloProvider client={subgraphClients[chainId as number] || defaultSubgraphClient}>
+        <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
           <WalletModal />
           <Routes>
             <Route element={<Landing />} path="/" />

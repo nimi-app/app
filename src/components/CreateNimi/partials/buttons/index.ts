@@ -3,7 +3,7 @@ import { Button } from '../../../Button';
 
 export const ImportButtonsWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 32px;
   margin-top: 41px;
 `;
@@ -20,6 +20,7 @@ export const ImportFromTwitterButton = styled(Button)`
 export const ImportFromLensProtocolButton = styled(Button)`
   background: #a3f428;
   color: #1a652c;
+  margin-left: 12px;
   &:hover,
   &:focus {
     background: #a3f428;
