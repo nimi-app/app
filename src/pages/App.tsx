@@ -1,19 +1,19 @@
-import { SkeletonTheme } from 'react-loading-skeleton';
-import styled, { useTheme } from 'styled-components';
-import { Route, Routes } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { Suspense } from 'react';
+import { SkeletonTheme } from 'react-loading-skeleton';
+import { Route, Routes } from 'react-router-dom';
+import styled, { useTheme } from 'styled-components';
 
-import { defaultClient as defaultSubgraphClient, clients as subgraphClients } from '../apollo/client';
-import { useActiveWeb3React } from '../hooks/useWeb3';
-import { Header } from '../components/Header';
-
-import { NotFound } from './NotFound';
-import { Landing } from './Landing';
-import { DomainsHome } from './Domains';
+import { clients as subgraphClients, defaultClient as defaultSubgraphClient } from '../apollo/client';
 import { Footer } from '../components/Footer';
+import { Header } from '../components/Header';
 import { WalletModal } from '../components/WalletModal';
+import { Web3Manager } from '../components/Web3Manager';
+import { useActiveWeb3React } from '../hooks/useWeb3';
 import { CreateNimiPage } from './CreateNimiPage';
+import { DomainsHome } from './Domains';
+import { Landing } from './Landing';
+import { NotFound } from './NotFound';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -66,6 +66,7 @@ export function App() {
     <Suspense fallback={null}>
       <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
         <ApolloProvider client={subgraphClients[chainId as number] || defaultSubgraphClient}>
+          <Web3Manager />
           <WalletModal />
           <Routes>
             <Route element={<Landing />} path="/" />
