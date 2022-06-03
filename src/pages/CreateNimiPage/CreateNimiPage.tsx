@@ -1,7 +1,7 @@
 import { namehash as ensNameHash } from '@ethersproject/hash';
 import { useParams } from 'react-router-dom';
 
-import { useGetDomainFromSubgraphQuery } from '../../generated/graphql';
+import { useGetDomainFromSubgraphQuery } from '../../generated/graphql/ens';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
 import { Container } from '../../components/Container';
