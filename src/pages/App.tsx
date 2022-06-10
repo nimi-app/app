@@ -13,13 +13,8 @@ import { Landing } from './Landing';
 import { DomainsHome } from './Domains';
 import { ReactComponent as NimiLogo } from '../assets/svg/nimi-logo-no-text.svg';
 import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
 import { WalletModal } from '../components/WalletModal';
-import { useActiveWeb3React } from '../hooks/useWeb3';
 import { CreateNimiPage } from './CreateNimiPage';
-import { DomainsHome } from './Domains';
-import { Landing } from './Landing';
-import { NotFound } from './NotFound';
 
 const AppWrapper = styled.div`
   display: flex;
