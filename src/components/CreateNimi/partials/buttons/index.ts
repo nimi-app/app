@@ -6,6 +6,9 @@ export const ImportButtonsWrapper = styled.div`
   justify-content: center;
   margin-bottom: 32px;
   margin-top: 41px;
+  & > :not(:last-child) {
+    margin-right: 12px;
+  }
 `;
 
 export const ImportFromTwitterButton = styled(Button)`
@@ -20,7 +23,6 @@ export const ImportFromTwitterButton = styled(Button)`
 export const ImportFromLensProtocolButton = styled(Button)`
   background: #a3f428;
   color: #1a652c;
-  margin-left: 12px;
   &:hover,
   &:focus {
     background: #a3f428;
