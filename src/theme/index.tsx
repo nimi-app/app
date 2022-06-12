@@ -203,35 +203,35 @@ export const TYPE = {
 export const FontsGlobal = css`
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-Regular.ttf') format('ttf');
+    src: url('../fonts/Baloo2-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: block;
   }
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-Medium.ttf') format('ttf');
+    src: url('../fonts/Baloo2-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
     font-display: block;
   }
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-SemiBold.ttf') format('ttf');
+    src: url('../fonts/Baloo2-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
     font-display: block;
   }
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-Bold.ttf') format('ttf');
+    src: url('../fonts/Baloo2-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
     font-display: block;
   }
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-ExtraBold.ttf') format('ttf');
+    src: url('../fonts/Baloo2-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
     font-display: block;
