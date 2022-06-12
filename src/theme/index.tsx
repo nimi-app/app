@@ -203,40 +203,39 @@ export const TYPE = {
 export const FontsGlobal = css`
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-Regular.ttf'), url('../fonts/Baloo2-Regular.ttf'), url('../fonts/Baloo2-SemiBold.ttf'),
-      url('../fonts/Baloo2-Bold.ttf'), url('../fonts/Baloo2-ExtraBold.ttf');
-    /* font-weight: 400;
+    src: url('../fonts/Baloo2-Regular.ttf');
+    font-weight: 400;
     font-style: normal;
-    font-display: block; */
+    font-display: block;
   }
-  /* @font-face {
+  @font-face {
     font-family: 'Baloo 2';
-    src: url('/fonts/Baloo2-Medium.ttf');
+    src: url('../fonts/Baloo2-Medium.ttf');
     font-weight: 500;
     font-style: normal;
     font-display: block;
   }
   @font-face {
     font-family: 'Baloo 2';
-    src: url('/fonts/Baloo2-SemiBold.ttf');
+    src: url('../fonts/Baloo2-SemiBold.ttf');
     font-weight: 600;
     font-style: normal;
     font-display: block;
   }
   @font-face {
     font-family: 'Baloo 2';
-    src: url('/fonts/Baloo2-Bold.ttf');
+    src: url('../fonts/Baloo2-Bold.ttf');
     font-weight: 700;
     font-style: normal;
     font-display: block;
   }
   @font-face {
     font-family: 'Baloo 2';
-    src: url('/fonts/Baloo2-ExtraBold.ttf');
+    src: url('../fonts/Baloo2-ExtraBold.ttf');
     font-weight: 800;
     font-style: normal;
     font-display: block;
-  } */
+  }
 `;
 export const FixedGlobalStyle = createGlobalStyle`
   ${FontsGlobal}; 
