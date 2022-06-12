@@ -201,40 +201,65 @@ export const TYPE = {
   },
 };
 export const FontsGlobal = css`
+  /* baloo-2-regular - latin */
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-Regular.ttf') format('ttf');
+    font-style: normal;
     font-weight: 400;
-    font-style: normal;
-    font-display: block;
+    src: url('../fonts/baloo-2-v12-latin-regular.eot'); /* IE9 Compat Modes */
+    src: local(''), url('../fonts/baloo-2-v12-latin-regular.eot?#iefix') format('embedded-opentype'),
+      /* IE6-IE8 */ url('../fonts/baloo-2-v12-latin-regular.woff2') format('woff2'),
+      /* Super Modern Browsers */ url('../fonts/baloo-2-v12-latin-regular.woff') format('woff'),
+      /* Modern Browsers */ url('../fonts/baloo-2-v12-latin-regular.ttf') format('truetype'),
+      /* Safari, Android, iOS */ url('../fonts/baloo-2-v12-latin-regular.svg#Baloo2') format('svg'); /* Legacy iOS */
   }
+  /* baloo-2-500 - latin */
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-Medium.ttf') format('ttf');
+    font-style: normal;
     font-weight: 500;
-    font-style: normal;
-    font-display: block;
+    src: url('../fonts/baloo-2-v12-latin-500.eot'); /* IE9 Compat Modes */
+    src: local(''), url('../fonts/baloo-2-v12-latin-500.eot?#iefix') format('embedded-opentype'),
+      /* IE6-IE8 */ url('../fonts/baloo-2-v12-latin-500.woff2') format('woff2'),
+      /* Super Modern Browsers */ url('../fonts/baloo-2-v12-latin-500.woff') format('woff'),
+      /* Modern Browsers */ url('../fonts/baloo-2-v12-latin-500.ttf') format('truetype'),
+      /* Safari, Android, iOS */ url('../fonts/baloo-2-v12-latin-500.svg#Baloo2') format('svg'); /* Legacy iOS */
   }
+  /* baloo-2-600 - latin */
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-SemiBold.ttf') format('ttf');
+    font-style: normal;
     font-weight: 600;
-    font-style: normal;
-    font-display: block;
+    src: url('../fonts/baloo-2-v12-latin-600.eot'); /* IE9 Compat Modes */
+    src: local(''), url('../fonts/baloo-2-v12-latin-600.eot?#iefix') format('embedded-opentype'),
+      /* IE6-IE8 */ url('../fonts/baloo-2-v12-latin-600.woff2') format('woff2'),
+      /* Super Modern Browsers */ url('../fonts/baloo-2-v12-latin-600.woff') format('woff'),
+      /* Modern Browsers */ url('../fonts/baloo-2-v12-latin-600.ttf') format('truetype'),
+      /* Safari, Android, iOS */ url('../fonts/baloo-2-v12-latin-600.svg#Baloo2') format('svg'); /* Legacy iOS */
   }
+  /* baloo-2-700 - latin */
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-Bold.ttf') format('ttf');
+    font-style: normal;
     font-weight: 700;
-    font-style: normal;
-    font-display: block;
+    src: url('../fonts/baloo-2-v12-latin-700.eot'); /* IE9 Compat Modes */
+    src: local(''), url('../fonts/baloo-2-v12-latin-700.eot?#iefix') format('embedded-opentype'),
+      /* IE6-IE8 */ url('../fonts/baloo-2-v12-latin-700.woff2') format('woff2'),
+      /* Super Modern Browsers */ url('../fonts/baloo-2-v12-latin-700.woff') format('woff'),
+      /* Modern Browsers */ url('../fonts/baloo-2-v12-latin-700.ttf') format('truetype'),
+      /* Safari, Android, iOS */ url('../fonts/baloo-2-v12-latin-700.svg#Baloo2') format('svg'); /* Legacy iOS */
   }
+  /* baloo-2-800 - latin */
   @font-face {
     font-family: 'Baloo 2';
-    src: url('../fonts/Baloo2-ExtraBold.ttf') format('ttf');
-    font-weight: 800;
     font-style: normal;
-    font-display: block;
+    font-weight: 800;
+    src: url('../fonts/baloo-2-v12-latin-800.eot'); /* IE9 Compat Modes */
+    src: local(''), url('../fonts/baloo-2-v12-latin-800.eot?#iefix') format('embedded-opentype'),
+      /* IE6-IE8 */ url('../fonts/baloo-2-v12-latin-800.woff2') format('woff2'),
+      /* Super Modern Browsers */ url('../fonts/baloo-2-v12-latin-800.woff') format('woff'),
+      /* Modern Browsers */ url('../fonts/baloo-2-v12-latin-800.ttf') format('truetype'),
+      /* Safari, Android, iOS */ url('../fonts/baloo-2-v12-latin-800.svg#Baloo2') format('svg'); /* Legacy iOS */
   }
 `;
 export const FixedGlobalStyle = createGlobalStyle`
