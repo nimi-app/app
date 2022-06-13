@@ -17,9 +17,7 @@ export const InnerWrapper = styled(Flex)`
 /**
  * Add some margin to the card
  */
-export const Card = styled(CardBase)`
-  margin-bottom: 24px;
-`;
+export const Card = styled(CardBase)``;
 
 export const CardBodyTextCenter = styled(CardBody)`
   text-align: center;
