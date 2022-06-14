@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Flex } from 'rebass';
 
-import { Card as CardBase, CardBody } from '../Card';
+import { CardBody } from '../Card';
 import { NimiSignatureColor } from '../../theme';
 import { ReactComponent as PlaceholderMini } from '../../assets/svg/profile-empty.svg';
 import { Button } from '../Button';
@@ -12,13 +12,6 @@ import { Button } from '../Button';
 export const InnerWrapper = styled(Flex)`
   justify-content: center;
   gap: 24px;
-`;
-
-/**
- * Add some margin to the card
- */
-export const Card = styled(CardBase)`
-  margin-bottom: 24px;
 `;
 
 export const CardBodyTextCenter = styled(CardBody)`

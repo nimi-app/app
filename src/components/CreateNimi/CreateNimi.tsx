@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useMemo, useState } from 'react';
 
 import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList } from 'nimi-card';
-import { CardBody } from '../Card';
+import { CardBody, Card } from '../Card';
 import {
-  Card,
   InnerWrapper,
   MainContent,
   PreviewContent,
