@@ -1,11 +1,11 @@
-import { Nimi, NimiLink, NimiLinkType } from 'nimi-card';
+import { Nimi, NimiLink, NimiLinkBaseDetails } from 'nimi-card';
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler } from 'react';
 
 import { Input, Label } from '../../../form';
 
 export interface NimiLinkFieldProps {
-  link: NimiLinkType;
+  link: NimiLink;
   label: string;
 }
 
@@ -18,7 +18,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const prevState = getValues('links') || [];
     const hasLink = prevState.some((prevLink) => prevLink.type === link);
-    const newState: NimiLink[] = hasLink
+    const newState: NimiLinkBaseDetails[] = hasLink
       ? prevState.map((curr) => {
           if (curr.type === link) {
             return { ...curr, url: event.target.value };

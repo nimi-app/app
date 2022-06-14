@@ -1,11 +1,11 @@
-import { Blockchain, Nimi, NimiBlockchainAddress } from 'nimi-card';
+import { NimiBlockchain, Nimi, NimiBlockchainAddress } from 'nimi-card';
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler } from 'react';
 
 import { Input, Label } from '../../../form';
 
 export interface NimiBlockchainFieldProps {
-  blockchain: Blockchain;
+  blockchain: NimiBlockchain;
   label: string;
 }
 

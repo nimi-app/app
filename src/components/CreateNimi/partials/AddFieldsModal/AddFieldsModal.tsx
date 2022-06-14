@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { blockchainList, linkTypeList, NimiLinkType, Blockchain } from 'nimi-card';
+import { blockchainList, linkTypeList, NimiLink, NimiBlockchain } from 'nimi-card';
 
 import {
   Modal,
@@ -42,8 +42,8 @@ const SectionTitle = styled.h2`
 `;
 
 interface AddFieldsOptions {
-  links: NimiLinkType[];
-  blockchainAddresses: Blockchain[];
+  links: NimiLink[];
+  blockchainAddresses: NimiBlockchain[];
 }
 
 export interface AddFieldsModalProps {
@@ -70,8 +70,8 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
 
   // An internal state to keep track of the current selected link type
   // Manages the links blockchain address list
-  const [linkList, setLinkList] = useState<NimiLinkType[]>(initialValues.links);
-  const [addressList, setAddressList] = useState<Blockchain[]>(initialValues.blockchainAddresses);
+  const [linkList, setLinkList] = useState<NimiLink[]>(initialValues.links);
+  const [addressList, setAddressList] = useState<NimiBlockchain[]>(initialValues.blockchainAddresses);
 
   return (
     <Modal>

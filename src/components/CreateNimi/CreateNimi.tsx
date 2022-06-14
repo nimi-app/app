@@ -3,10 +3,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useMemo, useState } from 'react';
 
-import { Nimi, nimiCard, NimiLinkType, Blockchain, blockchainList, linkTypeList } from 'nimi-card';
-import { CardBody } from '../Card';
+import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList } from 'nimi-card';
+import { CardBody, Card } from '../Card';
 import {
-  Card,
   InnerWrapper,
   MainContent,
   PreviewContent,
@@ -60,8 +59,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const { register, watch, handleSubmit, setValue } = useFormContext;
 
   // Manages the links blockchain address list
-  const [formLinkList, setFormLinkList] = useState<NimiLinkType[]>([]);
-  const [formAddressList, setFormAddressList] = useState<Blockchain[]>([]);
+  const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
+  const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
   const selectedBlockchainAddressFieldList = useMemo(

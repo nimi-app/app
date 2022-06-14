@@ -9,6 +9,7 @@ export const FooterMain = styled.footer`
   background: transparent;
   min-height: 60px;
   flex-shrink: 0;
+  margin-top: 60px;
 `;
 
 export const FooterWrapper = styled.div`
