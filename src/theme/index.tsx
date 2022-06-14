@@ -5,7 +5,6 @@ import styled, {
   css,
   DefaultTheme,
 } from 'styled-components';
-import backgroundImageUrl from '../assets/images/nimi-header-background.png';
 
 import { Text, TextProps } from 'rebass';
 import { Colors } from './styled';
@@ -274,11 +273,7 @@ body, html, #root {
   width: 100%;
 }
 
-body {
-  background-image: url("${backgroundImageUrl}");
-  background-position: center;
-  background-size: cover;
-}
+
 
 button {
   user-select: none;
