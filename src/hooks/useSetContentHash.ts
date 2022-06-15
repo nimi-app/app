@@ -1,19 +1,23 @@
 import { useMemo } from 'react';
-import { useENSResolverContract } from './useContract';
+import { useENSPublicResolverContract } from './useENSPublicResolverContract';
 import { TransactionResponse } from '@ethersproject/providers';
-import { fromIpfs } from 'content-hash';
+import contentHash from 'content-hash';
+import nameHash from '@ensdomains/eth-ens-namehash';
 
 /**
  * Returns a function that sets content hash for a given ENS name.
  */
-export function useSetContentHash(ipfsHash?: string, ensNode?: string): null | (() => Promise<TransactionResponse>) {
-  const publicResolverContract = useENSResolverContract();
-  const formattedHash = fromIpfs(ipfsHash);
+export function useSetContentHash(ipfsHash?: string, ensName?: string): null | (() => Promise<TransactionResponse>) {
+  const publicResolverContract = useENSPublicResolverContract();
 
   return useMemo(() => {
-    if (!publicResolverContract || !ipfsHash || !ensNode) return null;
-    return async () => {
-      return publicResolverContract.setContentHash(ensNode, formattedHash);
+    if (!publicResolverContract || !ipfsHash || !ensName) return null;
+
+    const ensNode = nameHash.hash(ensName);
+    const formattedHash = contentHash.fromIpfs(ipfsHash);
+
+    return async function setContenthash() {
+      return publicResolverContract.setContenthash(ensNode, '0x' + formattedHash);
     };
-  }, [formattedHash, ensNode, ipfsHash, publicResolverContract]);
+  }, [ensName, ipfsHash, publicResolverContract]);
 }
