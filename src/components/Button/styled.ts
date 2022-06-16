@@ -54,7 +54,7 @@ export const StyledButtonBaseFrame = styled(StyledButtonBase)`
 `;
 
 export const StyledButtonFrame = styled(StyledButtonBaseFrame)`
-  padding: 10px 24px;
+  padding: 13.5px 24px;
 `;
 
 export const StyledLink = styled(Link)`

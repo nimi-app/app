@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import backgroundImageUrl from '../../assets/images/nimi-header-background.png';
 import { NimiSignatureColor } from '../../theme';
 
 export const PageWrapper = styled.div`
@@ -9,6 +9,9 @@ export const PageWrapper = styled.div`
   justify-content: center;
   min-height: 100vh;
   width: 100%;
+  background-image: url('${backgroundImageUrl}');
+  background-position: center;
+  background-size: cover;
 `;
 
 export const Header = styled.header`
@@ -37,7 +40,7 @@ export const HeroText = styled.div`
     font-size:42px;
   `};
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
   justify-content: start;
   > * {
     -webkit-text-fill-color: transparent;
@@ -46,8 +49,20 @@ export const HeroText = styled.div`
 
 export const HeroLead = styled.div`
   font-weight: 400;
+  line-height: 93.06px;
 `;
 
 export const HeroSub = styled.div`
   font-weight: 600;
+`;
+export const HeaderEyebrow = styled.div`
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 117.7%;
+  margin-bottom: 16px;
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  color: #556de7;
 `;

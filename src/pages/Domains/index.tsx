@@ -10,11 +10,20 @@ import { useGetDomainsQuery } from '../../generated/graphql';
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
 import { ENSNameCard } from '../../components/ENSNameCard';
+import { NimiSignatureColor } from '../../theme';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
-  gap: 19px;
+  gap: 18px;
   justify-content: center;
+`;
+const DomainsHeader = styled.div`
+  ${NimiSignatureColor};
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 39px;
+
+  margin-bottom: 36px;
 `;
 
 interface DomainsProps {
@@ -41,6 +50,7 @@ function Domains({ address }: DomainsProps) {
 
   return (
     <Container>
+      <DomainsHeader>Your Identities</DomainsHeader>
       <StyledDomainsWrapper>
         {data.account.domains.map(({ id, name, labelName }) => {
           return <ENSNameCard key={id} name={name || ''} labelName={labelName || ''} />;

@@ -9,7 +9,7 @@ import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
 import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 // Styled components
-import { Content, Header, HeroLead, HeroText, PageWrapper } from './styled';
+import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
 
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
@@ -33,6 +33,7 @@ export function Landing() {
       </Header>
       <Content>
         <Container>
+          <HeaderEyebrow>Your personal web3 front page</HeaderEyebrow>
           <HeroText>
             <HeroLead>
               <Trans ns="lading" key="hero.lead">

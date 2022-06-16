@@ -1,14 +1,8 @@
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import PurpleCircle from '../../assets/svg/purpleCircle.svg';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../Button';
-import {
-  StyledENSNameCardWrapper,
-  StyledDomainNameWrapper,
-  StyledExternalLink,
-  ENSNameCardImage,
-  StyledDomainName,
-} from './styleds';
+
+import { StyledENSNameCardWrapper, StyledDomainNameWrapper, ENSNameCardImage, StyledDomainName } from './styleds';
 
 export interface ENSNameCardProps {
   name: string;
@@ -26,20 +20,18 @@ const DomainName: FC<ENSDomainNameProps> = ({ name }) => (
   </StyledDomainNameWrapper>
 );
 
-export function ENSNameCard({ name, labelName, imageUrl }: ENSNameCardProps) {
-  const { t } = useTranslation();
+export function ENSNameCard({ name, labelName, imageUrl = PurpleCircle }: ENSNameCardProps) {
   const navigate = useNavigate();
 
   const handleSubmit = () => navigate(`/domains/${name}`);
-  const domainLength = name.length;
-  const domainHref = name ? `https://${name}.limo` : `https://${labelName}.eth.limo`;
+  // const domainLength = name.length;
+  // const domainHref = name ? `https://${name}.limo` : `https://${labelName}.eth.limo`;
 
   return (
-    <StyledENSNameCardWrapper>
-      {imageUrl && <ENSNameCardImage alt={imageUrl} src={imageUrl} />}
+    <StyledENSNameCardWrapper onClick={handleSubmit}>
+      <ENSNameCardImage alt={imageUrl} src={imageUrl} />
       <DomainName name={name} />
-      <Button onClick={handleSubmit}>{t('setupANimiProfile')}</Button>
-      <StyledExternalLink
+      {/* <StyledExternalLink
         href={domainHref}
         title={t('goToDomainName', {
           domainName: name || labelName,
@@ -52,7 +44,7 @@ export function ENSNameCard({ name, labelName, imageUrl }: ENSNameCardProps) {
               domainName: name || labelName,
             })
           : t('viewThisDomain')}
-      </StyledExternalLink>
+      </StyledExternalLink> */}
     </StyledENSNameCardWrapper>
   );
 }
