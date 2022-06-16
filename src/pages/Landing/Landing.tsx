@@ -36,7 +36,11 @@ export function Landing() {
           <HeroText>
             <HeroLead>
               <Trans ns="lading" key="hero.lead">
-                Your <strong>Forever</strong> Identity.
+                Your{' '}
+                <i>
+                  <strong>Forever</strong>
+                </i>{' '}
+                Identity.
               </Trans>
             </HeroLead>
           </HeroText>
