@@ -76,6 +76,12 @@ export enum ChainId {
   ARBITRUM_RINKEBY = 421611,
 }
 
+export const PUBLIC_RESOLVER_ADDRESSES = {
+  [ChainId.MAINNET]: '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41',
+  [ChainId.RINKEBY]: '0xf6305c19e814d2a75429Fd637d01F7ee0E77d615',
+  [ChainId.GOERLI]: '0x4b1488b7a6b320d2d721406204abc3eeaa9ad329',
+};
+
 export function getChainLabel(chainId: ChainId): string {
   return (
     {
