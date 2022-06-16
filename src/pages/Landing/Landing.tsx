@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo.svg';
@@ -9,7 +9,7 @@ import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
 import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 // Styled components
-import { Content, Header, HeroLead, HeroSub, HeroText, PageWrapper } from './styled';
+import { Content, Header, HeroLead, HeroText, PageWrapper } from './styled';
 
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
@@ -34,8 +34,11 @@ export function Landing() {
       <Content>
         <Container>
           <HeroText>
-            <HeroLead>{t('hero.lead', { ns: 'landing' })}</HeroLead>
-            <HeroSub>{t('hero.sub', { ns: 'landing' })}</HeroSub>
+            <HeroLead>
+              <Trans ns="lading" key="hero.lead">
+                Your <strong>Forever</strong> Identity.
+              </Trans>
+            </HeroLead>
           </HeroText>
           <Button onClick={onCTAClick}>
             <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
