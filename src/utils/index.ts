@@ -59,13 +59,22 @@ export function getProviderOrSigner(
   return account ? getSigner(provider, account) : provider;
 }
 
-// account is optional
-export function getContract(address: string, ABI: any, provider: Web3Provider, account?: string): Contract {
+/**
+ * Creates and returns a contract instance
+ * @param address The address of the contract to use
+ * @param ABI The ABI of the contract to use
+ * @param provider The provider to use
+ * @param account The account to use
+ * @returns
+ */
+export function getContract<T = Contract>(address: string, ABI: any, provider: Web3Provider, account?: string): T {
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
 
-  return new Contract(address, ABI, getProviderOrSigner(provider, account) as any);
+  const contract = new Contract(address, ABI, getProviderOrSigner(provider, account)) as unknown;
+
+  return contract as T;
 }
 
 export const switchOrAddNetwork = (networkDetails?: NetworkDetails, account?: string) => {
