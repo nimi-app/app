@@ -31,15 +31,16 @@ export const StyledExternalLink = styled(ExternalLink)`
 export const StyledDomainNameWrapper = styled.div`
   margin-left: 16px;
   text-align: start;
-  overflow: auto;
 `;
 
-export const StyledDomainName = styled.h2`
+export const StyledDomainName = styled.div`
   ${NimiSignatureColor};
   font-size: 24px;
+  overflow-wrap: anywhere;
   line-height: 26px;
   white-space: wrap;
-  overflow: auto;
+  margin-left: 16px;
+  text-align: start;
   text-overflow: ellipsis;
   line-height: 100%;
 `;
