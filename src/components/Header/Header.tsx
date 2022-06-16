@@ -14,7 +14,9 @@ export function Header() {
         <Link to="/">
           <NavOption>Landing Page</NavOption>
         </Link>
-        <NavOption>Dashboard</NavOption>
+        <Link to="/domains">
+          <NavOption>Dashboard</NavOption>
+        </Link>
       </AccountAndLinks>
       <Web3Status />
     </HeaderWrapper>

@@ -22,7 +22,6 @@ const DomainsHeader = styled.div`
   font-weight: 800;
   font-size: 36px;
   line-height: 39px;
-
   margin-bottom: 36px;
 `;
 
