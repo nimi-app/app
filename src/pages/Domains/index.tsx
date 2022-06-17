@@ -11,6 +11,7 @@ import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
 import { ENSNameCard } from '../../components/ENSNameCard';
 import { NimiSignatureColor } from '../../theme';
+import { StyledDomainName } from '../../components/ENSNameCard/styleds';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -44,9 +45,10 @@ function Domains({ address }: DomainsProps) {
 
   // User has no domains
   if (!data.account?.domains || data.account.domains.length === 0) {
-    return <h2>{t('noDomains')}</h2>;
+    return <StyledDomainName>{t('noDomains')}</StyledDomainName>;
   }
 
+  console.log(data);
   return (
     <Container>
       <DomainsHeader>Your Identities</DomainsHeader>

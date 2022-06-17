@@ -9,7 +9,7 @@ export const StyledENSNameCardWrapper = styled(Card)`
   flex-direction: row;
   padding-bottom: 42px;
   width: 308px;
-
+  cursor: pointer;
   height: 146px;
 `;
 

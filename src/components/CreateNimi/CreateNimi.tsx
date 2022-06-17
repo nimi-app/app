@@ -26,6 +26,8 @@ import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
+import { useLocation } from 'react-router-dom';
+import { ENSMetadata } from '../../hooks/useENSMetadata';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -39,7 +41,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
    */
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
-
+  const location = useLocation();
+  const ensMetaData = location.state as ENSMetadata;
   const { t } = useTranslation('nimi');
 
   // Form state manager
@@ -47,6 +50,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     resolver: yupResolver(nimiCard),
     defaultValues: {
       displayName: ensName,
+      displayImageUrl: ensMetaData?.image,
+      description: ensMetaData?.description,
       ensAddress: ensAddress,
       ensName,
       addresses: [],
