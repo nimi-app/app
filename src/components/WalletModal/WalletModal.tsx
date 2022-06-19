@@ -8,7 +8,7 @@ import { Connector } from '@web3-react/types';
 import { useEffect, useState } from 'react';
 
 import { Button } from '../Button';
-import { Loader } from '../Loader';
+import { LoaderWrapper, Loader } from '../Loader';
 
 import { useCloseModals, useModalOpen } from '../../state/application/hooks';
 import { ChainId, getAddChainParameters, CHAINS } from '../../constants';
@@ -17,7 +17,8 @@ import { getName, useWeb3Connectors } from '../../connectors';
 import { shortenAddress } from '../../utils';
 
 import { Modal, Header, Footer, Content } from '../Modal';
-import { LoaderWrapper, ConnectorListWrapper } from './styled';
+import { ConnectorListWrapper } from './styled';
+import { useNavigate } from 'react-router-dom';
 
 export function WalletModal() {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ export function WalletModal() {
   const isModalOpen = useModalOpen(ApplicationModal.WALLET_SWITCHER);
   const connectors = useWeb3Connectors();
   const closeModal = useCloseModals();
+  const navigate = useNavigate();
   // Internal state
   const [isActivatingAConnector, setIsActivatingAConnector] = useState(false);
   const [pendingError, setPendingError] = useState<Error | undefined>();
@@ -141,7 +143,16 @@ export function WalletModal() {
         <ConnectorListWrapper>
           {connectors.map(({ connector, name }) => {
             return (
-              <Button key={name} onClick={() => activateConnector(connector).catch(console.error)}>
+              <Button
+                key={name}
+                onClick={() =>
+                  activateConnector(connector)
+                    .then(() => {
+                      navigate('/domains');
+                    })
+                    .catch(console.error)
+                }
+              >
                 {name}
               </Button>
             );
