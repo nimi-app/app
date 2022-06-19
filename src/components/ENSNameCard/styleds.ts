@@ -14,7 +14,7 @@ export const StyledENSNameCardWrapper = styled(Card)`
 `;
 
 export const ENSNameCardImage = styled.img`
-  background-position: center, center;
+  background-position: center center;
   background-size: cover;
   border-radius: 200px;
   height: 83px;

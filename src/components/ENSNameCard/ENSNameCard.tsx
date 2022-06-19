@@ -20,8 +20,7 @@ const DomainName: FC<ENSDomainNameProps> = ({ name }) => <StyledDomainName>{name
 export function ENSNameCard({ name }: ENSNameCardProps) {
   const navigate = useNavigate();
   const { data, loading } = useENSMetadata(name);
-  console.log(data);
-  console.log('lds', loading);
+
   const handleSubmit = () => navigate(`/domains/${name}`);
   return (
     <>

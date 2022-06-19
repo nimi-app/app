@@ -56,8 +56,6 @@ export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
   const [data, setData] = useState<ENSMetadata>();
   const [loading, setLoading] = useState<boolean>(true);
   const { chainId, ENSName } = useWeb3React();
-  console.log('ensname', ENSName);
-  console.log('custom', customENSLookup);
 
   useEffect(() => {
     // ENS supports Mainnet and Rinkeby
@@ -84,7 +82,6 @@ export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
             data.image = `${IPFS_GATEWAY}${data.image}`;
           }
         }
-        console.log('dta', data);
         setData(data);
         setLoading(false);
       })

@@ -48,7 +48,6 @@ function Domains({ address }: DomainsProps) {
     return <StyledDomainName>{t('noDomains')}</StyledDomainName>;
   }
 
-  console.log(data);
   return (
     <Container>
       <DomainsHeader>Your Identities</DomainsHeader>

@@ -42,7 +42,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const location = useLocation();
-  const ensMetaData = location.state as ENSMetadata;
+  const ensMetadata = location.state as ENSMetadata;
+
   const { t } = useTranslation('nimi');
 
   // Form state manager
@@ -50,8 +51,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     resolver: yupResolver(nimiCard),
     defaultValues: {
       displayName: ensName,
-      displayImageUrl: ensMetaData?.image,
-      description: ensMetaData?.description,
+      displayImageUrl: ensMetadata?.image,
+      description: ensMetadata?.description,
       ensAddress: ensAddress,
       ensName,
       addresses: [],

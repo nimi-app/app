@@ -33,7 +33,7 @@ export function Landing() {
       </Header>
       <Content>
         <Container>
-          <HeaderEyebrow>Your personal web3 front page</HeaderEyebrow>
+          <HeaderEyebrow>{t('hero.eyebrowText', { ns: 'landing' })}</HeaderEyebrow>
           <HeroText>
             <HeroLead>
               <Trans ns="lading" key="hero.lead">
