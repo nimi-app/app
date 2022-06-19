@@ -43,6 +43,7 @@
   "formLabel.bitcoin": "Bitcoin",
   "formLabel.litecoin": "Litecoin",
   "formLabel.dogecoin": "Dogecoin",
+  "formLabel.lenster": "Lenster",
   "formLabel.polygon": "Polygon",
   "formLabel.bnb-chain": "BNB Chain",
   "buttonLabel.addNimis": "Add Nimis",
