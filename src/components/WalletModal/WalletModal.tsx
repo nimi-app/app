@@ -8,7 +8,7 @@ import { Connector } from '@web3-react/types';
 import { useEffect, useState } from 'react';
 
 import { Button } from '../Button';
-import { Loader } from '../Loader';
+import { LoaderWrapper, Loader } from '../Loader';
 
 import { useCloseModals, useModalOpen } from '../../state/application/hooks';
 import { ChainId, getAddChainParameters, CHAINS } from '../../constants';
@@ -17,7 +17,7 @@ import { getName, useWeb3Connectors } from '../../connectors';
 import { shortenAddress } from '../../utils';
 
 import { Modal, Header, Footer, Content } from '../Modal';
-import { LoaderWrapper, ConnectorListWrapper } from './styled';
+import { ConnectorListWrapper } from './styled';
 import { useNavigate } from 'react-router-dom';
 
 export function WalletModal() {
