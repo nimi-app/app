@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo.svg';
 // SVGs
@@ -8,13 +9,22 @@ import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
 import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 // Styled components
-import { Content, Header, HeroLead, HeroSub, HeroText, PageWrapper } from './styled';
+import { Content, Header, HeroLead, HeroText, PageWrapper } from './styled';
 
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
 
-  const { isActive, account, isActivating } = useWeb3React();
+  const { isActive, account } = useWeb3React();
+  const navigate = useNavigate();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
+
+  const onCTAClick = () => {
+    if (isActive && account) {
+      navigate('/domains');
+    } else {
+      openWalletSwitcherPopover();
+    }
+  };
 
   return (
     <PageWrapper>
@@ -24,18 +34,19 @@ export function Landing() {
       <Content>
         <Container>
           <HeroText>
-            <HeroLead>{t('hero.lead', { ns: 'landing' })}</HeroLead>
-            <HeroSub>{t('hero.sub', { ns: 'landing' })}</HeroSub>
+            <HeroLead>
+              <Trans ns="lading" key="hero.lead">
+                Your{' '}
+                <i>
+                  <strong>Forever</strong>
+                </i>{' '}
+                Identity.
+              </Trans>
+            </HeroLead>
           </HeroText>
-          {isActive && account ? (
-            <Button to="/domains">
-              <span>{t('goToDomains')}</span>
-            </Button>
-          ) : (
-            <Button onClick={openWalletSwitcherPopover}>
-              {isActivating ? <span>{t('connecting')}</span> : <span>{t('connectWallet')}</span>}
-            </Button>
-          )}
+          <Button onClick={onCTAClick}>
+            <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
+          </Button>
         </Container>
       </Content>
       <Footer />
