@@ -1,7 +1,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList } from 'nimi-card';
 import { CardBody, Card } from '../Card';
@@ -26,6 +26,7 @@ import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
+import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -40,6 +41,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
 
+  const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
 
   // Form state manager
@@ -72,6 +74,13 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
   const formWatchPayload = watch();
 
+  const handleImportLensProfile = useCallback(() => {
+    if (!lensProfile) return;
+    setValue('displayName', lensProfile.name);
+    setValue('description', lensProfile.description);
+    setValue('displayImageUrl', lensProfile?.pictureUrl);
+  }, [setValue, lensProfile]);
+
   /**
    * Handle the form submit via ENS contract interaction
    * @param data
@@ -101,7 +110,11 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
                   {t('buttonLabel.importFromTwitter')}
                 </ImportFromTwitterButton>
-                <ImportFromLensProtocolButton>{t('buttonLabel.importFromLensProtocol')}</ImportFromLensProtocolButton>
+                {!loadingLensProfile && !!lensProfile && (
+                  <ImportFromLensProtocolButton onClick={handleImportLensProfile}>
+                    {t('buttonLabel.importFromLensProtocol')}
+                  </ImportFromLensProtocolButton>
+                )}
               </ImportButtonsWrapper>
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>

@@ -1,8 +1,14 @@
-overwrite: true
-schema: "https://api.thegraph.com/subgraphs/name/ensdomains/ens"
-documents: 'src/**/!(*.d).{ts,tsx}'
 generates:
-  ./src/generated/graphql/index.ts:
+  ./src/generated/graphql/ens.ts:
+    schema: "https://api.thegraph.com/subgraphs/name/ensdomains/ens"
+    documents: 'src/graphql/ens/queries.ts'
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+  ./src/generated/graphql/lens.ts:
+    schema: "https://api.lens.dev"
+    documents: 'src/graphql/lens/queries.ts'
     plugins:
       - typescript
       - typescript-operations
