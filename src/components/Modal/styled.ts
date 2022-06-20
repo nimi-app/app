@@ -108,7 +108,7 @@ export const StyledModalFooter = styled.footer<ModalInnerComponentProps>(
   justify-content: space-between;
   color: #6f6e84;
   padding: 0px 28px 20px;
-  pading: ${padding};
+  padding: ${padding};
 `
 );
 

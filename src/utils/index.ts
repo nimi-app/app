@@ -3,39 +3,7 @@ import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
 import { NetworkDetails } from '../constants';
-
-const ETHERSCAN_PREFIXES: Record<number, string> = {
-  1: '',
-  4: 'rinkeby.',
-};
-
-function getExplorerPrefix(chainId: number) {
-  return `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`;
-}
-
-export function getExplorerLink(
-  chainId: number,
-  data: string,
-  type: 'transaction' | 'token' | 'address' | 'block'
-): string {
-  const prefix = getExplorerPrefix(chainId);
-
-  switch (type) {
-    case 'transaction': {
-      return `${prefix}/tx/${data}`;
-    }
-    case 'token': {
-      return `${prefix}/token/${data}`;
-    }
-    case 'block': {
-      return `${prefix}/block/${data}`;
-    }
-    case 'address':
-    default: {
-      return `${prefix}/address/${data}`;
-    }
-  }
-}
+export * from './explorer';
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end
 export function shortenAddress(address: string, charsBefore = 4, charsAfter = 4): string {

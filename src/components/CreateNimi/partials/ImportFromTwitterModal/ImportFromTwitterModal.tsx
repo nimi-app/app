@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Button } from '../../../Button';
 import { FormGroup, Input } from '../../../form';
+import { Loader, LoaderWrapper } from '../../../Loader';
 import {
   Modal,
   Header as ModalHeaderBase,
@@ -84,7 +85,9 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
       <ModalContent>
         <ModalContentInnerWrapper>
           {isLoading ? (
-            <p>{t('importFromTwitterModal.loading')}</p>
+            <LoaderWrapper>
+              <Loader />
+            </LoaderWrapper>
           ) : (
             <>
               <FormGroup>
