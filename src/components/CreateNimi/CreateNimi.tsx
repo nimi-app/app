@@ -251,6 +251,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       {isPublishNimiModalOpen && (
         <PublishNimiModal
           ensName={ensName}
+          ipfsHash={publishNimiResponseIpfsHash}
           isPublishing={isPublishingNimi}
           publishError={publishNimiError}
           setContentHashTransaction={setContentHashTransaction}

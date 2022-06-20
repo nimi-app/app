@@ -40,6 +40,7 @@ export interface PublishNimiModalProps {
   cancel: () => void;
   isPublishing: boolean;
   ensName: string;
+  ipfsHash: string | undefined;
   publishError: Error | undefined;
   setContentHashTransaction: ContractTransaction | undefined;
   setContentHashTransactionReceipt: ContractReceipt | undefined;
