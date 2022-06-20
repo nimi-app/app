@@ -3,9 +3,12 @@ import { Button } from '../../../Button';
 
 export const ImportButtonsWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 32px;
   margin-top: 41px;
+  & > :not(:last-child) {
+    margin-right: 12px;
+  }
 `;
 
 export const ImportFromTwitterButton = styled(Button)`

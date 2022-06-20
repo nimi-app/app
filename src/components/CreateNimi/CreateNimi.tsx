@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 
 import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList } from 'nimi-card';
@@ -28,10 +29,10 @@ import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
-import { unstable_batchedUpdates } from 'react-dom';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
+import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -45,6 +46,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
    */
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
+
+  const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
 
   /**
@@ -89,6 +92,13 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   );
 
   const formWatchPayload = watch();
+
+  const handleImportLensProfile = useCallback(() => {
+    if (!lensProfile) return;
+    setValue('displayName', lensProfile.name);
+    setValue('description', lensProfile.description);
+    setValue('displayImageUrl', lensProfile?.pictureUrl);
+  }, [setValue, lensProfile]);
 
   /**
    * Handle the form submit via ENS contract interaction
@@ -156,7 +166,11 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
                   {t('buttonLabel.importFromTwitter')}
                 </ImportFromTwitterButton>
-                <ImportFromLensProtocolButton>{t('buttonLabel.importFromLensProtocol')}</ImportFromLensProtocolButton>
+                {!loadingLensProfile && !!lensProfile && (
+                  <ImportFromLensProtocolButton onClick={handleImportLensProfile}>
+                    {t('buttonLabel.importFromLensProtocol')}
+                  </ImportFromLensProtocolButton>
+                )}
               </ImportButtonsWrapper>
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
