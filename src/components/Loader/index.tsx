@@ -24,7 +24,6 @@ export const LoaderWrapper = styled.div`
   justify-content: center;
   height: 180px;
   width: 100%;
-  padding-bottom: 16px;
 `;
 
 export function Loader({ size = 36 }: LoaderProps) {
