@@ -1,7 +1,10 @@
+import axios from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState, useCallback } from 'react';
+import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 
 import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList } from 'nimi-card';
 import { CardBody, Card } from '../Card';
@@ -14,6 +17,8 @@ import {
   ProfileImagePlaceholder,
   AddFieldsButton,
   SaveAndDeployButton,
+  PreviewMobile,
+  BackButton,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -28,6 +33,10 @@ import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
 import { ENSMetadata } from '../../hooks/useENSMetadata';
+import { setENSNameContentHash } from '../../hooks/useSetContentHash';
+import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
+import { PublishNimiModal } from './partials/PublishNimiModal';
+import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -44,7 +53,21 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata;
 
+  const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
+
+  /**
+   * Publish Nimi state
+   * @todo create a reducer or context for this
+   */
+  const publicResolverContract = useENSPublicResolverContract();
+  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
+  const [isPublishingNimi, setIsPublishingNimi] = useState(false);
+  const [publishNimiError, setPublishNimiError] = useState<Error>();
+  const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
+  const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
+  const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
+  const publishNimiAbortController = useRef<AbortController>();
 
   // Form state manager
   const useFormContext = useForm<Nimi>({
@@ -67,6 +90,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
+  const [showPreviewMobile, setShowPreviewMobile] = useState(false);
   const selectedBlockchainAddressFieldList = useMemo(
     () => blockchainList.filter((blockchain) => formAddressList.includes(blockchain)),
     [formAddressList]
@@ -78,12 +102,56 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
   const formWatchPayload = watch();
 
+  const handleImportLensProfile = useCallback(() => {
+    if (!lensProfile) return;
+    setValue('displayName', lensProfile.name);
+    setValue('description', lensProfile.description);
+    setValue('displayImageUrl', lensProfile?.pictureUrl);
+  }, [setValue, lensProfile]);
+
   /**
    * Handle the form submit via ENS contract interaction
-   * @param data
+   * @param data a validated Nimi object
    */
-  const onSubmitValid = (data) => {
-    console.log(data);
+  const onSubmitValid = async (data: Nimi) => {
+    unstable_batchedUpdates(() => {
+      setIsPublishNimiModalOpen(true);
+      setIsPublishingNimi(true);
+      setPublishNimiError(undefined);
+    });
+
+    try {
+      publishNimiAbortController.current = new AbortController();
+
+      const { ipfsHash } = await publishNimi(data, publishNimiAbortController.current);
+      // Set the content
+      setPublishNimiResponseIpfsHash(ipfsHash);
+      // Immediately call the contract to set the content
+      if (publicResolverContract && ipfsHash) {
+        const setContentHashTransaction = await setENSNameContentHash({
+          contract: publicResolverContract,
+          name: data.ensName,
+          content: ipfsHash,
+        });
+
+        setSetContentHashTransaction(setContentHashTransaction);
+
+        const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
+
+        unstable_batchedUpdates(() => {
+          setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
+          setIsPublishingNimi(false);
+        });
+      } else {
+        throw new Error('No public resolver contract or ipfs hash');
+      }
+    } catch (error) {
+      console.error(error);
+      unstable_batchedUpdates(() => {
+        setIsPublishingNimi(false);
+        setPublishNimiError(error);
+      });
+    }
   };
 
   const onSubmitInvalid = (data) => {
@@ -93,7 +161,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
-        <MainContent>
+        <MainContent showMobile={!showPreviewMobile}>
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
@@ -107,7 +175,11 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
                   {t('buttonLabel.importFromTwitter')}
                 </ImportFromTwitterButton>
-                <ImportFromLensProtocolButton>{t('buttonLabel.importFromLensProtocol')}</ImportFromLensProtocolButton>
+                {!loadingLensProfile && !!lensProfile && (
+                  <ImportFromLensProtocolButton onClick={handleImportLensProfile}>
+                    {t('buttonLabel.importFromLensProtocol')}
+                  </ImportFromLensProtocolButton>
+                )}
               </ImportButtonsWrapper>
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
@@ -146,12 +218,15 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 <FormGroup>
                   <SaveAndDeployButton type="submit">{t('saveAndDeployNimiSite')}</SaveAndDeployButton>
                 </FormGroup>
+                <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
               </FormWrapper>
             </CardBody>
           </Card>
         </MainContent>
-        <PreviewContent>
+        <PreviewContent showMobile={showPreviewMobile}>
+          <BackButton onClick={() => setShowPreviewMobile(false)}>← Back To Editor</BackButton>
           <PageSectionTitle>{t('preview')}</PageSectionTitle>
+
           <NimiPreviewCard nimi={formWatchPayload} />
         </PreviewContent>
       </InnerWrapper>
@@ -163,9 +238,11 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           }}
           onClose={() => setIsAddFieldsModalOpen(false)}
           onSubmit={({ links, blockchainAddresses }) => {
-            setIsAddFieldsModalOpen(false);
-            setFormLinkList(links);
-            setFormAddressList(blockchainAddresses);
+            unstable_batchedUpdates(() => {
+              setIsAddFieldsModalOpen(false);
+              setFormLinkList(links);
+              setFormAddressList(blockchainAddresses);
+            });
           }}
         />
       )}
@@ -173,15 +250,55 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
         <ImportFromTwitterModal
           onClose={() => setIsImportFromTwitterModalOpen(false)}
           onDataImport={(data) => {
-            // Set the fields and close the modal
-            setValue('displayName', data.name);
-            setValue('description', data.description);
-            setValue('displayImageUrl', data.profileImageUrl);
-
-            setIsImportFromTwitterModalOpen(false);
+            unstable_batchedUpdates(() => {
+              // Set the fields and close the modal
+              setValue('displayName', data.name);
+              setValue('description', data.description);
+              setValue('displayImageUrl', data.profileImageUrl);
+              setIsImportFromTwitterModalOpen(false);
+            });
+          }}
+        />
+      )}
+      {isPublishNimiModalOpen && (
+        <PublishNimiModal
+          ensName={ensName}
+          ipfsHash={publishNimiResponseIpfsHash}
+          isPublishing={isPublishingNimi}
+          publishError={publishNimiError}
+          setContentHashTransaction={setContentHashTransaction}
+          setContentHashTransactionReceipt={setContentHashTransactionReceipt}
+          cancel={() => {
+            setIsPublishNimiModalOpen(false);
+            publishNimiAbortController?.current?.abort();
           }}
         />
       )}
     </FormProvider>
   );
+}
+
+/**
+ *
+ * @param payload the payload from the form
+ * @param controller Abort controller
+ * @returns A promise with IPFS hash
+ */
+export function publishNimi(
+  payload: Nimi,
+  controller?: AbortController
+): Promise<{
+  ipfsHash: string;
+}> {
+  return axios
+    .post<{
+      data: {
+        IpfsHash: string;
+      };
+    }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/nimi/publish`, payload, {
+      signal: controller ? controller.signal : undefined,
+    })
+    .then(({ data }) => ({
+      ipfsHash: data.data.IpfsHash,
+    }));
 }

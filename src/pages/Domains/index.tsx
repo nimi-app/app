@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Flex } from 'rebass';
 
 // Queries
-import { useGetDomainsQuery } from '../../generated/graphql';
+import { useGetDomainsQuery } from '../../generated/graphql/ens';
 
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';

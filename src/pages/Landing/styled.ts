@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 import backgroundImageUrl from '../../assets/images/nimi-header-background.png';
 import { NimiSignatureColor } from '../../theme';
+import backgroungImageUrl from '../../assets/images/nimi-header-background.png';
 
 export const PageWrapper = styled.div`
   display: flex;
+  background-image: url('${backgroungImageUrl}');
+  background-position: center;
+  background-size: cover;
   flex-direction: column;
   align-items: center;
   justify-content: center;
