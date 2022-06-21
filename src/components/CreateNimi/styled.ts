@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Flex } from 'rebass';
 
 import { CardBody } from '../Card';
-import { NimiSignatureColor } from '../../theme';
+import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
 import { ReactComponent as PlaceholderMini } from '../../assets/svg/profile-empty.svg';
 import { Button } from '../Button';
 
@@ -12,6 +12,9 @@ import { Button } from '../Button';
 export const InnerWrapper = styled(Flex)`
   justify-content: center;
   gap: 24px;
+  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
+    flex-wrap: wrap;
+  }
 `;
 
 export const CardBodyTextCenter = styled(CardBody)`
@@ -34,9 +37,12 @@ export const FieldList = styled.div`
  * @param param0
  * @returns
  */
-export const MainContent = styled.main`
+export const MainContent = styled.main<{ showMobile: boolean }>`
   max-width: 560px;
   flex: 1 0 100%;
+  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
+    display: ${({ showMobile }) => (showMobile ? 'block' : 'none')};
+  }
 `;
 
 /**
@@ -44,9 +50,15 @@ export const MainContent = styled.main`
  * @param param0
  * @returns
  */
-export const PreviewContent = styled.aside`
+export const PreviewContent = styled.aside<{ showMobile: boolean }>`
   flex: 0 0 400px;
   max-width: 400px;
+
+  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
+    height: 100vh;
+    display: ${({ showMobile }) => (showMobile ? 'block' : 'none')};
+    overflow: auto;
+  }
 `;
 
 /**
@@ -72,6 +84,9 @@ export const PageSectionTitle = styled.h1`
   font-size: 36px;
   line-height: 39px;
   letter-spacing: -0.02em;
+  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
+    text-align: center;
+  }
 `;
 export const ProfileImage = styled.img`
   background-position: center, center;
@@ -103,4 +118,32 @@ export const AddFieldsButton = styled.button`
   border: 2px dotted rgba(67, 104, 234, 1);
   padding: 22px 16px;
   border-radius: 12px;
+`;
+export const PreviewMobile = styled.div`
+  display: none;
+  flex: 1;
+  ${NimiSignatureColor};
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  justify-content: center;
+  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
+    display: flex;
+  }
+`;
+export const BackButton = styled.button`
+  display: none;
+  padding: 12px 16px;
+  color: #8e85e0;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  background-color: #ffffff;
+  box-shadow: 0px 18px 32px -48px rgba(52, 55, 100, 0.06);
+  border-radius: 90px;
+  border: 1px solid #ffffff;
+  margin: auto;
+  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
+    display: flex;
+  }
 `;

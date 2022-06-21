@@ -17,6 +17,8 @@ import {
   ProfileImagePlaceholder,
   AddFieldsButton,
   SaveAndDeployButton,
+  PreviewMobile,
+  BackButton,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -82,6 +84,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
+  const [showPreviewMobile, setShowPreviewMobile] = useState(false);
   const selectedBlockchainAddressFieldList = useMemo(
     () => blockchainList.filter((blockchain) => formAddressList.includes(blockchain)),
     [formAddressList]
@@ -152,7 +155,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
-        <MainContent>
+        <MainContent showMobile={!showPreviewMobile}>
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
@@ -209,12 +212,15 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 <FormGroup>
                   <SaveAndDeployButton type="submit">{t('saveAndDeployNimiSite')}</SaveAndDeployButton>
                 </FormGroup>
+                <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
               </FormWrapper>
             </CardBody>
           </Card>
         </MainContent>
-        <PreviewContent>
+        <PreviewContent showMobile={showPreviewMobile}>
+          <BackButton onClick={() => setShowPreviewMobile(false)}>← Back To Editor</BackButton>
           <PageSectionTitle>{t('preview')}</PageSectionTitle>
+
           <NimiPreviewCard nimi={formWatchPayload} />
         </PreviewContent>
       </InnerWrapper>
