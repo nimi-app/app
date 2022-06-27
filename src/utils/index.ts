@@ -2,7 +2,6 @@ import { getAddress, isAddress } from '@ethersproject/address';
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
-import { NetworkDetails } from '../constants';
 export * from './explorer';
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end
@@ -44,27 +43,3 @@ export function getContract<T = Contract>(address: string, ABI: any, provider: W
 
   return contract as T;
 }
-
-export const switchOrAddNetwork = (networkDetails?: NetworkDetails, account?: string) => {
-  if (!window.ethereum || !window.ethereum.request || !window.ethereum.isMetaMask || !networkDetails || !account)
-    return;
-  window.ethereum
-    .request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: networkDetails.chainId }],
-    })
-    .catch((error) => {
-      if (error.code !== 4902) {
-        console.error('error switching to chain id', networkDetails.chainId, error);
-      }
-      if (!window.ethereum || !window.ethereum.request) return;
-      window.ethereum
-        .request({
-          method: 'wallet_addEthereumChain',
-          params: [{ ...networkDetails }, account],
-        })
-        .catch((error) => {
-          console.error('error adding chain with id', networkDetails.chainId, error);
-        });
-    });
-};
