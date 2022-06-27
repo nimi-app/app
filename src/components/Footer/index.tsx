@@ -21,7 +21,7 @@ export function Footer() {
             <ExternalLink title="Nimi on Twitter" href="https://twitter.com/0xNimi">
               <TwitterLogo />
             </ExternalLink>
-            <ExternalLink title="Nimi on GitHub" href="https://twitter.com/nimi-app">
+            <ExternalLink title="Nimi on GitHub" href="https://github.com/nimi-app">
               <GitHubLogo fill="#1F3E4F" />
             </ExternalLink>
           </FooterNav>
