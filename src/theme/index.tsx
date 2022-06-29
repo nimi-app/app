@@ -86,6 +86,7 @@ export function colors(darkMode = false): Colors {
     yellow2: '#F3841E',
     blue1: '#2172E5',
     gray1: '#737798',
+    mainBackgoround: '#f5f7ff',
     // dont wanna forget these blue yet
     // blue4: darkMode ? '#153d6f70' : '#C4D9F8',
     // blue5: darkMode ? '#153d6f70' : '#EBF4FF',
@@ -222,9 +223,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Archivo', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 24px;
-}
+
 
 /** Full-width and height */
 body, html, #root {

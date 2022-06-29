@@ -1,18 +1,13 @@
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../Button';
-import {
-  StyledENSNameCardWrapper,
-  StyledDomainNameWrapper,
-  StyledExternalLink,
-  ENSNameCardImage,
-  StyledDomainName,
-} from './styleds';
+import PurpleCircle from '../../assets/svg/purpleCircle.svg';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { StyledENSNameCardWrapper, ENSNameCardImage, StyledDomainName } from './styleds';
+import { useENSMetadata } from '../../hooks/useENSMetadata';
+import { Loader } from '../Loader';
 
 export interface ENSNameCardProps {
   name: string;
-  imageUrl?: string;
   labelName: string;
 }
 
@@ -20,39 +15,25 @@ interface ENSDomainNameProps {
   name: string;
 }
 
-const DomainName: FC<ENSDomainNameProps> = ({ name }) => (
-  <StyledDomainNameWrapper>
-    <StyledDomainName>{name}</StyledDomainName>
-  </StyledDomainNameWrapper>
-);
+const DomainName: FC<ENSDomainNameProps> = ({ name }) => <StyledDomainName>{name}</StyledDomainName>;
 
-export function ENSNameCard({ name, labelName, imageUrl }: ENSNameCardProps) {
-  const { t } = useTranslation();
+export function ENSNameCard({ name }: ENSNameCardProps) {
   const navigate = useNavigate();
+  const { data, loading } = useENSMetadata(name);
 
   const handleSubmit = () => navigate(`/domains/${name}`);
-  const domainLength = name.length;
-  const domainHref = name ? `https://${name}.limo` : `https://${labelName}.eth.limo`;
-
   return (
-    <StyledENSNameCardWrapper>
-      {imageUrl && <ENSNameCardImage alt={imageUrl} src={imageUrl} />}
-      <DomainName name={name} />
-      <Button onClick={handleSubmit}>{t('setupANimiProfile')}</Button>
-      <StyledExternalLink
-        href={domainHref}
-        title={t('goToDomainName', {
-          domainName: name || labelName,
-        })}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {domainLength < 20
-          ? t('goToDomainName', {
-              domainName: name || labelName,
-            })
-          : t('viewThisDomain')}
-      </StyledExternalLink>
-    </StyledENSNameCardWrapper>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Link to={`/domains/${name}`} state={data}>
+          <StyledENSNameCardWrapper onClick={handleSubmit}>
+            <ENSNameCardImage alt={data ? data.image : PurpleCircle} src={data ? data.image : PurpleCircle} />
+            <DomainName name={name} />
+          </StyledENSNameCardWrapper>
+        </Link>
+      )}
+    </>
   );
 }

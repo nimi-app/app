@@ -50,9 +50,10 @@ const supportedENSChainIds = [ChainId.MAINNET, ChainId.RINKEBY, ChainId.GOERLI];
 
 /**
  * Does a lookup for an ENS name to find its avatar details, uses ENS Domains metadata API
+ * docs: https://metadata.ens.domains/docs#/paths/~1%7BnetworkName%7D~1avatar~1%7Bname%7D~1meta/get
  */
-export function useENSMetadata(): UseENSMetadataResult {
-  const [data, setDdata] = useState<ENSMetadata>();
+export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
+  const [data, setData] = useState<ENSMetadata>();
   const [loading, setLoading] = useState<boolean>(true);
   const { chainId, ENSName } = useWeb3React();
 
@@ -66,7 +67,9 @@ export function useENSMetadata(): UseENSMetadataResult {
     const networkName = supportedENSNetworks[chainId];
 
     axios
-      .get<ENSMetadata>(`https://metadata.ens.domains/${networkName}/avatar/${ENSName}/meta`)
+      .get<ENSMetadata>(
+        `https://metadata.ens.domains/${networkName}/avatar/${customENSLookup ? customENSLookup : ENSName}/meta`
+      )
       .then(({ data }) => {
         if ('image' in data && data.image) {
           if (data.image.startsWith('ipfs://ipfs/')) {
@@ -79,13 +82,14 @@ export function useENSMetadata(): UseENSMetadataResult {
             data.image = `${IPFS_GATEWAY}${data.image}`;
           }
         }
-        setDdata(data);
+        setData(data);
         setLoading(false);
       })
       .catch((e) => {
+        setLoading(false);
         console.error('useENSMetadata error: ', e);
       });
-  }, [chainId, ENSName]);
+  }, [chainId, ENSName, customENSLookup]);
 
   return {
     loading,

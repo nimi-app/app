@@ -31,6 +31,8 @@ import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
+import { useLocation } from 'react-router-dom';
+import { ENSMetadata } from '../../hooks/useENSMetadata';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
@@ -48,6 +50,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
    */
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
+  const location = useLocation();
+  const ensMetadata = location.state as ENSMetadata;
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -70,6 +74,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     resolver: yupResolver(nimiCard),
     defaultValues: {
       displayName: ensName,
+      displayImageUrl: ensMetadata?.image,
+      description: ensMetadata?.description,
       ensAddress: ensAddress,
       ensName,
       addresses: [],

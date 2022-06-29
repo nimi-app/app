@@ -43,7 +43,7 @@ export const animation = keyframes`
     -webkit-backdrop-filter:blur(6px);
     backdrop-filter:blur(6px)
   }
-}`;
+`;
 
 export const StyledModalBackdrop = styled.div`
   backdrop-filter: blur(6px);

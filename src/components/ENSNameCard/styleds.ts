@@ -5,38 +5,42 @@ import { Card } from '../Card';
 export const StyledENSNameCardWrapper = styled(Card)`
   justify-content: center;
   align-items: center;
-  padding: 48px 32px;
-  max-width: 310px;
-  min-height: 320px;
+  padding-top: 42px;
+  flex-direction: row;
+  padding-bottom: 42px;
+  width: 308px;
+  cursor: pointer;
+  height: 146px;
 `;
 
 export const ENSNameCardImage = styled.img`
-  background-position: center, center;
+  background-position: center center;
   background-size: cover;
-  margin-bottom: 15px;
   border-radius: 200px;
   height: 83px;
   width: 83px;
   z-index: 1;
-`;
-
-export const StyledDomainNameWrapper = styled.div`
-  width: 100%;
-  max-width: 200px;
-  text-align: center;
+  box-shadow: 0px 5px 24px rgba(138, 143, 234, 0.12);
+  backdrop-filter: blur(20px);
 `;
 
 export const StyledExternalLink = styled(ExternalLink)`
   ${NimiSignatureColor};
   margin-top: 26px;
 `;
+export const StyledDomainNameWrapper = styled.div`
+  margin-left: 16px;
+  text-align: start;
+`;
 
-export const StyledDomainName = styled.h2`
+export const StyledDomainName = styled.div`
   ${NimiSignatureColor};
-  font-size: 32px;
-  white-space: nowrap;
-  overflow: hidden;
+  font-size: 24px;
+  overflow-wrap: anywhere;
+  line-height: 26px;
+  white-space: wrap;
+  margin-left: 16px;
+  text-align: start;
   text-overflow: ellipsis;
-  margin-bottom: 32px;
   line-height: 100%;
 `;

@@ -31,6 +31,7 @@ const ModalContentInnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 33px;
 `;
 
 const HeaderImageWrapper = styled.div`

@@ -23,7 +23,7 @@ const AppWrapper = styled.div`
   flex-direction: column;
   overflow: hidden;
   min-height: 100vh;
-  background-color: #f5f7ff;
+  background-color: ${({ theme }) => theme.mainBackgoround};
 `;
 
 const HeaderWrapper = styled.div`
