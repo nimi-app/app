@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 
-import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList } from 'nimi-card';
+import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList, NimiLinkBaseDetails } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -75,7 +75,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     defaultValues: {
       displayName: ensName,
       displayImageUrl: ensMetadata?.image,
-      description: ensMetadata?.description,
+      description: '',
       ensAddress: ensAddress,
       ensName,
       addresses: [],
@@ -83,7 +83,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     },
   });
 
-  const { register, watch, handleSubmit, setValue } = useFormContext;
+  const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
 
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
@@ -184,11 +184,11 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
-                  <Input id="displayName" {...register('displayName')} />
+                  <Input placeholder="Name" id="displayName" {...register('displayName')} />
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <TextArea id="description" {...register('description')}></TextArea>
+                  <TextArea placeholder="Description" id="description" {...register('description')}></TextArea>
                 </FormGroup>
 
                 {selectedLinkFieldList.map((link) => {
@@ -255,6 +255,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               setValue('displayName', data.name);
               setValue('description', data.description);
               setValue('displayImageUrl', data.profileImageUrl);
+
               setIsImportFromTwitterModalOpen(false);
             });
           }}

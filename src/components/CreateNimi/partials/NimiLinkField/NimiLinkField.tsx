@@ -34,7 +34,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   return (
     <>
       <Label htmlFor={link}>{label}</Label>
-      <Input type="text" id={link} onChange={onChange} />
+      <Input placeholder={`${label} link`} type="text" id={link} onChange={onChange} />
     </>
   );
 }
