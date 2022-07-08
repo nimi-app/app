@@ -83,6 +83,7 @@ export const PageSectionTitle = styled.h1`
   ${NimiSignatureColor}
   font-size: 36px;
   line-height: 39px;
+  margin-bottom: 24px;
   letter-spacing: -0.02em;
   @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
     text-align: center;

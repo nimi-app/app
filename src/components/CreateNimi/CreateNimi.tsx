@@ -83,7 +83,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     },
   });
 
-  const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
+  const { register, watch, handleSubmit, setValue } = useFormContext;
 
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
