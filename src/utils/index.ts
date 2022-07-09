@@ -2,6 +2,8 @@ import { getAddress, isAddress } from '@ethersproject/address';
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
+import { NimiBlockchainAddress, NimiBlockchainDetails, NimiLinkBaseDetails } from 'nimi-card';
+import { t } from 'i18next';
 export * from './explorer';
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end
@@ -42,4 +44,31 @@ export function getContract<T = Contract>(address: string, ABI: any, provider: W
   const contract = new Contract(address, ABI, getProviderOrSigner(provider, account)) as unknown;
 
   return contract as T;
+}
+
+/**
+ * Creates and returns a contract instance
+ * @param prevState The address of the contract to use
+ * @param link The ABI of the contract to use
+ * @param value The provider to use
+ * @param account The account to use
+ * @returns new State
+ */
+
+type Linkse = NimiBlockchainAddress | NimiLinkBaseDetails;
+export function replaceOrAddArrayItem<T extends Linkse[]>(prevState: T, link: string, value: string) {
+  const label = t(`formLabel.${link}`);
+  const isLink = prevState instanceof NimiBlockchainAddress;
+  const hasLink = prevState.some((prevLink) => prevLink.type === link);
+
+  const newState = hasLink
+    ? prevState.map((curr) => {
+        if (curr.type === link) {
+          return { ...curr, url: value };
+        }
+
+        return curr;
+      })
+    : [...prevState, { type: link, label, url: value }];
+  return newState;
 }

@@ -37,6 +37,7 @@ import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
+import { replaceOrAddArrayItem } from '../../utils';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -83,7 +84,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     },
   });
 
-  const { register, watch, handleSubmit, setValue } = useFormContext;
+  const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
 
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
@@ -240,6 +241,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           onSubmit={({ links, blockchainAddresses }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
+
+              // formAddressList.forEach((element)=>{
+              //   if(!blockchainAddresses[element]) setValue('addresses')
+              // })
               setFormLinkList(links);
               setFormAddressList(blockchainAddresses);
             });
@@ -255,6 +260,13 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               setValue('displayName', data.name);
               setValue('description', data.description);
               setValue('displayImageUrl', data.profileImageUrl);
+              const hasTwitter = formLinkList.some((element) => element === 'twitter');
+              if (!hasTwitter) setFormLinkList([...formLinkList, 'twitter']);
+
+              const prevState = getValues('links') || [];
+              const newState = replaceOrAddArrayItem(prevState, 'twitter', data.username);
+
+              setValue('links', newState);
 
               setIsImportFromTwitterModalOpen(false);
             });
