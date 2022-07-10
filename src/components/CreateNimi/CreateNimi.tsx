@@ -37,7 +37,6 @@ import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { replaceOrAddArrayItem } from '../../utils';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -256,6 +255,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           onClose={() => setIsImportFromTwitterModalOpen(false)}
           onDataImport={(data) => {
             unstable_batchedUpdates(() => {
+              const label = t(`formLabel.twitter`);
               // Set the fields and close the modal
               setValue('displayName', data.name);
               setValue('description', data.description);
@@ -264,7 +264,17 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               if (!hasTwitter) setFormLinkList([...formLinkList, 'twitter']);
 
               const prevState = getValues('links') || [];
-              const newState = replaceOrAddArrayItem(prevState, 'twitter', data.username);
+
+              const hasLink = prevState.some((prevLink) => prevLink.type === 'twitter');
+              const newState: NimiLinkBaseDetails[] = hasLink
+                ? prevState.map((curr) => {
+                    if (curr.type === 'twitter') {
+                      return { ...curr, url: data.username };
+                    }
+
+                    return curr;
+                  })
+                : [...prevState, { type: 'twitter', label, url: data.username }];
 
               setValue('links', newState);
 

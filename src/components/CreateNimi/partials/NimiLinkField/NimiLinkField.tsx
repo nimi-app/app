@@ -1,9 +1,8 @@
-import { Nimi, NimiLink } from 'nimi-card';
+import { Nimi, NimiLink, NimiLinkBaseDetails } from 'nimi-card';
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler, useEffect, useState } from 'react';
 
 import { Input, Label } from '../../../form';
-import { replaceOrAddArrayItem } from '../../../../utils';
 
 export interface NimiLinkFieldProps {
   link: NimiLink;
@@ -21,14 +20,22 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
     setInputValue(event.target.value);
 
     const prevState = getValues('links') || [];
-    const newState = replaceOrAddArrayItem(prevState, link, event.target.value);
+    const hasLink = prevState.some((prevLink) => prevLink.type === link);
+    const newState: NimiLinkBaseDetails[] = hasLink
+      ? prevState.map((curr) => {
+          if (curr.type === link) {
+            return { ...curr, url: event.target.value };
+          }
+
+          return curr;
+        })
+      : [...prevState, { type: link, label, url: event.target.value }];
 
     setValue('links', newState);
   };
 
   useEffect(() => {
     const valuechange = getValues('links').find((prevLink) => prevLink.type === link);
-    console.log(valuechange ? valuechange.url : 'njet');
     setInputValue(valuechange ? valuechange.url : inputValue);
   }, [getValues, link, inputValue]);
 

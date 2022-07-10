@@ -3,7 +3,6 @@ import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler } from 'react';
 
 import { Input, Label } from '../../../form';
-import { replaceOrAddArrayItem } from '../../../../utils';
 
 export interface NimiBlockchainFieldProps {
   blockchain: NimiBlockchain;
@@ -18,7 +17,16 @@ export function NimiBlockchainField({ blockchain, label }: NimiBlockchainFieldPr
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const prevState = getValues('addresses') || [];
-    const newState = replaceOrAddArrayItem(prevState, blockchain, event.target.value);
+    const hasLink = prevState.some((prevLink) => prevLink.blockchain === blockchain);
+    const newState: NimiBlockchainAddress[] = hasLink
+      ? prevState.map((curr) => {
+          if (curr.blockchain === blockchain) {
+            return { ...curr, address: event.target.value };
+          }
+
+          return curr;
+        })
+      : [...prevState, { blockchain, address: event.target.value }];
 
     setValue('addresses', newState);
   };
