@@ -119,7 +119,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       setIsPublishingNimi(true);
       setPublishNimiError(undefined);
     });
-
+    console.log('data', data);
     try {
       publishNimiAbortController.current = new AbortController();
 
@@ -155,7 +155,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   };
 
   const onSubmitInvalid = (data) => {
-    console.error(data);
+    console.log(data);
   };
 
   return (
@@ -240,10 +240,13 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           onSubmit={({ links, blockchainAddresses }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
+              const arrayOfItemsToBeRemoved = formLinkList.filter((item) => !links.includes(item));
+              if (arrayOfItemsToBeRemoved.length > 0) {
+                const formData = getValues('links');
+                const newArray = formData.filter((item) => !arrayOfItemsToBeRemoved.includes(item.type));
+                if (newArray) setValue('links', newArray);
+              }
 
-              // formAddressList.forEach((element)=>{
-              //   if(!blockchainAddresses[element]) setValue('addresses')
-              // })
               setFormLinkList(links);
               setFormAddressList(blockchainAddresses);
             });
