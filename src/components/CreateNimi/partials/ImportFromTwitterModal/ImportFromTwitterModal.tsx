@@ -59,7 +59,6 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
         },
       })
       .then(({ data }) => {
-        console.log(data.data);
         onDataImport(data.data);
       })
       .catch((error) => {

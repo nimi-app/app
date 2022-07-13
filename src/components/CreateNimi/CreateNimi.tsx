@@ -119,7 +119,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       setIsPublishingNimi(true);
       setPublishNimiError(undefined);
     });
-    console.log('data', data);
+
     try {
       publishNimiAbortController.current = new AbortController();
 
@@ -240,11 +240,19 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           onSubmit={({ links, blockchainAddresses }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
-              const arrayOfItemsToBeRemoved = formLinkList.filter((item) => !links.includes(item));
-              if (arrayOfItemsToBeRemoved.length > 0) {
+              const arrayOfLinkItemsToBeRemoved = formLinkList.filter((item) => !links.includes(item));
+              if (arrayOfLinkItemsToBeRemoved.length > 0) {
                 const formData = getValues('links');
-                const newArray = formData.filter((item) => !arrayOfItemsToBeRemoved.includes(item.type));
+                const newArray = formData.filter((item) => !arrayOfLinkItemsToBeRemoved.includes(item.type));
                 if (newArray) setValue('links', newArray);
+              }
+              const arrayOfAddressItemsToBeRemoved = formAddressList.filter(
+                (item) => !blockchainAddresses.includes(item)
+              );
+              if (arrayOfAddressItemsToBeRemoved.length > 0) {
+                const formData = getValues('addresses');
+                const newArray = formData.filter((item) => !arrayOfAddressItemsToBeRemoved.includes(item.blockchain));
+                if (newArray) setValue('addresses', newArray);
               }
 
               setFormLinkList(links);
@@ -266,18 +274,18 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               const hasTwitter = formLinkList.some((element) => element === 'twitter');
               if (!hasTwitter) setFormLinkList([...formLinkList, 'twitter']);
 
-              const prevState = getValues('links') || [];
+              const prevLinkState = getValues('links') || [];
 
-              const hasLink = prevState.some((prevLink) => prevLink.type === 'twitter');
+              const hasLink = prevLinkState.some((prevLink) => prevLink.type === 'twitter');
               const newState: NimiLinkBaseDetails[] = hasLink
-                ? prevState.map((curr) => {
+                ? prevLinkState.map((curr) => {
                     if (curr.type === 'twitter') {
                       return { ...curr, url: data.username };
                     }
 
                     return curr;
                   })
-                : [...prevState, { type: 'twitter', label, url: data.username }];
+                : [...prevLinkState, { type: 'twitter', label, url: data.username }];
 
               setValue('links', newState);
 

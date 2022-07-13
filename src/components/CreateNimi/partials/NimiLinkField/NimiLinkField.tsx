@@ -30,14 +30,11 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
           return curr;
         })
       : [...prevState, { type: link, label, url: event.target.value }];
-    console.log('error eere', event.target.value);
     setValue('links', newState);
-    console.log('or ere eere', event.target.value);
   };
 
   useEffect(() => {
     const valuechange = getValues('links').find((prevLink) => prevLink.type === link);
-    console.log('does value change', valuechange);
     setInputValue(valuechange ? valuechange.url : inputValue);
   }, [getValues, link, inputValue]);
 
