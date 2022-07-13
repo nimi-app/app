@@ -55,11 +55,10 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
     axios
       .get<{ data: TwitterData }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/twitter-info`, {
         params: {
-          username,
+          username: username.charAt(0) === '@' ? username.substring(1) : username,
         },
       })
       .then(({ data }) => {
-        console.log(data.data);
         onDataImport(data.data);
       })
       .catch((error) => {

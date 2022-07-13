@@ -34,7 +34,7 @@ export function NimiBlockchainField({ blockchain, label }: NimiBlockchainFieldPr
   return (
     <>
       <Label htmlFor={blockchain}>{label}</Label>
-      <Input type="text" id={blockchain} onChange={onChange} />
+      <Input placeholder={`${label} address`} type="text" id={blockchain} onChange={onChange} />
     </>
   );
 }

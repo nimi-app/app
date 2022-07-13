@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 
-import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList } from 'nimi-card';
+import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList, NimiLinkBaseDetails } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -75,7 +75,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     defaultValues: {
       displayName: ensName,
       displayImageUrl: ensMetadata?.image,
-      description: ensMetadata?.description,
+      description: '',
       ensAddress: ensAddress,
       ensName,
       addresses: [],
@@ -83,7 +83,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     },
   });
 
-  const { register, watch, handleSubmit, setValue } = useFormContext;
+  const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
 
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
@@ -155,7 +155,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   };
 
   const onSubmitInvalid = (data) => {
-    console.error(data);
+    console.log(data);
   };
 
   return (
@@ -184,11 +184,11 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
-                  <Input id="displayName" {...register('displayName')} />
+                  <Input placeholder="Name" id="displayName" {...register('displayName')} />
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <TextArea id="description" {...register('description')}></TextArea>
+                  <TextArea placeholder="Description" id="description" {...register('description')}></TextArea>
                 </FormGroup>
 
                 {selectedLinkFieldList.map((link) => {
@@ -240,6 +240,21 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           onSubmit={({ links, blockchainAddresses }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
+              const arrayOfLinkItemsToBeRemoved = formLinkList.filter((item) => !links.includes(item));
+              if (arrayOfLinkItemsToBeRemoved.length > 0) {
+                const formData = getValues('links');
+                const newArray = formData.filter((item) => !arrayOfLinkItemsToBeRemoved.includes(item.type));
+                if (newArray) setValue('links', newArray);
+              }
+              const arrayOfAddressItemsToBeRemoved = formAddressList.filter(
+                (item) => !blockchainAddresses.includes(item)
+              );
+              if (arrayOfAddressItemsToBeRemoved.length > 0) {
+                const formData = getValues('addresses');
+                const newArray = formData.filter((item) => !arrayOfAddressItemsToBeRemoved.includes(item.blockchain));
+                if (newArray) setValue('addresses', newArray);
+              }
+
               setFormLinkList(links);
               setFormAddressList(blockchainAddresses);
             });
@@ -251,10 +266,29 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           onClose={() => setIsImportFromTwitterModalOpen(false)}
           onDataImport={(data) => {
             unstable_batchedUpdates(() => {
+              const label = t(`formLabel.twitter`);
               // Set the fields and close the modal
               setValue('displayName', data.name);
               setValue('description', data.description);
               setValue('displayImageUrl', data.profileImageUrl);
+              const hasTwitter = formLinkList.some((element) => element === 'twitter');
+              if (!hasTwitter) setFormLinkList([...formLinkList, 'twitter']);
+
+              const prevLinkState = getValues('links') || [];
+
+              const hasLink = prevLinkState.some((prevLink) => prevLink.type === 'twitter');
+              const newState: NimiLinkBaseDetails[] = hasLink
+                ? prevLinkState.map((curr) => {
+                    if (curr.type === 'twitter') {
+                      return { ...curr, url: data.username };
+                    }
+
+                    return curr;
+                  })
+                : [...prevLinkState, { type: 'twitter', label, url: data.username }];
+
+              setValue('links', newState);
+
               setIsImportFromTwitterModalOpen(false);
             });
           }}

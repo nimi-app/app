@@ -2,6 +2,7 @@ import { getAddress, isAddress } from '@ethersproject/address';
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
+
 export * from './explorer';
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end

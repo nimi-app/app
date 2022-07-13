@@ -90,7 +90,6 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
               const checked = linkList.includes(link);
 
               const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-                console.log('inputOnChange', event.target.checked);
                 // Compute the new state and then batch it previous state for onChange have newest state
                 const newState = event.target.checked ? [...linkList, link] : linkList.filter((item) => item !== link);
 
