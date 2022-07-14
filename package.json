@@ -69,7 +69,7 @@
     "lint:fix": "npm run lint -- --fix",
     "contracts:codegen": "typechain --target ethers-v5 --out-dir src/generated/contracts './src/abis/*.json'",
     "build:analyze": "cross-env REACT_APP_ANALYZE_BUNDLE=true yarn craco build && yarn writeVersion",
-    "ipfs:build": "cross-env PUBLIC_URL=\".\" yarn build",
+    "ipfs:build": "cross-env PUBLIC_URL=\".\" npm run build",
     "ipfs:publish": "ipfs-deploy build -p infura -O",
     "postinstall": "npm run contracts:codegen && npm run graphql:codegen",
     "graphql:codegen": "graphql-codegen --config graphql-codegen.yml"
