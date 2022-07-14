@@ -29,10 +29,16 @@ const ModalContent = styled(ModalContentBase)`
   align-items: center;
   justify-content: center;
   height: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
   flex-grow: 1;
+  > p {
+    margin-bottom: 10px;
+  }
 `;
 
 const ModalFooter = styled(ModalFooterBase)`
+  padding-top: 0;
   justify-content: center;
 `;
 
@@ -60,10 +66,6 @@ export function PublishNimiModal({
 }: PublishNimiModalProps) {
   const { t } = useTranslation(['common', 'nimi']);
 
-  console.log({
-    setContentHashTransaction,
-  });
-
   const modalContent = () => {
     if (setContentHashTransactionReceipt) {
       return (
@@ -78,6 +80,7 @@ export function PublishNimiModal({
             </Trans>
           </p>
           <p>{t('publishNimiModal.successParagraph2', { ns: 'nimi' })}</p>
+          <p>{t('publishNimiModal.successParagraph3', { ns: 'nimi' })}</p>
         </>
       );
     }
@@ -117,7 +120,7 @@ export function PublishNimiModal({
   };
 
   return (
-    <Modal>
+    <Modal maxWidth="560px">
       <ModalHeader>
         <ModalTitle>{t('publishNimiModal.title', { ns: 'nimi' })}</ModalTitle>
       </ModalHeader>
