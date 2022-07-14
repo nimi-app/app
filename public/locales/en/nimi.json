@@ -18,6 +18,8 @@
   "addFieldsModal.description": "Add the fields you want to be shown in your Nimi Profile.",
   "addFieldsModal.socials": "Socials",
   "addFieldsModal.addreses": "Addresses",
+  "addFieldsModal.nfts": "NFTs",
+  "addFieldsModal.widgets.paops": "POAPs",
   "buttonLabel.addFields": "Add Fields",
   "addLinksModal.title": "Add Links",
   "addFields.description": "Add the fields you want to be shown in your Nimi Profile.",
@@ -50,5 +52,6 @@
   "formLabel.polygon": "Polygon",
   "formLabel.bnb-chain": "BNB Chain",
   "buttonLabel.addNimis": "Add Nimis",
+  "formWidgetLabel.POAP": "POAPs",
   "modalTitle.addNimis": "Add Nimis"
 }

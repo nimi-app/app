@@ -6,7 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 
-import { Nimi, nimiCard, NimiLink, NimiBlockchain, blockchainList, linkTypeList, NimiLinkBaseDetails } from 'nimi-card';
+import {
+  Nimi,
+  nimiCard,
+  NimiLink,
+  NimiBlockchain,
+  blockchainList,
+  linkTypeList,
+  NimiLinkBaseDetails,
+  NimiWidgetType,
+} from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -80,6 +89,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       ensName,
       addresses: [],
       links: [],
+      widgets: [],
     },
   });
 
@@ -88,6 +98,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
   const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
+  const [formWidgetList, setFormWidgetList] = useState<NimiWidgetType[]>([]);
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
@@ -235,9 +246,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           initialValues={{
             links: formLinkList,
             blockchainAddresses: formAddressList,
+            widgets: formWidgetList,
           }}
           onClose={() => setIsAddFieldsModalOpen(false)}
-          onSubmit={({ links, blockchainAddresses }) => {
+          onSubmit={({ links, blockchainAddresses, widgets }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
               const arrayOfLinkItemsToBeRemoved = formLinkList.filter((item) => !links.includes(item));
@@ -246,6 +258,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 const newArray = formData.filter((item) => !arrayOfLinkItemsToBeRemoved.includes(item.type));
                 if (newArray) setValue('links', newArray);
               }
+
               const arrayOfAddressItemsToBeRemoved = formAddressList.filter(
                 (item) => !blockchainAddresses.includes(item)
               );
@@ -255,8 +268,28 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 if (newArray) setValue('addresses', newArray);
               }
 
+              // const arrayOfWidgetsItemsToBeRemoved = formWidgetList.filter((item) => !nimiWidgetList.includes(item));
+              // if (arrayOfWidgetsItemsToBeRemoved.length > 0) {
+              //   const formData = getValues('widgets');
+              //   const newArray = formData.filter((item) => !arrayOfWidgetsItemsToBeRemoved.includes(item.type));
+
+              setValue(
+                'widgets',
+                widgets.map((widget) => {
+                  if (widget === NimiWidgetType.POAP) {
+                    return {
+                      type: NimiWidgetType.POAP,
+                      address: ensAddress,
+                    };
+                  }
+
+                  return widget;
+                })
+              );
+
               setFormLinkList(links);
               setFormAddressList(blockchainAddresses);
+              setFormWidgetList(widgets);
             });
           }}
         />

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { blockchainList, linkTypeList, NimiLink, NimiBlockchain } from 'nimi-card';
+import { blockchainList, linkTypeList, NimiLink, NimiBlockchain, NimiWidgetType } from 'nimi-card';
 
 import {
   Modal,
@@ -44,6 +44,7 @@ const SectionTitle = styled.h2`
 interface AddFieldsOptions {
   links: NimiLink[];
   blockchainAddresses: NimiBlockchain[];
+  widgets: NimiWidgetType[];
 }
 
 export interface AddFieldsModalProps {
@@ -52,6 +53,8 @@ export interface AddFieldsModalProps {
   onSubmit?: (data: AddFieldsOptions) => void;
   initialValues?: AddFieldsOptions;
 }
+
+const nimiWidgetTypes = Object.keys(NimiWidgetType);
 
 /**
  * A modal to select the fields to add to the Nimi form.
@@ -66,12 +69,14 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
   initialValues = initialValues || {
     links: [],
     blockchainAddresses: [],
+    widgets: [],
   };
 
   // An internal state to keep track of the current selected link type
   // Manages the links blockchain address list
   const [linkList, setLinkList] = useState<NimiLink[]>(initialValues.links);
   const [addressList, setAddressList] = useState<NimiBlockchain[]>(initialValues.blockchainAddresses);
+  const [widgetList, setWidgetList] = useState<NimiWidgetType[]>(initialValues.widgets);
 
   return (
     <Modal>
@@ -98,6 +103,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                 onChange?.({
                   links: newState,
                   blockchainAddresses: addressList,
+                  widgets: widgetList,
                 });
               };
 
@@ -128,11 +134,49 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                 onChange?.({
                   links: linkList,
                   blockchainAddresses: newState,
+                  widgets: widgetList,
                 });
               };
 
               return (
                 <Checkbox key={inputId} checked={checked} id={inputId} name={blockchain} onChange={inputOnChange}>
+                  {t(i18nKey)}
+                </Checkbox>
+              );
+            })}
+          </StyledGridList>
+        </SectionWrapper>
+        <SectionWrapper>
+          <SectionTitle>{t('addFieldsModal.nfts')}</SectionTitle>
+          <StyledGridList>
+            {nimiWidgetTypes.map((widget) => {
+              const inputId = `modal-checkbox-${widget}`;
+              const i18nKey = `formWidgetLabel.${widget}`;
+              const checked = widgetList.includes(widget as NimiWidgetType);
+
+              const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+                // Compute the new state and then batch it previous state for onChange have newest state
+                const newState = event.target.checked
+                  ? [...widgetList, widget as NimiWidgetType]
+                  : widgetList.filter((item) => item !== widget);
+
+                setWidgetList(newState);
+                // emit the change event
+                onChange?.({
+                  links: linkList,
+                  blockchainAddresses: addressList,
+                  widgets: newState,
+                });
+              };
+
+              return (
+                <Checkbox
+                  key={inputId}
+                  checked={checked}
+                  id={inputId}
+                  name={`widget-${widget.toLowerCase()}`}
+                  onChange={inputOnChange}
+                >
                   {t(i18nKey)}
                 </Checkbox>
               );
@@ -146,6 +190,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
             onSubmit?.({
               links: linkList,
               blockchainAddresses: addressList,
+              widgets: widgetList,
             });
           }}
         >
