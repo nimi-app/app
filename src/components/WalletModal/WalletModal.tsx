@@ -12,7 +12,7 @@ import { Button } from '../Button';
 import { LoaderWrapper as LoaderWrapperBase, Loader } from '../Loader';
 
 import { useCloseModals, useModalOpen } from '../../state/application/hooks';
-import { ChainId, getAddChainParameters, CHAINS } from '../../constants';
+import { ChainId, getAddChainParameters, CHAINS, ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { ApplicationModal } from '../../state/application/actions';
 import { getName, useWeb3Connectors } from '../../connectors';
 import { shortenAddress } from '../../utils';
@@ -103,6 +103,12 @@ export function WalletModal() {
 
   // On wrong networks, invite the user to switch to supported chains
   if (isWrongNetwork) {
+    const intlFormatter = new Intl.ListFormat(navigator.language, {
+      style: 'short',
+      type: 'disjunction',
+    });
+    const chainNameList = ENV_SUPPORTED_CHAIN_IDS.map((chainId) => CHAINS[chainId].name);
+
     return (
       <Modal>
         <Header>
@@ -110,8 +116,13 @@ export function WalletModal() {
         </Header>
         <Content>
           <p>
-            {t('switchToEither')} {CHAINS[ChainId.MAINNET].name}, {CHAINS[ChainId.RINKEBY].name}, or{' '}
-            {CHAINS[ChainId.GOERLI].name}
+            {chainNameList.length > 0
+              ? t('network.switchToEither', {
+                  networkNameList: intlFormatter.format(chainNameList),
+                })
+              : t('network.switchTo', {
+                  networkName: intlFormatter.format(chainNameList),
+                })}
           </p>
         </Content>
         <Footer>
