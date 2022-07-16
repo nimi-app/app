@@ -1,6 +1,6 @@
 import { initializeConnector } from '@web3-react/core';
 import { WalletConnect } from '@web3-react/walletconnect';
-import { URLS } from '../constants';
+import { ENV_SUPPORTED_CHAIN_IDS, URLS } from '../constants';
 
 export const [walletConnect, hooks, store] = initializeConnector<WalletConnect>(
   (actions) =>
@@ -13,5 +13,5 @@ export const [walletConnect, hooks, store] = initializeConnector<WalletConnect>(
         icons: ['https://gateway.pinata.cloud/ipfs/QmNRpLfMXc57MPCHxd6v4Gw7iqT35XfgHw7LfXTFFWB8fy'],
       },
     }),
-  Object.keys(URLS).map((chainId) => Number(chainId))
+  ENV_SUPPORTED_CHAIN_IDS
 );
