@@ -10,7 +10,9 @@ export enum ApplicationModal {
   NETWORK_SWITCHER_TO,
   UNSUPPORTED_NETWORK,
 }
-
+export const updateBlockNumber = createAction<{ chainId: number; blockNumber: number }>(
+  'application/updateBlockNumber'
+);
 export const setOpenModal = createAction<ApplicationModal | null>('application/setOpenModal');
 export const setConnectorInfo =
   createAction<Pick<ApplicationState, 'account' | 'chainId'>>('application/setConnectorInfo');
