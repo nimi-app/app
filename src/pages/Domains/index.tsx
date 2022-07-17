@@ -44,7 +44,8 @@ const BuyDomainLink = styled.p`
   font-weight: 700;
   font-size: 20px;
   line-height: 22px;
-  color: red;
+  text-decoration-line: underline;
+  text-decoration-color: #9280e3;
   margin-top: 17px;
   cursor: pointer;
 `;
@@ -79,7 +80,6 @@ function Domains({ address }: DomainsProps) {
           {data.account.domains.map(({ id, name, labelName }) => {
             return <ENSNameCard key={id} name={name || ''} labelName={labelName || ''} />;
           })}
-
           <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
         </StyledDomainsWrapper>
       )}
