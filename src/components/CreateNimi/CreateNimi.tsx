@@ -16,6 +16,8 @@ import {
   NimiLinkBaseDetails,
   NimiWidgetType,
 } from 'nimi-card';
+
+import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -28,6 +30,7 @@ import {
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
+  PoapButton,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -89,7 +92,12 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       ensName,
       addresses: [],
       links: [],
-      widgets: [],
+      widgets: [
+        {
+          type: NimiWidgetType.POAP,
+          address: ensAddress,
+        },
+      ],
     },
   });
 
@@ -98,7 +106,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
   const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
-  const [formWidgetList, setFormWidgetList] = useState<NimiWidgetType[]>([]);
+  const [formWidgetList, setFormWidgetList] = useState<NimiWidgetType[]>([NimiWidgetType.POAP]);
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
@@ -222,6 +230,12 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 })}
 
                 <FormGroup>
+                  {formWidgetList.includes(NimiWidgetType.POAP) && (
+                    <PoapButton>
+                      <PoapLogo />
+                      POAPs
+                    </PoapButton>
+                  )}
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
                     + {t('buttonLabel.addFields')}
                   </AddFieldsButton>
