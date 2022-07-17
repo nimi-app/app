@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo.svg';
+import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
 // SVGs
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
@@ -29,7 +29,7 @@ export function Landing() {
   return (
     <PageWrapper>
       <Header>
-        <NimiLogo height="72px" />
+        <NimiLogoText height="60px" />
       </Header>
       <Content>
         <Container>
