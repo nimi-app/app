@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo-text.svg';
-import { AccountAndLinks, HeaderWrapper, NavOption } from './styleds';
+import { HeaderWrapper } from './styleds';
 import { Web3Status } from '../Web3Status';
 
 export function Header() {
@@ -10,14 +10,6 @@ export function Header() {
       <Link to="/">
         <NimiLogo width="100px" height="40px" />
       </Link>
-      <AccountAndLinks>
-        <Link to="/">
-          <NavOption>Landing Page</NavOption>
-        </Link>
-        <Link to="/domains">
-          <NavOption>Dashboard</NavOption>
-        </Link>
-      </AccountAndLinks>
       <Web3Status />
     </HeaderWrapper>
   );
