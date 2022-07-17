@@ -29,6 +29,7 @@ const AddDomain = styled(DottedButtonBase)`
   border-radius: 16px;
   height: 146px;
   font-weight: 400;
+  letter-spacing: -0.02em;
   font-size: 24px;
 `;
 const BigBanner = styled(DottedButtonBase)`

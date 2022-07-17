@@ -10,16 +10,14 @@ export interface NimiLinkFieldProps {
   link: NimiLink;
   label: string;
 }
-const InputWrap = styled.div`
+const InputWrap = styled.div<{ isInputFocused: boolean; isError: boolean }>`
   display: flex;
-  border: 2px solid #e6e8ec;
+  border: 2px solid ${({ isInputFocused, isError }) => (isError ? 'red' : isInputFocused ? 'blue' : '#e6e8ec')};
   border-radius: 12px;
 `;
 const AtFields = styled.div`
-  /* border: 2px solid #e6e8ec;
-  border-radius: 12px; */
   background: #e6e8ec;
-  border-radius: 8px 0 0 8px;
+  border-radius: 10px 0 0 10px;
   padding: 12px 16px;
   color: #777e91;
 `;
@@ -34,6 +32,10 @@ const StyledInput = styled.input`
     color: #b1b5c3;
   }
 `;
+const ErroText = styled.div`
+  color: red;
+  margin-top: 5px;
+`;
 
 /**
  * Handles the input for the link type
@@ -41,10 +43,13 @@ const StyledInput = styled.input`
 export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   const { setValue, getValues } = useFormContext<Nimi>();
   const [inputValue, setInputValue] = useState('');
+  const [isMyInputFocused, setIsMyInputFocused] = useState(false);
+  const [isError, setIsError] = useState(false);
   const hasAtField = link === ('twitter' || 'instagram' || 'telegram');
+
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    console.log('input', isValidUrl(event.target.value) && link !== 'website');
-    if (isValidUrl(event.target.value) && link !== 'website') return;
+    if (isValidUrl(event.target.value) && link !== 'website') setIsError(true);
+    else setIsError(false);
     setInputValue(event.target.value);
 
     const prevState = getValues('links') || [];
@@ -69,10 +74,12 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   return (
     <>
       <Label htmlFor={link}>{label}</Label>
-      <InputWrap>
+      <InputWrap isError={isError} isInputFocused={isMyInputFocused}>
         {hasAtField && <AtFields>@</AtFields>}
 
         <StyledInput
+          onFocus={() => setIsMyInputFocused(true)}
+          onBlur={() => setIsMyInputFocused(false)}
           value={inputValue}
           placeholder={`${label} ${link === 'website' ? 'link' : 'handle'}`}
           type="text"
@@ -80,6 +87,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
           onChange={onChange}
         />
       </InputWrap>
+      {isError && <ErroText>Only insert your username</ErroText>}
     </>
   );
 }
