@@ -44,7 +44,6 @@ const BuyDomainLink = styled.p`
   font-weight: 700;
   font-size: 20px;
   line-height: 22px;
-  width: fit-content;
   color: red;
   margin-top: 17px;
   cursor: pointer;
