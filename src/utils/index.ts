@@ -44,3 +44,18 @@ export function getContract<T = Contract>(address: string, ABI: any, provider: W
 
   return contract as T;
 }
+
+/**
+ * Checks if its url
+ * @param string The address of the contract to use
+ * @returns boolean if is valid url
+ */
+export const isValidUrl = (urlString) => {
+  let url;
+  try {
+    url = new URL(urlString);
+  } catch (e) {
+    return false;
+  }
+  return url.protocol === 'http:' || url.protocol === 'https:';
+};

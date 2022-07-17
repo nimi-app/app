@@ -36,8 +36,9 @@ const HeaderWrapper = styled.div`
 const BodyWrapper = styled.main`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   width: 100%;
+  margin-top: 24px;
   align-items: center;
   flex: 1;
   overflow-y: auto;

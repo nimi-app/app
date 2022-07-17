@@ -1,5 +1,4 @@
 import { useWeb3React } from '@web3-react/core';
-import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
@@ -11,12 +10,12 @@ import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
 import { ENSNameCard } from '../../components/ENSNameCard';
 import { NimiSignatureColor } from '../../theme';
-import { StyledDomainName } from '../../components/ENSNameCard/styleds';
+import { DottedButtonBase } from '../../components/Button/styled';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
   gap: 18px;
-  justify-content: center;
+  justify-content: start;
 `;
 const DomainsHeader = styled.div`
   ${NimiSignatureColor};
@@ -25,14 +24,37 @@ const DomainsHeader = styled.div`
   line-height: 39px;
   margin-bottom: 36px;
 `;
+const AddDomain = styled(DottedButtonBase)`
+  width: 308px;
+  border-radius: 16px;
+  height: 146px;
+  font-weight: 400;
+  font-size: 24px;
+`;
+const BigBanner = styled(DottedButtonBase)`
+  border-radius: 16px;
+  font-weight: 400;
+  font-size: 24px;
+  width: 100%;
+  padding: 80px 0;
+  letter-spacing: -0.02em;
+`;
+
+const BuyDomainLink = styled.p`
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  width: fit-content;
+  color: red;
+  margin-top: 17px;
+  cursor: pointer;
+`;
 
 interface DomainsProps {
   address: string;
 }
 
 function Domains({ address }: DomainsProps) {
-  const { t } = useTranslation();
-
   const { data, loading } = useGetDomainsQuery({
     variables: {
       address: address.toLowerCase(),
@@ -43,19 +65,25 @@ function Domains({ address }: DomainsProps) {
     return <Loader />;
   }
 
-  // User has no domains
-  if (!data.account?.domains || data.account.domains.length === 0) {
-    return <StyledDomainName>{t('noDomains')}</StyledDomainName>;
-  }
-
   return (
     <Container>
       <DomainsHeader>Your Identities</DomainsHeader>
-      <StyledDomainsWrapper>
-        {data.account.domains.map(({ id, name, labelName }) => {
-          return <ENSNameCard key={id} name={name || ''} labelName={labelName || ''} />;
-        })}
-      </StyledDomainsWrapper>
+      {!data.account?.domains || data.account.domains.length === 0 ? (
+        <BigBanner>
+          No ENS domain found on this wallet
+          <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+            You can buy one here
+          </BuyDomainLink>
+        </BigBanner>
+      ) : (
+        <StyledDomainsWrapper>
+          {data.account.domains.map(({ id, name, labelName }) => {
+            return <ENSNameCard key={id} name={name || ''} labelName={labelName || ''} />;
+          })}
+
+          <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
+        </StyledDomainsWrapper>
+      )}
     </Container>
   );
 }
