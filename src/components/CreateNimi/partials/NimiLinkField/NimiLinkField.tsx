@@ -23,6 +23,7 @@ const AtFields = styled.div`
 `;
 const StyledInput = styled.input`
   padding: 12px 16px;
+  flex: 1;
   border: none;
   background-color: transparent;
   resize: none;
@@ -45,7 +46,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   const [inputValue, setInputValue] = useState('');
   const [isMyInputFocused, setIsMyInputFocused] = useState(false);
   const [isError, setIsError] = useState(false);
-  const hasAtField = link === ('twitter' || 'instagram' || 'telegram');
+  const hasAtField = link === 'twitter' || link === 'instagram' || link === 'telegram';
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (isValidUrl(event.target.value) && link !== 'website') setIsError(true);
