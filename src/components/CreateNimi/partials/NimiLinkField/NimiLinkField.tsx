@@ -38,12 +38,6 @@ const ErroText = styled.div`
   margin-top: 5px;
 `;
 
-const PlaceholderMapping = {
-  twitter: 'handle',
-  telegram: 'handle',
-  website: 'link',
-};
-
 /**
  * Handles the input for the link type
  */
@@ -88,7 +82,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
           onFocus={() => setIsMyInputFocused(true)}
           onBlur={() => setIsMyInputFocused(false)}
           value={inputValue}
-          placeholder={`${label} ${PlaceholderMapping[link] ? PlaceholderMapping[link] : 'handle'}`}
+          placeholder={link === 'website' ? 'URL' : link === 'email' ? 'email@mail.com' : 'USERNAME'}
           type="text"
           id={link}
           onChange={onChange}
