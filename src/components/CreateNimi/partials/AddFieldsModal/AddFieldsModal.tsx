@@ -161,6 +161,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                   : widgetList.filter((item) => item !== widget);
 
                 setWidgetList(newState);
+
                 // emit the change event
                 onChange?.({
                   links: linkList,
