@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { blockchainList, linkTypeList, NimiLink, NimiBlockchain, NimiWidgetType } from 'nimi-card';
+import { linkTypeList, NimiLink, NimiBlockchain, NimiWidgetType } from 'nimi-card';
 
 import {
   Modal,
@@ -118,9 +118,9 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.addreses')}</SectionTitle>
           <StyledGridList>
-            {blockchainList.map((blockchain) => {
+            {Object.values(NimiBlockchain).map((blockchain) => {
               const inputId = `modal-checkbox-${blockchain}`;
-              const i18nKey = `formLabel.${blockchain}`;
+              const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
               const checked = addressList.includes(blockchain);
 
               const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
