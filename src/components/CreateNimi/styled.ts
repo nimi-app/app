@@ -162,4 +162,5 @@ export const PoapButton = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 28px;
+  gap: 12px;
 `;
