@@ -5,19 +5,9 @@ import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
-
-import {
-  Nimi,
-  nimiCard,
-  NimiLink,
-  NimiBlockchain,
-  blockchainList,
-  linkTypeList,
-  NimiLinkBaseDetails,
-  NimiWidgetType,
-} from 'nimi-card';
-
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
+
+import { Nimi, nimiCard, NimiLink, NimiBlockchain, linkTypeList, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -111,7 +101,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   // the list of blockchain addresses and links from Nimi
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
   const selectedBlockchainAddressFieldList = useMemo(
-    () => blockchainList.filter((blockchain) => formAddressList.includes(blockchain)),
+    () => Object.values(NimiBlockchain).filter((blockchain) => formAddressList.includes(blockchain)),
     [formAddressList]
   );
   const selectedLinkFieldList = useMemo(
@@ -220,10 +210,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                   );
                 })}
                 {selectedBlockchainAddressFieldList.map((blockchain) => {
-                  const label = t(`formLabel.${blockchain}`);
+                  const label = t(`formLabel.${blockchain.toLowerCase()}`);
 
                   return (
-                    <FormGroup key={'blockchain-input-' + blockchain}>
+                    <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
                       <NimiBlockchainField label={label} blockchain={blockchain} />
                     </FormGroup>
                   );
