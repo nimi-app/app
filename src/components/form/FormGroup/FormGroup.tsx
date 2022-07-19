@@ -11,7 +11,8 @@ export const FormGroup = styled.div`
   flex-direction: column;
 `;
 export const LinkFormGroup = styled.div`
-  flex: 1;
+  /* flex: 1; */
+  width: calc(50% - 14px);
   display: flex;
   flex-direction: column;
 `;
