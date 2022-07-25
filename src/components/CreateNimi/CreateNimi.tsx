@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { unstable_batchedUpdates } from 'react-dom';
@@ -39,6 +38,7 @@ import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
+import { publishNimi } from './api';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -132,15 +132,16 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     try {
       publishNimiAbortController.current = new AbortController();
 
-      const { ipfsHash } = await publishNimi(data, publishNimiAbortController.current);
+      const { cidV1 } = await publishNimi(data, publishNimiAbortController.current);
+
       // Set the content
-      setPublishNimiResponseIpfsHash(ipfsHash);
+      setPublishNimiResponseIpfsHash(cidV1);
       // Immediately call the contract to set the content
-      if (publicResolverContract && ipfsHash) {
+      if (publicResolverContract && cidV1) {
         const setContentHashTransaction = await setENSNameContentHash({
           contract: publicResolverContract,
           name: data.ensName,
-          content: ipfsHash,
+          contentHash: `ipfs://${cidV1}`,
         });
 
         setSetContentHashTransaction(setContentHashTransaction);
@@ -347,29 +348,4 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       )}
     </FormProvider>
   );
-}
-
-/**
- *
- * @param payload the payload from the form
- * @param controller Abort controller
- * @returns A promise with IPFS hash
- */
-export function publishNimi(
-  payload: Nimi,
-  controller?: AbortController
-): Promise<{
-  ipfsHash: string;
-}> {
-  return axios
-    .post<{
-      data: {
-        IpfsHash: string;
-      };
-    }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/nimi/publish`, payload, {
-      signal: controller ? controller.signal : undefined,
-    })
-    .then(({ data }) => ({
-      ipfsHash: data.data.IpfsHash,
-    }));
 }

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useENSPublicResolverContract } from './useENSPublicResolverContract';
-import contentHash from 'content-hash';
 import nameHash from '@ensdomains/eth-ens-namehash';
 import { ContractTransaction } from 'ethers';
 import { EnsPublicResolver } from '../generated/contracts';
+import { encodeContenthash } from '@ensdomains/ui';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -12,17 +12,21 @@ export interface UseSetContentHash {
 export interface SetENSNameContentParams {
   contract: EnsPublicResolver;
   name: string;
-  content: string;
+  contentHash: string;
 }
 
 /**
  * Direct call to the ENS public resolver contract to set the content hash of a name
  */
-export function setENSNameContentHash({ contract, name, content }: SetENSNameContentParams) {
-  const ensNode = nameHash.hash(name);
-  const formattedHash = `0x${contentHash.fromIpfs(content)}`;
+export function setENSNameContentHash(params: SetENSNameContentParams) {
+  const ensNode = nameHash.hash(params.name);
+  const { encoded, error } = encodeContenthash(params.contentHash);
 
-  return contract.setContenthash(ensNode, formattedHash);
+  if (error) {
+    throw new Error(error);
+  }
+
+  return params.contract.setContenthash(ensNode, encoded as any);
 }
 
 /**
@@ -40,7 +44,7 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
 
     return {
       setContentHash: () =>
-        setENSNameContentHash({ contract: publicResolverContract, name: ensName, content: ipfsHash }),
+        setENSNameContentHash({ contract: publicResolverContract, name: ensName, contentHash: ipfsHash }),
     };
   }, [ensName, ipfsHash, publicResolverContract]);
 }
