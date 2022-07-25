@@ -116,7 +116,7 @@ export function WalletModal() {
         </Header>
         <Content>
           <p>
-            {chainNameList.length > 0
+            {chainNameList.length > 1
               ? t('network.switchToEither', {
                   networkNameList: intlFormatter.format(chainNameList),
                 })
