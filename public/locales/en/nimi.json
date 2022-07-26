@@ -11,6 +11,8 @@
   "importFromTwitterModal.inputPlaceholder": "Your Twitter username",
   "importFromTwitterModal.buttonLabel": "Import From Twitter",
   "creatingYourProfile": "Creating Your Profile",
+  "noEnsFound": "No ENS domain found on this wallet",
+  "buyDomain": " You can buy one here",
   "addFieldsModal.title": "Add Fields",
   "publishNimiModal.title": "Publish Nimi",
   "publishNimiModal.successParagraph1": "Your Nimi has been published at $1{{ensName}}$1",

@@ -47,7 +47,7 @@ export function getContract<T = Contract>(address: string, ABI: any, provider: W
 
 /**
  * Checks if its url
- * @param string The address of the contract to use
+ * @param urlString string to be compared against
  * @returns boolean if is valid url
  */
 export const isValidUrl = (urlString) => {

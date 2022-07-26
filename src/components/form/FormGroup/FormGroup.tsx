@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
+const gap = 28;
 export const FormWrapper = styled.form`
   display: flex;
-  gap: 28px;
+  gap: ${gap}px;
   flex-wrap: wrap;
 `;
 export const FormGroup = styled.div`
@@ -11,8 +12,7 @@ export const FormGroup = styled.div`
   flex-direction: column;
 `;
 export const LinkFormGroup = styled.div`
-  /* flex: 1; */
-  width: calc(50% - 14px);
+  width: calc(50% - ${gap / 2}px);
   display: flex;
   flex-direction: column;
 `;

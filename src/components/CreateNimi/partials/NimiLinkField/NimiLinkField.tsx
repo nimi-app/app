@@ -15,7 +15,7 @@ const InputWrap = styled.div<{ isInputFocused: boolean; isError: boolean }>`
   border: 2px solid ${({ isInputFocused, isError }) => (isError ? 'red' : isInputFocused ? 'blue' : '#e6e8ec')};
   border-radius: 12px;
 `;
-const AtFields = styled.div`
+const AtField = styled.div`
   background: #e6e8ec;
   border-radius: 10px 0 0 10px;
   padding: 12px 16px;
@@ -38,13 +38,29 @@ const ErroText = styled.div`
   margin-top: 5px;
 `;
 
+const PlaceholderMapping = {
+  website: 'URL',
+  email: 'email@email.com',
+  twitter: 'USERNAME',
+  instagram: 'USERNAME',
+  telegram: 'USERNAME',
+  github: 'USERNAME',
+  medium: 'USERNAME',
+  reddit: 'USERNAME',
+  facebook: 'USERNAME',
+  lenster: 'USERNAME',
+  discord: 'USERNAME',
+  youtube: 'USERNAME',
+  linkedin: 'USERNAME',
+};
+
 /**
  * Handles the input for the link type
  */
 export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   const { setValue, getValues } = useFormContext<Nimi>();
   const [inputValue, setInputValue] = useState('');
-  const [isMyInputFocused, setIsMyInputFocused] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [isError, setIsError] = useState(false);
   const hasAtField = link === 'twitter' || link === 'instagram' || link === 'telegram';
 
@@ -75,14 +91,14 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   return (
     <>
       <Label htmlFor={link}>{label}</Label>
-      <InputWrap isError={isError} isInputFocused={isMyInputFocused}>
-        {hasAtField && <AtFields>@</AtFields>}
+      <InputWrap isError={isError} isInputFocused={isInputFocused}>
+        {hasAtField && <AtField>@</AtField>}
 
         <StyledInput
-          onFocus={() => setIsMyInputFocused(true)}
-          onBlur={() => setIsMyInputFocused(false)}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
           value={inputValue}
-          placeholder={link === 'website' ? 'URL' : link === 'email' ? 'email@mail.com' : 'USERNAME'}
+          placeholder={PlaceholderMapping[link]}
           type="text"
           id={link}
           onChange={onChange}

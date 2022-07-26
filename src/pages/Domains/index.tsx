@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
 
@@ -61,6 +62,7 @@ function Domains({ address }: DomainsProps) {
       address: address.toLowerCase(),
     },
   });
+  const { t } = useTranslation('nimi');
 
   if (loading || !data) {
     return <Loader />;
@@ -71,9 +73,9 @@ function Domains({ address }: DomainsProps) {
       <DomainsHeader>Your Identities</DomainsHeader>
       {!data.account?.domains || data.account.domains.length === 0 ? (
         <BigBanner>
-          No ENS domain found on this wallet
+          {t('noEnsFound')}
           <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-            You can buy one here
+            {t('buyDomain')}
           </BuyDomainLink>
         </BigBanner>
       ) : (
