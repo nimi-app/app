@@ -44,3 +44,20 @@ export function getContract<T = Contract>(address: string, ABI: any, provider: W
 
   return contract as T;
 }
+
+/**
+ * Loads a Fathom instance into the page
+ * @param siteId The site id to use
+ * @returns
+ */
+export function loadFathom(siteId: string) {
+  return new Promise<void>((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://upright-kings-leon.nimi.page/script.js';
+    script.setAttribute('data-site', siteId);
+    script.setAttribute('data-auto', 'true');
+    script.defer = true;
+    script.onload = () => resolve;
+    document.body.appendChild(script);
+  });
+}

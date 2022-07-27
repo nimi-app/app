@@ -15,6 +15,7 @@ import { ReactComponent as NimiLogo } from '../assets/svg/nimi-logo-no-text.svg'
 import { Footer } from '../components/Footer';
 import { WalletModal } from '../components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
+import { loadFathom } from '../utils';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -85,6 +86,11 @@ export function App() {
   const theme = useTheme();
 
   useEffect(() => {
+    // Load Fathom if it's set in .env
+    if (process.env.REACT_APP_FATHOM_SITE_ID) {
+      loadFathom(process.env.REACT_APP_FATHOM_SITE_ID);
+    }
+
     if (!connector?.connectEagerly) {
       return setIsConnectingEagerly(false);
     }
