@@ -39,6 +39,9 @@ import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverCo
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { publishNimi } from './api';
+import styled from 'styled-components';
+import { URL } from 'url';
+import axios from 'axios';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -46,6 +49,13 @@ export interface CreateNimiProps {
   ensLabelName: string;
 }
 
+const FileInput = styled.input`
+  display: none;
+`;
+const StyledLabel = styled.label`
+  display: flex;
+  justify-content: center;
+`;
 export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   /**
    * @todo replace this API
@@ -109,6 +119,8 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     [formLinkList]
   );
 
+  const [customImg, setCustomImg] = useState();
+
   const formWatchPayload = watch();
 
   const handleImportLensProfile = useCallback(() => {
@@ -167,6 +179,26 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const onSubmitInvalid = (data) => {
     console.log(data);
   };
+  const handleUpload = async (event) => {
+    const [file] = event.target.files;
+    if (file.size > 20000) console.log('handle error for too big of image or we can compress mofo');
+    if (file) {
+      setCustomImg(file);
+
+      const formData = new FormData();
+      formData.append('File', file);
+      await axios
+        .post({
+          method: 'post',
+          url: 'https://api.nimi.dev/assets',
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then((response) => {
+          console.log(response);
+        });
+    }
+  };
 
   return (
     <FormProvider {...useFormContext}>
@@ -175,11 +207,14 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              {formWatchPayload.displayImageUrl ? (
-                <ProfileImage src={formWatchPayload.displayImageUrl} />
-              ) : (
-                <ProfileImagePlaceholder />
-              )}
+              <StyledLabel>
+                {formWatchPayload.displayImageUrl || customImg ? (
+                  <ProfileImage src={customImg ? customImg : formWatchPayload.displayImageUrl} />
+                ) : (
+                  <ProfileImagePlaceholder />
+                )}
+                <FileInput name="myfile" type="file" onChange={handleUpload} />
+              </StyledLabel>
 
               <ImportButtonsWrapper>
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
