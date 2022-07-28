@@ -191,10 +191,9 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       const config = {
         headers: {
           'content-type': file.type,
-          'file-name': file.name,
         },
       };
-      const url = 'https://api.nimi.dev/assets';
+      const url = 'https://api.nimi.dev/nimi/assets';
       try {
         const reuslt = await axios.post(url, formData, config);
         console.log('?', reuslt);
