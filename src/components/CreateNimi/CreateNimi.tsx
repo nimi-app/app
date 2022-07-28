@@ -119,7 +119,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     [formLinkList]
   );
 
-  const [customImg, setCustomImg] = useState();
+  const [customImg, setCustomImg] = useState<any>(null);
 
   const formWatchPayload = watch();
 
@@ -179,26 +179,36 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const onSubmitInvalid = (data) => {
     console.log(data);
   };
-  const handleUpload = async (event) => {
-    const [file] = event.target.files;
-    if (file.size > 20000) console.log('handle error for too big of image or we can compress mofo');
-    if (file) {
-      setCustomImg(file);
-      console.log(file);
-      const formData = new FormData();
-      formData.append('file', file);
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files !== null) {
+      const fes = event.target.files;
+      const file = fes[0];
+      if (file.size > 20000) console.log('handle error for too big of image or we can compress mofo');
+      if (file) {
+        setCustomImg(file);
+        const reader = new FileReader();
+        const urls = reader.readAsDataURL(file);
 
-      const config = {
-        headers: {
-          'content-type': file.type,
-        },
-      };
-      const url = 'https://api.nimi.dev/nimi/assets';
-      try {
-        const reuslt = await axios.post(url, formData, config);
-        console.log('?', reuslt);
-      } catch (error) {
-        console.log('error', error);
+        reader.onloadend = function (e) {
+          setCustomImg([reader.result]);
+        };
+        console.log(urls);
+        console.log(file);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const config = {
+          headers: {
+            'content-type': file.type,
+          },
+        };
+        const url = 'https://api.nimi.dev/nimi/assets';
+        try {
+          const reuslt = await axios.post(url, formData, config);
+          console.log('?', reuslt);
+        } catch (error) {
+          console.log('error', error);
+        }
       }
     }
   };
@@ -211,11 +221,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           <Card>
             <CardBody>
               <StyledLabel>
-                {formWatchPayload.displayImageUrl || customImg ? (
-                  <ProfileImage src={customImg ? customImg : formWatchPayload.displayImageUrl} />
-                ) : (
-                  <ProfileImagePlaceholder />
-                )}
+                {customImg ? <ProfileImage src={customImg} /> : <ProfileImagePlaceholder />}
                 <FileInput name="myfile" type="file" onChange={handleUpload} />
               </StyledLabel>
 
