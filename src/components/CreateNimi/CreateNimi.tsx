@@ -221,7 +221,11 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           <Card>
             <CardBody>
               <StyledLabel>
-                {customImg ? <ProfileImage src={customImg} /> : <ProfileImagePlaceholder />}
+                {customImg || formWatchPayload.displayImageUrl ? (
+                  <ProfileImage src={customImg ? customImg : formWatchPayload.displayImageUrl} />
+                ) : (
+                  <ProfileImagePlaceholder />
+                )}
                 <FileInput name="myfile" type="file" onChange={handleUpload} />
               </StyledLabel>
 
