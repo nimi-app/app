@@ -186,11 +186,12 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       setCustomImg(file);
       console.log(file);
       const formData = new FormData();
-      formData.append('File', file);
+      formData.append('file', file);
 
       const config = {
         headers: {
-          'content-type': 'multipart/form-data',
+          'content-type': file.type,
+          'file-name': file.name,
         },
       };
       const url = 'https://api.nimi.dev/assets';
