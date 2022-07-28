@@ -143,7 +143,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
     try {
       publishNimiAbortController.current = new AbortController();
-
+      console.log(data, 'data');
       const { cidV1 } = await publishNimi(data, publishNimiAbortController.current);
 
       // Set the content
@@ -204,8 +204,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
         };
         const url = 'https://api.nimi.dev/nimi/assets';
         try {
-          const reuslt = await axios.post(url, formData, config);
-          console.log('?', reuslt);
+          const { data } = await axios.post(url, formData, config);
+          console.log('?', data.data.IpfsHash);
+          console.log('https://ipfs.io/');
+          setValue('displayImageUrl', `https://ipfs.io/ipfs/${data.data.IpfsHash}`);
         } catch (error) {
           console.log('error', error);
         }
