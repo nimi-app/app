@@ -184,19 +184,22 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     if (file.size > 20000) console.log('handle error for too big of image or we can compress mofo');
     if (file) {
       setCustomImg(file);
-
+      console.log(file);
       const formData = new FormData();
       formData.append('File', file);
-      await axios
-        .post({
-          method: 'post',
-          url: 'https://api.nimi.dev/assets',
-          data: formData,
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        .then((response) => {
-          console.log(response);
-        });
+
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      };
+      const url = 'https://api.nimi.dev/assets';
+      try {
+        const reuslt = await axios.post(url, formData, config);
+        console.log('?', reuslt);
+      } catch (error) {
+        console.log('error', error);
+      }
     }
   };
 
