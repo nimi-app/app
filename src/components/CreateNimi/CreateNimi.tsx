@@ -40,9 +40,7 @@ import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { publishNimi } from './api';
-
-import axios from 'axios';
+import { publishNimi, uploadImage } from './api';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -137,7 +135,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
     try {
       publishNimiAbortController.current = new AbortController();
-      console.log(data, 'data');
+
       const { cidV1 } = await publishNimi(data, publishNimiAbortController.current);
 
       // Set the content
@@ -173,34 +171,21 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const onSubmitInvalid = (data) => {
     console.log(data);
   };
+
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null) {
       const file = event.target.files[0];
       if (file.size > 20000) console.log('handle error for too big of image or we can compress mofo');
-
-      setCustomImg(file);
       const reader = new FileReader();
-      const urls = reader.readAsDataURL(file);
 
       reader.onloadend = () => {
         setCustomImg([reader.result]);
       };
-      console.log(urls);
-      console.log(file);
-      const formData = new FormData();
-      formData.append('file', file);
 
-      const config = {
-        headers: {
-          'content-type': file.type,
-        },
-      };
-      const url = 'https://api.nimi.dev/nimi/assets';
       try {
-        const { data } = await axios.post(url, formData, config);
-        console.log('?', data.data.IpfsHash);
-        console.log('https://ipfs.io/');
-        setValue('displayImageUrl', `https://ipfs.io/ipfs/${data.data.IpfsHash}`);
+        const { IpfsHash } = await uploadImage(file);
+
+        setValue('displayImageUrl', `https://ipfs.io/ipfs/${IpfsHash}`);
       } catch (error) {
         console.log('error', error);
       }
