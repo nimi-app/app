@@ -6,7 +6,7 @@ export const ImportButtonsWrapper = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 32px;
-  margin-top: 41px;
+  margin-top: 28px;
   gap: 16px;
   @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
     flex-wrap: wrap;

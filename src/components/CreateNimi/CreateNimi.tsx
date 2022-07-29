@@ -20,6 +20,8 @@ import {
   PreviewMobile,
   BackButton,
   PoapButton,
+  FileInput,
+  ImportButton,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -39,8 +41,7 @@ import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverCo
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { publishNimi } from './api';
-import styled from 'styled-components';
-import { URL } from 'url';
+
 import axios from 'axios';
 
 export interface CreateNimiProps {
@@ -49,13 +50,6 @@ export interface CreateNimiProps {
   ensLabelName: string;
 }
 
-const FileInput = styled.input`
-  display: none;
-`;
-const StyledLabel = styled.label`
-  display: flex;
-  justify-content: center;
-`;
 export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   /**
    * @todo replace this API
@@ -181,36 +175,34 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   };
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null) {
-      const fes = event.target.files;
-      const file = fes[0];
+      const file = event.target.files[0];
       if (file.size > 20000) console.log('handle error for too big of image or we can compress mofo');
-      if (file) {
-        setCustomImg(file);
-        const reader = new FileReader();
-        const urls = reader.readAsDataURL(file);
 
-        reader.onloadend = function (e) {
-          setCustomImg([reader.result]);
-        };
-        console.log(urls);
-        console.log(file);
-        const formData = new FormData();
-        formData.append('file', file);
+      setCustomImg(file);
+      const reader = new FileReader();
+      const urls = reader.readAsDataURL(file);
 
-        const config = {
-          headers: {
-            'content-type': file.type,
-          },
-        };
-        const url = 'https://api.nimi.dev/nimi/assets';
-        try {
-          const { data } = await axios.post(url, formData, config);
-          console.log('?', data.data.IpfsHash);
-          console.log('https://ipfs.io/');
-          setValue('displayImageUrl', `https://ipfs.io/ipfs/${data.data.IpfsHash}`);
-        } catch (error) {
-          console.log('error', error);
-        }
+      reader.onloadend = () => {
+        setCustomImg([reader.result]);
+      };
+      console.log(urls);
+      console.log(file);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const config = {
+        headers: {
+          'content-type': file.type,
+        },
+      };
+      const url = 'https://api.nimi.dev/nimi/assets';
+      try {
+        const { data } = await axios.post(url, formData, config);
+        console.log('?', data.data.IpfsHash);
+        console.log('https://ipfs.io/');
+        setValue('displayImageUrl', `https://ipfs.io/ipfs/${data.data.IpfsHash}`);
+      } catch (error) {
+        console.log('error', error);
       }
     }
   };
@@ -222,14 +214,16 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              <StyledLabel>
-                {customImg || formWatchPayload.displayImageUrl ? (
-                  <ProfileImage src={customImg ? customImg : formWatchPayload.displayImageUrl} />
-                ) : (
-                  <ProfileImagePlaceholder />
-                )}
+              {customImg || formWatchPayload.displayImageUrl ? (
+                <ProfileImage src={customImg ? customImg : formWatchPayload.displayImageUrl} />
+              ) : (
+                <ProfileImagePlaceholder />
+              )}
+
+              <ImportButton>
                 <FileInput name="myfile" type="file" onChange={handleUpload} />
-              </StyledLabel>
+                Upload Profile Picture
+              </ImportButton>
 
               <ImportButtonsWrapper>
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>

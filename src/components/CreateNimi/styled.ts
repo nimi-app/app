@@ -164,3 +164,56 @@ export const PoapButton = styled.div`
   margin-bottom: 28px;
   gap: 12px;
 `;
+
+export const FileInput = styled.input`
+  display: none;
+`;
+export const ImportButton = styled.label`
+  display: flex;
+  position: relative;
+  margin: 0 auto;
+  margin-top: 24px;
+  background: #e0e6ff;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 17px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  width: fit-content;
+  opacity: 0.8;
+  border-radius: 30px;
+  color: #0e4194;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  -webkit-transition-duration: 0.4s;
+  :hover {
+    transition-duration: 0.1s;
+    background-color: #c9d1f1;
+  }
+  :after {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 4em;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s;
+    box-shadow: 0 0 10px 40px #a78aff;
+  }
+  :active:after {
+    box-shadow: 0 0 0 0 white;
+    position: absolute;
+    border-radius: 4em;
+    left: 0;
+    top: 0;
+    opacity: 1;
+    transition: 0s;
+  }
+  :active {
+    top: 1px;
+  }
+`;
