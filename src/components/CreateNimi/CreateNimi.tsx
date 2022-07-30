@@ -136,16 +136,16 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     try {
       publishNimiAbortController.current = new AbortController();
 
-      const { cidV1 } = await publishNimi(data, publishNimiAbortController.current);
+      const { cid } = await publishNimi(data, publishNimiAbortController.current);
 
       // Set the content
-      setPublishNimiResponseIpfsHash(cidV1);
+      setPublishNimiResponseIpfsHash(cid);
       // Immediately call the contract to set the content
-      if (publicResolverContract && cidV1) {
+      if (publicResolverContract && cid) {
         const setContentHashTransaction = await setENSNameContentHash({
           contract: publicResolverContract,
           name: data.ensName,
-          contentHash: `ipfs://${cidV1}`,
+          contentHash: `ipfs://${cid}`,
         });
 
         setSetContentHashTransaction(setContentHashTransaction);
