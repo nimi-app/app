@@ -39,7 +39,7 @@ export function Landing() {
               <Trans ns="lading" key="hero.lead">
                 Your{' '}
                 <i>
-                  <strong>Forever</strong>
+                  <strong>Web3</strong>
                 </i>{' '}
                 Identity.
               </Trans>
