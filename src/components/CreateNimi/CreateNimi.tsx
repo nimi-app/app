@@ -167,6 +167,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const onSubmitInvalid = (data) => {
     console.log(data);
   };
+  const handleKeyDown = (e) => {
+    e.target.style.height = 'inherit';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  };
 
   return (
     <FormProvider {...useFormContext}>
@@ -198,7 +202,14 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <TextArea placeholder="Description" id="description" {...register('description')}></TextArea>
+                  <TextArea
+                    onKeyDown={handleKeyDown}
+                    maxLength={300}
+                    placeholder="Description"
+                    id="description"
+                    {...register('description')}
+                  ></TextArea>
+                  {/* <span  role="textbox" contenteditable  {...register('description')}></span> */}
                 </FormGroup>
 
                 {selectedLinkFieldList.map((link) => {
@@ -232,7 +243,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                   </AddFieldsButton>
                 </FormGroup>
                 <FormGroup>
-                  <SaveAndDeployButton type="submit">{t('saveAndDeployNimiSite')}</SaveAndDeployButton>
+                  <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
                 </FormGroup>
                 <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
               </FormWrapper>
