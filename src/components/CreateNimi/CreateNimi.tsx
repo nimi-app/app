@@ -22,6 +22,7 @@ import {
   PoapButton,
   FileInput,
   ImportButton,
+  ErrorMessage,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -41,6 +42,7 @@ import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverCo
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { publishNimi, uploadImage } from './api';
+import { supportedImageTypes } from '../../constants';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -71,6 +73,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
+  const [imgErrorMessage, setImaErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
   // Form state manager
@@ -175,7 +178,23 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null) {
       const file = event.target.files[0];
-      if (file.size > 20000) console.log('handle error for too big of image or we can compress mofo');
+      console.log(file.size);
+      if (file.size > 2000000) {
+        setImaErrorMessage('File too big!');
+        setTimeout(() => {
+          setImaErrorMessage('');
+        }, 5000);
+        return;
+      }
+      if (!supportedImageTypes.includes(file.type)) {
+        setImaErrorMessage('File type unsupported!');
+
+        setTimeout(() => {
+          setImaErrorMessage('');
+        }, 5000);
+
+        return;
+      }
       const reader = new FileReader();
 
       reader.onloadend = () => {
@@ -204,7 +223,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               ) : (
                 <ProfileImagePlaceholder />
               )}
-
+              {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
               <ImportButton>
                 <FileInput name="myfile" type="file" onChange={handleUpload} />
                 Upload Profile Picture

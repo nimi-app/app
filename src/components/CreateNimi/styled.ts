@@ -3,7 +3,7 @@ import { Flex } from 'rebass';
 
 import { CardBody } from '../Card';
 import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
-import { ReactComponent as PlaceholderMini } from '../../assets/svg/profile-empty.svg';
+import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 import { Button } from '../Button';
 
 /**
@@ -99,9 +99,12 @@ export const ProfileImage = styled.img`
   width: 209.8px;
   z-index: 1;
 `;
-export const ProfileImagePlaceholder = styled(PlaceholderMini)`
+export const ProfileImagePlaceholder = styled.img`
   align-self: center;
 `;
+ProfileImagePlaceholder.defaultProps = {
+  src: PlaceholderMini,
+};
 export const SaveAndDeployButton = styled(Button)`
   background: linear-gradient(291.35deg, #4368ea -25.85%, #c490dd 73.38%);
   opacity: 0.8;
@@ -216,4 +219,11 @@ export const ImportButton = styled.label`
   :active {
     top: 1px;
   }
+`;
+
+export const ErrorMessage = styled.div`
+  color: red;
+  display: flex;
+  justify-content: center;
+  margin-top: 17px;
 `;

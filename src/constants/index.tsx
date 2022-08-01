@@ -180,3 +180,5 @@ export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINS).map((key) => Number(key))
  * List of chain IDs that are supported in the current environment: production or development.
  */
 export const ENV_SUPPORTED_CHAIN_IDS = process.env.NODE_ENV === 'production' ? [ChainId.MAINNET] : SUPPORTED_CHAIN_IDS;
+
+export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];
