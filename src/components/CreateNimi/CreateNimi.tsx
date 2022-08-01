@@ -178,7 +178,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null) {
       const file = event.target.files[0];
-      console.log(file.size);
+
       if (file.size > 2000000) {
         setImaErrorMessage('File too big!');
         setTimeout(() => {
