@@ -15,49 +15,22 @@ import { ReactComponent as NimiLogo } from '../assets/svg/nimi-logo-no-text.svg'
 import { Footer } from '../components/Footer';
 import { WalletModal } from '../components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
+import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
+import { AppWrapper } from '../modules/app-wrapper';
 
-const AppWrapper = styled.div`
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.mainBackgoround};
-`;
+const DomainsAppWrapper = () => (
+  <AppWrapper header={<Header />} footer={<Footer />}>
+    <Routes>
+      <Route path=":ensName" element={<CreateNimiPage />} />
+      <Route path="/" element={<DomainsHome />} />
+    </Routes>
+  </AppWrapper>
+);
 
-const HeaderWrapper = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap}
-  width: 100%;
-  flex-shrink: 0;
-  justify-content: space-between;
-`;
-
-const BodyWrapper = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  align-items: center;
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overflow: visible;
-`;
-
-const AppMain = () => (
-  <AppWrapper id="app-wrapper">
-    <HeaderWrapper>
-      <Header />
-    </HeaderWrapper>
-    <BodyWrapper>
-      <Routes>
-        <Route path=":ensName" element={<CreateNimiPage />} />
-        <Route path="/" element={<DomainsHome />} />
-      </Routes>
-    </BodyWrapper>
-    <Footer />
+const NimiConnectAppWrapper = () => (
+  <AppWrapper header={<Header />} footer={<Footer />}>
+    <NimiConnectPage />
   </AppWrapper>
 );
 
@@ -112,8 +85,9 @@ export function App() {
       <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
         <WalletModal />
         <Routes>
+          <Route element={<NimiConnectAppWrapper />} path="/connect" />
+          <Route element={<DomainsAppWrapper />} path="domains/*" />
           <Route element={<Landing />} path="/" />
-          <Route element={<AppMain />} path="domains/*" />
           <Route element={<NotFound />} path="*" />
         </Routes>
       </ApolloProvider>
