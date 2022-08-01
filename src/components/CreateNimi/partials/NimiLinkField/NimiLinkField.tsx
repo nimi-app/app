@@ -1,7 +1,6 @@
 import { Nimi, NimiLink, NimiLinkBaseDetails } from 'nimi-card';
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler, useEffect, useState } from 'react';
-
 import { Label } from '../../../form';
 import { isValidUrl } from '../../../../utils';
 import styled from 'styled-components';
@@ -39,19 +38,19 @@ const ErroText = styled.div`
 `;
 
 const PlaceholderMapping = {
-  website: 'URL',
+  website: 'nimi.eth.limo',
   email: 'email@email.com',
-  twitter: 'USERNAME',
-  instagram: 'USERNAME',
-  telegram: 'USERNAME',
-  github: 'USERNAME',
-  medium: 'USERNAME',
-  reddit: 'USERNAME',
-  facebook: 'USERNAME',
-  lenster: 'USERNAME',
-  discord: 'USERNAME',
-  youtube: 'USERNAME',
-  linkedin: 'USERNAME',
+  twitter: '0xNimi',
+  instagram: '0xNimi',
+  telegram: 'NimiEth',
+  github: 'nimi-app',
+  medium: '0xNimi',
+  reddit: '0xNimi',
+  facebook: 'Username',
+  lenster: 'nimi.lens',
+  discord: 'nimi#0001',
+  youtube: 'Username',
+  linkedin: 'Username',
 };
 
 /**
