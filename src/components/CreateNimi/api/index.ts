@@ -1,8 +1,19 @@
 import axios from 'axios';
 import { Nimi } from 'nimi-card';
 
-interface PublishNimiResponse {
+interface PublishNimiApiResponseDeprecated {
+  IpfsHash: string;
+  PinSize: string;
+  Timestamp: string;
+}
+
+interface PublishNimiApiResponse {
   cidV1: string;
+}
+
+interface PublishNimiResponse {
+  cidVersion: number;
+  cid: string;
 }
 
 /**
@@ -11,12 +22,24 @@ interface PublishNimiResponse {
  * @param controller Abort controller
  * @returns A promise with IPFS hash
  */
-export function publishNimi(payload: Nimi, controller?: AbortController) {
+export function publishNimi(payload: Nimi, controller?: AbortController): Promise<PublishNimiResponse> {
   return axios
     .post<{
-      data: PublishNimiResponse;
+      data: PublishNimiApiResponse | PublishNimiApiResponseDeprecated;
     }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/nimi/publish`, payload, {
       signal: controller ? controller.signal : undefined,
     })
-    .then(({ data }) => data.data);
+    .then(({ data }) => {
+      if ((data.data as PublishNimiApiResponse).cidV1) {
+        return {
+          cidVersion: 1,
+          cid: (data.data as PublishNimiApiResponse).cidV1,
+        } as any;
+      }
+
+      return {
+        cidVersion: 0,
+        cid: (data.data as PublishNimiApiResponseDeprecated).IpfsHash,
+      };
+    });
 }

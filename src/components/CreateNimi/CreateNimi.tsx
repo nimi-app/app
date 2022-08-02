@@ -130,31 +130,34 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     });
 
     try {
+      if (!publicResolverContract) {
+        throw new Error('ENS Public Resolver contract is not available.');
+      }
+
       publishNimiAbortController.current = new AbortController();
 
-      const { cidV1 } = await publishNimi(data, publishNimiAbortController.current);
+      const { cid } = await publishNimi(data, publishNimiAbortController.current);
+
+      if (!cid) {
+        throw new Error('No CID returned from publishNimi');
+      }
 
       // Set the content
-      setPublishNimiResponseIpfsHash(cidV1);
-      // Immediately call the contract to set the content
-      if (publicResolverContract && cidV1) {
-        const setContentHashTransaction = await setENSNameContentHash({
-          contract: publicResolverContract,
-          name: data.ensName,
-          contentHash: `ipfs://${cidV1}`,
-        });
+      setPublishNimiResponseIpfsHash(cid);
+      const setContentHashTransaction = await setENSNameContentHash({
+        contract: publicResolverContract,
+        name: data.ensName,
+        contentHash: `ipfs://${cid}`,
+      });
 
-        setSetContentHashTransaction(setContentHashTransaction);
+      setSetContentHashTransaction(setContentHashTransaction);
 
-        const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
+      const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
 
-        unstable_batchedUpdates(() => {
-          setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
-          setIsPublishingNimi(false);
-        });
-      } else {
-        throw new Error('No public resolver contract or ipfs hash');
-      }
+      unstable_batchedUpdates(() => {
+        setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
+        setIsPublishingNimi(false);
+      });
     } catch (error) {
       console.error(error);
       unstable_batchedUpdates(() => {
