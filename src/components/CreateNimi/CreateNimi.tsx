@@ -130,31 +130,34 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     });
 
     try {
+      if (!publicResolverContract) {
+        throw new Error('ENS Public Resolver contract is not available.');
+      }
+
       publishNimiAbortController.current = new AbortController();
 
-      const { cidV1 } = await publishNimi(data, publishNimiAbortController.current);
+      const { cid } = await publishNimi(data, publishNimiAbortController.current);
+
+      if (!cid) {
+        throw new Error('No CID returned from publishNimi');
+      }
 
       // Set the content
-      setPublishNimiResponseIpfsHash(cidV1);
-      // Immediately call the contract to set the content
-      if (publicResolverContract && cidV1) {
-        const setContentHashTransaction = await setENSNameContentHash({
-          contract: publicResolverContract,
-          name: data.ensName,
-          contentHash: `ipfs://${cidV1}`,
-        });
+      setPublishNimiResponseIpfsHash(cid);
+      const setContentHashTransaction = await setENSNameContentHash({
+        contract: publicResolverContract,
+        name: data.ensName,
+        contentHash: `ipfs://${cid}`,
+      });
 
-        setSetContentHashTransaction(setContentHashTransaction);
+      setSetContentHashTransaction(setContentHashTransaction);
 
-        const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
+      const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
 
-        unstable_batchedUpdates(() => {
-          setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
-          setIsPublishingNimi(false);
-        });
-      } else {
-        throw new Error('No public resolver contract or ipfs hash');
-      }
+      unstable_batchedUpdates(() => {
+        setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
+        setIsPublishingNimi(false);
+      });
     } catch (error) {
       console.error(error);
       unstable_batchedUpdates(() => {
@@ -166,6 +169,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
   const onSubmitInvalid = (data) => {
     console.log(data);
+  };
+  const handleKeyDown = (e) => {
+    e.target.style.height = 'inherit';
+    e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
   return (
@@ -198,7 +205,14 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <TextArea placeholder="Description" id="description" {...register('description')}></TextArea>
+                  <TextArea
+                    onKeyDown={handleKeyDown}
+                    maxLength={300}
+                    placeholder="Description"
+                    id="description"
+                    {...register('description')}
+                  ></TextArea>
+                  {/* <span  role="textbox" contenteditable  {...register('description')}></span> */}
                 </FormGroup>
 
                 {selectedLinkFieldList.map((link) => {
@@ -232,7 +246,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                   </AddFieldsButton>
                 </FormGroup>
                 <FormGroup>
-                  <SaveAndDeployButton type="submit">{t('saveAndDeployNimiSite')}</SaveAndDeployButton>
+                  <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
                 </FormGroup>
                 <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
               </FormWrapper>
