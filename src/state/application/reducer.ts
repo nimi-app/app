@@ -1,17 +1,19 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { ChainId } from '../../constants';
-import { ApplicationModal, setOpenModal, setConnectorInfo } from './actions';
+import { ApplicationModal, setOpenModal, setConnectorInfo, setPhantomWallet } from './actions';
 
 export interface ApplicationState {
   readonly openModal: ApplicationModal | null;
   readonly chainId: ChainId | undefined;
   readonly account: string | null | undefined;
+  readonly phantomWallet: any;
 }
 
 export const initialState: ApplicationState = {
   openModal: null,
   chainId: undefined,
   account: null,
+  phantomWallet: null,
 };
 
 export const reducer = createReducer(initialState, (builder) =>
@@ -23,5 +25,8 @@ export const reducer = createReducer(initialState, (builder) =>
       const { account, chainId } = action.payload;
       state.account = account;
       state.chainId = chainId;
+    })
+    .addCase(setPhantomWallet, (state, action) => {
+      state.phantomWallet = action.payload;
     })
 );
