@@ -15,15 +15,26 @@ import { useCloseModals, useModalOpen } from '../../state/application/hooks';
 import { ChainId, getAddChainParameters, CHAINS, ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { ApplicationModal } from '../../state/application/actions';
 import { getName, useWeb3Connectors } from '../../connectors';
-import { shortenAddress } from '../../utils';
+import { shortenAddress, shortenString } from '../../utils';
 
 import { Modal, Header, Footer, Content } from '../Modal';
 import { ConnectorListWrapper } from './styled';
 import { useNavigate } from 'react-router-dom';
 
+import { usePhantomWallet } from '../../hooks/usePhantomWallet';
+import { AppState } from '../../state';
+import { useSelector } from 'react-redux';
+
 const LoaderWrapper = styled(LoaderWrapperBase)`
   padding-bottom: 16px;
 `;
+
+enum Solana {
+  DEFAULT,
+  ACTIVE,
+  NOT_ACTIVE,
+  NO_PHANTOM,
+}
 
 export function WalletModal() {
   const { t } = useTranslation();
@@ -35,13 +46,22 @@ export function WalletModal() {
   const navigate = useNavigate();
   // Internal state
   const [isActivatingAConnector, setIsActivatingAConnector] = useState(false);
+  const [isSolana, setIsSolana] = useState<Solana>(Solana.DEFAULT);
   const [pendingError, setPendingError] = useState<Error | undefined>();
   const isWrongNetwork = pendingError instanceof ChainIdNotAllowedError;
-
+  const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
+  console.log('hasPhantom', window.solana !== null);
+  const { connectPhantomWallet } = usePhantomWallet();
   // Track connector errors
   useEffect(() => {
     setPendingError(error);
   }, [error]);
+  useEffect(() => {
+    if (phantomWallet) setIsSolana(Solana.ACTIVE);
+    if (window.solana === null) {
+      setIsSolana(Solana.NO_PHANTOM);
+    }
+  }, []);
 
   /**
    * Activate a connector
@@ -78,8 +98,22 @@ export function WalletModal() {
     return null;
   }
 
-  // A wallet is connected on the right network
-  if (account && isActive) {
+  if (!isActive && isSolana === Solana.DEFAULT) {
+    console.log('here');
+    return (
+      <Modal>
+        <Header>Select Soalana or Ethereum</Header>
+        <Footer>
+          <Button onClick={() => connectPhantomWallet(false)}>Solana</Button>
+          <Button onClick={() => setIsSolana(Solana.NOT_ACTIVE)}>Ethereum</Button>
+          <Button onClick={closeModal}>{t('close')}</Button>
+        </Footer>
+        ;
+      </Modal>
+    );
+  }
+  if ((account && isActive) || phantomWallet) {
+    // A wallet is connected on the right network
     return (
       <Modal>
         <Header>
@@ -87,11 +121,19 @@ export function WalletModal() {
         </Header>
         <Content>
           <p>
-            {t('connectedViaConnector', {
-              connectorName: getName(connector),
-            })}
+            {isSolana === Solana.ACTIVE
+              ? 'solana'
+              : t('connectedViaConnector', {
+                  connectorName: getName(connector),
+                })}
           </p>
-          <p>{shortenAddress(account)}</p>
+          <p>
+            {isSolana === Solana.ACTIVE
+              ? shortenString(phantomWallet.publicKey.toString())
+              : account
+              ? shortenAddress(account)
+              : ''}
+          </p>
         </Content>
         <Footer>
           <Button onClick={() => connector.deactivate()}>{t('disconnect')}</Button>
@@ -102,7 +144,7 @@ export function WalletModal() {
   }
 
   // On wrong networks, invite the user to switch to supported chains
-  if (isWrongNetwork) {
+  if (isWrongNetwork || !isSolana) {
     const intlFormatter = new Intl.ListFormat(navigator.language, {
       style: 'short',
       type: 'disjunction',

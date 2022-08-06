@@ -5,6 +5,7 @@ import { AppState } from '../../state';
 import { usePhantomWallet } from '../../hooks/usePhantomWallet';
 
 import { StyledButtonBaseFrame } from '../Button/styled';
+import { shortenString } from '../../utils';
 
 const PhanotmWalletButton = styled(StyledButtonBaseFrame)`
   display: flex;
@@ -23,7 +24,7 @@ export function PhantomWalletStatus() {
 
   return (
     <PhanotmWalletButton onClick={() => connectPhantomWallet(false)}>
-      {phantomWallet ? phantomWallet.publicKey.toString() : 'Connect PW'}
+      {phantomWallet ? shortenString(phantomWallet.publicKey.toString()) : 'Connect PW'}
     </PhanotmWalletButton>
   );
 }

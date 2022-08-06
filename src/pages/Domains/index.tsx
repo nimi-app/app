@@ -12,6 +12,9 @@ import { Loader } from '../../components/Loader';
 import { ENSNameCard } from '../../components/ENSNameCard';
 import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
+import { AppState } from '../../state';
+import { useSelector } from 'react-redux';
+import { useDomainsForUser } from '../../hooks/Bonfida/useBonfidaDomainsForUser';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -56,7 +59,7 @@ interface DomainsProps {
   address: string;
 }
 
-function Domains({ address }: DomainsProps) {
+function EnsDomains({ address }: DomainsProps) {
   const { data, loading } = useGetDomainsQuery({
     variables: {
       address: address.toLowerCase(),
@@ -90,16 +93,30 @@ function Domains({ address }: DomainsProps) {
   );
 }
 
+function SolanaDomains(account) {
+  console.log(account);
+  const data = useDomainsForUser(account);
+
+  return (
+    <Container>
+      <DomainsHeader>Your Identities</DomainsHeader>Account:{data}
+    </Container>
+  );
+}
+
 /**
  * A logic wrapper around Domains components
  */
 export function DomainsHome() {
   const { account, isActive } = useWeb3React();
+  const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
 
   if (account && isActive) {
-    return <Domains address={account} />;
+    return <EnsDomains address={account} />;
   }
-
+  if (phantomWallet) {
+    return <SolanaDomains account={phantomWallet.publicKey} />;
+  }
   // Redirect to home page if no wallet is connected
   return <Navigate to="/" />;
 }

@@ -1,6 +1,7 @@
 import { AppDispatch } from '../state';
 import { useDispatch } from 'react-redux';
 import { setPhantomWallet } from '../state/application/actions';
+// import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 
 declare global {
   interface Window {
@@ -13,9 +14,11 @@ export function usePhantomWallet() {
 
   async function connectPhantomWallet(onlyIfTrusted = true) {
     try {
+      if ('solana' in window) {
+      }
       const win: typeof global = window;
       const solana = win.solana;
-
+      console.log('inside', solana);
       if (solana?.isPhantom) {
         const response = onlyIfTrusted ? await solana.connect({ onlyIfTrusted: true }) : await solana.connect();
 

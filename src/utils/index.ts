@@ -11,7 +11,11 @@ export function shortenAddress(address: string, charsBefore = 4, charsAfter = 4)
   if (!parsed) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
-  return `${parsed.substring(0, charsBefore + 2)}...${parsed.substring(42 - charsAfter)}`;
+  return shortenString(address, charsBefore, charsAfter);
+}
+
+export function shortenString(address, charsBefore = 4, charsAfter = 4): string {
+  return `${address.substring(0, charsBefore + 2)}...${address.substring(42 - charsAfter)}`;
 }
 
 // account is not optional
