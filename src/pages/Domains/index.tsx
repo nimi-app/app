@@ -99,7 +99,9 @@ function SolanaDomains(account) {
 
   return (
     <Container>
-      <DomainsHeader>Your Identities</DomainsHeader>Account:{data}
+      <>
+        <DomainsHeader>Your Identities</DomainsHeader>Account:{data}
+      </>
     </Container>
   );
 }
