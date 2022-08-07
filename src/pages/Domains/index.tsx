@@ -96,11 +96,12 @@ function EnsDomains({ address }: DomainsProps) {
 function SolanaDomains(account) {
   console.log(account);
   const data = useDomainsForUser(account);
+  console.log('data', data);
 
   return (
     <Container>
       <>
-        <DomainsHeader>Your Identities</DomainsHeader>Account:{data}
+        <DomainsHeader>Your Identities</DomainsHeader>Account:{data && data[0].reverse}
       </>
     </Container>
   );
