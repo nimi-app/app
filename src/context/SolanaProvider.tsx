@@ -50,7 +50,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
 export const useSolana = () => {
   const conect = useContext(SolanaContext);
   if (!conect) {
-    throw new Error('This hook must be used in context of EcoBridge provider');
+    throw new Error('No Solana for you!');
   }
 
   return conect;
