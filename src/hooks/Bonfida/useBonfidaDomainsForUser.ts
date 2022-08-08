@@ -1,7 +1,7 @@
 import { getAllDomains, NameRegistryState, performReverseLookupBatch } from '@bonfida/spl-name-service';
 
 import { useEffect, useRef, useState } from 'react';
-import { useSolana } from '../../context/SolanaProvider';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 
 interface Result {
   pubkey: any;
@@ -11,25 +11,29 @@ interface Result {
 
 /**
  * This hook can be used to retrieve all the domains of a user
- * @param user The user to search domains for
  * @returns
  */
-export const useDomainsForUser = (user) => {
+export const useDomainsForUser = () => {
   const [result, setResult] = useState<Result[] | undefined>(undefined);
   const mounted = useRef(true);
-  const { connection } = useSolana();
+  const { connection } = useConnection();
+  const { publicKey } = useWallet();
 
   useEffect(() => {
     const fn = async () => {
       try {
-        const wallet = window.solana.publicKey;
         console.log('solana', window.solana);
-        console.log('wallet', wallet);
+
         console.log('connection', connection);
-        if (window.solana && wallet) {
-          const domains = await getAllDomains(connection, wallet);
+        if (window.solana && publicKey) {
+          console.log('eere');
+          const domains = await getAllDomains(connection, publicKey);
+          console.log('eere');
           const registries = await NameRegistryState.retrieveBatch(connection, [...domains]);
+          console.log('eere');
           const reverses = await performReverseLookupBatch(connection, [...domains]);
+          console.log('eere');
+
           const _result: Result[] = [];
           for (let i = 0; i < domains.length; i++) {
             _result.push({
@@ -51,7 +55,7 @@ export const useDomainsForUser = (user) => {
     };
 
     fn().catch(console.error);
-  }, [user]);
+  }, [publicKey]);
 
   return result;
 };

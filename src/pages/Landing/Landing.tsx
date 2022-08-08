@@ -2,13 +2,14 @@ import { useWeb3React } from '@web3-react/core';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import { useWallet } from '@solana/wallet-adapter-react';
 import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
 // SVGs
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
-import { AppState } from '../../state';
+
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 // Styled components
 import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
@@ -17,12 +18,13 @@ export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
 
   const { isActive, account } = useWeb3React();
-  const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
+  // const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
+  const { wallet } = useWallet();
   const navigate = useNavigate();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
-  console.log('0hantom', phantomWallet);
+
   const onCTAClick = () => {
-    if ((isActive && account) || phantomWallet) {
+    if ((isActive && account) || wallet) {
       navigate('/domains');
     } else {
       openWalletSwitcherPopover();
@@ -48,6 +50,7 @@ export function Landing() {
               </Trans>
             </HeroLead>
           </HeroText>
+          <WalletMultiButton>Here</WalletMultiButton>
           <Button onClick={onCTAClick}>
             <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
           </Button>

@@ -93,9 +93,8 @@ function EnsDomains({ address }: DomainsProps) {
   );
 }
 
-function SolanaDomains(account) {
-  console.log(account);
-  const data = useDomainsForUser(account);
+function SolanaDomains() {
+  const data = useDomainsForUser();
   console.log('data', data);
 
   return (
@@ -118,7 +117,7 @@ export function DomainsHome() {
     return <EnsDomains address={account} />;
   }
   if (phantomWallet) {
-    return <SolanaDomains account={phantomWallet.publicKey} />;
+    return <SolanaDomains />;
   }
   // Redirect to home page if no wallet is connected
   return <Navigate to="/" />;

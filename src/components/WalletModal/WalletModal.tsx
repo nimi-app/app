@@ -4,13 +4,14 @@ import { WalletConnect } from '@web3-react/walletconnect';
 import { MetaMask } from '@web3-react/metamask';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'react-i18next';
+
 import { Connector } from '@web3-react/types';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '../Button';
 import { LoaderWrapper as LoaderWrapperBase, Loader } from '../Loader';
-
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { useCloseModals, useModalOpen } from '../../state/application/hooks';
 import { ChainId, getAddChainParameters, CHAINS, ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { ApplicationModal } from '../../state/application/actions';
@@ -21,7 +22,6 @@ import { Modal, Header, Footer, Content } from '../Modal';
 import { ConnectorListWrapper } from './styled';
 import { useNavigate } from 'react-router-dom';
 
-import { usePhantomWallet } from '../../hooks/usePhantomWallet';
 import { AppState } from '../../state';
 import { useSelector } from 'react-redux';
 
@@ -40,10 +40,13 @@ export function WalletModal() {
   const { t } = useTranslation();
 
   const { connector, isActive, account, error } = useWeb3React();
+
+  const { setVisible } = useWalletModal();
   const isModalOpen = useModalOpen(ApplicationModal.WALLET_SWITCHER);
   const connectors = useWeb3Connectors();
   const closeModal = useCloseModals();
   const navigate = useNavigate();
+
   // Internal state
   const [isActivatingAConnector, setIsActivatingAConnector] = useState(false);
   const [isSolana, setIsSolana] = useState<Solana>(Solana.DEFAULT);
@@ -51,7 +54,6 @@ export function WalletModal() {
   const isWrongNetwork = pendingError instanceof ChainIdNotAllowedError;
   const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
   console.log('hasPhantom', window.solana !== null);
-  const { connectPhantomWallet } = usePhantomWallet();
   // Track connector errors
   useEffect(() => {
     setPendingError(error);
@@ -104,7 +106,7 @@ export function WalletModal() {
       <Modal>
         <Header>Select Soalana or Ethereum</Header>
         <Footer>
-          <Button onClick={() => connectPhantomWallet(false)}>Solana</Button>
+          <Button onClick={() => setVisible(true)}>Solana</Button>
           <Button onClick={() => setIsSolana(Solana.NOT_ACTIVE)}>Ethereum</Button>
           <Button onClick={closeModal}>{t('close')}</Button>
         </Footer>
