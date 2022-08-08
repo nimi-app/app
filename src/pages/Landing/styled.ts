@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import backgroundImageUrl from '../../assets/images/nimi-header-background.png';
+import backgroundImageUrl from '../../assets/images/nimi-header-background.jpeg';
 import { NimiSignatureColor } from '../../theme';
-import backgroungImageUrl from '../../assets/images/nimi-header-background.png';
 
 export const PageWrapper = styled.div`
   display: flex;
-  background-image: url('${backgroungImageUrl}');
+  background-image: url('${backgroundImageUrl}');
   background-position: center;
   background-size: cover;
   flex-direction: column;
@@ -13,9 +12,6 @@ export const PageWrapper = styled.div`
   justify-content: center;
   min-height: 100vh;
   width: 100%;
-  background-image: url('${backgroundImageUrl}');
-  background-position: center;
-  background-size: cover;
 `;
 
 export const Header = styled.header`

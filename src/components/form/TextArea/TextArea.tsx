@@ -10,6 +10,6 @@ export const TextArea = styled.textarea`
     color: #b1b5c3;
   }
   width: 100%;
-  resize: none;
-  overflow: auto;
+  resize: vertical;
+  overflow: hidden;
 `;

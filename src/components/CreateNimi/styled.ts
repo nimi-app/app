@@ -5,6 +5,7 @@ import { CardBody } from '../Card';
 import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 import { Button } from '../Button';
+import { DottedButtonBase } from '../Button/styled';
 
 /**
  * Defines the layout
@@ -112,16 +113,12 @@ export const SaveAndDeployButton = styled(Button)`
   padding: 25px 24px;
   letter-spacing: -0.02em;
 `;
-export const AddFieldsButton = styled.button`
+export const AddFieldsButton = styled(DottedButtonBase)`
   text-transform: uppercase;
-  cursor: pointer;
   font-weight: 600;
-  line-height: 24px;
   letter-spacing: 0.1em;
-  ${NimiSignatureColor};
-  border: 2px dotted rgba(67, 104, 234, 1);
-  padding: 22px 16px;
   border-radius: 12px;
+  padding: 22px 16px;
 `;
 export const PreviewMobile = styled.div`
   display: none;
