@@ -22,10 +22,7 @@ export const useDomainsForUser = () => {
   useEffect(() => {
     const fn = async () => {
       try {
-        console.log('solana', window.solana);
-
-        console.log('connection', connection);
-        if (window.solana && publicKey) {
+        if (publicKey) {
           console.log('eere');
           const domains = await getAllDomains(connection, publicKey);
           console.log('eere');

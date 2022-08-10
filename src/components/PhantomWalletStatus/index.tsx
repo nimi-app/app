@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 import { useSelector } from 'react-redux';
 import { AppState } from '../../state';
-import { usePhantomWallet } from '../../hooks/usePhantomWallet';
-
+import { useWallet } from '@solana/wallet-adapter-react/lib/cjs';
 import { StyledButtonBaseFrame } from '../Button/styled';
 import { shortenString } from '../../utils';
 
@@ -19,12 +18,12 @@ const PhanotmWalletButton = styled(StyledButtonBaseFrame)`
 export function PhantomWalletStatus() {
   const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
 
-  const { connectPhantomWallet } = usePhantomWallet();
+  const { wallet, wallets } = useWallet();
   console.log('PW STATUS', phantomWallet);
 
   return (
-    <PhanotmWalletButton onClick={() => connectPhantomWallet(false)}>
-      {phantomWallet ? shortenString(phantomWallet.publicKey.toString()) : 'Connect PW'}
+    <PhanotmWalletButton onClick={() => wallets[0].adapter.connect()}>
+      {wallet ? shortenString(wallet.publicKey.toString()) : 'Connect PW'}
     </PhanotmWalletButton>
   );
 }

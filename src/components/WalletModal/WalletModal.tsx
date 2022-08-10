@@ -9,7 +9,7 @@ import { Connector } from '@web3-react/types';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useWallet } from '@solana/wallet-adapter-react/lib/cjs';
-import { WalletMultiButton, useWalletModal } from '@solana/wallet-adapter-react-ui/lib/cjs';
+
 import { Button } from '../Button';
 import { LoaderWrapper as LoaderWrapperBase, Loader } from '../Loader';
 
@@ -25,26 +25,20 @@ import { useNavigate } from 'react-router-dom';
 
 import { AppState } from '../../state';
 import { useSelector } from 'react-redux';
+import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 
 const LoaderWrapper = styled(LoaderWrapperBase)`
   padding-bottom: 16px;
 `;
-
-enum Solana {
-  DEFAULT,
-  ACTIVE,
-  NOT_ACTIVE,
-  NO_PHANTOM,
-}
 
 export function WalletModal() {
   const { t } = useTranslation();
 
   const { connector, isActive, account, error } = useWeb3React();
 
-  const walletModal = useWalletModal();
-  const { wallet } = useWallet();
-  console.log('wallet', walletModal);
+  const { wallets, connect } = useWallet();
+  const { activeNetwork, setActiveNetwork } = useActiveNetwork();
+
   const isModalOpen = useModalOpen(ApplicationModal.WALLET_SWITCHER);
   const connectors = useWeb3Connectors();
   const closeModal = useCloseModals();
@@ -52,21 +46,17 @@ export function WalletModal() {
 
   // Internal state
   const [isActivatingAConnector, setIsActivatingAConnector] = useState(false);
-  const [isSolana, setIsSolana] = useState<Solana>(Solana.DEFAULT);
+
   const [pendingError, setPendingError] = useState<Error | undefined>();
   const isWrongNetwork = pendingError instanceof ChainIdNotAllowedError;
   const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
-  console.log('hasPhantom', window.solana !== null);
+
+  console.log('isInstalled', wallets);
+  const isSolana = true;
   // Track connector errors
   useEffect(() => {
     setPendingError(error);
   }, [error]);
-  useEffect(() => {
-    if (phantomWallet) setIsSolana(Solana.ACTIVE);
-    if (window.solana === null) {
-      setIsSolana(Solana.NO_PHANTOM);
-    }
-  }, []);
 
   /**
    * Activate a connector
@@ -103,21 +93,21 @@ export function WalletModal() {
     return null;
   }
 
-  if (!isActive && isSolana === Solana.DEFAULT) {
+  if (!isActive && wallets[0].readyState == 'Installed') {
     console.log('here');
     return (
       <Modal>
         <Header>Select Soalana or Ethereum</Header>
         <Footer>
-          <WalletMultiButton>Solanaasnnpm</WalletMultiButton>
-          <Button onClick={() => setIsSolana(Solana.NOT_ACTIVE)}>Ethereum</Button>
+          <Button onClick={() => connect()}>Solana</Button>
+          <Button onClick={() => console.log('here')}>Ethereum</Button>
           <Button onClick={closeModal}>{t('close')}</Button>
         </Footer>
         ;
       </Modal>
     );
   }
-  if ((account && isActive) || phantomWallet) {
+  if ((account && isActive) || wallets) {
     // A wallet is connected on the right network
     return (
       <Modal>
@@ -126,18 +116,14 @@ export function WalletModal() {
         </Header>
         <Content>
           <p>
-            {isSolana === Solana.ACTIVE
+            {activeNetwork === ActiveNetworkState.SOLANA
               ? 'solana'
               : t('connectedViaConnector', {
                   connectorName: getName(connector),
                 })}
           </p>
           <p>
-            {isSolana === Solana.ACTIVE
-              ? shortenString(phantomWallet.publicKey.toString())
-              : account
-              ? shortenAddress(account)
-              : ''}
+            {activeNetwork ? shortenString(phantomWallet.publicKey.toString()) : account ? shortenAddress(account) : ''}
           </p>
         </Content>
         <Footer>

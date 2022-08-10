@@ -4,12 +4,10 @@ import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo-text.svg'
 import { HeaderWrapper } from './styleds';
 import { PhantomWalletStatus } from '../PhantomWalletStatus';
 import { Web3Status } from '../Web3Status';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../state';
 
 export function Header() {
-  const isPhantom = useSelector((state: AppState) => state.application.phantomWallet);
-  console.log('header', isPhantom);
+  const isPhantom = true;
+
   return (
     <HeaderWrapper>
       <Link to="/">

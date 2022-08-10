@@ -18,13 +18,14 @@ export function Landing() {
 
   const { isActive, account } = useWeb3React();
   // const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
-  const { wallet } = useWallet();
+  const wallet = useWallet();
 
   const navigate = useNavigate();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
 
-  const onCTAClick = () => {
-    if ((isActive && account) || wallet) {
+  const onCTAClick = async () => {
+    console.log(wallet);
+    if (isActive && account) {
       navigate('/domains');
     } else {
       openWalletSwitcherPopover();
