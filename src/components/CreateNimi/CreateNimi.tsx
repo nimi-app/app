@@ -6,7 +6,7 @@ import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 
-import { Nimi, nimiCard, NimiLink, NimiBlockchain, linkTypeList, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
+import { Nimi, nimiCard, NimiBlockchain, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -94,7 +94,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
 
   // Manages the links blockchain address list
-  const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
+  const [formLinkList, setFormLinkList] = useState<NimiLinkType[]>([]);
   const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
   const [formWidgetList, setFormWidgetList] = useState<NimiWidgetType[]>([NimiWidgetType.POAP]);
   // To keep the same order of links and addresses, compute
@@ -105,7 +105,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     [formAddressList]
   );
   const selectedLinkFieldList = useMemo(
-    () => linkTypeList.filter((link) => formLinkList.includes(link)),
+    () => Object.keys(NimiLinkType).filter((link) => formLinkList.includes(link as NimiLinkType)),
     [formLinkList]
   );
 
@@ -220,7 +220,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
                   return (
                     <LinkFormGroup key={'blockchain-input-' + link}>
-                      <NimiLinkField key={'link-input' + link} label={label} link={link} />
+                      <NimiLinkField key={'link-input' + link} label={label} link={link as NimiLinkType} />
                     </LinkFormGroup>
                   );
                 })}
@@ -323,21 +323,25 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
               setValue('displayName', data.name);
               setValue('description', data.description);
               setValue('displayImageUrl', data.profileImageUrl);
-              const hasTwitter = formLinkList.some((element) => element === 'twitter');
-              if (!hasTwitter) setFormLinkList([...formLinkList, 'twitter']);
+
+              // Handle Twitter
+              const hasTwitter = formLinkList.some((element) => element === NimiLinkType.TWITTER);
+              if (!hasTwitter) {
+                setFormLinkList([...formLinkList, NimiLinkType.TWITTER]);
+              }
 
               const prevLinkState = getValues('links') || [];
 
-              const hasLink = prevLinkState.some((prevLink) => prevLink.type === 'twitter');
+              const hasLink = prevLinkState.some((prevLink) => prevLink.type === NimiLinkType.TWITTER);
               const newState: NimiLinkBaseDetails[] = hasLink
                 ? prevLinkState.map((curr) => {
-                    if (curr.type === 'twitter') {
-                      return { ...curr, url: data.username };
+                    if (curr.type === NimiLinkType.TWITTER) {
+                      return { ...curr, content: data.username };
                     }
 
                     return curr;
                   })
-                : [...prevLinkState, { type: 'twitter', label, url: data.username }];
+                : [...prevLinkState, { type: NimiLinkType.TWITTER, label, content: data.username }];
 
               setValue('links', newState);
 
