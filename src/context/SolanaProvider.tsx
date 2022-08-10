@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
-import { PhantomWalletAdapter, GlowWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { PhantomWalletAdapter, GlowWalletAdapter } from '@solana/wallet-adapter-wallets/lib/cjs';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui/lib/cjs';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react/lib/cjs';
 
 export function SolanaProvider({ children }: { children: ReactNode }) {
   const wallets = useMemo(() => [new PhantomWalletAdapter(), new GlowWalletAdapter()], []);
@@ -9,7 +9,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
 
   return (
     <ConnectionProvider endpoint={'https://api.mainnet-beta.solana.com '}>
-      <WalletProvider wallets={wallets}>
+      <WalletProvider onError={(e) => console.log('error', e)} wallets={wallets}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

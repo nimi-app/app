@@ -29,7 +29,6 @@ root.render(
   <StrictMode>
     <ReduxStoreProvider store={store}>
       <FixedGlobalStyle />
-
       <Web3ConnectorsProvider>
         <Web3ConnectorsContext.Consumer>
           {(context) => {

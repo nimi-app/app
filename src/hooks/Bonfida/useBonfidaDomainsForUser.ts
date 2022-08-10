@@ -1,7 +1,7 @@
 import { getAllDomains, NameRegistryState, performReverseLookupBatch } from '@bonfida/spl-name-service';
 
 import { useEffect, useRef, useState } from 'react';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react/lib/cjs';
 
 interface Result {
   pubkey: any;

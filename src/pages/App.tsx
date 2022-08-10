@@ -16,7 +16,6 @@ import { Footer } from '../components/Footer';
 import { WalletModal } from '../components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
 import { loadFathom } from '../utils';
-import { SolanaProvider } from '../context/SolanaProvider';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -85,6 +84,7 @@ const AppLoaderContainer = styled.div`
 export function App() {
   const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
   const { chainId, connector } = useActiveWeb3React();
+
   const theme = useTheme();
 
   useEffect(() => {
@@ -111,16 +111,14 @@ export function App() {
 
   return (
     <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
-      <SolanaProvider>
-        <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
-          <WalletModal />
-          <Routes>
-            <Route element={<Landing />} path="/" />
-            <Route element={<AppMain />} path="domains/*" />
-            <Route element={<NotFound />} path="*" />
-          </Routes>
-        </ApolloProvider>
-      </SolanaProvider>
+      <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
+        <WalletModal />
+        <Routes>
+          <Route element={<Landing />} path="/" />
+          <Route element={<AppMain />} path="domains/*" />
+          <Route element={<NotFound />} path="*" />
+        </Routes>
+      </ApolloProvider>
     </SkeletonTheme>
   );
 }

@@ -1,15 +1,14 @@
 import { useWeb3React } from '@web3-react/core';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useWallet } from '@solana/wallet-adapter-react/lib/cjs';
 import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
 // SVGs
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
 
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui/lib/cjs';
 import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 // Styled components
 import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
@@ -20,6 +19,7 @@ export function Landing() {
   const { isActive, account } = useWeb3React();
   // const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
   const { wallet } = useWallet();
+
   const navigate = useNavigate();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
 
