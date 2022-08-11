@@ -77,7 +77,8 @@
     "ipfs:build": "cross-env PUBLIC_URL=\".\" npm run build",
     "ipfs:publish": "ipfs-deploy build -p infura -O",
     "postinstall": "npm run contracts:codegen && npm run graphql:codegen",
-    "graphql:codegen": "graphql-codegen --config graphql-codegen.yml"
+    "graphql:codegen": "graphql-codegen --config graphql-codegen.yml",
+    "winStart": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired start"
   },
   "eslintConfig": {
     "extends": [
