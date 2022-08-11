@@ -7,7 +7,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   console.log('wallets', wallets);
 
   return (
-    <ConnectionProvider endpoint={'https://api.mainnet-beta.solana.com '}>
+    <ConnectionProvider endpoint={'https://api.mainnet-beta.solana.com'}>
       <WalletProvider onError={(e) => console.log('error', e)} wallets={wallets}>
         {/* <WalletModalProvider>{children}</WalletModalProvider> */}
         {children}
