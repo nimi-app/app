@@ -65,6 +65,10 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   const hasAtField = [NimiLinkType.TWITTER, NimiLinkType.INSTAGRAM, NimiLinkType.TELEGRAM].includes(link);
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    console.log({
+      value: event.target.value,
+    });
+
     if (isValidUrl(event.target.value) && link === NimiLinkType.URL) {
       setIsError(true);
     } else {
@@ -78,12 +82,15 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
     const newState: NimiLinkBaseDetails[] = hasLink
       ? prevState.map((curr) => {
           if (curr.type === link) {
-            return { ...curr, url: event.target.value };
+            return { ...curr, content: event.target.value };
           }
 
           return curr;
         })
       : [...prevState, { type: link, label, content: event.target.value }];
+    console.log({
+      newState,
+    });
     setValue('links', newState);
   };
 
