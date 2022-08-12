@@ -84,7 +84,6 @@ const AppLoaderContainer = styled.div`
 export function App() {
   const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
   const { chainId, connector } = useActiveWeb3React();
-
   const theme = useTheme();
 
   useEffect(() => {

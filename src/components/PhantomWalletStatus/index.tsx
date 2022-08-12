@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 
-import { useSelector } from 'react-redux';
-import { AppState } from '../../state';
-import { usePhantomWallet } from '../../hooks/usePhantomWallet';
-
 import { StyledButtonBaseFrame } from '../Button/styled';
 import { shortenString } from '../../utils';
+import { useSolana } from '../../context/SolanaProvider';
+import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 
 const PhanotmWalletButton = styled(StyledButtonBaseFrame)`
   display: flex;
@@ -17,14 +15,12 @@ const PhanotmWalletButton = styled(StyledButtonBaseFrame)`
 `;
 
 export function PhantomWalletStatus() {
-  const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
-
-  const { connectPhantomWallet } = usePhantomWallet();
-  console.log('PW STATUS', phantomWallet);
+  const { publicKey } = useSolana();
+  const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
 
   return (
-    <PhanotmWalletButton onClick={() => connectPhantomWallet(false)}>
-      {phantomWallet ? shortenString(phantomWallet.publicKey.toString()) : 'Connect PW'}
+    <PhanotmWalletButton onClick={openWalletSwitcherPopover}>
+      {publicKey ? shortenString(publicKey.toString()) : 'Connect PHANTOM'}
     </PhanotmWalletButton>
   );
 }

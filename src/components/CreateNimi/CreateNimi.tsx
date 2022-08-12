@@ -34,19 +34,22 @@ import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
 import { ENSMetadata } from '../../hooks/useENSMetadata';
-import { setENSNameContentHash } from '../../hooks/useSetContentHash';
+import { setBonfidaContentHash, setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { publishNimi } from './api';
+import { useConnection } from '@solana/wallet-adapter-react';
 
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
   ensLabelName: string;
+  solanaAddress?: string;
+  solanaData: any;
 }
 
-export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
+export function CreateNimi({ ensAddress, ensName, solanaData }: CreateNimiProps) {
   /**
    * @todo replace this API
    */
@@ -54,6 +57,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata;
+  const { connection } = useConnection();
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -130,9 +134,9 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
     });
 
     try {
-      if (!publicResolverContract) {
-        throw new Error('ENS Public Resolver contract is not available.');
-      }
+      // if (!publicResolverContract) {
+      //   throw new Error('ENS Public Resolver contract is not available.');
+      // }
 
       publishNimiAbortController.current = new AbortController();
 
@@ -143,21 +147,24 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       }
 
       // Set the content
+      console.log('solandata', solanaData);
       setPublishNimiResponseIpfsHash(cid);
-      const setContentHashTransaction = await setENSNameContentHash({
-        contract: publicResolverContract,
-        name: data.ensName,
-        contentHash: `ipfs://${cid}`,
-      });
+      const solana = await setBonfidaContentHash(cid, solanaData, connection);
+      console.log(solana);
+      // const setContentHashTransaction = await setENSNameContentHash({
+      //   contract: publicResolverContract,
+      //   name: data.ensName,
+      //   contentHash: `ipfs://${cid}`,
+      // });
 
-      setSetContentHashTransaction(setContentHashTransaction);
+      // setSetContentHashTransaction(setContentHashTransaction);
 
-      const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
+      // const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
 
-      unstable_batchedUpdates(() => {
-        setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
-        setIsPublishingNimi(false);
-      });
+      // unstable_batchedUpdates(() => {
+      //   setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
+      //   setIsPublishingNimi(false);
+      // });
     } catch (error) {
       console.error(error);
       unstable_batchedUpdates(() => {

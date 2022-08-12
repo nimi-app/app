@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
@@ -15,6 +15,10 @@ import { DottedButtonBase } from '../../components/Button/styled';
 import { AppState } from '../../state';
 import { useSelector } from 'react-redux';
 import { useDomainsForUser } from '../../hooks/Bonfida/useBonfidaDomainsForUser';
+import { Button } from '../../components/Button';
+import { useSolana } from '../../context/SolanaProvider';
+import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
+import { GenericCard } from '../../components/ENSNameCard/GenericCard';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -93,15 +97,35 @@ function EnsDomains({ address }: DomainsProps) {
   );
 }
 
-function SolanaDomains() {
-  const data = useDomainsForUser();
-  console.log('data', data);
+function SolanaDomains(account) {
+  console.log(account);
+  // const navigate = useNavigate();
+  const { result, loading } = useDomainsForUser();
+  console.log('data', result);
+  // const handleSubmit = (name) => navigate(`/domains/${name}`);
+  console.log();
+  if (loading || !result) {
+    return <Loader />;
+  }
 
   return (
     <Container>
-      <>
-        <DomainsHeader>Your Identities</DomainsHeader>Account:{data && data[0].reverse}
-      </>
+      <DomainsHeader>Your Identities</DomainsHeader>
+      {result.length === 0 ? (
+        <BigBanner>
+          No Bonfida domains found
+          <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+            Buy Domain
+          </BuyDomainLink>
+        </BigBanner>
+      ) : (
+        <StyledDomainsWrapper>
+          {result.map((item, index) => {
+            return <GenericCard key={index} loading={false} name={item.reverse} routeData={result[index]} />;
+          })}
+          <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy Bonfida</AddDomain>
+        </StyledDomainsWrapper>
+      )}
     </Container>
   );
 }
@@ -111,13 +135,14 @@ function SolanaDomains() {
  */
 export function DomainsHome() {
   const { account, isActive } = useWeb3React();
-  const phantomWallet = useSelector((state: AppState) => state.application.phantomWallet);
+  const { activeNetwork } = useActiveNetwork();
+  const { wallet } = useSolana();
 
-  if (account && isActive) {
+  if (activeNetwork === ActiveNetworkState.ETHEREUM && account && isActive) {
     return <EnsDomains address={account} />;
   }
-  if (phantomWallet) {
-    return <SolanaDomains />;
+  if (activeNetwork === ActiveNetworkState.SOLANA && wallet) {
+    return <SolanaDomains account={wallet} />;
   }
   // Redirect to home page if no wallet is connected
   return <Navigate to="/" />;

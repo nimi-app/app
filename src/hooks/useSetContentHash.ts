@@ -4,6 +4,8 @@ import nameHash from '@ensdomains/eth-ens-namehash';
 import { ContractTransaction } from 'ethers';
 import { EnsPublicResolver } from '../generated/contracts';
 import { encodeContenthash } from '@ensdomains/ui';
+import { useConnection } from '@solana/wallet-adapter-react';
+import { updateNameRegistryData } from '@bonfida/spl-name-service';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -47,4 +49,21 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
         setENSNameContentHash({ contract: publicResolverContract, name: ensName, contentHash: ipfsHash }),
     };
   }, [ensName, ipfsHash, publicResolverContract]);
+}
+
+/**
+ * Direct call to the ENS public resolver contract to set the content hash of a name
+ */
+export async function setBonfidaContentHash(cid, name, connection) {
+  // const ensNode = nameHash.hash(params.name);
+  // const { encoded, error } = encodeContenthash(params.contentHash);
+  const data = Buffer.from(cid);
+  console.log('cid', cid);
+  console.log('name', name);
+
+  // The offset to which the data should be written into the registry, usually 0
+  const offset = 0;
+  const reponse = await updateNameRegistryData(connection, name, offset, data, undefined);
+
+  return reponse;
 }

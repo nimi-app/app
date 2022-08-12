@@ -1,6 +1,7 @@
 import { AppDispatch } from '../state';
 import { useDispatch } from 'react-redux';
 import { setPhantomWallet } from '../state/application/actions';
+// import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 
 declare global {
   interface Window {

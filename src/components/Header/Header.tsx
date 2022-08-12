@@ -4,18 +4,16 @@ import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo-text.svg'
 import { HeaderWrapper } from './styleds';
 import { PhantomWalletStatus } from '../PhantomWalletStatus';
 import { Web3Status } from '../Web3Status';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../state';
+import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 
 export function Header() {
-  const isPhantom = useSelector((state: AppState) => state.application.phantomWallet);
-  console.log('header', isPhantom);
+  const { activeNetwork } = useActiveNetwork();
   return (
     <HeaderWrapper>
       <Link to="/">
         <NimiLogo width="100px" height="40px" />
       </Link>
-      {isPhantom ? <PhantomWalletStatus /> : <Web3Status />}
+      {activeNetwork === ActiveNetworkState.SOLANA ? <PhantomWalletStatus /> : <Web3Status />}
     </HeaderWrapper>
   );
 }
