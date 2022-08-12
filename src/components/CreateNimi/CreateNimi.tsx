@@ -40,16 +40,16 @@ import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { publishNimi } from './api';
 import { useConnection } from '@solana/wallet-adapter-react';
+import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 
 export interface CreateNimiProps {
-  ensAddress: string;
+  userAddress: string;
   ensName: string;
   ensLabelName: string;
-  solanaAddress?: string;
-  solanaData: any;
+  solanaData?: any;
 }
 
-export function CreateNimi({ ensAddress, ensName, solanaData }: CreateNimiProps) {
+export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps) {
   /**
    * @todo replace this API
    */
@@ -58,6 +58,7 @@ export function CreateNimi({ ensAddress, ensName, solanaData }: CreateNimiProps)
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata;
   const { connection } = useConnection();
+  const { activeNetwork } = useActiveNetwork();
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -82,14 +83,14 @@ export function CreateNimi({ ensAddress, ensName, solanaData }: CreateNimiProps)
       displayName: ensName,
       displayImageUrl: ensMetadata?.image,
       description: '',
-      ensAddress: ensAddress,
+      ensAddress: userAddress,
       ensName,
       addresses: [],
       links: [],
       widgets: [
         {
           type: NimiWidgetType.POAP,
-          address: ensAddress,
+          address: userAddress,
         },
       ],
     },
@@ -134,10 +135,6 @@ export function CreateNimi({ ensAddress, ensName, solanaData }: CreateNimiProps)
     });
 
     try {
-      // if (!publicResolverContract) {
-      //   throw new Error('ENS Public Resolver contract is not available.');
-      // }
-
       publishNimiAbortController.current = new AbortController();
 
       const { cid } = await publishNimi(data, publishNimiAbortController.current);
@@ -149,22 +146,28 @@ export function CreateNimi({ ensAddress, ensName, solanaData }: CreateNimiProps)
       // Set the content
       console.log('solandata', solanaData);
       setPublishNimiResponseIpfsHash(cid);
-      const solana = await setBonfidaContentHash(cid, solanaData, connection);
-      console.log(solana);
-      // const setContentHashTransaction = await setENSNameContentHash({
-      //   contract: publicResolverContract,
-      //   name: data.ensName,
-      //   contentHash: `ipfs://${cid}`,
-      // });
+      if (activeNetwork === ActiveNetworkState.SOLANA) {
+        const solana = await setBonfidaContentHash(cid, solanaData, connection);
+        console.log(solana);
+      } else {
+        if (!publicResolverContract) {
+          throw new Error('ENS Public Resolver contract is not available.');
+        }
+        const setContentHashTransaction = await setENSNameContentHash({
+          contract: publicResolverContract,
+          name: data.ensName,
+          contentHash: `ipfs://${cid}`,
+        });
 
-      // setSetContentHashTransaction(setContentHashTransaction);
+        setSetContentHashTransaction(setContentHashTransaction);
 
-      // const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
+        const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
 
-      // unstable_batchedUpdates(() => {
-      //   setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
-      //   setIsPublishingNimi(false);
-      // });
+        unstable_batchedUpdates(() => {
+          setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
+          setIsPublishingNimi(false);
+        });
+      }
     } catch (error) {
       console.error(error);
       unstable_batchedUpdates(() => {
@@ -305,7 +308,7 @@ export function CreateNimi({ ensAddress, ensName, solanaData }: CreateNimiProps)
                   if (widget === NimiWidgetType.POAP) {
                     return {
                       type: NimiWidgetType.POAP,
-                      address: ensAddress,
+                      address: userAddress,
                     };
                   }
 

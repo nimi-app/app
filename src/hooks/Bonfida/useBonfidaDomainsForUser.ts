@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSolana } from '../../context/SolanaProvider';
 import { useConnection } from '@solana/wallet-adapter-react';
 
-interface Result {
+export interface BonfidaUserData {
   pubkey: any;
   registry: NameRegistryState;
   reverse: string;
@@ -16,7 +16,7 @@ interface Result {
  * @returns
  */
 export const useDomainsForUser = () => {
-  const [result, setResult] = useState<Result[] | undefined>(undefined);
+  const [result, setResult] = useState<BonfidaUserData[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const mounted = useRef(true);
   const { publicKey } = useSolana();
@@ -29,7 +29,7 @@ export const useDomainsForUser = () => {
           const domains = await getAllDomains(connection, publicKey);
           const registries = await NameRegistryState.retrieveBatch(connection, [...domains]);
           const reverses = await performReverseLookupBatch(connection, [...domains]);
-          const _result: Result[] = [];
+          const _result: BonfidaUserData[] = [];
           for (let i = 0; i < domains.length; i++) {
             _result.push({
               pubkey: domains[i],

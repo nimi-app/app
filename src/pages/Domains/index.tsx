@@ -99,11 +99,9 @@ function EnsDomains({ address }: DomainsProps) {
 
 function SolanaDomains(account) {
   console.log(account);
-  // const navigate = useNavigate();
+
   const { result, loading } = useDomainsForUser();
-  console.log('data', result);
-  // const handleSubmit = (name) => navigate(`/domains/${name}`);
-  console.log();
+
   if (loading || !result) {
     return <Loader />;
   }
