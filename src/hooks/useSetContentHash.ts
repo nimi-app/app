@@ -55,8 +55,6 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
  * Direct call to the ENS public resolver contract to set the content hash of a name
  */
 export async function setBonfidaContentHash(cid, name, connection) {
-  // const ensNode = nameHash.hash(params.name);
-  // const { encoded, error } = encodeContenthash(params.contentHash);
   const data = Buffer.from(cid);
   console.log('cid', cid);
   console.log('name', name);

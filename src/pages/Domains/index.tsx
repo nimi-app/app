@@ -19,6 +19,7 @@ import { Button } from '../../components/Button';
 import { useSolana } from '../../context/SolanaProvider';
 import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 import { GenericCard } from '../../components/ENSNameCard/GenericCard';
+import { SolanaNameCard } from '../../components/ENSNameCard/SolanaNameCard';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -119,7 +120,7 @@ function SolanaDomains(account) {
       ) : (
         <StyledDomainsWrapper>
           {result.map((item, index) => {
-            return <GenericCard key={index} loading={false} name={item.reverse} routeData={result[index]} />;
+            return <SolanaNameCard key={index} name={item.reverse} routeData={result[index]} />;
           })}
           <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy Bonfida</AddDomain>
         </StyledDomainsWrapper>

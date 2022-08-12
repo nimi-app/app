@@ -148,7 +148,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
       setPublishNimiResponseIpfsHash(cid);
       if (activeNetwork === ActiveNetworkState.SOLANA) {
         const solana = await setBonfidaContentHash(cid, solanaData, connection);
-        console.log(solana);
+        console.log('bonfidaContentHash', solana);
       } else {
         if (!publicResolverContract) {
           throw new Error('ENS Public Resolver contract is not available.');
