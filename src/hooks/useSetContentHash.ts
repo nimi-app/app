@@ -61,19 +61,21 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
  * Direct call to the ENS public resolver contract to set the content hash of a name
  */
 export async function setBonfidaContentHash(cid, solanaData, connection, bonfidaDomain, wallet) {
-  const data = Buffer.from(cid);
   const record = Buffer.from([1]).toString() + Record.IPFS;
   console.log('bonfida', bonfidaDomain);
   console.log('solanaData', solanaData);
-  const { pubkey: domainKey } = await getDomainKey(record + bonfidaDomain, true);
+  const { pubkey: recordKey } = await getDomainKey(record + '.' + bonfidaDomain, true);
+  const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
   console.log(domainKey);
   console.log('wallet', wallet);
-  const recordAccInfo = await connection.getAccountInfo(domainKey);
+  const recordAccInfo = await connection.getAccountInfo(recordKey);
+  console.log(recordAccInfo, 'reccordAccInfo');
 
   if (!recordAccInfo?.data) {
-    const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
+    console.log('jere');
     const space = 2_000; // i.e 2KB
     const lamports = await connection.getMinimumBalanceForRentExemption(space + NameRegistryState.HEADER_LEN);
+    console.log('lamport', lamports);
     const ix = await createNameRegistry(
       connection,
       record,
@@ -84,13 +86,14 @@ export async function setBonfidaContentHash(cid, solanaData, connection, bonfida
       undefined,
       domainKey
     );
+    console.log('create registru', ix);
     const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
     console.log(`Created record ${tx}`);
   }
   console.log('accountInfo', recordAccInfo);
   // The offset to which the data should be written into the registry, usually 0
 
-  const ix = await updateNameRegistryData(connection, record, 0, Buffer.from('Some IPFS CID'), undefined, domainKey);
+  const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(cid), undefined, domainKey);
   const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
   console.log(tx, 'here');
   return tx;
