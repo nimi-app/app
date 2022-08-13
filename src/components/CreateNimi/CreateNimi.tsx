@@ -147,7 +147,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
       console.log('solandata', solanaData);
       setPublishNimiResponseIpfsHash(cid);
       if (activeNetwork === ActiveNetworkState.SOLANA) {
-        const solana = await setBonfidaContentHash(cid, solanaData, connection);
+        const solana = await setBonfidaContentHash(cid, solanaData.registry, connection);
         console.log('bonfidaContentHash', solana);
       } else {
         if (!publicResolverContract) {
