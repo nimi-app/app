@@ -6,7 +6,16 @@ import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 
-import { Nimi, nimiCard, NimiLink, NimiBlockchain, linkTypeList, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
+import {
+  Nimi,
+  nimiCard,
+  NimiLink,
+  NimiBlockchain,
+  linkTypeList,
+  NimiLinkBaseDetails,
+  NimiWidgetType,
+  ensAddress,
+} from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -147,7 +156,8 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
       console.log('solandata', solanaData);
       setPublishNimiResponseIpfsHash(cid);
       if (activeNetwork === ActiveNetworkState.SOLANA) {
-        const solana = await setBonfidaContentHash(cid, solanaData.registry, connection);
+        console.log('ensAddress', ensName);
+        const solana = await setBonfidaContentHash(cid, solanaData, connection, ensName);
         console.log('bonfidaContentHash', solana);
       } else {
         if (!publicResolverContract) {

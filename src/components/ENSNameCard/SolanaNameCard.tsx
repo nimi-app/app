@@ -1,5 +1,4 @@
 import { useProfilePic } from '../../hooks/Bonfida/useProfilePic';
-import { useENSMetadata } from '../../hooks/useENSMetadata';
 
 import { GenericCard } from './GenericCard';
 

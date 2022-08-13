@@ -45,7 +45,7 @@ export function CreateEthereumNimi() {
 export function CreateSolanaNimi() {
   const { state } = useLocation();
   const { publicKey } = useSolana();
-  console.log(state);
+  console.log('stateworking', state);
 
   if (!state || !publicKey) {
     return <div>Error</div>;
@@ -58,8 +58,8 @@ export function CreateSolanaNimi() {
         userAddress={'0x26358E62C2eDEd350e311bfde51588b8383A9315'}
         // ensName={state.reverse as string}
         // ensLabelName={state.reverse}
-        ensName={'oxViolet'}
-        ensLabelName={'0xViolet'}
+        ensName={'0xviolet'}
+        ensLabelName={'0xviolet'}
         solanaData={state}
       />
     </Container>
