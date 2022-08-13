@@ -5,6 +5,7 @@
   "dependencies": {
     "@apollo/client": "^3.5.10",
     "@bonfida/spl-name-service": "^0.1.44",
+    "@bonfida/utils": "^0.0.4",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ensdomains/ui": "^3.4.1",
     "@hookform/resolvers": "^2.8.10",

@@ -6,16 +6,7 @@ import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 
-import {
-  Nimi,
-  nimiCard,
-  NimiLink,
-  NimiBlockchain,
-  linkTypeList,
-  NimiLinkBaseDetails,
-  NimiWidgetType,
-  ensAddress,
-} from 'nimi-card';
+import { Nimi, nimiCard, NimiLink, NimiBlockchain, linkTypeList, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -50,6 +41,7 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimi } from './api';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
+import { useSolana } from '../../context/SolanaProvider';
 
 export interface CreateNimiProps {
   userAddress: string;
@@ -68,6 +60,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
   const ensMetadata = location.state as ENSMetadata;
   const { connection } = useConnection();
   const { activeNetwork } = useActiveNetwork();
+  const { wallet } = useSolana();
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -157,7 +150,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
       setPublishNimiResponseIpfsHash(cid);
       if (activeNetwork === ActiveNetworkState.SOLANA) {
         console.log('ensAddress', ensName);
-        const solana = await setBonfidaContentHash(cid, solanaData, connection, ensName);
+        const solana = await setBonfidaContentHash(cid, solanaData, connection, ensName, wallet);
         console.log('bonfidaContentHash', solana);
       } else {
         if (!publicResolverContract) {

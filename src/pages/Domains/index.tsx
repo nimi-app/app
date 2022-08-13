@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
@@ -12,13 +12,11 @@ import { Loader } from '../../components/Loader';
 import { ENSNameCard } from '../../components/ENSNameCard';
 import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
-import { AppState } from '../../state';
-import { useSelector } from 'react-redux';
+
 import { useDomainsForUser } from '../../hooks/Bonfida/useBonfidaDomainsForUser';
-import { Button } from '../../components/Button';
+
 import { useSolana } from '../../context/SolanaProvider';
 import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
-import { GenericCard } from '../../components/ENSNameCard/GenericCard';
 import { SolanaNameCard } from '../../components/ENSNameCard/SolanaNameCard';
 
 const StyledDomainsWrapper = styled(Flex)`
@@ -98,9 +96,7 @@ function EnsDomains({ address }: DomainsProps) {
   );
 }
 
-function SolanaDomains(account) {
-  console.log(account);
-
+function SolanaDomains() {
   const { result, loading } = useDomainsForUser();
 
   if (loading || !result) {
@@ -141,7 +137,7 @@ export function DomainsHome() {
     return <EnsDomains address={account} />;
   }
   if (activeNetwork === ActiveNetworkState.SOLANA && wallet) {
-    return <SolanaDomains account={wallet} />;
+    return <SolanaDomains />;
   }
   // Redirect to home page if no wallet is connected
   return <Navigate to="/" />;

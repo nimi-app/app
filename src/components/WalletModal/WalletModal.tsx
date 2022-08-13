@@ -51,10 +51,6 @@ export function WalletModal() {
     setPendingError(error);
   }, [error]);
 
-  const handleDisconnect = () => {
-    console.log('here');
-  };
-
   /**
    * Activate a connector
    */

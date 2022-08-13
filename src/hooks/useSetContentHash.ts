@@ -4,7 +4,14 @@ import nameHash from '@ensdomains/eth-ens-namehash';
 import { ContractTransaction } from 'ethers';
 import { EnsPublicResolver } from '../generated/contracts';
 import { encodeContenthash } from '@ensdomains/ui';
-import { getDomainKey, Record, updateNameRegistryData } from '@bonfida/spl-name-service';
+import {
+  createNameRegistry,
+  getDomainKey,
+  Record,
+  updateNameRegistryData,
+  NameRegistryState,
+} from '@bonfida/spl-name-service';
+import { signAndSendInstructions } from '@bonfida/utils';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -53,22 +60,38 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
 /**
  * Direct call to the ENS public resolver contract to set the content hash of a name
  */
-export async function setBonfidaContentHash(cid, solanaData, connection, bonfidaDomain) {
+export async function setBonfidaContentHash(cid, solanaData, connection, bonfidaDomain, wallet) {
   const data = Buffer.from(cid);
+  const record = Buffer.from([1]).toString() + Record.IPFS;
   console.log('bonfida', bonfidaDomain);
   console.log('solanaData', solanaData);
-  const domainKey = await getDomainKey(Record.IPFS + bonfidaDomain, true);
-  console.log(domainKey.pubkey);
-  // The offset to which the data should be written into the registry, usually 0
-  const offset = 0;
-  const reponse = await updateNameRegistryData(
-    connection,
-    domainKey.pubkey.toBase58(),
-    offset,
-    data,
-    undefined,
-    solanaData.pubkey
-  );
+  const { pubkey: domainKey } = await getDomainKey(record + bonfidaDomain, true);
+  console.log(domainKey);
+  console.log('wallet', wallet);
+  const recordAccInfo = await connection.getAccountInfo(domainKey);
 
-  return reponse;
+  if (!recordAccInfo?.data) {
+    const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
+    const space = 2_000; // i.e 2KB
+    const lamports = await connection.getMinimumBalanceForRentExemption(space + NameRegistryState.HEADER_LEN);
+    const ix = await createNameRegistry(
+      connection,
+      record,
+      space,
+      wallet.publicKey,
+      wallet.publicKey,
+      lamports,
+      undefined,
+      domainKey
+    );
+    const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
+    console.log(`Created record ${tx}`);
+  }
+  console.log('accountInfo', recordAccInfo);
+  // The offset to which the data should be written into the registry, usually 0
+
+  const ix = await updateNameRegistryData(connection, record, 0, Buffer.from('Some IPFS CID'), undefined, domainKey);
+  const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
+  console.log(tx, 'here');
+  return tx;
 }

@@ -29,6 +29,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
         if (solana?.isPhantom) {
           const response = onlyIfTrusted ? await solana.connect({ onlyIfTrusted: true }) : await solana.connect();
           setPublicKey(response.publicKey);
+          console.log('repsonse', response);
           setWallet(response);
         }
       }
@@ -63,7 +64,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
     console.log('publickey', window.solana);
     const initSolana = async () => {
       if (activeNetwork === ActiveNetworkState.SOLANA) {
-        connect();
+        connect(true);
       }
       console.log('check if user has already connected once I figure it out');
     };

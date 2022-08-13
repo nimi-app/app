@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getAllDomains, NameRegistryState, performReverseLookupBatch } from '@bonfida/spl-name-service';
 
 import { useEffect, useRef, useState } from 'react';
@@ -51,6 +52,7 @@ export const useDomainsForUser = () => {
     };
 
     fn().catch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publicKey]);
 
   return { result, loading };

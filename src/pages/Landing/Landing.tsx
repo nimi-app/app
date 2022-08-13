@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
@@ -9,7 +9,7 @@ import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
 import { useSolana } from '../../context/SolanaProvider';
-import { AppState } from '../../state';
+
 import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 // Styled components
 import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
