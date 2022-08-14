@@ -109,7 +109,7 @@ function SolanaDomains() {
       {result.length === 0 ? (
         <BigBanner>
           No Bonfida domains found
-          <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+          <BuyDomainLink onClick={() => window.open('https://naming.bonfida.org/search', '_blank')?.focus()}>
             Buy Domain
           </BuyDomainLink>
         </BigBanner>
@@ -118,7 +118,9 @@ function SolanaDomains() {
           {result.map((item, index) => {
             return <SolanaNameCard key={index} name={item.reverse} routeData={result[index]} />;
           })}
-          <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy Bonfida</AddDomain>
+          <AddDomain onClick={() => window.open('https://naming.bonfida.org/search', '_blank')?.focus()}>
+            Buy Bonfida
+          </AddDomain>
         </StyledDomainsWrapper>
       )}
     </Container>

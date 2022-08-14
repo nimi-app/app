@@ -42,6 +42,7 @@ import { publishNimi } from './api';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 import { useSolana } from '../../context/SolanaProvider';
+import { BonfidaUserData } from '../../hooks/Bonfida/useBonfidaDomainsForUser';
 
 export interface CreateNimiProps {
   userAddress: string;
@@ -57,7 +58,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const location = useLocation();
-  const ensMetadata = location.state as ENSMetadata;
+  const ensMetadata = location.state as ENSMetadata | BonfidaUserData;
   const { connection } = useConnection();
   const { activeNetwork } = useActiveNetwork();
   const { wallet } = useSolana();
@@ -89,12 +90,15 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
       ensName,
       addresses: [],
       links: [],
-      widgets: [
-        {
-          type: NimiWidgetType.POAP,
-          address: userAddress,
-        },
-      ],
+      widgets:
+        activeNetwork === ActiveNetworkState.SOLANA
+          ? []
+          : [
+              {
+                type: NimiWidgetType.POAP,
+                address: userAddress,
+              },
+            ],
     },
   });
 

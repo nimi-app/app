@@ -9,6 +9,7 @@ export interface BonfidaUserData {
   pubkey: any;
   registry: NameRegistryState;
   reverse: string;
+  image?: string;
 }
 
 /**
