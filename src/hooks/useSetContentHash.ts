@@ -12,6 +12,7 @@ import {
   NameRegistryState,
 } from '@bonfida/spl-name-service';
 import { signAndSendInstructions } from '@bonfida/utils';
+import { Keypair } from '@solana/web3.js';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -87,7 +88,8 @@ export async function setBonfidaContentHash(cid, solanaData, connection, bonfida
       domainKey
     );
     console.log('create registru', ix);
-    const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
+
+    const tx = await signAndSendInstructions(connection, [], wallet.publicKey, [ix]);
     console.log(`Created record ${tx}`);
   }
   console.log('accountInfo', recordAccInfo);
