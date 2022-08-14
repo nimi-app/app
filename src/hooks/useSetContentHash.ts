@@ -12,7 +12,6 @@ import {
   NameRegistryState,
 } from '@bonfida/spl-name-service';
 import { signAndSendInstructions } from '@bonfida/utils';
-import { Keypair } from '@solana/web3.js';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -63,17 +62,16 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
  */
 export async function setBonfidaContentHash(cid, solanaData, connection, bonfidaDomain, wallet) {
   const record = Buffer.from([1]).toString() + Record.IPFS;
-  console.log('bonfida', bonfidaDomain);
-  console.log('solanaData', solanaData);
+
   const { pubkey: recordKey } = await getDomainKey(record + '.' + bonfidaDomain, true);
   const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
-  console.log(domainKey);
+  console.log('solanaData', solanaData);
+  console.log('bonfidaDomain', bonfidaDomain);
   console.log('wallet', wallet);
   const recordAccInfo = await connection.getAccountInfo(recordKey);
   console.log(recordAccInfo, 'reccordAccInfo');
 
   if (!recordAccInfo?.data) {
-    console.log('jere');
     const space = 2_000; // i.e 2KB
     const lamports = await connection.getMinimumBalanceForRentExemption(space + NameRegistryState.HEADER_LEN);
     console.log('lamport', lamports);

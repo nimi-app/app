@@ -8,6 +8,7 @@ import { Container } from '../../components/Container';
 import { useWeb3React } from '@web3-react/core';
 import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 import { useSolana } from '../../context/SolanaProvider';
+import { BonfidaUserData } from '../../hooks/Bonfida/useBonfidaDomainsForUser';
 
 export function CreateEthereumNimi() {
   const { account } = useWeb3React();
@@ -49,16 +50,15 @@ export function CreateSolanaNimi() {
   if (!state || !publicKey) {
     return <div>Error</div>;
   }
+  const bonfidaState = state as BonfidaUserData;
   return (
     <Container>
       <CreateNimi
         //TODO: Fix form validators to support Solana addresses
         // userAddress={publicKey?.toString()}
         userAddress={'0x26358E62C2eDEd350e311bfde51588b8383A9315'}
-        // ensName={state.reverse as string}
-        // ensLabelName={state.reverse}
-        ensName={'0xviolet'}
-        ensLabelName={'0xviolet'}
+        ensName={bonfidaState.reverse}
+        ensLabelName={bonfidaState.reverse}
         solanaData={state}
       />
     </Container>
