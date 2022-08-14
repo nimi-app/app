@@ -43,9 +43,8 @@ export function WalletModal() {
   const isWrongNetwork = pendingError instanceof ChainIdNotAllowedError;
 
   const { activeNetwork, setActiveNetwork } = useActiveNetwork();
-  const { wallet, connect, publicKey, disconnect } = useSolana();
-  console.log('activeNetwork', activeNetwork);
-  console.log('wallet', wallet);
+  const { connect, publicKey, disconnect } = useSolana();
+
   // Track connector errors
   useEffect(() => {
     setPendingError(error);

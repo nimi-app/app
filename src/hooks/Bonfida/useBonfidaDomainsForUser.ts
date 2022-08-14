@@ -40,7 +40,6 @@ export const useDomainsForUser = () => {
               reverse: reverses[i]!,
             });
           }
-          console.log('result', result);
           if (mounted.current) {
             setResult(_result);
           }

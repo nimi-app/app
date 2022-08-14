@@ -12,6 +12,8 @@ import {
   NameRegistryState,
 } from '@bonfida/spl-name-service';
 import { signAndSendInstructions } from '@bonfida/utils';
+import { BonfidaUserData } from './Bonfida/useBonfidaDomainsForUser';
+import { Connection } from '@solana/web3.js';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -60,7 +62,13 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
 /**
  * Direct call to the ENS public resolver contract to set the content hash of a name
  */
-export async function setBonfidaContentHash(cid, solanaData, connection, bonfidaDomain, wallet) {
+export async function setBonfidaContentHash(
+  cid: string,
+  solanaData: BonfidaUserData,
+  connection: Connection,
+  bonfidaDomain: string,
+  wallet
+) {
   const record = Buffer.from([1]).toString() + Record.IPFS;
 
   const { pubkey: recordKey } = await getDomainKey(record + '.' + bonfidaDomain, true);
@@ -91,7 +99,6 @@ export async function setBonfidaContentHash(cid, solanaData, connection, bonfida
     console.log(`Created record ${tx}`);
   }
   console.log('accountInfo', recordAccInfo);
-  // The offset to which the data should be written into the registry, usually 0
 
   const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(cid), undefined, domainKey);
   const tx = await signAndSendInstructions(connection, [], wallet, [ix]);

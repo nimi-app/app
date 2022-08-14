@@ -26,14 +26,19 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
         const win: typeof global = window;
         const solana = win.solana;
         console.log('inside', solana);
+
+        console.log('solana', solana.isPhantom);
         if (solana?.isPhantom) {
+          console.log('here', solana);
           const response = onlyIfTrusted ? await solana.connect({ onlyIfTrusted: true }) : await solana.connect();
+          console.log('violet', response);
           setPublicKey(response.publicKey);
           console.log('repsonse', response);
           setWallet(response);
         }
       }
     } catch (error) {
+      console.log('errrrooroororororor');
       console.error(error);
     }
   }
@@ -42,7 +47,6 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
       if ('solana' in window) {
         const win: typeof global = window;
         const solana = win.solana;
-        console.log('inside', solana);
         if (solana?.isPhantom) {
           if (onlyIfTrusted) {
             await solana.disconnect({ onlyIfTrusted: true });
@@ -62,14 +66,14 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const win: typeof global = window;
     if (win.solana && win.solana.hasPhantom) setHasPhanton(true);
-    console.log('publickey', win.solana);
     const initSolana = async () => {
       if (activeNetwork === ActiveNetworkState.SOLANA) {
-        connect(true);
+        connect();
       }
       console.log('check if user has already connected once I figure it out');
     };
     initSolana();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeNetwork]);
 
   return (

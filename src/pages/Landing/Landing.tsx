@@ -21,7 +21,6 @@ export function Landing() {
   const { wallet } = useSolana();
   const navigate = useNavigate();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
-  console.log('0hantom', wallet);
   const onCTAClick = () => {
     if ((isActive && account) || wallet) {
       navigate('/domains');

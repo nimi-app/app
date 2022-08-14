@@ -15,7 +15,6 @@ export const useProfilePic = (domain) => {
     const fn = async () => {
       try {
         setLoading(true);
-        console.log('domani', domain);
         if (!domain) {
           setLoading(false);
           return setResult(undefined);

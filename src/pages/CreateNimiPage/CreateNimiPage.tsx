@@ -45,7 +45,6 @@ export function CreateEthereumNimi() {
 export function CreateSolanaNimi() {
   const { state } = useLocation();
   const { publicKey } = useSolana();
-  console.log('stateworking', state);
 
   if (!state || !publicKey) {
     return <div>Error</div>;
