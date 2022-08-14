@@ -24,6 +24,8 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   const [previewNimi, setPreviewNimi] = useState<Nimi>();
 
   useEffect(() => {
+    // Filter invalid links
+
     nimiCard
       .validate(nimi, {
         abortEarly: false,

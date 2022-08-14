@@ -43,3 +43,50 @@ export function publishNimi(payload: Nimi, controller?: AbortController): Promis
       };
     });
 }
+
+interface PublishNimiViaIPNSParams {
+  /**
+   * Nimi
+   */
+  nimi: Nimi;
+  /**
+   * EIP-712 signature
+   */
+  signature: string;
+  /**
+   * Abort controller
+   */
+  controller?: AbortController;
+}
+
+interface PublishNimiViaIPNSResponse {
+  cidV1: string;
+  ipns: string;
+}
+
+/**
+ *
+ * @param payload the payload from the form
+ * @param controller Abort controller
+ * @returns A promise with IPFS hash
+ */
+export function publishNimiViaIPNS({
+  nimi,
+  signature,
+  controller,
+}: PublishNimiViaIPNSParams): Promise<PublishNimiViaIPNSResponse> {
+  return axios
+    .post<{
+      data: PublishNimiViaIPNSResponse;
+    }>(
+      `${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/publish/ipns`,
+      {
+        nimi,
+        signature,
+      },
+      {
+        signal: controller ? controller.signal : undefined,
+      }
+    )
+    .then(({ data }) => data.data);
+}
