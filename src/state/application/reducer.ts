@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { ChainId } from '../../constants';
-import { ApplicationModal, setOpenModal, setConnectorInfo, setPhantomWallet } from './actions';
+import { ApplicationModal, setOpenModal, setConnectorInfo } from './actions';
 
 export interface ApplicationState {
   readonly openModal: ApplicationModal | null;
@@ -25,8 +25,5 @@ export const reducer = createReducer(initialState, (builder) =>
       const { account, chainId } = action.payload;
       state.account = account;
       state.chainId = chainId;
-    })
-    .addCase(setPhantomWallet, (state, action) => {
-      state.phantomWallet = action.payload;
     })
 );

@@ -22,11 +22,13 @@ export const useDomainsForUser = () => {
   const mounted = useRef(true);
   const { publicKey } = useSolana();
   const { connection } = useConnection();
+
   useEffect(() => {
     const fn = async () => {
       try {
+        const win: typeof global = window;
         setLoading(true);
-        if (window.solana && publicKey) {
+        if (win.solana && publicKey) {
           const domains = await getAllDomains(connection, publicKey);
           const registries = await NameRegistryState.retrieveBatch(connection, [...domains]);
           const reverses = await performReverseLookupBatch(connection, [...domains]);

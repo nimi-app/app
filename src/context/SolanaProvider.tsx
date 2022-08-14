@@ -19,10 +19,10 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   const { activeNetwork, setActiveNetwork } = useActiveNetwork();
 
   const [hasPhanton, setHasPhanton] = useState(false);
-
+  const win: typeof global = window;
   async function connect(onlyIfTrusted = true) {
     try {
-      if ('solana' in window) {
+      if (win.solana) {
         const win: typeof global = window;
         const solana = win.solana;
         console.log('inside', solana);
@@ -60,8 +60,9 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    if (window.solana && window.solana.hasPhantom) setHasPhanton(true);
-    console.log('publickey', window.solana);
+    const win: typeof global = window;
+    if (win.solana && win.solana.hasPhantom) setHasPhanton(true);
+    console.log('publickey', win.solana);
     const initSolana = async () => {
       if (activeNetwork === ActiveNetworkState.SOLANA) {
         connect(true);
