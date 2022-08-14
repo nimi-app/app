@@ -8,7 +8,7 @@ import { Container } from '../../components/Container';
 import { useWeb3React } from '@web3-react/core';
 
 export function CreateNimiPage() {
-  const { account } = useWeb3React();
+  const { account, provider } = useWeb3React();
   const { ensName } = useParams();
   const nodeHash = ensNameHash(ensName as string);
 
@@ -29,12 +29,17 @@ export function CreateNimiPage() {
     return <div>{error?.message}</div>;
   }
 
+  if (!provider) {
+    return <div>No web3 provider available</div>;
+  }
+
   return (
     <Container>
       <CreateNimi
         ensAddress={account as string}
         ensName={data.domain.name as string}
         ensLabelName={data.domain.labelName as string}
+        provider={provider}
       />
     </Container>
   );

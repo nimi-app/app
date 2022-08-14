@@ -45,6 +45,7 @@ const ModalFooter = styled(ModalFooterBase)`
 export interface PublishNimiModalProps {
   cancel: () => void;
   isPublishing: boolean;
+  isPublished: boolean;
   ensName: string;
   ipfsHash: string | undefined;
   publishError: Error | undefined;
@@ -63,11 +64,12 @@ export function PublishNimiModal({
   publishError,
   setContentHashTransaction,
   setContentHashTransactionReceipt,
+  isPublished,
 }: PublishNimiModalProps) {
   const { t } = useTranslation(['common', 'nimi']);
 
   const modalContent = () => {
-    if (setContentHashTransactionReceipt) {
+    if (setContentHashTransactionReceipt || isPublished) {
       return (
         <>
           <p>
@@ -126,7 +128,9 @@ export function PublishNimiModal({
       </ModalHeader>
       <ModalContent>{modalContent()}</ModalContent>
       <ModalFooter>
-        {(setContentHashTransactionReceipt || publishError) && <Button onClick={cancel}>{t('close')}</Button>}
+        {(setContentHashTransactionReceipt || publishError || isPublished) && (
+          <Button onClick={cancel}>{t('close')}</Button>
+        )}
       </ModalFooter>
     </Modal>
   );

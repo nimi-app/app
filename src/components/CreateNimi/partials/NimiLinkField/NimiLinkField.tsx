@@ -1,4 +1,4 @@
-import { Nimi, NimiLink, NimiLinkBaseDetails } from 'nimi-card';
+import { Nimi, NimiLinkBaseDetails, NimiLinkType } from 'nimi-card';
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler, useEffect, useState } from 'react';
 import { Label } from '../../../form';
@@ -6,7 +6,7 @@ import { isValidUrl } from '../../../../utils';
 import styled from 'styled-components';
 
 export interface NimiLinkFieldProps {
-  link: NimiLink;
+  link: NimiLinkType;
   label: string;
 }
 const InputWrap = styled.div<{ isInputFocused: boolean; isError: boolean }>`
@@ -38,6 +38,7 @@ const ErroText = styled.div`
 `;
 
 const PlaceholderMapping = {
+  url: 'nimi.eth.limo',
   website: 'nimi.eth.limo',
   email: 'email@email.com',
   twitter: '0xNimi',
@@ -61,11 +62,19 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   const [inputValue, setInputValue] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isError, setIsError] = useState(false);
-  const hasAtField = link === 'twitter' || link === 'instagram' || link === 'telegram';
+  const hasAtField = [NimiLinkType.TWITTER, NimiLinkType.INSTAGRAM, NimiLinkType.TELEGRAM].includes(link);
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (isValidUrl(event.target.value) && link !== 'website') setIsError(true);
-    else setIsError(false);
+    console.log({
+      value: event.target.value,
+    });
+
+    if (isValidUrl(event.target.value) && link === NimiLinkType.URL) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+    }
+
     setInputValue(event.target.value);
 
     const prevState = getValues('links') || [];
@@ -73,18 +82,21 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
     const newState: NimiLinkBaseDetails[] = hasLink
       ? prevState.map((curr) => {
           if (curr.type === link) {
-            return { ...curr, url: event.target.value };
+            return { ...curr, content: event.target.value };
           }
 
           return curr;
         })
-      : [...prevState, { type: link, label, url: event.target.value }];
+      : [...prevState, { type: link, label, content: event.target.value }];
+    console.log({
+      newState,
+    });
     setValue('links', newState);
   };
 
   useEffect(() => {
     const valuechange = getValues('links').find((prevLink) => prevLink.type === link);
-    setInputValue(valuechange ? valuechange.url : inputValue);
+    setInputValue(valuechange ? valuechange.content : inputValue);
   }, [getValues, link, inputValue]);
 
   return (
