@@ -59,9 +59,12 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata | BonfidaUserData;
+
   const { connection } = useConnection();
   const { activeNetwork } = useActiveNetwork();
-  const { wallet } = useSolana();
+  const { publicKey } = useSolana();
+  console.log('ensName,', ensName);
+  console.log('useraddres,', userAddress);
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -70,6 +73,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
    * Publish Nimi state
    * @todo create a reducer or context for this
    */
+  console.log('ensName,', ensName);
   const publicResolverContract = useENSPublicResolverContract();
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPublishingNimi, setIsPublishingNimi] = useState(false);
@@ -78,7 +82,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const publishNimiAbortController = useRef<AbortController>();
-
+  console.log('ensName,', ensName);
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiCard),
@@ -101,9 +105,9 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
             ],
     },
   });
-
+  console.log('ensName,', ensName);
   const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
-
+  console.log('ensName,', ensName);
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
   const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
@@ -115,13 +119,14 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
     () => Object.values(NimiBlockchain).filter((blockchain) => formAddressList.includes(blockchain)),
     [formAddressList]
   );
+  console.log('ensName,', ensName);
   const selectedLinkFieldList = useMemo(
     () => linkTypeList.filter((link) => formLinkList.includes(link)),
     [formLinkList]
   );
 
   const formWatchPayload = watch();
-
+  console.log('ensName,', ensName);
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;
     setValue('displayName', lensProfile.name);
@@ -152,7 +157,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
       // Set the content
       setPublishNimiResponseIpfsHash(cid);
       if (activeNetwork === ActiveNetworkState.SOLANA) {
-        const solana = await setBonfidaContentHash(cid, solanaData, connection, ensName, wallet);
+        const solana = await setBonfidaContentHash(cid, solanaData, connection, ensName, publicKey);
         console.log('bonfidaContentHash', solana);
       } else {
         if (!publicResolverContract) {
@@ -181,7 +186,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
       });
     }
   };
-
+  console.log('ensName,', ensName);
   const onSubmitInvalid = (data) => {
     console.log(data);
   };
@@ -189,6 +194,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
+  console.log('ensName,', ensName);
 
   return (
     <FormProvider {...useFormContext}>

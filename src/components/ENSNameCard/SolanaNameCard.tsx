@@ -12,5 +12,5 @@ export function SolanaNameCard({ name, routeData }: SolanaNameCardProps) {
   const { result, loading } = useProfilePic(name);
   console.log('result', result);
 
-  return <GenericCard loading={loading} name={name} routeData={{ ...routeData, image: result }} />;
+  return <GenericCard loading={loading} name={name} routeData={{ ...routeData, image: result ? result : '' }} />;
 }

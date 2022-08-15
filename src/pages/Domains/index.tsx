@@ -97,9 +97,9 @@ function EnsDomains({ address }: DomainsProps) {
 }
 
 function SolanaDomains() {
-  const { result, loading } = useDomainsForUser();
+  const { result, loading, error } = useDomainsForUser();
 
-  if (loading || !result) {
+  if (loading || !result || error) {
     return <Loader />;
   }
 
@@ -133,12 +133,12 @@ function SolanaDomains() {
 export function DomainsHome() {
   const { account, isActive } = useWeb3React();
   const { activeNetwork } = useActiveNetwork();
-  const { wallet } = useSolana();
+  const { publicKey } = useSolana();
 
   if (activeNetwork === ActiveNetworkState.ETHEREUM && account && isActive) {
     return <EnsDomains address={account} />;
   }
-  if (activeNetwork === ActiveNetworkState.SOLANA && wallet) {
+  if (activeNetwork === ActiveNetworkState.SOLANA && publicKey) {
     return <SolanaDomains />;
   }
   // Redirect to home page if no wallet is connected

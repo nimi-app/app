@@ -20,6 +20,7 @@ export interface BonfidaUserData {
 export const useDomainsForUser = () => {
   const [result, setResult] = useState<BonfidaUserData[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const mounted = useRef(true);
   const { publicKey } = useSolana();
   const { connection } = useConnection();
@@ -27,6 +28,7 @@ export const useDomainsForUser = () => {
   useEffect(() => {
     const fn = async () => {
       try {
+        setError('');
         const win: typeof global = window;
         setLoading(true);
         if (win.solana && publicKey) {
@@ -48,14 +50,15 @@ export const useDomainsForUser = () => {
           return () => (mounted.current = false);
         }
       } catch (e) {
+        setError(e);
         setLoading(false);
         console.log('error');
       }
     };
 
-    fn().catch();
+    fn().catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publicKey]);
 
-  return { result, loading };
+  return { result, loading, error };
 };

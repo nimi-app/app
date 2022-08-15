@@ -39,7 +39,7 @@ export const useProfilePic = (domain) => {
 
     fn().catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [domain, domain]);
+  }, [domain]);
 
   return { result, loading };
 };

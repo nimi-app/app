@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useActiveWeb3React } from './useWeb3';
 import { useGetDefaultLensProfileQuery } from '../generated/graphql/lens';
 import { useLensSubgraphClient } from './useLensSubgraph';
+import { ActiveNetworkState, useActiveNetwork } from '../context/ActiveNetwork';
 
 export interface LensDefaultProfileData {
   name: string;
@@ -10,21 +11,34 @@ export interface LensDefaultProfileData {
 }
 
 export function useLensDefaultProfileData(): { loading: boolean; defaultProfileData: LensDefaultProfileData | null } {
+  console.log('jere');
   const { account } = useActiveWeb3React();
+
+  const { activeNetwork } = useActiveNetwork();
   const lensSubgraph = useLensSubgraphClient();
-  const { data, loading } = useGetDefaultLensProfileQuery({
+  console.log('acctount', account);
+  const { data, loading, error } = useGetDefaultLensProfileQuery({
     client: lensSubgraph,
     variables: {
       account,
     },
   });
 
+  console.log('here', error);
+
   const [defaultProfileData, setDefaultProfileData] = useState<LensDefaultProfileData | null>(null);
+  console.log('here');
 
   useEffect(() => {
-    if (!data) return;
+    console.log('herer', data, error);
+    if (!data || !account) return;
     setDefaultProfileData(
-      data.defaultProfile && data.defaultProfile.name && data.defaultProfile.bio && data.defaultProfile.picture
+      data.defaultProfile &&
+        data.defaultProfile.name &&
+        data.defaultProfile.bio &&
+        data.defaultProfile.picture &&
+        activeNetwork === ActiveNetworkState.ETHEREUM &&
+        !error
         ? {
             name: data.defaultProfile.name,
             description: data.defaultProfile.bio,
@@ -35,7 +49,7 @@ export function useLensDefaultProfileData(): { loading: boolean; defaultProfileD
           }
         : null
     );
-  }, [data, account]);
+  }, [data, account, activeNetwork, error]);
 
   return { loading, defaultProfileData };
 }

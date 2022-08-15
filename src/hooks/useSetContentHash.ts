@@ -62,7 +62,7 @@ export async function setBonfidaContentHash(
   solanaData: BonfidaUserData,
   connection: Connection,
   bonfidaDomain: string,
-  wallet
+  publicKey
 ) {
   const record = Buffer.from([1]).toString() + Record.IPFS;
 
@@ -70,7 +70,7 @@ export async function setBonfidaContentHash(
   const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
   console.log('solanaData', solanaData);
   console.log('bonfidaDomain', bonfidaDomain);
-  console.log('wallet', wallet);
+  console.log('wallet', publicKey);
   const recordAccInfo = await connection.getAccountInfo(recordKey);
   console.log(recordAccInfo, 'reccordAccInfo');
 
@@ -86,8 +86,8 @@ export async function setBonfidaContentHash(
       connection,
       record,
       space,
-      wallet.publicKey,
-      wallet.publicKey,
+      publicKey,
+      publicKey,
       lamports,
       undefined,
       domainKey
@@ -97,7 +97,7 @@ export async function setBonfidaContentHash(
 
     const transaction = new Transaction();
     transaction.add(ix);
-    transaction.feePayer = wallet.publicKey;
+    transaction.feePayer = publicKey;
     const { blockhash } = await connection.getLatestBlockhash('finalized');
     transaction.recentBlockhash = blockhash;
 
@@ -113,7 +113,7 @@ export async function setBonfidaContentHash(
   const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(`ipfs://${cid}`), undefined, domainKey);
   const transaction = new Transaction();
   transaction.add(ix);
-  transaction.feePayer = wallet.publicKey;
+  transaction.feePayer = publicKey.publicKey;
   const { blockhash } = await connection.getLatestBlockhash('finalized');
   transaction.recentBlockhash = blockhash;
 
