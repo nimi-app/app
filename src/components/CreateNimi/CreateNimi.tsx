@@ -51,7 +51,7 @@ export interface CreateNimiProps {
   solanaData?: any;
 }
 
-export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps) {
+export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
   /**
    * @todo replace this API
    */
@@ -106,9 +106,9 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
             ],
     },
   });
-  console.log('ensName,', ensName);
+
   const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
-  console.log('ensName,', ensName);
+
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLink[]>([]);
   const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
@@ -120,14 +120,14 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
     () => Object.values(NimiBlockchain).filter((blockchain) => formAddressList.includes(blockchain)),
     [formAddressList]
   );
-  console.log('ensName,', ensName);
+
   const selectedLinkFieldList = useMemo(
     () => linkTypeList.filter((link) => formLinkList.includes(link)),
     [formLinkList]
   );
 
   const formWatchPayload = watch();
-  console.log('ensName,', ensName);
+
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;
     setValue('displayName', lensProfile.name);

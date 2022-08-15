@@ -27,7 +27,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
         const solana = win.solana;
 
         if (solana?.isPhantom) {
-          const response = await solana.connect();
+          const response = onlyIfTrusted ? await solana.connect({ onlyIfTrusted: true }) : await solana.connect();
           setPublicKey(response.publicKey);
           setConnecting(false);
         }

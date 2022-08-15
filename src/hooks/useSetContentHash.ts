@@ -12,7 +12,6 @@ import {
   NameRegistryState,
 } from '@bonfida/spl-name-service';
 
-import { BonfidaUserData } from './Bonfida/useBonfidaDomainsForUser';
 import { Connection, Transaction } from '@solana/web3.js';
 
 export interface UseSetContentHash {
