@@ -14,7 +14,7 @@ export * from './components';
 export const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
   upToSmall: 720,
-  upToMedium: 960,
+  upToMedium: 1000,
   upToLarge: 1280,
 };
 
