@@ -13,7 +13,8 @@ import {
 } from '@bonfida/spl-name-service';
 import { signAndSendInstructions } from '@bonfida/utils';
 import { BonfidaUserData } from './Bonfida/useBonfidaDomainsForUser';
-import { Connection } from '@solana/web3.js';
+import { Connection, Keypair, Transaction, SystemProgram } from '@solana/web3.js';
+import { readFileSync } from 'fs';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -25,9 +26,6 @@ export interface SetENSNameContentParams {
   contentHash: string;
 }
 
-/**
- * Direct call to the ENS public resolver contract to set the content hash of a name
- */
 export function setENSNameContentHash(params: SetENSNameContentParams) {
   const ensNode = nameHash.hash(params.name);
   const { encoded, error } = encodeContenthash(params.contentHash);
@@ -39,9 +37,6 @@ export function setENSNameContentHash(params: SetENSNameContentParams) {
   return params.contract.setContenthash(ensNode, encoded as any);
 }
 
-/**
- * Returns a function that sets content hash for a given ENS name.
- */
 export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetContentHash {
   const publicResolverContract = useENSPublicResolverContract();
 
@@ -79,6 +74,10 @@ export async function setBonfidaContentHash(
   const recordAccInfo = await connection.getAccountInfo(recordKey);
   console.log(recordAccInfo, 'reccordAccInfo');
 
+  const win: typeof global = window;
+  const provider = win?.phantom?.solana;
+  console.log('PROVIDER', provider);
+
   if (!recordAccInfo?.data) {
     const space = 2_000; // i.e 2KB
     const lamports = await connection.getMinimumBalanceForRentExemption(space + NameRegistryState.HEADER_LEN);
@@ -94,14 +93,36 @@ export async function setBonfidaContentHash(
       domainKey
     );
     console.log('create registru', ix);
+    console.log('OUR SYSTEM PROGRAM ID', SystemProgram.programId);
 
-    const tx = await signAndSendInstructions(connection, [], wallet.publicKey, [ix]);
-    console.log(`Created record ${tx}`);
+    const transaction = new Transaction();
+    transaction.add(ix);
+    transaction.feePayer = wallet.publicKey;
+    const { blockhash } = await connection.getLatestBlockhash('finalized');
+    transaction.recentBlockhash = blockhash;
+
+    console.log('TRANSACTION', transaction);
+
+    const { signature } = await provider.signAndSendTransaction(transaction);
+    console.log('SIGNATURE', signature);
+    // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
+    // console.log(Created record ${tx});
   }
   console.log('accountInfo', recordAccInfo);
 
   const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(cid), undefined, domainKey);
-  const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
-  console.log(tx, 'here');
-  return tx;
+  const transaction = new Transaction();
+  transaction.add(ix);
+  transaction.feePayer = wallet.publicKey;
+  const { blockhash } = await connection.getLatestBlockhash('finalized');
+  transaction.recentBlockhash = blockhash;
+
+  const { signature } = await provider.signAndSendTransaction(transaction);
+  console.log('SECOND SIGNATURE', signature);
+
+  return signature;
+
+  // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
+  // console.log(tx, 'here');
+  // return tx;
 }

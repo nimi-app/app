@@ -6,7 +6,7 @@ import {
   createNameRegistry,
   NameRegistryState,
 } from '@bonfida/spl-name-service';
-import fs from 'fs';
+import { readFileSync } from 'fs';
 import { signAndSendInstructions } from '@bonfida/utils';
 
 // 7766553311.sol
@@ -17,9 +17,15 @@ const record = Buffer.from([1]).toString() + Record.IPFS;
 
 const connection = new Connection(clusterApiUrl('mainnet-beta'), 'processed');
 
-const wallet = Keypair.fromSecretKey(new Uint8Array(JSON.parse(fs.readFileSync('path_to_your_wallet').toString())));
+const wallet = Keypair.fromSecretKey(
+  new Uint8Array(
+    JSON.parse(
+      readFileSync('47mVfw4YJT79nGxdxvn2ayqnyBAGTQBbeYwK86VDp23rXuPpsu9eGDaBE6te7Eyhu11GRZHeawRTsTxxYyruaqh').toString()
+    )
+  )
+);
 
-const update = async () => {
+export const update = async () => {
   const { pubkey: domainKey } = await getDomainKey(domain);
   const { pubkey: recordKey } = await getDomainKey(record + '.' + domain, true);
 

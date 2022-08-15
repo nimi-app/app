@@ -8,6 +8,7 @@ import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
+import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 import { useSolana } from '../../context/SolanaProvider';
 
 import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
@@ -18,11 +19,16 @@ export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
 
   const { isActive, account } = useWeb3React();
-  const { wallet } = useSolana();
+  const { publicKey } = useSolana();
+  const { activeNetwork } = useActiveNetwork();
   const navigate = useNavigate();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
   const onCTAClick = () => {
-    if ((isActive && account) || wallet) {
+    if (
+      (isActive && account && activeNetwork === ActiveNetworkState.ETHEREUM) ||
+      (activeNetwork === ActiveNetworkState.SOLANA && publicKey)
+    ) {
+      console.log('jhere', account, isActive, publicKey);
       navigate('/domains');
     } else {
       openWalletSwitcherPopover();

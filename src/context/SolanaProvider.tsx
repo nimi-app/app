@@ -25,7 +25,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
       if (win.solana) {
         const win: typeof global = window;
         const solana = win.solana;
-        console.log('inside', solana);
+        console.log('win', win.phantom);
 
         console.log('solana', solana.isPhantom);
         if (solana?.isPhantom) {
@@ -65,9 +65,11 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const win: typeof global = window;
+    console.log('active', activeNetwork);
     if (win.solana && win.solana.hasPhantom) setHasPhanton(true);
     const initSolana = async () => {
       if (activeNetwork === ActiveNetworkState.SOLANA) {
+        console.log('jere');
         connect();
       }
       console.log('check if user has already connected once I figure it out');
