@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useActiveWeb3React } from './useWeb3';
+
 import { useGetDefaultLensProfileQuery } from '../generated/graphql/lens';
 import { useLensSubgraphClient } from './useLensSubgraph';
 import { ActiveNetworkState, useActiveNetwork } from '../context/ActiveNetwork';
@@ -10,9 +10,11 @@ export interface LensDefaultProfileData {
   pictureUrl: string;
 }
 
-export function useLensDefaultProfileData(): { loading: boolean; defaultProfileData: LensDefaultProfileData | null } {
+export function useLensDefaultProfileData(account): {
+  loading: boolean;
+  defaultProfileData: LensDefaultProfileData | null;
+} {
   console.log('jere');
-  const { account } = useActiveWeb3React();
 
   const { activeNetwork } = useActiveNetwork();
   const lensSubgraph = useLensSubgraphClient();

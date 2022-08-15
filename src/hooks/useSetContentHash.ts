@@ -95,7 +95,7 @@ export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomai
 
   const win: typeof global = window;
   const provider = win?.phantom?.solana;
-
+  console.log(recordAccInfo);
   if (!recordAccInfo?.data) {
     const space = 2_000; // i.e 2KB
     const lamports = await connection.getMinimumBalanceForRentExemption(space + NameRegistryState.HEADER_LEN);

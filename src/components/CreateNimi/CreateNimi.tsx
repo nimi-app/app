@@ -42,13 +42,11 @@ import { publishNimi } from './api';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 import { useSolana } from '../../context/SolanaProvider';
-import { BonfidaUserData } from '../../hooks/Bonfida/useBonfidaDomainsForUser';
 
 export interface CreateNimiProps {
   userAddress: string;
   ensName: string;
   ensLabelName: string;
-  solanaData?: any;
 }
 
 export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
@@ -58,7 +56,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const location = useLocation();
-  const ensMetadata = location.state as ENSMetadata | BonfidaUserData;
+  const ensMetadata = location.state as ENSMetadata;
 
   const { connection } = useConnection();
   const { activeNetwork } = useActiveNetwork();
@@ -66,9 +64,10 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
   console.log('ensName,', ensName);
   console.log('useraddres,', publicKey);
 
-  const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
+  const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData(userAddress);
+  console.log('here');
   const { t } = useTranslation('nimi');
-
+  console.log('hree');
   /**
    * Publish Nimi state
    * @todo create a reducer or context for this
@@ -328,7 +327,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
               // if (arrayOfWidgetsItemsToBeRemoved.length > 0) {
               //   const formData = getValues('widgets');
               //   const newArray = formData.filter((item) => !arrayOfWidgetsItemsToBeRemoved.includes(item.type));
-
+              console.log('widnger');
               setValue(
                 'widgets',
                 widgets.map((widget) => {

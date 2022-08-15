@@ -23,11 +23,13 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
     setConnecting(true);
     try {
       if (win.solana) {
-        const win: typeof global = window;
+        console.log('hasSolana', win);
         const solana = win.solana;
 
         if (solana?.isPhantom) {
+          console.log('repsonse');
           const response = onlyIfTrusted ? await solana.connect({ onlyIfTrusted: true }) : await solana.connect();
+          console.log('repsonse', response);
           setPublicKey(response.publicKey);
           setConnecting(false);
         }
@@ -41,7 +43,6 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   async function disconnect(onlyIfTrusted = true) {
     try {
       if ('solana' in window) {
-        const win: typeof global = window;
         const solana = win.solana;
         if (solana?.isPhantom) {
           if (onlyIfTrusted) {
@@ -59,12 +60,15 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    const win: typeof global = window;
     console.log('active', activeNetwork);
-    if (win.solana && win.solana.hasPhantom) setHasPhanton(true);
+    console.log('window', win.solana);
+    if (win.solana && win.solana.isPhantom) setHasPhanton(true);
+
     const initSolana = async () => {
+      console.log('activeNetwork', activeNetwork === ActiveNetworkState.SOLANA);
       if (activeNetwork === ActiveNetworkState.SOLANA) {
-        connect();
+        await connect(true);
+        console.log('succesful');
       }
     };
     initSolana();

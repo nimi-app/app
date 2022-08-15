@@ -43,25 +43,24 @@ export function CreateEthereumNimi() {
   );
 }
 export function CreateSolanaNimi() {
-  const { state } = useLocation();
+  const { ensName } = useParams();
   const { publicKey, connecting } = useSolana();
-  console.log(state);
-  console.log('publicket', publicKey && publicKey.toString());
-  console.log('connecting', connecting);
 
-  if (!state || !publicKey || connecting) {
+  console.log('publicket', publicKey && publicKey.toString());
+  console.log('connecting', ensName);
+
+  if (!ensName || !publicKey || connecting) {
     return <div>Error</div>;
   }
-  const bonfidaState = state as BonfidaUserData;
+
   return (
     <Container>
       <CreateNimi
         //TODO: Fix form validators to support Solana addresses
         // userAddress={publicKey?.toString()}
         userAddress={'0x26358E62C2eDEd350e311bfde51588b8383A9315'}
-        ensName={bonfidaState.reverse}
-        ensLabelName={bonfidaState.reverse}
-        solanaData={state}
+        ensName={ensName}
+        ensLabelName={ensName}
       />
     </Container>
   );

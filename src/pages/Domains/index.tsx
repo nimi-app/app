@@ -119,7 +119,7 @@ function SolanaDomains(publicKey) {
       ) : (
         <StyledDomainsWrapper>
           {result.map((item, index) => {
-            return <SolanaNameCard key={index} name={item.reverse} routeData={result[index]} />;
+            return <SolanaNameCard key={index} name={item.reverse} />;
           })}
           <AddDomain onClick={() => window.open('https://naming.bonfida.org/search', '_blank')?.focus()}>
             Buy Bonfida
