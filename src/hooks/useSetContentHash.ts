@@ -103,14 +103,14 @@ export async function setBonfidaContentHash(
 
     console.log('TRANSACTION', transaction);
 
-    const { signature } = await provider.signAndSendTransaction(transaction);
+    const { signature } = await provider.signTransaction(transaction);
     console.log('SIGNATURE', signature);
     // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
     // console.log(Created record ${tx});
   }
   console.log('accountInfo', recordAccInfo);
 
-  const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(cid), undefined, domainKey);
+  const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(`ipfs://${cid}`), undefined, domainKey);
   const transaction = new Transaction();
   transaction.add(ix);
   transaction.feePayer = wallet.publicKey;
