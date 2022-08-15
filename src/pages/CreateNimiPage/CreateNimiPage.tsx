@@ -50,7 +50,7 @@ export function CreateSolanaNimi() {
   console.log('connecting', ensName);
 
   if (!ensName || !publicKey || connecting) {
-    return <div>Error</div>;
+    return <div>Loading</div>;
   }
 
   return (

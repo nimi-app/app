@@ -61,11 +61,9 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
   const { connection } = useConnection();
   const { activeNetwork } = useActiveNetwork();
   const { publicKey } = useSolana();
-  console.log('ensName,', ensName);
-  console.log('useraddres,', publicKey);
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData(userAddress);
-  console.log('here');
+
   const { t } = useTranslation('nimi');
   console.log('hree');
   /**
