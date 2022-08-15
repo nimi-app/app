@@ -44,9 +44,12 @@ export function CreateEthereumNimi() {
 }
 export function CreateSolanaNimi() {
   const { state } = useLocation();
-  const { publicKey } = useSolana();
+  const { publicKey, connecting } = useSolana();
+  console.log(state);
+  console.log('publicket', publicKey && publicKey.toString());
+  console.log('connecting', connecting);
 
-  if (!state || !publicKey) {
+  if (!state || !publicKey || connecting) {
     return <div>Error</div>;
   }
   const bonfidaState = state as BonfidaUserData;
@@ -66,8 +69,9 @@ export function CreateSolanaNimi() {
 
 export function CreateNimiPage() {
   const { activeNetwork } = useActiveNetwork();
+  const { publicKey, connecting } = useSolana();
   if (activeNetwork === ActiveNetworkState.ETHEREUM) return <CreateEthereumNimi />;
-  else if (activeNetwork === ActiveNetworkState.SOLANA) return <CreateSolanaNimi />;
+  else if (activeNetwork === ActiveNetworkState.SOLANA && (connecting || publicKey)) return <CreateSolanaNimi />;
 
   return <Navigate to="/" />;
 }

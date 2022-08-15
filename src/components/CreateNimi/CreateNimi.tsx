@@ -34,7 +34,7 @@ import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
 import { ENSMetadata } from '../../hooks/useENSMetadata';
-import { setBonfidaContentHash, setENSNameContentHash } from '../../hooks/useSetContentHash';
+import { craeteBonfidaRegistry, setBonfidaContentHash, setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
@@ -64,7 +64,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
   const { activeNetwork } = useActiveNetwork();
   const { publicKey } = useSolana();
   console.log('ensName,', ensName);
-  console.log('useraddres,', userAddress);
+  console.log('useraddres,', publicKey);
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -81,6 +81,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
+  const [solanaTransaction, setSolanaTransaction] = useState();
   const publishNimiAbortController = useRef<AbortController>();
   console.log('ensName,', ensName);
   // Form state manager
@@ -157,21 +158,36 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
       // Set the content
       setPublishNimiResponseIpfsHash(cid);
       if (activeNetwork === ActiveNetworkState.SOLANA) {
-        const solana = await setBonfidaContentHash(cid, solanaData, connection, ensName, publicKey);
-        console.log('bonfidaContentHash', solana);
+        const signature = await craeteBonfidaRegistry(connection, ensName, publicKey);
+        console.log('bonfidaContentHash', signature);
+        // if (signature) {
+        //   setSolanaTransaction(signature);
+        //   const recepit = await connection.sendRawTransaction(signature);
+
+        //   console.log('recepit', recepit);
+        // }
+        const signature2 = await setBonfidaContentHash(cid, connection, ensName, publicKey);
+
+        setTimeout(() => {
+          console.log('wait');
+        }, 5000);
+        const recepit = await connection.getSignatureStatus(signature2);
+        console.log(recepit);
+        setSolanaTransaction(signature2);
+        setIsPublishingNimi(false);
       } else {
         if (!publicResolverContract) {
           throw new Error('ENS Public Resolver contract is not available.');
         }
-        const setContentHashTransaction = await setENSNameContentHash({
+        const contentHashTransaction = await setENSNameContentHash({
           contract: publicResolverContract,
           name: data.ensName,
           contentHash: `ipfs://${cid}`,
         });
 
-        setSetContentHashTransaction(setContentHashTransaction);
+        setSetContentHashTransaction(contentHashTransaction);
 
-        const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
+        const setContentHashTransactionReceipt = await contentHashTransaction.wait();
 
         unstable_batchedUpdates(() => {
           setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
@@ -373,6 +389,7 @@ export function CreateNimi({ userAddress, ensName, solanaData }: CreateNimiProps
           ipfsHash={publishNimiResponseIpfsHash}
           isPublishing={isPublishingNimi}
           publishError={publishNimiError}
+          solanaSignature={solanaTransaction}
           setContentHashTransaction={setContentHashTransaction}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
           cancel={() => {

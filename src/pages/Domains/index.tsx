@@ -96,10 +96,13 @@ function EnsDomains({ address }: DomainsProps) {
   );
 }
 
-function SolanaDomains() {
+function SolanaDomains(publicKey) {
   const { result, loading, error } = useDomainsForUser();
-
-  if (loading || !result || error) {
+  console.log('result', result);
+  console.log('loading', loading);
+  console.log('error', error);
+  console.log('publicke', publicKey);
+  if (loading || !result || error || !publicKey) {
     return <Loader />;
   }
 
@@ -139,7 +142,7 @@ export function DomainsHome() {
     return <EnsDomains address={account} />;
   }
   if (activeNetwork === ActiveNetworkState.SOLANA && publicKey) {
-    return <SolanaDomains />;
+    return <SolanaDomains publickKey={publicKey} />;
   }
   // Redirect to home page if no wallet is connected
   return <Navigate to="/" />;

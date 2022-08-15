@@ -93,7 +93,7 @@ export function WalletModal() {
         <Footer>
           <Button
             onClick={() =>
-              connect(false)
+              connect()
                 .then(() => {
                   setActiveNetwork(ActiveNetworkState.SOLANA);
                   closeModal();

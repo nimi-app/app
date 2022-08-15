@@ -11,10 +11,9 @@ import {
   updateNameRegistryData,
   NameRegistryState,
 } from '@bonfida/spl-name-service';
-import { signAndSendInstructions } from '@bonfida/utils';
+
 import { BonfidaUserData } from './Bonfida/useBonfidaDomainsForUser';
-import { Connection, Keypair, Transaction, SystemProgram } from '@solana/web3.js';
-import { readFileSync } from 'fs';
+import { Connection, Transaction } from '@solana/web3.js';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -57,26 +56,46 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
 /**
  * Direct call to the ENS public resolver contract to set the content hash of a name
  */
-export async function setBonfidaContentHash(
-  cid: string,
-  solanaData: BonfidaUserData,
-  connection: Connection,
-  bonfidaDomain: string,
-  publicKey
-) {
+export async function setBonfidaContentHash(cid: string, connection: Connection, bonfidaDomain: string, publicKey) {
   const record = Buffer.from([1]).toString() + Record.IPFS;
 
   const { pubkey: recordKey } = await getDomainKey(record + '.' + bonfidaDomain, true);
   const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
-  console.log('solanaData', solanaData);
-  console.log('bonfidaDomain', bonfidaDomain);
-  console.log('wallet', publicKey);
+
   const recordAccInfo = await connection.getAccountInfo(recordKey);
   console.log(recordAccInfo, 'reccordAccInfo');
 
   const win: typeof global = window;
   const provider = win?.phantom?.solana;
-  console.log('PROVIDER', provider);
+
+  const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(`ipfs://${cid}`), undefined, domainKey);
+  const transaction = new Transaction();
+  transaction.add(ix);
+  transaction.feePayer = publicKey;
+  const { blockhash } = await connection.getLatestBlockhash('finalized');
+  transaction.recentBlockhash = blockhash;
+
+  const { signature } = await provider.signAndSendTransaction(transaction);
+  console.log('SECOND SIGNATURE', signature);
+
+  return signature;
+
+  // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
+  // console.log(tx, 'here');
+  // return tx;
+}
+
+export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomain: string, publicKey) {
+  const record = Buffer.from([1]).toString() + Record.IPFS;
+  console.log('bonfida domain', bonfidaDomain);
+  console.log('pib', publicKey);
+  const { pubkey: recordKey } = await getDomainKey(record + '.' + bonfidaDomain, true);
+  const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
+
+  const recordAccInfo = await connection.getAccountInfo(recordKey);
+
+  const win: typeof global = window;
+  const provider = win?.phantom?.solana;
 
   if (!recordAccInfo?.data) {
     const space = 2_000; // i.e 2KB
@@ -93,7 +112,6 @@ export async function setBonfidaContentHash(
       domainKey
     );
     console.log('create registru', ix);
-    console.log('OUR SYSTEM PROGRAM ID', SystemProgram.programId);
 
     const transaction = new Transaction();
     transaction.add(ix);
@@ -101,26 +119,14 @@ export async function setBonfidaContentHash(
     const { blockhash } = await connection.getLatestBlockhash('finalized');
     transaction.recentBlockhash = blockhash;
 
-    console.log('TRANSACTION', transaction);
-
-    const { signature } = await provider.signTransaction(transaction);
-    console.log('SIGNATURE', signature);
+    const response = await provider.signTransaction(transaction);
+    console.log('SIGNATURE!', response);
+    return response;
     // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
     // console.log(Created record ${tx});
+  } else {
+    return;
   }
-  console.log('accountInfo', recordAccInfo);
-
-  const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(`ipfs://${cid}`), undefined, domainKey);
-  const transaction = new Transaction();
-  transaction.add(ix);
-  transaction.feePayer = publicKey.publicKey;
-  const { blockhash } = await connection.getLatestBlockhash('finalized');
-  transaction.recentBlockhash = blockhash;
-
-  const { signature } = await provider.signAndSendTransaction(transaction);
-  console.log('SECOND SIGNATURE', signature);
-
-  return signature;
 
   // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
   // console.log(tx, 'here');

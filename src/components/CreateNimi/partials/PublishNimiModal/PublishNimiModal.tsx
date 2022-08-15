@@ -12,6 +12,7 @@ import {
 import { Loader } from '../../../Loader';
 import { Button } from '../../../Button';
 import { getEtherscanExplorerLink } from '../../../../utils/explorer';
+import { ActiveNetworkState, useActiveNetwork } from '../../../../context/ActiveNetwork';
 
 const LoaderWrapper = styled.div`
   margin-bottom: 32px;
@@ -50,6 +51,7 @@ export interface PublishNimiModalProps {
   publishError: Error | undefined;
   setContentHashTransaction: ContractTransaction | undefined;
   setContentHashTransactionReceipt: ContractReceipt | undefined;
+  solanaSignature?: string;
 }
 
 /**
@@ -63,17 +65,26 @@ export function PublishNimiModal({
   publishError,
   setContentHashTransaction,
   setContentHashTransactionReceipt,
+  solanaSignature,
 }: PublishNimiModalProps) {
   const { t } = useTranslation(['common', 'nimi']);
-
+  const { activeNetwork } = useActiveNetwork();
   const modalContent = () => {
-    if (setContentHashTransactionReceipt) {
+    if (setContentHashTransactionReceipt || solanaSignature) {
       return (
         <>
           <p>
             <Trans key="publishNimiModal.successParagraph1" ns="nimi">
               Your Nimi has been published at{' '}
-              <a target="_blank" rel="noreferrer" href={`https://${ensName}.limo`}>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href={
+                  activeNetwork === ActiveNetworkState.ETHEREUM
+                    ? `https://${ensName}.limo`
+                    : `https://${ensName}.sol-domain.org`
+                }
+              >
                 {ensName}
               </a>
               !
@@ -96,11 +107,15 @@ export function PublishNimiModal({
               <a
                 target="_blank"
                 rel="noreferrer"
-                href={getEtherscanExplorerLink(
-                  setContentHashTransaction.chainId,
-                  setContentHashTransaction.hash,
-                  'transaction'
-                )}
+                href={
+                  activeNetwork === ActiveNetworkState.ETHEREUM
+                    ? getEtherscanExplorerLink(
+                        setContentHashTransaction.chainId,
+                        setContentHashTransaction.hash,
+                        'transaction'
+                      )
+                    : `Soalna ${setContentHashTransaction}`
+                }
               >
                 {t('viewTransactionOnBlockExplorer')}
               </a>
