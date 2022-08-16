@@ -57,7 +57,7 @@ export function CreateSolanaNimi() {
       <CreateNimi
         //TODO: Fix form validators to support Solana addresses
         // userAddress={publicKey?.toString()}
-        userAddress={'0x26358E62C2eDEd350e311bfde51588b8383A9315'}
+        userAddress={publicKey?.toString()}
         ensName={ensName}
         ensLabelName={ensName}
       />

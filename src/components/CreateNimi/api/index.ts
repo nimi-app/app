@@ -26,7 +26,7 @@ export function publishNimi(payload: Nimi, controller?: AbortController): Promis
   return axios
     .post<{
       data: PublishNimiApiResponse | PublishNimiApiResponseDeprecated;
-    }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/nimi/publish`, payload, {
+    }>(`https://api.nimi.io/v1.5/nimi/publish`, payload, {
       signal: controller ? controller.signal : undefined,
     })
     .then(({ data }) => {

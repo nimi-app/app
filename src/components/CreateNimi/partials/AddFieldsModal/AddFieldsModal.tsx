@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { linkTypeList, NimiLink, NimiBlockchain, NimiWidgetType } from 'nimi-card';
+import { NimiBlockchain, NimiWidgetType, NimiLinkType } from 'nimi-card';
 
 import {
   Modal,
@@ -42,7 +42,7 @@ const SectionTitle = styled.h2`
 `;
 
 interface AddFieldsOptions {
-  links: NimiLink[];
+  links: NimiLinkType[];
   blockchainAddresses: NimiBlockchain[];
   widgets: NimiWidgetType[];
 }
@@ -55,6 +55,7 @@ export interface AddFieldsModalProps {
 }
 
 const nimiWidgetTypes = Object.keys(NimiWidgetType);
+const linkTypeTypes = Object.keys(NimiLinkType);
 
 /**
  * A modal to select the fields to add to the Nimi form.
@@ -74,7 +75,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
 
   // An internal state to keep track of the current selected link type
   // Manages the links blockchain address list
-  const [linkList, setLinkList] = useState<NimiLink[]>(initialValues.links);
+  const [linkList, setLinkList] = useState<NimiLinkType[]>(initialValues.links);
   const [addressList, setAddressList] = useState<NimiBlockchain[]>(initialValues.blockchainAddresses);
   const [widgetList, setWidgetList] = useState<NimiWidgetType[]>(initialValues.widgets);
 
@@ -89,14 +90,16 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.socials')}</SectionTitle>
           <StyledGridList>
-            {linkTypeList.map((link) => {
+            {linkTypeTypes.map((link) => {
               const inputId = `modal-checkbox-${link}`;
-              const i18nKey = `formLabel.${link}`;
-              const checked = linkList.includes(link);
+              const i18nKey = `formLabel.${link.toLowerCase()}`;
+              const checked = linkList.includes(link as NimiLinkType);
 
               const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
                 // Compute the new state and then batch it previous state for onChange have newest state
-                const newState = event.target.checked ? [...linkList, link] : linkList.filter((item) => item !== link);
+                const newState: NimiLinkType[] = event.target.checked
+                  ? [...linkList, link as NimiLinkType]
+                  : linkList.filter((item) => item !== (link as NimiLinkType));
 
                 setLinkList(newState);
                 // emit the change event
