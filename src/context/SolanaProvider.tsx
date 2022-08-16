@@ -82,8 +82,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
     <SolanaContext.Provider value={{ publicKey, hasPhantom: hasPhanton, connect, disconnect, connecting }}>
       <ConnectionProvider
         endpoint={
-          'https://api.mainnet-beta.solana.com '
-          // 'https://yolo-smart-friday.solana-mainnet.discover.quiknode.pro/b410a9fd44d9d96c368523a6dc08374e8287b51a/'
+          'https://yolo-smart-friday.solana-mainnet.discover.quiknode.pro/b410a9fd44d9d96c368523a6dc08374e8287b51a/'
         }
       >
         {children}
