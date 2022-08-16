@@ -1,5 +1,5 @@
 import { namehash as ensNameHash } from '@ethersproject/hash';
-import { Navigate, useLocation, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetDomainFromSubgraphQuery } from '../../generated/graphql/ens';
 import { CreateNimi } from '../../components/CreateNimi';
@@ -8,7 +8,6 @@ import { Container } from '../../components/Container';
 import { useWeb3React } from '@web3-react/core';
 import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwork';
 import { useSolana } from '../../context/SolanaProvider';
-import { BonfidaUserData } from '../../hooks/Bonfida/useBonfidaDomainsForUser';
 
 export function CreateEthereumNimi() {
   const { account } = useWeb3React();

@@ -23,12 +23,15 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
     setConnecting(true);
     try {
       if (win.solana) {
-        console.log('hasSolana', win);
+        console.log('hasSolana', win.solana);
         const solana = win.solana;
+        console.log('ohantom', win.phantom);
 
         if (solana?.isPhantom) {
           console.log('repsonse');
-          const response = onlyIfTrusted ? await solana.connect({ onlyIfTrusted: true }) : await solana.connect();
+          const response = onlyIfTrusted
+            ? await win.phantom.solana.connect({ onlyIfTrusted: true })
+            : await win.phantom.solana.connect();
           console.log('repsonse', response);
           setPublicKey(response.publicKey);
           setConnecting(false);
@@ -79,7 +82,8 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
     <SolanaContext.Provider value={{ publicKey, hasPhantom: hasPhanton, connect, disconnect, connecting }}>
       <ConnectionProvider
         endpoint={
-          'https://yolo-smart-friday.solana-mainnet.discover.quiknode.pro/b410a9fd44d9d96c368523a6dc08374e8287b51a/'
+          'https://api.mainnet-beta.solana.com '
+          // 'https://yolo-smart-friday.solana-mainnet.discover.quiknode.pro/b410a9fd44d9d96c368523a6dc08374e8287b51a/'
         }
       >
         {children}
