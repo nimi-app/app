@@ -2,9 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { PublicKey } from '@solana/web3.js';
 import { ConnectionProvider } from '@solana/wallet-adapter-react';
 import { ActiveNetworkState, useActiveNetwork } from './ActiveNetwork';
-
 export const SolanaContext = createContext<null | SolanaData>(null);
-
 interface SolanaData {
   publicKey?: PublicKey;
   hasPhantom: boolean;
@@ -16,23 +14,20 @@ interface SolanaData {
 export function SolanaProvider({ children }: { children: ReactNode }) {
   const [publicKey, setPublicKey] = useState<PublicKey | undefined>(undefined);
   const { activeNetwork, setActiveNetwork } = useActiveNetwork();
+
   const [connecting, setConnecting] = useState(false);
   const [hasPhanton, setHasPhanton] = useState(false);
   const win: typeof global = window;
-  async function connect(onlyIfTrusted = true) {
+  async function connect() {
     setConnecting(true);
     try {
       if (win.solana) {
-        console.log('hasSolana', win.solana);
+        const win: typeof global = window;
         const solana = win.solana;
-        console.log('ohantom', win.phantom);
 
         if (solana?.isPhantom) {
-          console.log('repsonse');
-          const response = onlyIfTrusted
-            ? await win.phantom.solana.connect({ onlyIfTrusted: true })
-            : await win.phantom.solana.connect();
-          console.log('repsonse', response);
+          // const response = onlyIfTrusted ? await solana.connect({ onlyIfTrusted: true }) : await solana.connect();
+          const response = await solana.connect();
           setPublicKey(response.publicKey);
           setConnecting(false);
         }
@@ -46,6 +41,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   async function disconnect(onlyIfTrusted = true) {
     try {
       if ('solana' in window) {
+        const win: typeof global = window;
         const solana = win.solana;
         if (solana?.isPhantom) {
           if (onlyIfTrusted) {
@@ -61,18 +57,15 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
       console.error(error);
     }
   }
-
   useEffect(() => {
+    const win: typeof global = window;
     console.log('active', activeNetwork);
-    console.log('window', win.solana);
-    if (win.solana && win.solana.isPhantom) setHasPhanton(true);
-
+    if (win.solana && win.solana.hasPhantom) setHasPhanton(true);
     const initSolana = async () => {
-      console.log('activeNetwork', activeNetwork === ActiveNetworkState.SOLANA);
       if (activeNetwork === ActiveNetworkState.SOLANA) {
-        await connect(true);
-        console.log('succesful');
+        connect();
       }
+      console.log('check if user has already connected once I figure it out');
     };
     initSolana();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,8 +75,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
     <SolanaContext.Provider value={{ publicKey, hasPhantom: hasPhanton, connect, disconnect, connecting }}>
       <ConnectionProvider
         endpoint={
-          'https://api.mainnet-beta.solana.com '
-          // 'https://yolo-smart-friday.solana-mainnet.discover.quiknode.pro/b410a9fd44d9d96c368523a6dc08374e8287b51a/'
+          'https://yolo-smart-friday.solana-mainnet.discover.quiknode.pro/b410a9fd44d9d96c368523a6dc08374e8287b51a/'
         }
       >
         {children}
@@ -91,12 +83,10 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
     </SolanaContext.Provider>
   );
 }
-
 export const useSolana = () => {
   const conect = useContext(SolanaContext);
   if (!conect) {
     throw new Error('No Solana for you!');
   }
-
   return conect;
 };
