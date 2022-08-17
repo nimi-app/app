@@ -221,6 +221,7 @@ export function WalletModal() {
               </Button>
             );
           })}
+          <Button onClick={() => setActiveNetwork(ActiveNetworkState.DEFAULT)}>Disconnect Ethereum</Button>
         </ConnectorListWrapper>
       </Content>
       <Footer>
