@@ -117,7 +117,7 @@ export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomai
     transaction.recentBlockhash = blockhash;
     let reponse;
     try {
-      reponse = await provider.signTransaction(transaction);
+      reponse = await provider.signAndSendTransaction(transaction);
     } catch (e) {
       try {
         reponse = await provider.signAndSendTransaction(transaction);
