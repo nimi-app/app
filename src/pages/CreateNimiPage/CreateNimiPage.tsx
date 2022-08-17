@@ -49,9 +49,6 @@ export function CreateSolanaNimi() {
   const { ensName } = useParams();
   const { publicKey, connecting } = useSolana();
 
-  console.log('publicket', publicKey && publicKey.toString());
-  console.log('connecting', ensName);
-
   if (!ensName || !publicKey || connecting) {
     return <div>Loading</div>;
   }

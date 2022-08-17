@@ -14,11 +14,9 @@ export function useLensDefaultProfileData(account): {
   loading: boolean;
   defaultProfileData: LensDefaultProfileData | null;
 } {
-  console.log('jere');
-
   const { activeNetwork } = useActiveNetwork();
   const lensSubgraph = useLensSubgraphClient();
-  console.log('acctount', account);
+
   const { data, loading, error } = useGetDefaultLensProfileQuery({
     client: lensSubgraph,
     variables: {
@@ -26,13 +24,9 @@ export function useLensDefaultProfileData(account): {
     },
   });
 
-  console.log('here', error);
-
   const [defaultProfileData, setDefaultProfileData] = useState<LensDefaultProfileData | null>(null);
-  console.log('here');
 
   useEffect(() => {
-    console.log('herer', data, error);
     if (!data || !account) return;
     setDefaultProfileData(
       data.defaultProfile &&

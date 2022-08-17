@@ -34,7 +34,7 @@ import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
 import { ENSMetadata } from '../../hooks/useENSMetadata';
-import { craeteBonfidaRegistry, setBonfidaContentHash, setENSNameContentHash } from '../../hooks/useSetContentHash';
+import { setBonfidaContentHash, setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
@@ -65,12 +65,12 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData(userAddress);
 
   const { t } = useTranslation('nimi');
-  console.log('hree');
+
   /**
    * Publish Nimi state
    * @todo create a reducer or context for this
    */
-  console.log('ensName,', ensName);
+
   const publicResolverContract = useENSPublicResolverContract();
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPublishingNimi, setIsPublishingNimi] = useState(false);
@@ -78,9 +78,9 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
-  const [solanaTransaction, setSolanaTransaction] = useState();
+  const [solanaTransaction, setSolanaTransaction] = useState<string>('');
   const publishNimiAbortController = useRef<AbortController>();
-  console.log('ensName,', ensName);
+
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiCard),
@@ -155,7 +155,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
       // Set the content
       setPublishNimiResponseIpfsHash(cid);
       if (activeNetwork === ActiveNetworkState.SOLANA && publicKey) {
-        const signature = await craeteBonfidaRegistry(connection, ensName, publicKey);
+        const signature = await setBonfidaContentHash(connection, ensName, publicKey, cid);
         console.log('bonfidaContentHash', signature);
         // if (signature) {
         //   setSolanaTransaction(signature);
@@ -164,12 +164,11 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
         //   console.log('recepit', recepit);
         // }
 
-        const signature2 = await setBonfidaContentHash(cid, connection, ensName, publicKey);
+        // const signature2 = await setBonfidaContentHash(cid, connection, ensName, publicKey);
 
-        const recepit = await connection.getSignatureStatus(signature2);
-        console.log(recepit);
+        console.log(signature);
         setTimeout(() => {
-          setSolanaTransaction(signature2);
+          setSolanaTransaction('works');
           setIsPublishingNimi(false);
         }, 38000);
       } else {
@@ -199,7 +198,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
       });
     }
   };
-  console.log('ensName,', ensName);
+
   const onSubmitInvalid = (data) => {
     console.log(data);
   };
@@ -207,7 +206,6 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
-  console.log('ensName,', ensName);
 
   return (
     <FormProvider {...useFormContext}>
@@ -260,7 +258,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
                 })}
                 {selectedBlockchainAddressFieldList.map((blockchain) => {
                   const label = t(`formLabel.${blockchain.toLowerCase()}`);
-                  console.log('link', blockchain);
+
                   return (
                     <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
                       <NimiBlockchainField label={label} blockchain={blockchain} />
@@ -325,7 +323,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
               // if (arrayOfWidgetsItemsToBeRemoved.length > 0) {
               //   const formData = getValues('widgets');
               //   const newArray = formData.filter((item) => !arrayOfWidgetsItemsToBeRemoved.includes(item.type));
-              console.log('widnger');
+
               if (ActiveNetworkState.ETHEREUM === activeNetwork) {
                 setValue(
                   'widgets',

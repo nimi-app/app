@@ -10,6 +10,10 @@ import {
   Record,
   updateNameRegistryData,
   NameRegistryState,
+  updateInstruction,
+  NAME_PROGRAM_ID,
+  Numberu32,
+  // deleteNameRegistry,
 } from '@bonfida/spl-name-service';
 
 import { Connection, PublicKey, Transaction } from '@solana/web3.js';
@@ -55,7 +59,7 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
 /**
  * Direct call to the ENS public resolver contract to set the content hash of a name
  */
-export async function setBonfidaContentHash(cid: string, connection: Connection, bonfidaDomain: string, publicKey) {
+export async function dontDoAnything(cid: string, connection: Connection, bonfidaDomain: string, publicKey) {
   const record = Buffer.from([1]).toString() + Record.IPFS;
 
   const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
@@ -80,25 +84,34 @@ export async function setBonfidaContentHash(cid: string, connection: Connection,
   // return tx;
 }
 
-export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomain: string, publicKey: PublicKey) {
+export async function setBonfidaContentHash(
+  connection: Connection,
+  bonfidaDomain: string,
+  publicKey: PublicKey,
+  cid: string
+) {
   const record = Buffer.from([1]).toString() + Record.IPFS;
+
   console.log('bonfida domain', bonfidaDomain);
   console.log('pib', publicKey);
   console.log('');
   const { pubkey: recordKey } = await getDomainKey(Record.IPFS + '.' + bonfidaDomain, true);
   const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
   console.log('recordKey', recordKey);
-
-  const recordAccInfo = await connection.getAccountInfo(recordKey);
-
   const win: typeof global = window;
   const provider = win?.phantom?.solana;
-  console.log(recordAccInfo);
+
+  const recordAccInfo = await connection.getAccountInfo(recordKey);
+  const transaction = new Transaction();
+  const { blockhash } = await connection.getLatestBlockhash('finalized');
+
   if (!recordAccInfo?.data) {
+    console.log('WIWIWJIWJWIWJWIJWIWJWIJWIWJWIWJIWJWIWJWIJWIWJWIJWIWJ');
     const space = 2_000; // i.e 2KB
     const lamports = await connection.getMinimumBalanceForRentExemption(space + NameRegistryState.HEADER_LEN);
     console.log('lamport', lamports);
-    const ix = await createNameRegistry(
+    console.log('record', record);
+    const ix1 = await createNameRegistry(
       connection,
       record,
       space,
@@ -108,25 +121,35 @@ export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomai
       undefined,
       domainKey
     );
+    transaction.add(ix1);
+    const ix = updateInstruction(NAME_PROGRAM_ID, recordKey, new Numberu32(0), Buffer.from(`ipfs://${cid}`), publicKey);
     console.log('create registru', ix);
 
+    transaction.add(ix);
+    transaction.feePayer = publicKey;
+
+    console.log('blockhash', blockhash);
+    transaction.recentBlockhash = blockhash;
+
+    const { signature } = await provider.signAndSendTransaction(transaction);
+    const recepit = await connection.confirmTransaction(signature);
+    console.log('SIGNATURE!', recepit);
+
+    return recepit;
+  } else {
+    const ix = await updateNameRegistryData(connection, record, 0, Buffer.from(`ipfs://${cid}`), undefined, domainKey);
     const transaction = new Transaction();
     transaction.add(ix);
     transaction.feePayer = publicKey;
     const { blockhash } = await connection.getLatestBlockhash('finalized');
-    console.log('blockhash', blockhash);
     transaction.recentBlockhash = blockhash;
-
-    const reponse = await provider.signTransaction(transaction);
-
-    console.log('SIGNATURE!', reponse);
-
-    return reponse;
-    // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
-    // console.log(Created record ${tx});
-  } else {
-    return;
+    console.log('attempting second transaction', transaction);
+    const { signature } = await provider.signAndSendTransaction(transaction);
+    console.log('SECOND SIGNATURE', signature);
   }
+
+  // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
+  // console.log(Created record ${tx});
 
   // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
   // console.log(tx, 'here');

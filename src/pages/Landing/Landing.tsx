@@ -28,7 +28,6 @@ export function Landing() {
       (isActive && account && activeNetwork === ActiveNetworkState.ETHEREUM) ||
       (activeNetwork === ActiveNetworkState.SOLANA && publicKey)
     ) {
-      console.log('jhere', account, isActive, publicKey);
       navigate('/domains');
     } else {
       openWalletSwitcherPopover();

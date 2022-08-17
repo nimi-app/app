@@ -98,10 +98,7 @@ function EnsDomains({ address }: DomainsProps) {
 
 function SolanaDomains(publicKey) {
   const { result, loading, error } = useDomainsForUser();
-  console.log('result', result);
-  console.log('loading', loading);
-  console.log('error', error);
-  console.log('publicke', publicKey);
+
   if (loading || !result || error || !publicKey) {
     return <Loader />;
   }

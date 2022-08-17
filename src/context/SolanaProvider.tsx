@@ -34,7 +34,7 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       setConnecting(false);
-      console.log('errrrooroororororor');
+
       console.error(error);
     }
   }
@@ -59,13 +59,12 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   }
   useEffect(() => {
     const win: typeof global = window;
-    console.log('active', activeNetwork);
+
     if (win.solana && win.solana.hasPhantom) setHasPhanton(true);
     const initSolana = async () => {
       if (activeNetwork === ActiveNetworkState.SOLANA) {
         connect();
       }
-      console.log('check if user has already connected once I figure it out');
     };
     initSolana();
     // eslint-disable-next-line react-hooks/exhaustive-deps
