@@ -85,7 +85,7 @@ export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomai
   console.log('bonfida domain', bonfidaDomain);
   console.log('pib', publicKey);
   console.log('');
-  const { pubkey: recordKey } = await getDomainKey(record + bonfidaDomain, true);
+  const { pubkey: recordKey } = await getDomainKey(Record.IPFS + '.' + bonfidaDomain, true);
   const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
   console.log('recordKey', recordKey);
 
@@ -114,20 +114,10 @@ export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomai
     transaction.add(ix);
     transaction.feePayer = publicKey;
     const { blockhash } = await connection.getLatestBlockhash('finalized');
+    console.log('blockhash', blockhash);
     transaction.recentBlockhash = blockhash;
-    let reponse;
-    try {
-      reponse = await provider.signAndSendTransaction(transaction);
-    } catch (e) {
-      try {
-        reponse = await provider.signAndSendTransaction(transaction);
-      } catch {
-        reponse = 'fail';
-      }
 
-      console.log('error', e);
-      reponse = 'signature';
-    }
+    const reponse = await provider.signTransaction(transaction);
 
     console.log('SIGNATURE!', reponse);
 
