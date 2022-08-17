@@ -14,6 +14,7 @@ import { StyledGridList } from '../../styled';
 import { ChangeEventHandler, useState } from 'react';
 import { Button } from '../../../Button';
 import { Checkbox } from '../../../form';
+import { ActiveNetworkState, useActiveNetwork } from '../../../../context/ActiveNetwork';
 
 const ModalHeader = styled(ModalHeaderBase)`
   padding: 82px 82px 0 82px;
@@ -78,6 +79,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
   const [linkList, setLinkList] = useState<NimiLinkType[]>(initialValues.links);
   const [addressList, setAddressList] = useState<NimiBlockchain[]>(initialValues.blockchainAddresses);
   const [widgetList, setWidgetList] = useState<NimiWidgetType[]>(initialValues.widgets);
+  const { activeNetwork } = useActiveNetwork();
 
   return (
     <Modal>
@@ -122,6 +124,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
           <SectionTitle>{t('addFieldsModal.addreses')}</SectionTitle>
           <StyledGridList>
             {Object.values(NimiBlockchain).map((blockchain) => {
+              if (blockchain === NimiBlockchain.SOLANA) return;
               const inputId = `modal-checkbox-${blockchain}`;
               const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
               const checked = addressList.includes(blockchain);
@@ -149,44 +152,46 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
             })}
           </StyledGridList>
         </SectionWrapper>
-        <SectionWrapper>
-          <SectionTitle>{t('addFieldsModal.nfts')}</SectionTitle>
-          <StyledGridList>
-            {nimiWidgetTypes.map((widget) => {
-              const inputId = `modal-checkbox-${widget}`;
-              const i18nKey = `formWidgetLabel.${widget}`;
-              const checked = widgetList.includes(widget as NimiWidgetType);
+        {activeNetwork === ActiveNetworkState.ETHEREUM && (
+          <SectionWrapper>
+            <SectionTitle>{t('addFieldsModal.nfts')}</SectionTitle>
+            <StyledGridList>
+              {nimiWidgetTypes.map((widget) => {
+                const inputId = `modal-checkbox-${widget}`;
+                const i18nKey = `formWidgetLabel.${widget}`;
+                const checked = widgetList.includes(widget as NimiWidgetType);
 
-              const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-                // Compute the new state and then batch it previous state for onChange have newest state
-                const newState = event.target.checked
-                  ? [...widgetList, widget as NimiWidgetType]
-                  : widgetList.filter((item) => item !== widget);
+                const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+                  // Compute the new state and then batch it previous state for onChange have newest state
+                  const newState = event.target.checked
+                    ? [...widgetList, widget as NimiWidgetType]
+                    : widgetList.filter((item) => item !== widget);
 
-                setWidgetList(newState);
+                  setWidgetList(newState);
 
-                // emit the change event
-                onChange?.({
-                  links: linkList,
-                  blockchainAddresses: addressList,
-                  widgets: newState,
-                });
-              };
+                  // emit the change event
+                  onChange?.({
+                    links: linkList,
+                    blockchainAddresses: addressList,
+                    widgets: newState,
+                  });
+                };
 
-              return (
-                <Checkbox
-                  key={inputId}
-                  checked={checked}
-                  id={inputId}
-                  name={`widget-${widget.toLowerCase()}`}
-                  onChange={inputOnChange}
-                >
-                  {t(i18nKey)}
-                </Checkbox>
-              );
-            })}
-          </StyledGridList>
-        </SectionWrapper>
+                return (
+                  <Checkbox
+                    key={inputId}
+                    checked={checked}
+                    id={inputId}
+                    name={`widget-${widget.toLowerCase()}`}
+                    onChange={inputOnChange}
+                  >
+                    {t(i18nKey)}
+                  </Checkbox>
+                );
+              })}
+            </StyledGridList>
+          </SectionWrapper>
+        )}
       </ModalContent>
       <ModalFooter>
         <Button

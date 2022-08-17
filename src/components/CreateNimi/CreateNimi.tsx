@@ -165,13 +165,12 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
         // }
         const signature2 = await setBonfidaContentHash(cid, connection, ensName, publicKey);
 
-        setTimeout(() => {
-          console.log('wait');
-        }, 5000);
         const recepit = await connection.getSignatureStatus(signature2);
         console.log(recepit);
-        setSolanaTransaction(signature2);
-        setIsPublishingNimi(false);
+        await setTimeout(() => {
+          setSolanaTransaction(signature2);
+          setIsPublishingNimi(false);
+        }, 38000);
       } else {
         if (!publicResolverContract) {
           throw new Error('ENS Public Resolver contract is not available.');
@@ -250,7 +249,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
                 </FormGroup>
 
                 {selectedLinkFieldList.map((link) => {
-                  const label = t(`formLabel.${link}`);
+                  const label = t(`formLabel.${link.toLowerCase()}`);
 
                   return (
                     <LinkFormGroup key={'blockchain-input-' + link}>
@@ -260,7 +259,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
                 })}
                 {selectedBlockchainAddressFieldList.map((blockchain) => {
                   const label = t(`formLabel.${blockchain.toLowerCase()}`);
-
+                  console.log('link', blockchain);
                   return (
                     <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
                       <NimiBlockchainField label={label} blockchain={blockchain} />
@@ -326,19 +325,21 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
               //   const formData = getValues('widgets');
               //   const newArray = formData.filter((item) => !arrayOfWidgetsItemsToBeRemoved.includes(item.type));
               console.log('widnger');
-              setValue(
-                'widgets',
-                widgets.map((widget) => {
-                  if (widget === NimiWidgetType.POAP) {
-                    return {
-                      type: NimiWidgetType.POAP,
-                      address: userAddress,
-                    };
-                  }
+              if (ActiveNetworkState.ETHEREUM === activeNetwork) {
+                setValue(
+                  'widgets',
+                  widgets.map((widget) => {
+                    if (widget === NimiWidgetType.POAP) {
+                      return {
+                        type: NimiWidgetType.POAP,
+                        address: userAddress,
+                      };
+                    }
 
-                  return widget;
-                })
-              );
+                    return widget;
+                  })
+                );
+              }
 
               setFormLinkList(links);
               setFormAddressList(blockchainAddresses);
