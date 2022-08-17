@@ -115,11 +115,17 @@ export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomai
     transaction.feePayer = publicKey;
     const { blockhash } = await connection.getLatestBlockhash('finalized');
     transaction.recentBlockhash = blockhash;
+    let reponse;
+    try {
+      reponse = await provider.signAndSendTransaction(transaction);
+    } catch (e) {
+      console.log('error', e);
+      reponse = 'signature';
+    }
 
-    const response = await provider.signTransaction(transaction);
-    console.log('SIGNATURE!', response);
+    console.log('SIGNATURE!', reponse);
 
-    return response;
+    return reponse;
     // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
     // console.log(Created record ${tx});
   } else {

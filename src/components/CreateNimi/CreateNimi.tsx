@@ -163,6 +163,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
 
         //   console.log('recepit', recepit);
         // }
+
         const signature2 = await setBonfidaContentHash(cid, connection, ensName, publicKey);
 
         const recepit = await connection.getSignatureStatus(signature2);
