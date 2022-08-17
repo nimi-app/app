@@ -119,6 +119,12 @@ export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomai
     try {
       reponse = await provider.signTransaction(transaction);
     } catch (e) {
+      try {
+        reponse = await provider.signAndSendTransaction(transaction);
+      } catch {
+        reponse = 'fail';
+      }
+
       console.log('error', e);
       reponse = 'signature';
     }
