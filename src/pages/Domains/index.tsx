@@ -112,7 +112,7 @@ function SolanaDomains(publicKey) {
       {result.length === 0 ? (
         <BigBanner>
           No Bonfida domains found
-          <BuyDomainLink onClick={() => window.open('https://naming.bonfida.org/search', '_blank')?.focus()}>
+          <BuyDomainLink onClick={() => window.open('https://naming.bonfida.org/', '_blank')?.focus()}>
             Buy Domain
           </BuyDomainLink>
         </BigBanner>
@@ -121,7 +121,7 @@ function SolanaDomains(publicKey) {
           {result.map((item, index) => {
             return <SolanaNameCard key={index} name={item.reverse} />;
           })}
-          <AddDomain onClick={() => window.open('https://naming.bonfida.org/search', '_blank')?.focus()}>
+          <AddDomain onClick={() => window.open('https://naming.bonfida.org/', '_blank')?.focus()}>
             Buy Bonfida
           </AddDomain>
         </StyledDomainsWrapper>
