@@ -268,7 +268,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
                 })}
 
                 <FormGroup>
-                  {formWidgetList.includes(NimiWidgetType.POAP) && (
+                  {formWidgetList.includes(NimiWidgetType.POAP) && activeNetwork === ActiveNetworkState.ETHEREUM && (
                     <PoapButton>
                       <PoapLogo />
                       POAPs
