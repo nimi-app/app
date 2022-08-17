@@ -47,7 +47,6 @@ export interface CreateNimiProps {
   userAddress: string;
   ensName: string;
   ensLabelName: string;
-  provider?: Web3Provider;
 }
 
 export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
@@ -75,7 +74,6 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
   const publicResolverContract = useENSPublicResolverContract();
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPublishingNimi, setIsPublishingNimi] = useState(false);
-  const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
@@ -85,10 +83,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
   console.log('ensName,', ensName);
   // Form state manager
   const useFormContext = useForm<Nimi>({
-    resolver: yupResolver(nimiCard, {
-      stripUnknown: true,
-      abortEarly: false,
-    }),
+    resolver: yupResolver(nimiCard),
     defaultValues: {
       displayName: ensName,
       displayImageUrl: ensMetadata?.image,
@@ -146,36 +141,15 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
       setIsPublishNimiModalOpen(true);
       setIsPublishingNimi(true);
       setPublishNimiError(undefined);
-      setIsNimiPublished(false);
     });
 
     try {
       publishNimiAbortController.current = new AbortController();
 
-      const signature = await provider.getSigner().signMessage(JSON.stringify(data));
+      const { cid } = await publishNimi(data, publishNimiAbortController.current);
 
-      const { cidV1, ipns } = await publishNimiViaIPNS({
-        nimi: data,
-        signature,
-        controller: publishNimiAbortController.current,
-      });
-
-      if (!cidV1) {
-        throw new Error('No CID returned from publishNimiViaIPNS');
-      }
-
-      // Get current content hash from ENS contract
-      const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
-      const contentHash = `ipns://${ipns}`;
-      const newContentHashEncoded = encodeContenthash(contentHash).encoded as unknown as string;
-
-      // User already uses the Nimi IPNS
-      if (newContentHashEncoded === currentContentHashEncoded) {
-        unstable_batchedUpdates(() => {
-          setIsNimiPublished(true);
-          setIsPublishingNimi(false);
-        });
-        return;
+      if (!cid) {
+        throw new Error('No CID returned from publishNimi');
       }
 
       // Set the content
@@ -272,10 +246,11 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
                     id="description"
                     {...register('description')}
                   ></TextArea>
+                  {/* <span  role="textbox" contenteditable  {...register('description')}></span> */}
                 </FormGroup>
 
                 {selectedLinkFieldList.map((link) => {
-                  const label = t(`formLabel.${link.toLowerCase()}`);
+                  const label = t(`formLabel.${link}`);
 
                   return (
                     <LinkFormGroup key={'blockchain-input-' + link}>
@@ -410,7 +385,6 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
           ensName={ensName}
           ipfsHash={publishNimiResponseIpfsHash}
           isPublishing={isPublishingNimi}
-          isPublished={isNimiPublished}
           publishError={publishNimiError}
           solanaSignature={solanaTransaction}
           setContentHashTransaction={setContentHashTransaction}

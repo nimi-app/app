@@ -10,8 +10,7 @@ import { ActiveNetworkState, useActiveNetwork } from '../../context/ActiveNetwor
 import { useSolana } from '../../context/SolanaProvider';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
 export function CreateEthereumNimi() {
-
-  const { account, provider, chainId } = useWeb3React();
+  const { account, chainId } = useWeb3React();
   const { ensName } = useParams();
   const nodeHash = ensNameHash(ensName as string);
 
@@ -32,7 +31,7 @@ export function CreateEthereumNimi() {
     return <div>{error?.message}</div>;
   }
 
-  if (!provider || !SUPPORTED_CHAIN_IDS.includes(chainId as number)) {
+  if (!SUPPORTED_CHAIN_IDS.includes(chainId as number)) {
     return <div>Wrong network</div>;
   }
 
@@ -42,7 +41,6 @@ export function CreateEthereumNimi() {
         userAddress={account as string}
         ensName={data.domain.name as string}
         ensLabelName={data.domain.labelName as string}
-        provider={provider}
       />
     </Container>
   );
