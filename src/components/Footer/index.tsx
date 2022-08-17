@@ -13,9 +13,7 @@ export function Footer() {
       <Container>
         <FooterWrapper>
           <FooterContent>
-            <span>
-              Nimi.eth | <a href="https://amsterdam.ethglobal.com/">ETHAmsterdam 2022 Hackathon</a> winners
-            </span>
+            <span>Nimi.eth | Solana Hackers</span>
           </FooterContent>
           <FooterNav>
             <ExternalLink title="Nimi on Twitter" href="https://twitter.com/0xNimi">

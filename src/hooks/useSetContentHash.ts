@@ -12,7 +12,7 @@ import {
   NameRegistryState,
 } from '@bonfida/spl-name-service';
 
-import { Connection, Transaction } from '@solana/web3.js';
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -58,11 +58,7 @@ export function useSetContentHash(ipfsHash?: string, ensName?: string): UseSetCo
 export async function setBonfidaContentHash(cid: string, connection: Connection, bonfidaDomain: string, publicKey) {
   const record = Buffer.from([1]).toString() + Record.IPFS;
 
-  const { pubkey: recordKey } = await getDomainKey(record + '.' + bonfidaDomain, true);
   const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
-
-  const recordAccInfo = await connection.getAccountInfo(recordKey);
-  console.log(recordAccInfo, 'reccordAccInfo');
 
   const win: typeof global = window;
   const provider = win?.phantom?.solana;
@@ -73,7 +69,7 @@ export async function setBonfidaContentHash(cid: string, connection: Connection,
   transaction.feePayer = publicKey;
   const { blockhash } = await connection.getLatestBlockhash('finalized');
   transaction.recentBlockhash = blockhash;
-
+  console.log('attempting second transaction', transaction);
   const { signature } = await provider.signAndSendTransaction(transaction);
   console.log('SECOND SIGNATURE', signature);
 
@@ -84,12 +80,14 @@ export async function setBonfidaContentHash(cid: string, connection: Connection,
   // return tx;
 }
 
-export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomain: string, publicKey) {
+export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomain: string, publicKey: PublicKey) {
   const record = Buffer.from([1]).toString() + Record.IPFS;
   console.log('bonfida domain', bonfidaDomain);
   console.log('pib', publicKey);
-  const { pubkey: recordKey } = await getDomainKey(record + '.' + bonfidaDomain, true);
+  console.log('');
+  const { pubkey: recordKey } = await getDomainKey(record + bonfidaDomain, true);
   const { pubkey: domainKey } = await getDomainKey(bonfidaDomain);
+  console.log('recordKey', recordKey);
 
   const recordAccInfo = await connection.getAccountInfo(recordKey);
 
@@ -120,6 +118,7 @@ export async function craeteBonfidaRegistry(connection: Connection, bonfidaDomai
 
     const response = await provider.signTransaction(transaction);
     console.log('SIGNATURE!', response);
+
     return response;
     // const tx = await signAndSendInstructions(connection, [], wallet, [ix]);
     // console.log(Created record ${tx});

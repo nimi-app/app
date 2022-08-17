@@ -154,7 +154,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
 
       // Set the content
       setPublishNimiResponseIpfsHash(cid);
-      if (activeNetwork === ActiveNetworkState.SOLANA) {
+      if (activeNetwork === ActiveNetworkState.SOLANA && publicKey) {
         const signature = await craeteBonfidaRegistry(connection, ensName, publicKey);
         console.log('bonfidaContentHash', signature);
         // if (signature) {
@@ -167,7 +167,7 @@ export function CreateNimi({ userAddress, ensName }: CreateNimiProps) {
 
         const recepit = await connection.getSignatureStatus(signature2);
         console.log(recepit);
-        await setTimeout(() => {
+        setTimeout(() => {
           setSolanaTransaction(signature2);
           setIsPublishingNimi(false);
         }, 38000);
