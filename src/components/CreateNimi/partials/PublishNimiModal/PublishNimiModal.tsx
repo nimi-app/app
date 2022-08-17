@@ -46,6 +46,7 @@ const ModalFooter = styled(ModalFooterBase)`
 export interface PublishNimiModalProps {
   cancel: () => void;
   isPublishing: boolean;
+  isPublished: boolean;
   ensName: string;
   ipfsHash: string | undefined;
   publishError: Error | undefined;
@@ -66,6 +67,7 @@ export function PublishNimiModal({
   setContentHashTransaction,
   setContentHashTransactionReceipt,
   solanaSignature,
+  isPublished,
 }: PublishNimiModalProps) {
   const { t } = useTranslation(['common', 'nimi']);
   const { activeNetwork } = useActiveNetwork();
@@ -141,7 +143,9 @@ export function PublishNimiModal({
       </ModalHeader>
       <ModalContent>{modalContent()}</ModalContent>
       <ModalFooter>
-        {(setContentHashTransactionReceipt || publishError) && <Button onClick={cancel}>{t('close')}</Button>}
+        {(setContentHashTransactionReceipt || publishError || isPublished) && (
+          <Button onClick={cancel}>{t('close')}</Button>
+        )}
       </ModalFooter>
     </Modal>
   );
