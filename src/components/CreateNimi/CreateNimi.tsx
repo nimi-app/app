@@ -111,10 +111,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     () => Object.values(NimiBlockchain).filter((blockchain) => formAddressList.includes(blockchain)),
     [formAddressList]
   );
-  const selectedLinkFieldList = useMemo(
-    () => Object.keys(NimiLinkType).filter((link) => formLinkList.includes(link as NimiLinkType)),
-    [formLinkList]
-  );
+  const selectedLinkFieldList = useMemo(() => formLinkList, [formLinkList]);
+  console.log('GARGANTUA', selectedLinkFieldList);
 
   const formWatchPayload = watch();
 
@@ -136,6 +134,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       setPublishNimiError(undefined);
       setIsNimiPublished(false);
     });
+    console.log('data', data);
 
     try {
       if (!publicResolverContract) {
@@ -243,12 +242,17 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   ></TextArea>
                 </FormGroup>
 
-                {selectedLinkFieldList.map((link) => {
+                {selectedLinkFieldList.map((link, index) => {
                   const label = t(`formLabel.${link.toLowerCase()}`);
 
                   return (
-                    <LinkFormGroup key={'blockchain-input-' + link}>
-                      <NimiLinkField key={'link-input' + link} label={label} link={link as NimiLinkType} />
+                    <LinkFormGroup key={'link-input-' + link + index}>
+                      <NimiLinkField
+                        key={'link-input' + link + index}
+                        label={label}
+                        link={link as NimiLinkType}
+                        index={index}
+                      />
                     </LinkFormGroup>
                   );
                 })}
@@ -299,9 +303,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           onSubmit={({ links, blockchainAddresses, widgets }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
+              console.log('formLinkList', formLinkList);
+              console.log('links', links);
               const arrayOfLinkItemsToBeRemoved = formLinkList.filter((item) => !links.includes(item));
+              console.log('arrayOfItems', arrayOfLinkItemsToBeRemoved);
               if (arrayOfLinkItemsToBeRemoved.length > 0) {
                 const formData = getValues('links');
+                console.log('formData', formData);
                 const newArray = formData.filter((item) => !arrayOfLinkItemsToBeRemoved.includes(item.type));
                 if (newArray) setValue('links', newArray);
               }
@@ -333,7 +341,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   return widget;
                 })
               );
-
+              console.log('links', links);
               setFormLinkList(links);
               setFormAddressList(blockchainAddresses);
               setFormWidgetList(widgets);

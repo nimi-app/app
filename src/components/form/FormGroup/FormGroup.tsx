@@ -12,7 +12,7 @@ export const FormGroup = styled.div`
   flex-direction: column;
 `;
 export const LinkFormGroup = styled.div`
-  width: calc(50% - ${gap / 2}px);
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;

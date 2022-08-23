@@ -1,19 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { NimiBlockchain, NimiWidgetType, NimiLinkType } from 'nimi-card';
+import { NimiBlockchain, NimiWidgetType, NimiLinkType, nimiLinkDetailsExtended } from 'nimi-card';
 
 import {
   Modal,
   Header as ModalHeaderBase,
   Content as ModalContentBase,
-  Footer as ModalFooterBase,
   CloseButton as ModalCloseButton,
   Title as ModalTitle,
 } from '../../../Modal';
 import { StyledGridList } from '../../styled';
 import { ChangeEventHandler, useState } from 'react';
-import { Button } from '../../../Button';
 import { Checkbox } from '../../../form';
+import { ButtonGroup } from '../../../form/Button';
+import { renderSVG } from '../../../../utils';
 
 const ModalHeader = styled(ModalHeaderBase)`
   padding: 82px 82px 0 82px;
@@ -22,11 +22,6 @@ const ModalHeader = styled(ModalHeaderBase)`
 
 const ModalContent = styled(ModalContentBase)`
   padding: 50px 82px;
-`;
-
-const ModalFooter = styled(ModalFooterBase)`
-  padding: 0 82px 82px 82px;
-  justify-content: center;
 `;
 
 const SectionWrapper = styled.div`
@@ -93,13 +88,14 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
             {linkTypeTypes.map((link) => {
               const inputId = `modal-checkbox-${link}`;
               const i18nKey = `formLabel.${link.toLowerCase()}`;
-              const checked = linkList.includes(link as NimiLinkType);
-
-              const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+              const logo = nimiLinkDetailsExtended[link].logo && nimiLinkDetailsExtended[link].logo;
+              console.log('logo', logo);
+              const onClick: ChangeEventHandler<HTMLInputElement> = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state
-                const newState: NimiLinkType[] = event.target.checked
-                  ? [...linkList, link as NimiLinkType]
-                  : linkList.filter((item) => item !== (link as NimiLinkType));
+                const newState: NimiLinkType[] = [...linkList, link as NimiLinkType];
+                console.log('newState', newState);
+                console.log('linkList', linkList);
+                console.log('link', link);
 
                 setLinkList(newState);
                 // emit the change event
@@ -108,12 +104,18 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                   blockchainAddresses: addressList,
                   widgets: widgetList,
                 });
+                onSubmit?.({
+                  links: newState,
+                  blockchainAddresses: addressList,
+                  widgets: widgetList,
+                });
               };
 
               return (
-                <Checkbox key={inputId} defaultChecked={checked} id={inputId} name={link} onChange={inputOnChange}>
+                <ButtonGroup key={inputId} id={inputId} onClick={onClick}>
+                  {renderSVG(logo)}
                   {t(i18nKey)}
-                </Checkbox>
+                </ButtonGroup>
               );
             })}
           </StyledGridList>
@@ -188,19 +190,6 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
           </StyledGridList>
         </SectionWrapper>
       </ModalContent>
-      <ModalFooter>
-        <Button
-          onClick={() => {
-            onSubmit?.({
-              links: linkList,
-              blockchainAddresses: addressList,
-              widgets: widgetList,
-            });
-          }}
-        >
-          {t('buttonLabel.addFields')}
-        </Button>
-      </ModalFooter>
     </Modal>
   );
 }

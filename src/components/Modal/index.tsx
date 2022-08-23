@@ -27,7 +27,7 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     borderRadius: '24px',
     textAlign: 'center',
-    width: 'fit-content',
+    maxWidth: '620px',
     height: 'fit-content',
   },
   overlay: { zIndex: 1000 },

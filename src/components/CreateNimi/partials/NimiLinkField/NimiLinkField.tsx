@@ -1,4 +1,4 @@
-import { Nimi, NimiLinkBaseDetails, NimiLinkType, link as linkValidator } from 'nimi-card';
+import { Nimi, NimiLinkBaseDetails, NimiLinkType, link as linkValidator, nimiLinkDetailsExtended } from 'nimi-card';
 import isURL from 'validator/lib/isURL';
 
 import { useFormContext } from 'react-hook-form';
@@ -6,6 +6,7 @@ import { ChangeEventHandler, FocusEventHandler, useState } from 'react';
 
 import { Label } from '../../../form';
 import { StyledInputWrapper, StyledAtField, StyledInput } from './NimiLinkField.styled';
+import { renderSVG } from '../../../../utils';
 
 /**
  * Map NimiLinkType to the correct placeholder text
@@ -29,12 +30,13 @@ const nimiLinkTypePlaceholder: Record<NimiLinkType, string> = {
 export interface NimiLinkFieldProps {
   link: NimiLinkType;
   label: string;
+  index: number;
 }
 
 /**
  * Handles the input for the link type
  */
-export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
+export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
   // Form context
   const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   // Local state for the input value
@@ -43,7 +45,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
   const [isValueValid, setIsValueValid] = useState(true);
 
   const hasAtField = [NimiLinkType.TWITTER, NimiLinkType.INSTAGRAM, NimiLinkType.TELEGRAM].includes(link);
-
+  const logo = nimiLinkDetailsExtended[link].logo;
   // Handle the input change
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     // Extract the value from the event
@@ -82,20 +84,15 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
 
   const handleFormValue = (newValue: string) => {
     const linksPrevState = getFormValues('links') || [];
-    const hasLink = linksPrevState.some((prevLink) => prevLink.type === link);
-    const linksNewState: NimiLinkBaseDetails[] = hasLink
-      ? linksPrevState.map((curr) => {
-          if (curr.type === link) {
-            return { ...curr, content: newValue };
-          }
-          return curr;
-        })
-      : [...linksPrevState, { type: link, label, content: newValue }];
-    setFormValue('links', linksNewState);
+    console.log('currentLink', link);
+    console.log('linksPrevState', linksPrevState);
+
+    linksPrevState[index] = { type: link, label, content: newValue };
+    setFormValue('links', linksPrevState);
   };
 
   /**
-   * @todo - study the commented out code below and see if it can be used instead of the above
+   * @todo - study the commented out code below and see if it can be used instead of the above -> Will do sensei
    */
   // useEffect(() => {
   //   const valuechange = getFormValues('links').find((prevLink) => prevLink.type === link);
@@ -106,7 +103,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
     <>
       <Label htmlFor={link}>{label}</Label>
       <StyledInputWrapper isError={!isValueValid} isInputFocused={isInputFocused}>
-        {hasAtField && <StyledAtField>@</StyledAtField>}
+        {logo && renderSVG(logo)}
         <StyledInput
           onFocus={() => setIsInputFocused(true)}
           onBlur={onBlur}
@@ -114,7 +111,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
           value={value}
           placeholder={nimiLinkTypePlaceholder[link]}
           type="text"
-          id={`nimi-link-input-${link}`}
+          id={`nimi-link-input-${link}${index}`}
         />
       </StyledInputWrapper>
     </>
