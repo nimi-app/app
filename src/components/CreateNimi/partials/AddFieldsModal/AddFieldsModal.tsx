@@ -89,13 +89,10 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
               const inputId = `modal-checkbox-${link}`;
               const i18nKey = `formLabel.${link.toLowerCase()}`;
               const logo = nimiLinkDetailsExtended[link].logo && nimiLinkDetailsExtended[link].logo;
-              console.log('logo', logo);
+
               const onClick: ChangeEventHandler<HTMLInputElement> = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state
                 const newState: NimiLinkType[] = [...linkList, link as NimiLinkType];
-                console.log('newState', newState);
-                console.log('linkList', linkList);
-                console.log('link', link);
 
                 setLinkList(newState);
                 // emit the change event

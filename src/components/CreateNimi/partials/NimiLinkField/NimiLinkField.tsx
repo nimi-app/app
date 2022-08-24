@@ -7,6 +7,7 @@ import { ChangeEventHandler, FocusEventHandler, useState } from 'react';
 import { Label } from '../../../form';
 import { StyledInputWrapper, StyledAtField, StyledInput } from './NimiLinkField.styled';
 import { renderSVG } from '../../../../utils';
+import { Button } from 'rebass';
 
 /**
  * Map NimiLinkType to the correct placeholder text
@@ -44,7 +45,6 @@ export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isValueValid, setIsValueValid] = useState(true);
 
-  const hasAtField = [NimiLinkType.TWITTER, NimiLinkType.INSTAGRAM, NimiLinkType.TELEGRAM].includes(link);
   const logo = nimiLinkDetailsExtended[link].logo;
   // Handle the input change
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -58,7 +58,7 @@ export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
         content: targetValue,
       })
       .then((validatedLink: NimiLinkBaseDetails) => {
-        console.log({ validatedLink });
+        console.log({ validatedLink }, 'shitter');
         handleFormValue(targetValue);
         setIsValueValid(true);
       })
@@ -90,6 +90,15 @@ export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
     linksPrevState[index] = { type: link, label, content: newValue };
     setFormValue('links', linksPrevState);
   };
+  const handleDelete = () => {
+    console.log('delete');
+    const linksPrevState = getFormValues('links') || [];
+    console.log('linksPrevState', linksPrevState);
+    linksPrevState.splice(index, 1);
+    console.log('index', index);
+
+    setFormValue('links', linksPrevState);
+  };
 
   /**
    * @todo - study the commented out code below and see if it can be used instead of the above -> Will do sensei
@@ -114,6 +123,9 @@ export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
           id={`nimi-link-input-${link}${index}`}
         />
       </StyledInputWrapper>
+      <Button type="button" onClick={handleDelete}>
+        Delete
+      </Button>
     </>
   );
 }

@@ -111,10 +111,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     () => Object.values(NimiBlockchain).filter((blockchain) => formAddressList.includes(blockchain)),
     [formAddressList]
   );
-  const selectedLinkFieldList = useMemo(() => formLinkList, [formLinkList]);
-  console.log('GARGANTUA', selectedLinkFieldList);
-
   const formWatchPayload = watch();
+
+  console.log('formWatchPayload', formWatchPayload);
 
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;
@@ -242,15 +241,15 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   ></TextArea>
                 </FormGroup>
 
-                {selectedLinkFieldList.map((link, index) => {
-                  const label = t(`formLabel.${link.toLowerCase()}`);
+                {formWatchPayload.links.map(({ type }, index) => {
+                  const label = t(`formLabel.${type.toLowerCase()}`);
 
                   return (
-                    <LinkFormGroup key={'link-input-' + link + index}>
+                    <LinkFormGroup key={'link-input-' + type + index}>
                       <NimiLinkField
-                        key={'link-input' + link + index}
+                        key={'link-input' + type + index}
                         label={label}
-                        link={link as NimiLinkType}
+                        link={type as NimiLinkType}
                         index={index}
                       />
                     </LinkFormGroup>
@@ -303,16 +302,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           onSubmit={({ links, blockchainAddresses, widgets }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
-              console.log('formLinkList', formLinkList);
-              console.log('links', links);
-              const arrayOfLinkItemsToBeRemoved = formLinkList.filter((item) => !links.includes(item));
-              console.log('arrayOfItems', arrayOfLinkItemsToBeRemoved);
-              if (arrayOfLinkItemsToBeRemoved.length > 0) {
-                const formData = getValues('links');
-                console.log('formData', formData);
-                const newArray = formData.filter((item) => !arrayOfLinkItemsToBeRemoved.includes(item.type));
-                if (newArray) setValue('links', newArray);
-              }
 
               const arrayOfAddressItemsToBeRemoved = formAddressList.filter(
                 (item) => !blockchainAddresses.includes(item)
@@ -342,7 +331,17 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 })
               );
               console.log('links', links);
-              setFormLinkList(links);
+              const linksData = getValues('links');
+
+              let newLinksArray: NimiLinkBaseDetails[] = [];
+              if (linksData.length === 0) {
+                newLinksArray.push({ content: '', title: 'jebac', label: links[0], type: links[0] });
+              } else {
+                newLinksArray = [...linksData, { content: '', label: links[0], type: links[0] }];
+              }
+
+              setValue('links', newLinksArray);
+              // setFormLinkList(links);
               setFormAddressList(blockchainAddresses);
               setFormWidgetList(widgets);
             });
