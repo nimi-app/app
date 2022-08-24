@@ -50,15 +50,16 @@ export function getContract<T = Contract>(address: string, ABI: any, provider: W
  * @param urlString string to be compared against
  * @returns boolean if is valid url
  */
-export const isValidUrl = (urlString) => {
+export function isValidURL(urlString) {
   let url;
   try {
     url = new URL(urlString);
   } catch (e) {
     return false;
   }
+
   return url.protocol === 'http:' || url.protocol === 'https:';
-};
+}
 
 /**
  * Loads a Fathom instance into the page
