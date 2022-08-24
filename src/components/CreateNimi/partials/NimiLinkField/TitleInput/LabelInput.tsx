@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { StyledCross, StyledInputWrapper } from '../NimiLinkField.styled';
 import { ReactComponent as Pen } from '../../../../../assets/svg/pen.svg';
 
-const LabelWrapper = styled.div`
+const TitleWrapper = styled.div`
   margin-bottom: 10px;
 `;
 export const StyledInput = styled.input`
@@ -22,7 +22,7 @@ export const StyledInput = styled.input`
     font-weight: 400;
   }
 `;
-const LabelDisplay = styled.div`
+const TitleDisplay = styled.div`
   color: #8c90a0;
   font-weight: 400;
   display: flex;
@@ -36,48 +36,49 @@ const LabelDisplay = styled.div`
     }
   }
 `;
-const InputWraper = styled.div``;
+
 const StyledPen = styled(Pen)`
   display: none;
   margin-left: 5.67px;
 `;
 
-export interface LabelInputProps {
-  defaultLabel: string;
+export interface TitleInputProps {
+  setTitle: any;
+  title: string;
+  defaultTitle: string;
 }
 
 /**
  * Handles the input for the link type
  */
-export function LabelInput({ defaultLabel }: LabelInputProps) {
-  const [label, setLabel] = useState(defaultLabel);
+export function TitleInput({ title, setTitle, defaultTitle }: TitleInputProps) {
   const [showInput, setShowInput] = useState(false);
   console.log('here');
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     // Extract the value from the event
     const targetValue = event.target.value;
-    setLabel(targetValue);
+    setTitle(targetValue);
     // Vlidate
   };
   return (
-    <LabelWrapper>
+    <TitleWrapper>
       {showInput ? (
         <StyledInputWrapper>
-          <StyledInput placeholder="Custom Title" type="text" onChange={onChange} value={label} />
-          {label.length > 0 && (
+          <StyledInput placeholder="Custom Title" type="text" onChange={onChange} value={title} />
+          {title.length > 0 && (
             <StyledCross
               onClick={() => {
-                setLabel(defaultLabel);
+                setTitle(defaultTitle);
                 setShowInput(false);
               }}
             />
           )}
         </StyledInputWrapper>
       ) : (
-        <LabelDisplay onClick={() => setShowInput(true)}>
-          {label} <StyledPen />
-        </LabelDisplay>
+        <TitleDisplay onClick={() => setShowInput(true)}>
+          {title} <StyledPen />
+        </TitleDisplay>
       )}
-    </LabelWrapper>
+    </TitleWrapper>
   );
 }

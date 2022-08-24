@@ -9,7 +9,7 @@ import { StyledInputWrapper, LinkFieldWrapper, StyledInput, TrashCanStyle, Style
 import { renderSVG } from '../../../../utils';
 
 import { ReactComponent as TrashCan } from '../../../../assets/svg/trashcan.svg';
-import { LabelInput } from './LabelInput';
+import { TitleInput } from './TitleInput';
 
 /**
  * Map NimiLinkType to the correct placeholder text
@@ -40,11 +40,12 @@ export interface NimiLinkFieldProps {
 /**
  * Handles the input for the link type
  */
-export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
+export function NimiLinkField({ link, label: defaultTitle, index }: NimiLinkFieldProps) {
   // Form context
   const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   // Local state for the input value
   const [value, setValue] = useState('');
+  const [title, setTitle] = useState(defaultTitle);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isValueValid, setIsValueValid] = useState(true);
 
@@ -90,7 +91,7 @@ export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
     console.log('currentLink', link);
     console.log('linksPrevState', linksPrevState);
 
-    linksPrevState[index] = { type: link, label, content: newValue };
+    linksPrevState[index] = { type: link, title, content: newValue };
     setFormValue('links', linksPrevState);
   };
   const handleDelete = () => {
@@ -113,7 +114,7 @@ export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
 
   return (
     <LinkFieldWrapper>
-      <LabelInput defaultLabel={label} />
+      <TitleInput setTitle={setTitle} title={title} defaultTitle={defaultTitle} />
       <StyledInputWrapper>
         {logo && renderSVG(logo, 20)}
         <StyledInput
