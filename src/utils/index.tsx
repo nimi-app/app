@@ -84,9 +84,9 @@ export function loadFathom(siteId: string) {
  * @param logo Logo returned from Nimi-Card
  * @returns
  */
-export function renderSVG(logo?: FC<SVGProps<SVGSVGElement>>) {
+export function renderSVG(logo?: FC<SVGProps<SVGSVGElement>>, size = 20) {
   if (!logo) return;
   const Logo = logo;
 
-  return <Logo height={22} width={22} />;
+  return <Logo height={size} width={size} />;
 }

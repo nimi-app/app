@@ -161,3 +161,6 @@ export const PoapButton = styled.div`
   margin-bottom: 28px;
   gap: 12px;
 `;
+export const LinkWrapper = styled.div`
+  width: 100%;
+`;

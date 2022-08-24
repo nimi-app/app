@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
-
+import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
+// import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Nimi, nimiCard, NimiBlockchain, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
@@ -121,6 +122,19 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     setValue('description', lensProfile.description);
     setValue('displayImageUrl', lensProfile?.pictureUrl);
   }, [setValue, lensProfile]);
+
+  const handleDrop = (droppedItem) => {
+    // Ignore drop outside droppable container
+    if (!droppedItem.destination) return;
+    const updatedList = formWatchPayload.links;
+    // Remove dragged item
+    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
+    // Add dropped item
+    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
+    // Update State
+
+    setValue('links', updatedList);
+  };
 
   /**
    * Handle the form submit via ENS contract interaction
@@ -240,12 +254,41 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     {...register('description')}
                   ></TextArea>
                 </FormGroup>
+                {/* <DragDropContext onDragEnd={handleDrop}>
+                  <Droppable droppableId="list-container">
+                    {(provided) => (
+                      <div {...provided.droppableProps} ref={provided.innerRef}>
+                        {formWatchPayload.links.map(({ type }, index) => (
+                          <Draggable key={index} draggableId={index.toString()} index={index}>
+                            {(provided) => (
+                              <LinkFormGroup
+                                {...provided.dragHandleProps}
+                                {...provided.draggableProps}
+                                ref={provided.innerRef}
+                                key={'link-input-' + type + index}
+                              >
+                                <NimiLinkField
+                                  key={'link-input' + type + index}
+                                  label={t(`formLabel.${type.toLowerCase()}`)}
+                                  link={type as NimiLinkType}
+                                  index={index}
+                                />
+                              </LinkFormGroup>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext> */}
 
                 {formWatchPayload.links.map(({ type }, index) => {
                   const label = t(`formLabel.${type.toLowerCase()}`);
 
                   return (
                     <LinkFormGroup key={'link-input-' + type + index}>
+                      <DragDots />
                       <NimiLinkField
                         key={'link-input' + type + index}
                         label={label}

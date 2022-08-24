@@ -14,5 +14,10 @@ export const FormGroup = styled.div`
 export const LinkFormGroup = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  background: #f1f1f1;
+  flex-direction: row;
+  padding: 15px;
+  border-radius: 12px;
+  align-items: center;
+  gap: 12px;
 `;

@@ -5,9 +5,11 @@ import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler, FocusEventHandler, useState } from 'react';
 
 import { Label } from '../../../form';
-import { StyledInputWrapper, StyledAtField, StyledInput } from './NimiLinkField.styled';
+import { StyledInputWrapper, LinkFieldWrapper, StyledInput, TrashCanStyle, StyledCross } from './NimiLinkField.styled';
 import { renderSVG } from '../../../../utils';
-import { Button } from 'rebass';
+
+import { ReactComponent as TrashCan } from '../../../../assets/svg/trashcan.svg';
+import { LabelInput } from './LabelInput';
 
 /**
  * Map NimiLinkType to the correct placeholder text
@@ -32,6 +34,7 @@ export interface NimiLinkFieldProps {
   link: NimiLinkType;
   label: string;
   index: number;
+  key: string;
 }
 
 /**
@@ -109,10 +112,10 @@ export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
   // }, [getFormValues, link, value]);
 
   return (
-    <>
-      <Label htmlFor={link}>{label}</Label>
-      <StyledInputWrapper isError={!isValueValid} isInputFocused={isInputFocused}>
-        {logo && renderSVG(logo)}
+    <LinkFieldWrapper>
+      <LabelInput defaultLabel={label} />
+      <StyledInputWrapper>
+        {logo && renderSVG(logo, 20)}
         <StyledInput
           onFocus={() => setIsInputFocused(true)}
           onBlur={onBlur}
@@ -122,10 +125,11 @@ export function NimiLinkField({ link, label, index }: NimiLinkFieldProps) {
           type="text"
           id={`nimi-link-input-${link}${index}`}
         />
+        {value.length > 0 && <StyledCross onClick={() => setValue('')} />}
+        <TrashCanStyle onClick={handleDelete}>
+          <TrashCan />
+        </TrashCanStyle>
       </StyledInputWrapper>
-      <Button type="button" onClick={handleDelete}>
-        Delete
-      </Button>
-    </>
+    </LinkFieldWrapper>
   );
 }

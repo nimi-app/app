@@ -6,6 +6,7 @@
     "@apollo/client": "^3.5.10",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ensdomains/ui": "^3.4.1",
+    "@hello-pangea/dnd": "^15.0.0",
     "@hookform/resolvers": "^2.8.10",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
