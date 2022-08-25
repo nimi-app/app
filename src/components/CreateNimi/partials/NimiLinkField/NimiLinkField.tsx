@@ -32,19 +32,20 @@ const nimiLinkTypePlaceholder: Record<NimiLinkType, string> = {
 
 export interface NimiLinkFieldProps {
   link: NimiLinkType;
-  label: string;
+  title: string;
   index: number;
   key: string;
+  content: string;
 }
 
 /**
  * Handles the input for the link type
  */
-export function NimiLinkField({ link, label: defaultTitle, index }: NimiLinkFieldProps) {
+export function NimiLinkField({ link, title: defaultTitle, index, content: defaultContent }: NimiLinkFieldProps) {
   // Form context
   const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   // Local state for the input value
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(defaultContent);
   const [title, setTitle] = useState(defaultTitle);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isValueValid, setIsValueValid] = useState(true);
@@ -62,7 +63,7 @@ export function NimiLinkField({ link, label: defaultTitle, index }: NimiLinkFiel
         content: targetValue,
       })
       .then((validatedLink: NimiLinkBaseDetails) => {
-        console.log({ validatedLink }, 'shitter');
+        console.log({ validatedLink });
         handleFormValue(targetValue);
         setIsValueValid(true);
       })
@@ -114,7 +115,7 @@ export function NimiLinkField({ link, label: defaultTitle, index }: NimiLinkFiel
 
   return (
     <LinkFieldWrapper>
-      <TitleInput setTitle={setTitle} title={title} defaultTitle={defaultTitle} />
+      <TitleInput setTitle={setTitle} title={title} defaultTitle={defaultTitle} index={index} />
       <StyledInputWrapper>
         {logo && renderSVG(logo, 20)}
         <StyledInput

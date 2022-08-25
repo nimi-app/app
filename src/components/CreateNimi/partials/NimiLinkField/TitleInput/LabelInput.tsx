@@ -2,6 +2,8 @@ import { useState, ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 import { StyledCross, StyledInputWrapper } from '../NimiLinkField.styled';
 import { ReactComponent as Pen } from '../../../../../assets/svg/pen.svg';
+import { useFormContext } from 'react-hook-form';
+import { Nimi, NimiLinkBaseDetails } from 'nimi-card';
 
 const TitleWrapper = styled.div`
   margin-bottom: 10px;
@@ -46,19 +48,28 @@ export interface TitleInputProps {
   setTitle: any;
   title: string;
   defaultTitle: string;
+  index: number;
 }
 
 /**
  * Handles the input for the link type
  */
-export function TitleInput({ title, setTitle, defaultTitle }: TitleInputProps) {
+export function TitleInput({ title, setTitle, defaultTitle, index }: TitleInputProps) {
   const [showInput, setShowInput] = useState(false);
+  const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   console.log('here');
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     // Extract the value from the event
     const targetValue = event.target.value;
     setTitle(targetValue);
     // Vlidate
+
+    const linksPrevState = getFormValues('links') || [];
+
+    console.log('linksPrevState', linksPrevState);
+    const currentState = linksPrevState[index] as NimiLinkBaseDetails;
+    linksPrevState[index] = { type: currentState.type, title: targetValue, content: currentState.content };
+    setFormValue('links', linksPrevState);
   };
   return (
     <TitleWrapper>

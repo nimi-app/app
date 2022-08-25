@@ -42,6 +42,7 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
+import styled from 'styled-components';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -49,6 +50,24 @@ export interface CreateNimiProps {
   ensLabelName: string;
   provider: Web3Provider;
 }
+
+// const StyledDraggable = styled(Draggable)`
+//   top: auto !important;
+//   left: auto !important;
+//   &.drag {
+//     top: auto !important;
+//     left: auto !important;
+//   }
+//   &.draggable {
+//     top: auto !important;
+//     left: auto !important;
+//   }
+
+//   [data-rfd-draggable-id] {
+//     left: auto !important;
+//     top: auto !important;
+//   }
+// `;
 
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   /**
@@ -123,18 +142,18 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     setValue('displayImageUrl', lensProfile?.pictureUrl);
   }, [setValue, lensProfile]);
 
-  const handleDrop = (droppedItem) => {
-    // Ignore drop outside droppable container
-    if (!droppedItem.destination) return;
-    const updatedList = formWatchPayload.links;
-    // Remove dragged item
-    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-    // Add dropped item
-    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-    // Update State
+  // const handleDrop = (droppedItem) => {
+  //   // Ignore drop outside droppable container
+  //   if (!droppedItem.destination) return;
+  //   const updatedList = formWatchPayload.links;
+  //   // Remove dragged item
+  //   const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
+  //   // Add dropped item
+  //   updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
+  //   // Update State
 
-    setValue('links', updatedList);
-  };
+  //   setValue('links', updatedList);
+  // };
 
   /**
    * Handle the form submit via ENS contract interaction
@@ -254,50 +273,59 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     {...register('description')}
                   ></TextArea>
                 </FormGroup>
-                {/* <DragDropContext onDragEnd={handleDrop}>
+                {/* drag and drop with laggy offset */}
+                {/*               
+                <DragDropContext onDragEnd={handleDrop}>
                   <Droppable droppableId="list-container">
                     {(provided) => (
-                      <div {...provided.droppableProps} ref={provided.innerRef}>
-                        {formWatchPayload.links.map(({ type }, index) => (
-                          <Draggable key={index} draggableId={index.toString()} index={index}>
-                            {(provided) => (
-                              <LinkFormGroup
-                                {...provided.dragHandleProps}
-                                {...provided.draggableProps}
-                                ref={provided.innerRef}
-                                key={'link-input-' + type + index}
-                              >
-                                <NimiLinkField
-                                  key={'link-input' + type + index}
-                                  label={t(`formLabel.${type.toLowerCase()}`)}
-                                  link={type as NimiLinkType}
-                                  index={index}
-                                />
-                              </LinkFormGroup>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
+                      <div style={{ width: '100%' }} {...provided.droppableProps} ref={provided.innerRef}>
+                        {formWatchPayload.links.map(({ type, content }, index) => {
+                          const label = t(`formLabel.${type.toLowerCase()}`);
+
+                          return (
+                            <StyledDraggable key={index.toString() + type} draggableId={index.toString()} index={index}>
+                              {(provided) => (
+                                <LinkFormGroup
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  key={'link-input-' + type + index}
+                                >
+                                  <DragDots />
+                                  <NimiLinkField
+                                    key={'link-input' + type + index}
+                                    label={label}
+                                    link={type as NimiLinkType}
+                                    index={index}
+                                    content={content}
+                                  />
+                                </LinkFormGroup>
+                              )}
+                            </StyledDraggable>
+                          );
+                        })}
                       </div>
                     )}
                   </Droppable>
                 </DragDropContext> */}
 
-                {formWatchPayload.links.map(({ type }, index) => {
-                  const label = t(`formLabel.${type.toLowerCase()}`);
+                {formWatchPayload.links.map(({ type, content }, index) => {
+                  const title = t(`formLabel.${type.toLowerCase()}`);
 
                   return (
                     <LinkFormGroup key={'link-input-' + type + index}>
                       <DragDots />
                       <NimiLinkField
                         key={'link-input' + type + index}
-                        label={label}
+                        title={title}
                         link={type as NimiLinkType}
                         index={index}
+                        content={content}
                       />
                     </LinkFormGroup>
                   );
                 })}
+
                 {selectedBlockchainAddressFieldList.map((blockchain) => {
                   const label = t(`formLabel.${blockchain.toLowerCase()}`);
 
