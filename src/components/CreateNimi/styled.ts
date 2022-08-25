@@ -80,6 +80,12 @@ export const StyledGridList = styled.div`
   grid-row-gap: 0px;
 `;
 
+export const StyledFlexList = styled.div`
+  display: flex;
+  gap: 28px 16px;
+  flex-wrap: wrap;
+`;
+
 export const PageSectionTitle = styled.h1`
   ${NimiSignatureColor}
   font-size: 36px;

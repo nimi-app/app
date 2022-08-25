@@ -9,6 +9,7 @@ import {
   StyledModalInnerWrapper,
   StyledModalOutterWrapper,
   StyledCloseModalButton,
+  ModalSubTitle,
 } from './styled';
 // Export the three main modal elements
 export {
@@ -17,6 +18,7 @@ export {
   StyledModalContent as Content,
   StyledCloseModalButton as CloseButton,
   StyledModalTitle as Title,
+  ModalSubTitle,
 } from './styled';
 
 const customStyles = {

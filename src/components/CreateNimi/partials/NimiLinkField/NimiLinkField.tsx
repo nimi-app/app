@@ -4,31 +4,12 @@ import isURL from 'validator/lib/isURL';
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler, FocusEventHandler, useState } from 'react';
 
-import { Label } from '../../../form';
 import { StyledInputWrapper, LinkFieldWrapper, StyledInput, TrashCanStyle, StyledCross } from './NimiLinkField.styled';
 import { renderSVG } from '../../../../utils';
 
 import { ReactComponent as TrashCan } from '../../../../assets/svg/trashcan.svg';
 import { TitleInput } from './TitleInput';
-
-/**
- * Map NimiLinkType to the correct placeholder text
- */
-const nimiLinkTypePlaceholder: Record<NimiLinkType, string> = {
-  [NimiLinkType.URL]: 'https://nimi.eth.limo',
-  [NimiLinkType.EMAIL]: 'email@email.com',
-  [NimiLinkType.TWITTER]: '0xNimi',
-  [NimiLinkType.INSTAGRAM]: '0xNimi',
-  [NimiLinkType.TELEGRAM]: 'NimiEth',
-  [NimiLinkType.GITHUB]: 'nimi-app',
-  [NimiLinkType.MEDIUM]: '0xNimi',
-  [NimiLinkType.REDDIT]: '0xNimi',
-  [NimiLinkType.LENSTER]: 'nimi.lens',
-  [NimiLinkType.DISCORD]: 'nimi#0001',
-  [NimiLinkType.YOUTUBE_CHANNEL]: 'Username',
-  [NimiLinkType.LINKEDIN]: 'Username',
-  [NimiLinkType.TWITCH]: 'Twitch Username',
-};
+import { nimiLinkTypePlaceholder } from '../../../../constants';
 
 export interface NimiLinkFieldProps {
   link: NimiLinkType;
@@ -62,8 +43,8 @@ export function NimiLinkField({ link, title: defaultTitle, index, content: defau
         type: link,
         content: targetValue,
       })
-      .then((validatedLink: NimiLinkBaseDetails) => {
-        console.log({ validatedLink });
+      .then((value: NimiLinkBaseDetails) => {
+        console.log({ value });
         handleFormValue(targetValue);
         setIsValueValid(true);
       })

@@ -8,8 +8,9 @@ import {
   Content as ModalContentBase,
   CloseButton as ModalCloseButton,
   Title as ModalTitle,
+  ModalSubTitle,
 } from '../../../Modal';
-import { StyledGridList } from '../../styled';
+import { StyledGridList, StyledFlexList } from '../../styled';
 import { ChangeEventHandler, useState } from 'react';
 import { Checkbox } from '../../../form';
 import { ButtonGroup } from '../../../form/Button';
@@ -75,16 +76,16 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
   const [widgetList, setWidgetList] = useState<NimiWidgetType[]>(initialValues.widgets);
 
   return (
-    <Modal>
+    <Modal maxWidth={'620px'}>
       <ModalHeader>
         <ModalCloseButton role="button" onClick={() => onClose?.()} />
         <ModalTitle>{t('addFieldsModal.title')}</ModalTitle>
-        <small>{t('addFieldsModal.description')}</small>
+        <ModalSubTitle>{t('addFieldsModal.description')}</ModalSubTitle>
       </ModalHeader>
       <ModalContent>
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.socials')}</SectionTitle>
-          <StyledGridList>
+          <StyledFlexList>
             {linkTypeTypes.map((link) => {
               const inputId = `modal-checkbox-${link}`;
               const i18nKey = `formLabel.${link.toLowerCase()}`;
@@ -115,7 +116,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                 </ButtonGroup>
               );
             })}
-          </StyledGridList>
+          </StyledFlexList>
         </SectionWrapper>
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.addreses')}</SectionTitle>
