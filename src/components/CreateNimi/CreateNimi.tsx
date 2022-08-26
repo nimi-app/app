@@ -43,6 +43,7 @@ import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import styled from 'styled-components';
+import { uniqueIdGenerator } from '../../utils';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -121,7 +122,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
 
   // Manages the links blockchain address list
-  const [formLinkList, setFormLinkList] = useState<NimiLinkType[]>([]);
+  const [formLinkList, setFormLinkList] = useState<{ type: NimiLinkType; id: string }[]>([]);
   const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
   const [formWidgetList, setFormWidgetList] = useState<NimiWidgetType[]>([NimiWidgetType.POAP]);
   // To keep the same order of links and addresses, compute
@@ -131,6 +132,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     () => Object.values(NimiBlockchain).filter((blockchain) => formAddressList.includes(blockchain)),
     [formAddressList]
   );
+  console.log('formLinkListOrigi', formLinkList);
+
   const formWatchPayload = watch();
 
   console.log('formWatchPayload', formWatchPayload);
@@ -309,18 +312,21 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   </Droppable>
                 </DragDropContext> */}
 
-                {formWatchPayload.links.map(({ type, content }, index) => {
+                {formLinkList.map(({ type, id }, index) => {
                   const title = t(`formLabel.${type.toLowerCase()}`);
-
+                  console.log(id);
+                  console.log('type', type);
                   return (
                     <LinkFormGroup key={'link-input-' + type + index}>
                       <DragDots />
                       <NimiLinkField
-                        key={'link-input' + type + index}
+                        setFormLinkList={setFormLinkList}
+                        formLinkList={formLinkList}
+                        key={id}
+                        id={id}
                         title={title}
                         link={type as NimiLinkType}
                         index={index}
-                        content={content}
                       />
                     </LinkFormGroup>
                   );
@@ -402,17 +408,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 })
               );
               console.log('links', links);
-              const linksData = getValues('links');
 
-              let newLinksArray: NimiLinkBaseDetails[] = [];
-              if (linksData.length === 0) {
-                newLinksArray.push({ content: '', title: 'jebac', label: links[0], type: links[0] });
-              } else {
-                newLinksArray = [...linksData, { content: '', label: links[0], type: links[0] }];
-              }
-
-              setValue('links', newLinksArray);
-              // setFormLinkList(links);
+              setFormLinkList(links);
               setFormAddressList(blockchainAddresses);
               setFormWidgetList(widgets);
             });
@@ -431,23 +428,15 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               setValue('displayImageUrl', data.profileImageUrl);
 
               // Handle Twitter
-              const hasTwitter = formLinkList.some((element) => element === NimiLinkType.TWITTER);
-              if (!hasTwitter) {
-                setFormLinkList([...formLinkList, NimiLinkType.TWITTER]);
-              }
+
+              setFormLinkList([...formLinkList, { type: NimiLinkType.TWITTER, id: uniqueIdGenerator() }]);
 
               const prevLinkState = getValues('links') || [];
 
-              const hasLink = prevLinkState.some((prevLink) => prevLink.type === NimiLinkType.TWITTER);
-              const newState: NimiLinkBaseDetails[] = hasLink
-                ? prevLinkState.map((curr) => {
-                    if (curr.type === NimiLinkType.TWITTER) {
-                      return { ...curr, content: data.username };
-                    }
-
-                    return curr;
-                  })
-                : [...prevLinkState, { type: NimiLinkType.TWITTER, label, content: data.username }];
+              const newState: NimiLinkBaseDetails[] = [
+                ...prevLinkState,
+                { type: NimiLinkType.TWITTER, label, content: data.username },
+              ];
 
               setValue('links', newState);
 

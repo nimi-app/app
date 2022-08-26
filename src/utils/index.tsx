@@ -90,3 +90,11 @@ export function renderSVG(logo?: FC<SVGProps<SVGSVGElement>>, size = 20) {
 
   return <Logo height={size} width={size} />;
 }
+
+/**
+ * Returns unique id linked to millisceonds
+ * @returns
+ */
+export function uniqueIdGenerator() {
+  return Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36);
+}

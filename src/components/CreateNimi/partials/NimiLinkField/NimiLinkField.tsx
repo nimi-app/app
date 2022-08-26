@@ -16,17 +16,26 @@ export interface NimiLinkFieldProps {
   title: string;
   index: number;
   key: string;
-  content: string;
+  setFormLinkList: any;
+  formLinkList: any;
+  id: string;
 }
 
 /**
  * Handles the input for the link type
  */
-export function NimiLinkField({ link, title: defaultTitle, index, content: defaultContent }: NimiLinkFieldProps) {
+export function NimiLinkField({
+  link,
+  title: defaultTitle,
+  index,
+  setFormLinkList,
+  id: LinkId,
+  formLinkList,
+}: NimiLinkFieldProps) {
   // Form context
   const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   // Local state for the input value
-  const [value, setValue] = useState(defaultContent);
+  const [value, setValue] = useState('');
   const [title, setTitle] = useState(defaultTitle);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isValueValid, setIsValueValid] = useState(true);
@@ -77,13 +86,21 @@ export function NimiLinkField({ link, title: defaultTitle, index, content: defau
     setFormValue('links', linksPrevState);
   };
   const handleDelete = () => {
-    console.log('delete');
-    const linksPrevState = getFormValues('links') || [];
-    console.log('linksPrevState', linksPrevState);
-    linksPrevState.splice(index, 1);
     console.log('index', index);
+    console.log('id', LinkId);
+    const oldArray = [...formLinkList];
+    const indexFinder = formLinkList.findIndex(({ id }) => id === LinkId);
+    console.log('indexFinder', indexFinder);
+    console.log('formListNefore', ...formLinkList);
+    oldArray.splice(indexFinder, 1);
+    if (formLinkList.length === 1) setFormLinkList([]);
+    else setFormLinkList(oldArray);
 
-    setFormValue('links', linksPrevState);
+    if (isValueValid) {
+      const linksPrevState = getFormValues('links') || [];
+      linksPrevState.splice(indexFinder, 1);
+      setFormValue('links', linksPrevState);
+    }
   };
 
   /**

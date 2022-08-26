@@ -14,7 +14,7 @@ import { StyledGridList, StyledFlexList } from '../../styled';
 import { ChangeEventHandler, useState } from 'react';
 import { Checkbox } from '../../../form';
 import { ButtonGroup } from '../../../form/Button';
-import { renderSVG } from '../../../../utils';
+import { renderSVG, uniqueIdGenerator } from '../../../../utils';
 
 const ModalHeader = styled(ModalHeaderBase)`
   padding: 82px 82px 0 82px;
@@ -38,7 +38,7 @@ const SectionTitle = styled.h2`
 `;
 
 interface AddFieldsOptions {
-  links: NimiLinkType[];
+  links: { type: NimiLinkType; id: string }[];
   blockchainAddresses: NimiBlockchain[];
   widgets: NimiWidgetType[];
 }
@@ -71,7 +71,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
 
   // An internal state to keep track of the current selected link type
   // Manages the links blockchain address list
-  const [linkList, setLinkList] = useState<NimiLinkType[]>(initialValues.links);
+  const [linkList, setLinkList] = useState<{ type: NimiLinkType; id: string }[]>(initialValues.links);
   const [addressList, setAddressList] = useState<NimiBlockchain[]>(initialValues.blockchainAddresses);
   const [widgetList, setWidgetList] = useState<NimiWidgetType[]>(initialValues.widgets);
 
@@ -93,7 +93,10 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
 
               const onClick: ChangeEventHandler<HTMLInputElement> = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state
-                const newState: NimiLinkType[] = [...linkList, link as NimiLinkType];
+                const newState: { type: NimiLinkType; id: string }[] = [
+                  ...linkList,
+                  { type: link, id: uniqueIdGenerator() } as { type: NimiLinkType; id: string },
+                ];
 
                 setLinkList(newState);
                 // emit the change event
