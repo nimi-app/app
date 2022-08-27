@@ -22,7 +22,7 @@ export interface NimiLinkFieldProps {
 /**
  * Handles the input for the link type
  */
-export function NimiLinkField({ link, index, content: defaultContent }: NimiLinkFieldProps) {
+export function NimiLinkField({ link, index, content: defaultContent, title: defaultTitle }: NimiLinkFieldProps) {
   // Form context
   const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   // Local state for the input value
@@ -99,7 +99,7 @@ export function NimiLinkField({ link, index, content: defaultContent }: NimiLink
 
   return (
     <LinkFieldWrapper>
-      <TitleInput setTitle={setTitle} title={title} index={index} />
+      <TitleInput setTitle={setTitle} title={title} index={index} defaultTitle={defaultTitle} />
       <StyledInputWrapper>
         {logo && renderSVG(logo, 20)}
         <StyledInput
