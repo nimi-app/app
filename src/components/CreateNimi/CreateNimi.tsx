@@ -6,7 +6,7 @@ import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
-// import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Nimi, nimiCard, NimiBlockchain, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
@@ -52,23 +52,23 @@ export interface CreateNimiProps {
   provider: Web3Provider;
 }
 
-// const StyledDraggable = styled(Draggable)`
-//   top: auto !important;
-//   left: auto !important;
-//   &.drag {
-//     top: auto !important;
-//     left: auto !important;
-//   }
-//   &.draggable {
-//     top: auto !important;
-//     left: auto !important;
-//   }
+const StyledDraggable = styled(Draggable)`
+  top: auto !important;
+  left: auto !important;
+  &.drag {
+    top: auto !important;
+    left: auto !important;
+  }
+  &.draggable {
+    top: auto !important;
+    left: auto !important;
+  }
 
-//   [data-rfd-draggable-id] {
-//     left: auto !important;
-//     top: auto !important;
-//   }
-// `;
+  [data-rfd-draggable-id] {
+    left: auto !important;
+    top: auto !important;
+  }
+`;
 
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   /**
@@ -145,18 +145,26 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     setValue('displayImageUrl', lensProfile?.pictureUrl);
   }, [setValue, lensProfile]);
 
-  // const handleDrop = (droppedItem) => {
-  //   // Ignore drop outside droppable container
-  //   if (!droppedItem.destination) return;
-  //   const updatedList = formWatchPayload.links;
-  //   // Remove dragged item
-  //   const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-  //   // Add dropped item
-  //   updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-  //   // Update State
+  const handleDrop = (droppedItem) => {
+    // Ignore drop outside droppable container
+    if (!droppedItem.destination) return;
+    const newList = [...formLinkList];
+    let updatedList = formWatchPayload.links;
+    // Remove dragged item
+    const [linkItemReordered] = newList.splice(droppedItem.source.index, 1);
+    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
+    // Add dropped item
 
-  //   setValue('links', updatedList);
-  // };
+    newList.splice(droppedItem.destination.index, 0, linkItemReordered);
+    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
+
+    // Update State
+    updatedList.filter((item) => item !== undefined);
+    if (!updatedList[0]) updatedList = [];
+    console.log('updatedList', updatedList);
+    setFormLinkList(newList);
+    setValue('links', updatedList);
+  };
 
   /**
    * Handle the form submit via ENS contract interaction
@@ -277,13 +285,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   ></TextArea>
                 </FormGroup>
                 {/* drag and drop with laggy offset */}
-                {/*               
+
                 <DragDropContext onDragEnd={handleDrop}>
                   <Droppable droppableId="list-container">
                     {(provided) => (
                       <div style={{ width: '100%' }} {...provided.droppableProps} ref={provided.innerRef}>
-                        {formWatchPayload.links.map(({ type, content }, index) => {
-                          const label = t(`formLabel.${type.toLowerCase()}`);
+                        {formLinkList.map(({ type, id }, index) => {
+                          const title = t(`formLabel.${type.toLowerCase()}`);
 
                           return (
                             <StyledDraggable key={index.toString() + type} draggableId={index.toString()} index={index}>
@@ -296,11 +304,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                                 >
                                   <DragDots />
                                   <NimiLinkField
-                                    key={'link-input' + type + index}
-                                    label={label}
+                                    setFormLinkList={setFormLinkList}
+                                    formLinkList={formLinkList}
+                                    key={id}
+                                    id={id}
+                                    title={title}
                                     link={type as NimiLinkType}
                                     index={index}
-                                    content={content}
                                   />
                                 </LinkFormGroup>
                               )}
@@ -310,7 +320,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                       </div>
                     )}
                   </Droppable>
-                </DragDropContext> */}
+                </DragDropContext>
 
                 {formLinkList.map(({ type, id }, index) => {
                   const title = t(`formLabel.${type.toLowerCase()}`);

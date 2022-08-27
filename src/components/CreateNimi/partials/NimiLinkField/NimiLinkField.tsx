@@ -38,7 +38,7 @@ export function NimiLinkField({
   const [value, setValue] = useState('');
   const [title, setTitle] = useState(defaultTitle);
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const [isValueValid, setIsValueValid] = useState(true);
+  const [isValueValid, setIsValueValid] = useState(false);
 
   const logo = nimiLinkDetailsExtended[link].logo;
   // Handle the input change
@@ -99,6 +99,7 @@ export function NimiLinkField({
     if (isValueValid) {
       const linksPrevState = getFormValues('links') || [];
       linksPrevState.splice(indexFinder, 1);
+      console.log('validValue', ...linksPrevState);
       setFormValue('links', linksPrevState);
     }
   };
