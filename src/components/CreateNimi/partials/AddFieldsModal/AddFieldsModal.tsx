@@ -10,7 +10,7 @@ import {
   Title as ModalTitle,
   ModalSubTitle,
 } from '../../../Modal';
-import { StyledGridList } from '../../styled';
+import { StyledFlexList, StyledGridList } from '../../styled';
 import { ChangeEventHandler, useState } from 'react';
 import { Checkbox } from '../../../form';
 
@@ -133,7 +133,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
         <LinksSection title={'portfolio'} sectionLinks={PortfolioSectionLinks} onChange={onLinksChange} />
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.addreses')}</SectionTitle>
-          <StyledGridList>
+          <StyledFlexList>
             {Object.values(NimiBlockchain).map((blockchain) => {
               const inputId = `modal-checkbox-${blockchain}`;
               const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
@@ -163,7 +163,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                 </ButtonGroup>
               );
             })}
-          </StyledGridList>
+          </StyledFlexList>
         </SectionWrapper>
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.nfts')}</SectionTitle>
