@@ -1,4 +1,4 @@
-import { Nimi, NimiLinkBaseDetails, NimiLinkType, link as linkValidator, nimiLinkDetailsExtended } from 'nimi-card';
+import { Nimi, NimiLinkBaseDetails, NimiLinkType, links, nimiLinkDetailsExtended } from 'nimi-card';
 import isURL from 'validator/lib/isURL';
 
 import { useFormContext } from 'react-hook-form';
@@ -38,15 +38,17 @@ export function NimiLinkField({ link, title: defaultTitle, index, content: defau
     const targetValue = event.target.value;
     setValue(targetValue);
     // Vlidate
-    linkValidator
-      .validate({
+    links
+      .isValid({
         type: link,
         content: targetValue,
       })
-      .then((value: NimiLinkBaseDetails) => {
+      .then((isGut) => {
         console.log({ value });
-        handleFormValue(targetValue);
-        setIsValueValid(true);
+        console.log('isValidShit', isGut);
+        if (isGut) handleFormValue(targetValue);
+
+        setIsValueValid(isGut);
       })
       .catch(() => setIsValueValid(false));
   };

@@ -7,7 +7,15 @@ import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
 // import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { Nimi, nimiCard, NimiBlockchain, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
+import {
+  Nimi,
+  nimiCard,
+  NimiBlockchain,
+  NimiLinkType,
+  NimiLinkBaseDetails,
+  NimiWidgetType,
+  NimiBlockchainAddress,
+} from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -326,7 +334,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   );
                 })}
 
-                {selectedBlockchainAddressFieldList.map((blockchain) => {
+                {formWatchPayload.addresses.map(({ blockchain }) => {
                   const label = t(`formLabel.${blockchain.toLowerCase()}`);
 
                   return (
@@ -374,15 +382,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
 
-              const arrayOfAddressItemsToBeRemoved = formAddressList.filter(
-                (item) => !blockchainAddresses.includes(item)
-              );
-              if (arrayOfAddressItemsToBeRemoved.length > 0) {
-                const formData = getValues('addresses');
-                const newArray = formData.filter((item) => !arrayOfAddressItemsToBeRemoved.includes(item.blockchain));
-                if (newArray) setValue('addresses', newArray);
-              }
-
               // const arrayOfWidgetsItemsToBeRemoved = formWidgetList.filter((item) => !nimiWidgetList.includes(item));
               // if (arrayOfWidgetsItemsToBeRemoved.length > 0) {
               //   const formData = getValues('widgets');
@@ -405,15 +404,28 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               const linksData = getValues('links');
 
               let newLinksArray: NimiLinkBaseDetails[] = [];
-              if (linksData.length === 0) {
-                newLinksArray.push({ content: '', title: 'jebac', label: links[0], type: links[0] });
+              if (links.length == 0) {
+                newLinksArray = [...linksData];
+              } else if (linksData.length === 0) {
+                newLinksArray.push({ content: '', title: '', type: links[0] });
               } else {
-                newLinksArray = [...linksData, { content: '', label: links[0], type: links[0] }];
+                newLinksArray = [...linksData, { content: '', type: links[0] }];
+              }
+              console.log('newLinksArray', newLinksArray);
+              const currentAddresses = getValues('addresses');
+              let newAddressesArray: NimiBlockchainAddress[] = [];
+              if (blockchainAddresses.length === 0) {
+                newAddressesArray = [...currentAddresses];
+              } else if (currentAddresses.length === 0) {
+                newAddressesArray.push({ blockchain: blockchainAddresses[0], address: '' });
+              } else {
+                newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresses[0], address: '' }];
               }
 
               setValue('links', newLinksArray);
               // setFormLinkList(links);
-              setFormAddressList(blockchainAddresses);
+              setValue('addresses', newAddressesArray);
+
               setFormWidgetList(widgets);
             });
           }}

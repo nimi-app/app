@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { NimiBlockchain, NimiWidgetType, NimiLinkType, nimiLinkDetailsExtended } from 'nimi-card';
+import { NimiBlockchain, NimiWidgetType, NimiLinkType, NIMI_BLOCKCHAIN_LOGO_URL } from 'nimi-card';
 
 import {
   Modal,
@@ -10,9 +10,11 @@ import {
   Title as ModalTitle,
   ModalSubTitle,
 } from '../../../Modal';
-import { StyledGridList, StyledFlexList } from '../../styled';
+import { StyledGridList } from '../../styled';
 import { ChangeEventHandler, useState } from 'react';
 import { Checkbox } from '../../../form';
+
+import { LinksSection } from './LinksSection';
 import { ButtonGroup } from '../../../form/Button';
 import { renderSVG } from '../../../../utils';
 
@@ -34,7 +36,7 @@ const SectionWrapper = styled.div`
 
 const SectionTitle = styled.h2`
   color: #4e5d78;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 `;
 
 interface AddFieldsOptions {
@@ -51,7 +53,35 @@ export interface AddFieldsModalProps {
 }
 
 const nimiWidgetTypes = Object.keys(NimiWidgetType);
-const linkTypeTypes = Object.keys(NimiLinkType);
+
+const ProfileSectionLinks = [NimiLinkType.URL, NimiLinkType.EMAIL, NimiLinkType.TELEGRAM];
+const ContactsSectionLinks = [
+  NimiLinkType.WHATSAPP,
+  NimiLinkType.DISCORD,
+  NimiLinkType.MESSANGER,
+  NimiLinkType.WECHAT,
+  NimiLinkType.DISCORD,
+  NimiLinkType.KEYBASE,
+];
+const SocialsSectionLinks = [
+  NimiLinkType.TWITTER,
+  NimiLinkType.LENSTER,
+  NimiLinkType.INSTAGRAM,
+  NimiLinkType.DISCORD,
+  NimiLinkType.SNAPCHAT,
+  NimiLinkType.MEDIUM,
+  NimiLinkType.LINKEDIN,
+  NimiLinkType.FACEBOOK,
+  NimiLinkType.TWITCH,
+];
+
+const PortfolioSectionLinks = [
+  NimiLinkType.DRIBBLE,
+  NimiLinkType.FIGMA,
+  NimiLinkType.FACEBOOK,
+  NimiLinkType.GITHUB,
+  NimiLinkType.DISCORD,
+];
 
 /**
  * A modal to select the fields to add to the Nimi form.
@@ -74,7 +104,21 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
   const [linkList, setLinkList] = useState<NimiLinkType[]>(initialValues.links);
   const [addressList, setAddressList] = useState<NimiBlockchain[]>(initialValues.blockchainAddresses);
   const [widgetList, setWidgetList] = useState<NimiWidgetType[]>(initialValues.widgets);
-
+  const onLinksChange = (newLink: NimiLinkType) => {
+    const newState: NimiLinkType[] = [...linkList, newLink as NimiLinkType];
+    setLinkList(newState);
+    // emit the change event
+    onChange?.({
+      links: newState,
+      blockchainAddresses: addressList,
+      widgets: widgetList,
+    });
+    onSubmit?.({
+      links: newState,
+      blockchainAddresses: addressList,
+      widgets: widgetList,
+    });
+  };
   return (
     <Modal maxWidth={'620px'}>
       <ModalHeader>
@@ -83,55 +127,21 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
         <ModalSubTitle>{t('addFieldsModal.description')}</ModalSubTitle>
       </ModalHeader>
       <ModalContent>
-        <SectionWrapper>
-          <SectionTitle>{t('addFieldsModal.socials')}</SectionTitle>
-          <StyledFlexList>
-            {linkTypeTypes.map((link) => {
-              const inputId = `modal-checkbox-${link}`;
-              const i18nKey = `formLabel.${link.toLowerCase()}`;
-              const logo = nimiLinkDetailsExtended[link].logo && nimiLinkDetailsExtended[link].logo;
-
-              const onClick: ChangeEventHandler<HTMLInputElement> = () => {
-                // Compute the new state and then batch it previous state for onChange have newest state
-                const newState: NimiLinkType[] = [...linkList, link as NimiLinkType];
-
-                setLinkList(newState);
-                // emit the change event
-                onChange?.({
-                  links: newState,
-                  blockchainAddresses: addressList,
-                  widgets: widgetList,
-                });
-                onSubmit?.({
-                  links: newState,
-                  blockchainAddresses: addressList,
-                  widgets: widgetList,
-                });
-              };
-
-              return (
-                <ButtonGroup key={inputId} id={inputId} onClick={onClick}>
-                  {renderSVG(logo)}
-                  {t(i18nKey)}
-                </ButtonGroup>
-              );
-            })}
-          </StyledFlexList>
-        </SectionWrapper>
+        <LinksSection title={'profile'} sectionLinks={ProfileSectionLinks} onChange={onLinksChange} />
+        <LinksSection title={'contacts'} sectionLinks={ContactsSectionLinks} onChange={onLinksChange} />
+        <LinksSection title={'socials'} sectionLinks={SocialsSectionLinks} onChange={onLinksChange} />
+        <LinksSection title={'portfolio'} sectionLinks={PortfolioSectionLinks} onChange={onLinksChange} />
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.addreses')}</SectionTitle>
           <StyledGridList>
             {Object.values(NimiBlockchain).map((blockchain) => {
               const inputId = `modal-checkbox-${blockchain}`;
               const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
-              const checked = addressList.includes(blockchain);
-
-              const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+              const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];
+              const onChangeHandler = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state
-                const newState = event.target.checked
-                  ? [...addressList, blockchain]
-                  : addressList.filter((item) => item !== blockchain);
-
+                const newState = [...addressList, blockchain as NimiBlockchain];
+                console.log('addressList', addressList);
                 setAddressList(newState);
                 // emit the change event
                 onChange?.({
@@ -139,12 +149,18 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                   blockchainAddresses: newState,
                   widgets: widgetList,
                 });
+                onSubmit?.({
+                  links: linkList,
+                  blockchainAddresses: newState,
+                  widgets: widgetList,
+                });
               };
 
               return (
-                <Checkbox key={inputId} checked={checked} id={inputId} name={blockchain} onChange={inputOnChange}>
+                <ButtonGroup key={inputId} id={inputId} onClick={onChangeHandler}>
+                  {renderSVG(logo)}
                   {t(i18nKey)}
-                </Checkbox>
+                </ButtonGroup>
               );
             })}
           </StyledGridList>

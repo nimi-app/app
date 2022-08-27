@@ -36,7 +36,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
             validatedNimi,
           });
         }
-        setPreviewNimi(validatedNimi as Nimi);
+        setPreviewNimi(validatedNimi as unknown as Nimi);
       })
       .catch((error) => {
         console.error(error);

@@ -64,14 +64,14 @@ export const nimiLinkTypePlaceholder: Record<NimiLinkType, string> = {
   [NimiLinkType.YOUTUBE_CHANNEL]: 'Username',
   [NimiLinkType.LINKEDIN]: 'Username',
   [NimiLinkType.TWITCH]: 'Twitch Username',
-  // [NimiLinkType.WHATSAPP]: 'Whatsapp Username',
-  // [NimiLinkType.MESSANGER]: 'Messanger username',
-  // [NimiLinkType.KEYBASE]: 'Keybase Username',
-  // [NimiLinkType.WECHAT]: 'Wechat Username',
-  // [NimiLinkType.SNAPCHAT]: 'Snapchat Username',
-  // [NimiLinkType.FACEBOOK]: 'Facebook Username',
-  // [NimiLinkType.DRIBBLE]: 'Dribble Username',
-  // [NimiLinkType.FIGMA]: 'Figma Username',
+  [NimiLinkType.WHATSAPP]: 'Whatsapp Username',
+  [NimiLinkType.MESSANGER]: 'Messanger username',
+  [NimiLinkType.KEYBASE]: 'Keybase Username',
+  [NimiLinkType.WECHAT]: 'Wechat Username',
+  [NimiLinkType.SNAPCHAT]: 'Snapchat Username',
+  [NimiLinkType.FACEBOOK]: 'Facebook Username',
+  [NimiLinkType.DRIBBLE]: 'Dribble Username',
+  [NimiLinkType.FIGMA]: 'Figma Username',
 };
 
 export const MULTICALL2_ADDRESS: Record<number, string> = {

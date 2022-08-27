@@ -82,7 +82,7 @@ export const StyledGridList = styled.div`
 
 export const StyledFlexList = styled.div`
   display: flex;
-  gap: 28px 16px;
+  gap: 16px;
   flex-wrap: wrap;
 `;
 
