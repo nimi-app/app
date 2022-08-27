@@ -168,5 +168,8 @@ export const PoapButton = styled.div`
   gap: 12px;
 `;
 export const LinkWrapper = styled.div`
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 `;

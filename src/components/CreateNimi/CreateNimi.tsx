@@ -6,7 +6,7 @@ import { useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
-// import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Nimi, nimiCard, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType, NimiBlockchainAddress } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
@@ -21,6 +21,7 @@ import {
   PreviewMobile,
   BackButton,
   PoapButton,
+  LinkWrapper,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -49,24 +50,6 @@ export interface CreateNimiProps {
   ensLabelName: string;
   provider: Web3Provider;
 }
-
-// const StyledDraggable = styled(Draggable)`
-//   top: auto !important;
-//   left: auto !important;
-//   &.drag {
-//     top: auto !important;
-//     left: auto !important;
-//   }
-//   &.draggable {
-//     top: auto !important;
-//     left: auto !important;
-//   }
-
-//   [data-rfd-draggable-id] {
-//     left: auto !important;
-//     top: auto !important;
-//   }
-// `;
 
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   /**
@@ -138,18 +121,48 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     setValue('displayImageUrl', lensProfile?.pictureUrl);
   }, [setValue, lensProfile]);
 
-  // const handleDrop = (droppedItem) => {
-  //   // Ignore drop outside droppable container
-  //   if (!droppedItem.destination) return;
-  //   const updatedList = formWatchPayload.links;
-  //   // Remove dragged item
-  //   const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-  //   // Add dropped item
-  //   updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-  //   // Update State
+  const handleDrop = (droppedItem) => {
+    // Ignore drop outside droppable container
+    if (!droppedItem.destination) return;
+    const updatedList = formWatchPayload.links;
+    // Remove dragged item
+    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
+    console.log('reorderedIte', reorderedItem);
+    console.log('updatedList', ...updatedList);
+    // Add dropped item
+    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
 
-  //   setValue('links', updatedList);
-  // };
+    // Update State
+    console.log('newUpdate', ...updatedList);
+    setValue('links', updatedList);
+  };
+
+  // eslint-disable-next-line react/display-name
+  const getRenderItem = (items) => (provided, snapshot, rubric) => {
+    const item = items.links[rubric.source.index];
+    const index = rubric.source.index;
+    const type = item.type;
+    console.log('item', item);
+    console.log('index', index);
+    console.log('type', type);
+    return (
+      <LinkFormGroup
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        key={'link-input-' + type + index}
+      >
+        <DragDots />
+        <NimiLinkField
+          key={'link-input' + type + index}
+          title={t(`formLabel.${type.toLowerCase()}`)}
+          link={type as NimiLinkType}
+          index={index}
+          content={item.content}
+        />
+      </LinkFormGroup>
+    );
+  };
 
   /**
    * Handle the form submit via ENS contract interaction
@@ -270,42 +283,22 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   ></TextArea>
                 </FormGroup>
                 {/* drag and drop with laggy offset */}
-                {/*               
-                <DragDropContext onDragEnd={handleDrop}>
-                  <Droppable droppableId="list-container">
-                    {(provided) => (
-                      <div style={{ width: '100%' }} {...provided.droppableProps} ref={provided.innerRef}>
-                        {formWatchPayload.links.map(({ type, content }, index) => {
-                          const label = t(`formLabel.${type.toLowerCase()}`);
 
-                          return (
-                            <StyledDraggable key={index.toString() + type} draggableId={index.toString()} index={index}>
-                              {(provided) => (
-                                <LinkFormGroup
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  key={'link-input-' + type + index}
-                                >
-                                  <DragDots />
-                                  <NimiLinkField
-                                    key={'link-input' + type + index}
-                                    label={label}
-                                    link={type as NimiLinkType}
-                                    index={index}
-                                    content={content}
-                                  />
-                                </LinkFormGroup>
-                              )}
-                            </StyledDraggable>
-                          );
-                        })}
-                      </div>
+                <DragDropContext onDragEnd={handleDrop}>
+                  <Droppable droppableId="list-container" renderClone={getRenderItem(formWatchPayload)}>
+                    {(provided) => (
+                      <LinkWrapper {...provided.droppableProps} ref={provided.innerRef}>
+                        {formWatchPayload.links.map(({ type, content }, index) => (
+                          <Draggable key={index.toString() + type} draggableId={index.toString()} index={index}>
+                            {getRenderItem(formWatchPayload)}
+                          </Draggable>
+                        ))}
+                      </LinkWrapper>
                     )}
                   </Droppable>
-                </DragDropContext> */}
+                </DragDropContext>
 
-                {formWatchPayload.links.map(({ type, content }, index) => {
+                {/* {formWatchPayload.links.map(({ type, content }, index) => {
                   const title = t(`formLabel.${type.toLowerCase()}`);
 
                   return (
@@ -320,7 +313,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                       />
                     </LinkFormGroup>
                   );
-                })}
+                })} */}
 
                 {formWatchPayload.addresses.map(({ blockchain }, index) => {
                   const label = t(`formLabel.${blockchain.toLowerCase()}`);
