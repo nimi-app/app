@@ -1,5 +1,5 @@
 import Frame, { FrameContextConsumer } from 'react-frame-component';
-import { Nimi, nimiValidator, NimiCard } from 'nimi-card';
+import { Nimi, nimiValidator, NimiCard, filterEmptyFields } from 'nimi-card';
 import { useEffect, useState } from 'react';
 import styled, { StyleSheetManager } from 'styled-components';
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
@@ -25,9 +25,10 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
 
   useEffect(() => {
     // Filter invalid links
-
+    const filteredNimi = filterEmptyFields(nimi);
+    console.log('fitleredShit', filteredNimi);
     nimiValidator
-      .validate(nimi, {
+      .validate(filteredNimi, {
         abortEarly: false,
       })
       .then((validatedNimi) => {

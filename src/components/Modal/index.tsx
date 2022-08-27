@@ -9,7 +9,6 @@ import {
   StyledModalInnerWrapper,
   StyledModalOutterWrapper,
   StyledCloseModalButton,
-  ModalSubTitle,
 } from './styled';
 // Export the three main modal elements
 export {

@@ -2,20 +2,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useMemo, useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
 // import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import {
-  Nimi,
-  nimiCard,
-  NimiBlockchain,
-  NimiLinkType,
-  NimiLinkBaseDetails,
-  NimiWidgetType,
-  NimiBlockchainAddress,
-} from 'nimi-card';
+import { Nimi, nimiCard, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType, NimiBlockchainAddress } from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -50,7 +42,6 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
-import styled from 'styled-components';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -130,15 +121,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
   // Manages the links blockchain address list
   const [formLinkList, setFormLinkList] = useState<NimiLinkType[]>([]);
-  const [formAddressList, setFormAddressList] = useState<NimiBlockchain[]>([]);
+
   const [formWidgetList, setFormWidgetList] = useState<NimiWidgetType[]>([NimiWidgetType.POAP]);
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
-  const selectedBlockchainAddressFieldList = useMemo(
-    () => Object.values(NimiBlockchain).filter((blockchain) => formAddressList.includes(blockchain)),
-    [formAddressList]
-  );
+
   const formWatchPayload = watch();
 
   console.log('formWatchPayload', formWatchPayload);
@@ -334,12 +322,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   );
                 })}
 
-                {formWatchPayload.addresses.map(({ blockchain }) => {
+                {formWatchPayload.addresses.map(({ blockchain }, index) => {
                   const label = t(`formLabel.${blockchain.toLowerCase()}`);
 
                   return (
                     <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
-                      <NimiBlockchainField label={label} blockchain={blockchain} />
+                      <NimiBlockchainField index={index} label={label} blockchain={blockchain} />
                     </FormGroup>
                   );
                 })}
@@ -373,8 +361,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       {isAddFieldsModalOpen && (
         <AddFieldsModal
           initialValues={{
-            links: formLinkList,
-            blockchainAddresses: formAddressList,
+            links: [],
+            blockchainAddresses: [],
             widgets: formWidgetList,
           }}
           onClose={() => setIsAddFieldsModalOpen(false)}

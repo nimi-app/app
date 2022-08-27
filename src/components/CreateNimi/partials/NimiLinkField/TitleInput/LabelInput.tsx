@@ -47,14 +47,14 @@ const StyledPen = styled(Pen)`
 export interface TitleInputProps {
   setTitle: any;
   title: string;
-  defaultTitle: string;
+
   index: number;
 }
 
 /**
  * Handles the input for the link type
  */
-export function TitleInput({ title, setTitle, defaultTitle, index }: TitleInputProps) {
+export function TitleInput({ title, setTitle, index }: TitleInputProps) {
   const [showInput, setShowInput] = useState(false);
   const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   console.log('here');
@@ -79,7 +79,7 @@ export function TitleInput({ title, setTitle, defaultTitle, index }: TitleInputP
           {title.length > 0 && (
             <StyledCross
               onClick={() => {
-                setTitle(defaultTitle);
+                setTitle('');
                 setShowInput(false);
               }}
             />

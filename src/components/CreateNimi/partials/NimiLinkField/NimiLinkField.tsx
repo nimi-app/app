@@ -1,4 +1,4 @@
-import { Nimi, NimiLinkBaseDetails, NimiLinkType, links, nimiLinkDetailsExtended } from 'nimi-card';
+import { Nimi, NimiLinkType, nimiLinkValidator, nimiLinkDetailsExtended } from 'nimi-card';
 import isURL from 'validator/lib/isURL';
 
 import { useFormContext } from 'react-hook-form';
@@ -22,12 +22,12 @@ export interface NimiLinkFieldProps {
 /**
  * Handles the input for the link type
  */
-export function NimiLinkField({ link, title: defaultTitle, index, content: defaultContent }: NimiLinkFieldProps) {
+export function NimiLinkField({ link, index, content: defaultContent }: NimiLinkFieldProps) {
   // Form context
   const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   // Local state for the input value
   const [value, setValue] = useState(defaultContent);
-  const [title, setTitle] = useState(defaultTitle);
+  const [title, setTitle] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isValueValid, setIsValueValid] = useState(true);
 
@@ -38,7 +38,7 @@ export function NimiLinkField({ link, title: defaultTitle, index, content: defau
     const targetValue = event.target.value;
     setValue(targetValue);
     // Vlidate
-    links
+    nimiLinkValidator
       .isValid({
         type: link,
         content: targetValue,
@@ -79,6 +79,7 @@ export function NimiLinkField({ link, title: defaultTitle, index, content: defau
     setFormValue('links', linksPrevState);
   };
   const handleDelete = () => {
+    console.log(isInputFocused, isValueValid);
     console.log('delete');
     const linksPrevState = getFormValues('links') || [];
     console.log('linksPrevState', linksPrevState);
@@ -98,7 +99,7 @@ export function NimiLinkField({ link, title: defaultTitle, index, content: defau
 
   return (
     <LinkFieldWrapper>
-      <TitleInput setTitle={setTitle} title={title} defaultTitle={defaultTitle} index={index} />
+      <TitleInput setTitle={setTitle} title={title} index={index} />
       <StyledInputWrapper>
         {logo && renderSVG(logo, 20)}
         <StyledInput
