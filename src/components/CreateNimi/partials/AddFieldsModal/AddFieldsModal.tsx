@@ -12,7 +12,7 @@ import {
 } from '../../../Modal';
 import { StyledFlexList, StyledGridList } from '../../styled';
 import { ChangeEventHandler, useState } from 'react';
-import { Checkbox } from '../../../form';
+import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
 
 import { LinksSection } from './LinksSection';
 import { ButtonGroup } from '../../../form/Button';
@@ -186,18 +186,18 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                   blockchainAddresses: addressList,
                   widgets: newState,
                 });
+                onSubmit?.({
+                  links: linkList,
+                  blockchainAddresses: addressList,
+                  widgets: newState,
+                });
               };
 
               return (
-                <Checkbox
-                  key={inputId}
-                  checked={checked}
-                  id={inputId}
-                  name={`widget-${widget.toLowerCase()}`}
-                  onChange={inputOnChange}
-                >
+                <ButtonGroup active={checked} key={inputId} id={inputId} onClick={inputOnChange}>
+                  {PoapLogo}
                   {t(i18nKey)}
-                </Checkbox>
+                </ButtonGroup>
               );
             })}
           </StyledGridList>

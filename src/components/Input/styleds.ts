@@ -46,6 +46,8 @@ export const StyledErrorText = styled.div`
 `;
 
 export const TrashCanStyle = styled.div`
+  width: 45px;
+  height: 39px;
   border: 2px solid #f3f3f1;
   border-radius: 15.5556px;
   display: flex;

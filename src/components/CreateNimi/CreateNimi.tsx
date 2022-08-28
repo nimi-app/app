@@ -4,7 +4,7 @@ import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
-import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
+
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Nimi, nimiCard, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType, NimiBlockchainAddress } from 'nimi-card';
@@ -20,7 +20,6 @@ import {
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
-  PoapButton,
   LinkWrapper,
   AddresssWrapper,
   AddressesTitle,
@@ -46,6 +45,7 @@ import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import styled from 'styled-components';
+import { PoapField } from './partials/PoapField/PoapField';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -323,12 +323,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 )}
 
                 <FormGroup>
-                  {formWidgetList.includes(NimiWidgetType.POAP) && (
-                    <PoapButton>
-                      <PoapLogo />
-                      POAPs
-                    </PoapButton>
-                  )}
+                  {formWatchPayload.widgets.some((item) => NimiWidgetType.POAP === item.type) && <PoapField />}
+
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
                     + {t('buttonLabel.addFields')}
                   </AddFieldsButton>

@@ -152,22 +152,6 @@ export const BackButton = styled.button`
   }
 `;
 
-export const PoapButton = styled.div`
-  display: flex;
-  border: 2px solid #a78aff;
-  border-radius: 12px;
-  padding: 12px 36px 12px 8px;
-  font-weight: 600;
-  font-size: 16px;
-  color: #a78aff;
-  letter-spacing: 0.1em;
-  line-height: 24px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 28px;
-  gap: 12px;
-`;
-
 export const AddresssWrapper = styled.div`
   background-color: #f1f1f1;
   padding: 15px;

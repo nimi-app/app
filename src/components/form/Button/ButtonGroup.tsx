@@ -1,7 +1,7 @@
 import { NIMI_CARDS_WIDTH } from 'nimi-card';
 import styled from 'styled-components';
 
-export const StyledButton = styled.button`
+export const StyledButton = styled.button<{ active: boolean }>`
   display: flex;
   height: 42px;
   border-color: transparent;
@@ -9,6 +9,7 @@ export const StyledButton = styled.button`
   padding: 12px 16px;
   width: fit-content;
   gap: 8.7px;
+  opacity:${(active) => active && '0.5'}
   align-items: center;
   background: linear-gradient(0deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), #ffffff;
   box-shadow: 0px 5px 18px rgba(156, 149, 233, 0.2);
@@ -20,9 +21,9 @@ export const StyledButton = styled.button`
   }
 `;
 
-export const ButtonGroup = ({ id, children, onClick }) => {
+export const ButtonGroup = ({ id, children, onClick, active = true }) => {
   return (
-    <StyledButton id={id} onClick={onClick}>
+    <StyledButton active={active} id={id} onClick={onClick}>
       {children}
     </StyledButton>
   );
