@@ -60,7 +60,6 @@ const ContactsSectionLinks = [
   NimiLinkType.DISCORD,
   NimiLinkType.MESSANGER,
   NimiLinkType.WECHAT,
-  NimiLinkType.DISCORD,
   NimiLinkType.KEYBASE,
 ];
 const SocialsSectionLinks = [

@@ -2,7 +2,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
@@ -43,6 +43,7 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
+import styled from 'styled-components';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -50,6 +51,10 @@ export interface CreateNimiProps {
   ensLabelName: string;
   provider: Web3Provider;
 }
+
+const StyledDots = styled.div`
+  display: flex;
+`;
 
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   /**
@@ -112,7 +117,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
   const formWatchPayload = watch();
 
-  console.log('formWatchPayload', formWatchPayload);
+  console.log('LINKS WATCHING', formWatchPayload.links);
 
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;
@@ -124,8 +129,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const handleDrop = (droppedItem) => {
     // Ignore drop outside droppable container
     if (!droppedItem.destination) return;
-    const updatedList = formWatchPayload.links;
+    const updatedList = [...links];
+    console.log('updatedList', ...links);
     // Remove dragged item
+    console.log('droppedItem', droppedItem.source);
+    console.log('destionatin', droppedItem.destination.index);
     const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
     console.log('reorderedIte', reorderedItem);
     console.log('updatedList', ...updatedList);
@@ -137,22 +145,22 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     setValue('links', updatedList);
   };
 
+  const links = useMemo(() => formWatchPayload.links, [formWatchPayload]);
+
   // eslint-disable-next-line react/display-name
   const getRenderItem = (items) => (provided, snapshot, rubric) => {
-    const item = items.links[rubric.source.index];
+    const item = items[rubric.source.index];
     const index = rubric.source.index;
     const type = item.type;
     console.log('item', item);
     console.log('index', index);
     console.log('type', type);
     return (
-      <LinkFormGroup
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        key={'link-input-' + type + index}
-      >
-        <DragDots />
+      <LinkFormGroup ref={provided.innerRef} {...provided.draggableProps} key={'link-input-' + type + index}>
+        <StyledDots {...provided.dragHandleProps}>
+          <DragDots />
+        </StyledDots>
+
         <NimiLinkField
           key={'link-input' + type + index}
           title={t(`formLabel.${type.toLowerCase()}`)}
@@ -285,12 +293,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 {/* drag and drop with laggy offset */}
 
                 <DragDropContext onDragEnd={handleDrop}>
-                  <Droppable droppableId="list-container" renderClone={getRenderItem(formWatchPayload)}>
+                  <Droppable droppableId="list-container" renderClone={getRenderItem(links)}>
                     {(provided) => (
                       <LinkWrapper {...provided.droppableProps} ref={provided.innerRef}>
-                        {formWatchPayload.links.map(({ type, content }, index) => (
+                        {links.map(({ type }, index) => (
                           <Draggable key={index.toString() + type} draggableId={index.toString()} index={index}>
-                            {getRenderItem(formWatchPayload)}
+                            {getRenderItem(links)}
                           </Draggable>
                         ))}
                       </LinkWrapper>
