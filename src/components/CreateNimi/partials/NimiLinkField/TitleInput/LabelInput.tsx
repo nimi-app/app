@@ -1,6 +1,6 @@
 import { useState, ChangeEventHandler } from 'react';
 import styled from 'styled-components';
-import { StyledCross, StyledInputWrapper } from '../NimiLinkField.styled';
+import { StyledCross, StyledInputWrapper } from '../../../../Input';
 import { ReactComponent as Pen } from '../../../../../assets/svg/pen.svg';
 import { useFormContext } from 'react-hook-form';
 import { Nimi, NimiLinkBaseDetails } from 'nimi-card';

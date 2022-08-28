@@ -1,8 +1,10 @@
-import { NimiBlockchain, Nimi, blockchainAddresses } from 'nimi-card';
+import { NimiBlockchain, Nimi, blockchainAddresses, NIMI_BLOCKCHAIN_LOGO_URL } from 'nimi-card';
 import { useFormContext } from 'react-hook-form';
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, useMemo, useState } from 'react';
 
 import { Input, Label } from '../../../form';
+import { InputFieldWithIcon } from '../../../Input';
+import { renderSVG } from '../../../../utils';
 
 export interface NimiBlockchainFieldProps {
   blockchain: NimiBlockchain;
@@ -17,7 +19,9 @@ export function NimiBlockchainField({ blockchain, label, index }: NimiBlockchain
   const { setValue: setAddressValue, getValues } = useFormContext<Nimi>();
   const [value, setValue] = useState('');
   const [isValueValid, setIsValueValid] = useState(false);
-
+  const logo = useMemo(() => {
+    return renderSVG(NIMI_BLOCKCHAIN_LOGO_URL[blockchain], 20);
+  }, [blockchain]);
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const targetValue = event.target.value;
 
@@ -45,10 +49,27 @@ export function NimiBlockchainField({ blockchain, label, index }: NimiBlockchain
     setAddressValue('addresses', addressPrevState);
   };
 
+  const onDelete = () => {
+    const addressesState = getValues('addresses') || [];
+    console.log('linksPrevState', addressesState);
+    addressesState.splice(index, 1);
+    console.log('index', index);
+
+    setAddressValue('addresses', addressesState);
+  };
+
   return (
     <>
-      <Label htmlFor={blockchain}>{label}</Label>
-      <Input value={value} placeholder={`${label} address`} type="text" id={blockchain} onChange={onChange} />
+      {/* <Input value={value} placeholder={`${label} address`} type="text" id={blockchain} onChange={onChange} /> */}
+      <InputFieldWithIcon
+        logo={logo}
+        onChange={onChange}
+        placeholder={`${label} address`}
+        onDelete={onDelete}
+        onInputReset={() => setValue('')}
+        value={value}
+        id={blockchain + index}
+      />
     </>
   );
 }

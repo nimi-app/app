@@ -22,6 +22,8 @@ import {
   BackButton,
   PoapButton,
   LinkWrapper,
+  AddresssWrapper,
+  AddressesTitle,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -305,33 +307,20 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     )}
                   </Droppable>
                 </DragDropContext>
+                {formWatchPayload.addresses.length > 0 && (
+                  <AddresssWrapper>
+                    <AddressesTitle>Addresses</AddressesTitle>
+                    {formWatchPayload.addresses.map(({ blockchain }, index) => {
+                      const label = t(`formLabel.${blockchain.toLowerCase()}`);
 
-                {/* {formWatchPayload.links.map(({ type, content }, index) => {
-                  const title = t(`formLabel.${type.toLowerCase()}`);
-
-                  return (
-                    <LinkFormGroup key={'link-input-' + type + index}>
-                      <DragDots />
-                      <NimiLinkField
-                        key={'link-input' + type + index}
-                        title={title}
-                        link={type as NimiLinkType}
-                        index={index}
-                        content={content}
-                      />
-                    </LinkFormGroup>
-                  );
-                })} */}
-
-                {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                  const label = t(`formLabel.${blockchain.toLowerCase()}`);
-
-                  return (
-                    <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
-                      <NimiBlockchainField index={index} label={label} blockchain={blockchain} />
-                    </FormGroup>
-                  );
-                })}
+                      return (
+                        <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
+                          <NimiBlockchainField index={index} label={label} blockchain={blockchain} />
+                        </FormGroup>
+                      );
+                    })}
+                  </AddresssWrapper>
+                )}
 
                 <FormGroup>
                   {formWidgetList.includes(NimiWidgetType.POAP) && (

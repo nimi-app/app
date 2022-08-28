@@ -2,14 +2,14 @@ import { Nimi, NimiLinkType, nimiLinkValidator, nimiLinkDetailsExtended } from '
 import isURL from 'validator/lib/isURL';
 
 import { useFormContext } from 'react-hook-form';
-import { ChangeEventHandler, FocusEventHandler, useState } from 'react';
+import { ChangeEventHandler, FocusEventHandler, useMemo, useState } from 'react';
 
-import { StyledInputWrapper, LinkFieldWrapper, StyledInput, TrashCanStyle, StyledCross } from './NimiLinkField.styled';
+import { LinkFieldWrapper } from './NimiLinkField.styled';
 import { renderSVG } from '../../../../utils';
 
-import { ReactComponent as TrashCan } from '../../../../assets/svg/trashcan.svg';
 import { TitleInput } from './TitleInput';
 import { nimiLinkTypePlaceholder } from '../../../../constants';
+import { InputFieldWithIcon } from '../../../Input';
 
 export interface NimiLinkFieldProps {
   link: NimiLinkType;
@@ -31,7 +31,9 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isValueValid, setIsValueValid] = useState(true);
 
-  const logo = nimiLinkDetailsExtended[link].logo;
+  const logo = useMemo(() => {
+    return renderSVG(nimiLinkDetailsExtended[link].logo, 20);
+  }, [link]);
   // Handle the input change
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     // Extract the value from the event
@@ -100,22 +102,17 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
   return (
     <LinkFieldWrapper>
       <TitleInput setTitle={setTitle} title={title} index={index} defaultTitle={defaultTitle} />
-      <StyledInputWrapper>
-        {logo && renderSVG(logo, 20)}
-        <StyledInput
-          onFocus={() => setIsInputFocused(true)}
-          onBlur={onBlur}
-          onChange={onChange}
-          value={value}
-          placeholder={nimiLinkTypePlaceholder[link]}
-          type="text"
-          id={`nimi-link-input-${link}${index}`}
-        />
-        {value.length > 0 && <StyledCross onClick={() => setValue('')} />}
-        <TrashCanStyle onClick={handleDelete}>
-          <TrashCan />
-        </TrashCanStyle>
-      </StyledInputWrapper>
+      <InputFieldWithIcon
+        logo={logo}
+        placeholder={nimiLinkTypePlaceholder[link]}
+        onInputFocus={() => setIsInputFocused(true)}
+        onBlur={onBlur}
+        onChange={onChange}
+        value={value}
+        onDelete={handleDelete}
+        onInputReset={() => setValue('')}
+        id={`nimi-link-input-${link}${index}`}
+      />
     </LinkFieldWrapper>
   );
 }

@@ -167,6 +167,23 @@ export const PoapButton = styled.div`
   margin-bottom: 28px;
   gap: 12px;
 `;
+
+export const AddresssWrapper = styled.div`
+  background-color: #f1f1f1;
+  padding: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 12px;
+`;
+export const AddressesTitle = styled.div`
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  color: #8c90a0;
+`;
+
 export const LinkWrapper = styled.div`
   gap: 16px;
   display: flex;
