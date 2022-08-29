@@ -340,32 +340,28 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
 
-              const linksData = getValues('links');
-
-              let newLinksArray: NimiLinkBaseDetails[] = [];
-              if (!link) {
-                newLinksArray = [...linksData];
-              } else {
+              //if link is submitted
+              if (link) {
+                let newLinksArray: NimiLinkBaseDetails[] = [];
+                const linksData = getValues('links');
                 newLinksArray = [...linksData, { content: '', type: link }];
+                setValue('links', newLinksArray);
               }
-
-              const currentAddresses = getValues('addresses');
-              let newAddressesArray: NimiBlockchainAddress[] = [];
-              if (!blockchainAddresse) {
-                newAddressesArray = [...currentAddresses];
-              } else {
+              //if address is submitted
+              if (blockchainAddresse) {
+                let newAddressesArray: NimiBlockchainAddress[] = [];
+                const currentAddresses = getValues('addresses');
                 newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresse, address: '' }];
+                setValue('addresses', newAddressesArray);
               }
+
+              //if widget is submitted
               const currentWidgets = getValues('widgets');
-              let newWidgets: NimiPOAPWidget[] = [];
               if (widget || currentWidgets.length !== 0) {
+                let newWidgets: NimiPOAPWidget[] = [];
                 newWidgets = [{ type: NimiWidgetType.POAP, address: ensAddress }];
+                setValue('widgets', newWidgets);
               }
-
-              setValue('links', newLinksArray);
-
-              setValue('addresses', newAddressesArray);
-              setValue('widgets', newWidgets);
             });
           }}
         />
