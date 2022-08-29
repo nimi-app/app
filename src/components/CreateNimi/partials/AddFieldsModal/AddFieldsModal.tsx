@@ -64,7 +64,7 @@ const ProfileSectionLinks = [NimiLinkType.URL, NimiLinkType.EMAIL, NimiLinkType.
 const ContactsSectionLinks = [
   NimiLinkType.WHATSAPP,
   NimiLinkType.DISCORD,
-  NimiLinkType.MESSANGER,
+  NimiLinkType.MESSENGER,
   NimiLinkType.WECHAT,
   NimiLinkType.KEYBASE,
 ];
@@ -81,7 +81,8 @@ const SocialsSectionLinks = [
 ];
 
 const PortfolioSectionLinks = [
-  NimiLinkType.DRIBBLE,
+  NimiLinkType.DRIBBBLE,
+
   NimiLinkType.FIGMA,
   NimiLinkType.FACEBOOK,
   NimiLinkType.GITHUB,

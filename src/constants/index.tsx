@@ -65,12 +65,12 @@ export const nimiLinkTypePlaceholder: Record<NimiLinkType, string> = {
   [NimiLinkType.LINKEDIN]: 'Username',
   [NimiLinkType.TWITCH]: 'Twitch Username',
   [NimiLinkType.WHATSAPP]: 'Whatsapp Username',
-  [NimiLinkType.MESSANGER]: 'Messanger username',
+  [NimiLinkType.MESSENGER]: 'Messanger username',
   [NimiLinkType.KEYBASE]: 'Keybase Username',
   [NimiLinkType.WECHAT]: 'Wechat Username',
   [NimiLinkType.SNAPCHAT]: 'Snapchat Username',
   [NimiLinkType.FACEBOOK]: 'Facebook Username',
-  [NimiLinkType.DRIBBLE]: 'Dribble Username',
+  [NimiLinkType.DRIBBBLE]: 'Dribble Username',
   [NimiLinkType.FIGMA]: 'Figma Username',
 };
 
