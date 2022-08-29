@@ -141,35 +141,37 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.addreses')}</SectionTitle>
           <StyledFlexList>
-            {Object.values(NimiBlockchain).map((blockchain) => {
-              const inputId = `modal-checkbox-${blockchain}`;
-              const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
-              const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];
-              const onChangeHandler = () => {
-                // Compute the new state and then batch it previous state for onChange have newest state
-                const newState = [...addressList, blockchain as NimiBlockchain];
+            {Object.values(NimiBlockchain)
+              .filter((item) => item !== NimiBlockchain.SOLANA)
+              .map((blockchain) => {
+                const inputId = `modal-checkbox-${blockchain}`;
+                const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
+                const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];
+                const onChangeHandler = () => {
+                  // Compute the new state and then batch it previous state for onChange have newest state
+                  const newState = [...addressList, blockchain as NimiBlockchain];
 
-                setAddressList(newState);
-                // emit the change event
-                onChange?.({
-                  links: linkList,
-                  blockchainAddresses: newState,
-                  widgets: widgetList,
-                });
-                onSubmit?.({
-                  links: linkList,
-                  blockchainAddresses: newState,
-                  widgets: widgetList,
-                });
-              };
+                  setAddressList(newState);
+                  // emit the change event
+                  onChange?.({
+                    links: linkList,
+                    blockchainAddresses: newState,
+                    widgets: widgetList,
+                  });
+                  onSubmit?.({
+                    links: linkList,
+                    blockchainAddresses: newState,
+                    widgets: widgetList,
+                  });
+                };
 
-              return (
-                <ButtonGroup key={inputId} id={inputId} onClick={onChangeHandler}>
-                  {renderSVG(logo)}
-                  {t(i18nKey)}
-                </ButtonGroup>
-              );
-            })}
+                return (
+                  <ButtonGroup key={inputId} id={inputId} onClick={onChangeHandler}>
+                    {renderSVG(logo)}
+                    {t(i18nKey)}
+                  </ButtonGroup>
+                );
+              })}
           </StyledFlexList>
         </SectionWrapper>
         <SectionWrapper>
