@@ -168,6 +168,10 @@ export const AddressesTitle = styled.div`
   color: #8c90a0;
 `;
 
+export const StyledDots = styled.div`
+  display: flex;
+`;
+
 export const LinkWrapper = styled.div`
   gap: 16px;
   display: flex;

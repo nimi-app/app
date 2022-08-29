@@ -11,7 +11,6 @@ import {
   ModalSubTitle,
 } from '../../../Modal';
 import { StyledFlexList, StyledGridList } from '../../styled';
-import { useState } from 'react';
 import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
 
 import { LinksSection } from './LinksSection';
@@ -46,16 +45,15 @@ const StyledPoapLogo = styled(PoapLogo)`
 `;
 
 interface AddFieldsOptions {
-  links: NimiLinkType[];
-  blockchainAddresses: NimiBlockchain[];
-  widgets: NimiWidgetType[];
+  link?: NimiLinkType;
+  blockchainAddresse?: NimiBlockchain;
+  widget?: NimiWidgetType;
 }
 
 export interface AddFieldsModalProps {
   onClose?: () => void;
   onChange?: (data: AddFieldsOptions) => void;
   onSubmit?: (data: AddFieldsOptions) => void;
-  initialValues?: AddFieldsOptions;
 }
 
 const nimiWidgetTypes = Object.keys(NimiWidgetType);
@@ -82,7 +80,6 @@ const SocialsSectionLinks = [
 
 const PortfolioSectionLinks = [
   NimiLinkType.DRIBBBLE,
-
   NimiLinkType.FIGMA,
   NimiLinkType.FACEBOOK,
   NimiLinkType.GITHUB,
@@ -95,35 +92,18 @@ const PortfolioSectionLinks = [
  * @param param0
  * @returns
  */
-export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: AddFieldsModalProps) {
+export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalProps) {
   const { t } = useTranslation('nimi');
   const { getValues } = useFormContext();
 
-  // Take the intial state values from props if they exist
-  initialValues = initialValues || {
-    links: [],
-    blockchainAddresses: [],
-    widgets: [],
-  };
-
-  // An internal state to keep track of the current selected link type
-  // Manages the links blockchain address list
-  const [linkList, setLinkList] = useState<NimiLinkType[]>(initialValues.links);
-  const [addressList, setAddressList] = useState<NimiBlockchain[]>(initialValues.blockchainAddresses);
-  const [widgetList, setWidgetList] = useState<NimiWidgetType[]>(initialValues.widgets);
   const onLinksChange = (newLink: NimiLinkType) => {
-    const newState: NimiLinkType[] = [...linkList, newLink as NimiLinkType];
-    setLinkList(newState);
+    const newState: NimiLinkType = newLink as NimiLinkType;
     // emit the change event
     onChange?.({
-      links: newState,
-      blockchainAddresses: addressList,
-      widgets: widgetList,
+      link: newState,
     });
     onSubmit?.({
-      links: newState,
-      blockchainAddresses: addressList,
-      widgets: widgetList,
+      link: newState,
     });
   };
 
@@ -150,19 +130,14 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
                 const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];
                 const onChangeHandler = () => {
                   // Compute the new state and then batch it previous state for onChange have newest state
-                  const newState = [...addressList, blockchain as NimiBlockchain];
+                  const newState = blockchain as NimiBlockchain;
 
-                  setAddressList(newState);
                   // emit the change event
                   onChange?.({
-                    links: linkList,
-                    blockchainAddresses: newState,
-                    widgets: widgetList,
+                    blockchainAddresse: newState,
                   });
                   onSubmit?.({
-                    links: linkList,
-                    blockchainAddresses: newState,
-                    widgets: widgetList,
+                    blockchainAddresse: newState,
                   });
                 };
 
@@ -185,20 +160,14 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
 
               const inputOnChange = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state
-                const newState = [widget as NimiWidgetType];
-
-                setWidgetList(newState);
+                const newState = widget as NimiWidgetType;
 
                 // emit the change event
                 onChange?.({
-                  links: linkList,
-                  blockchainAddresses: addressList,
-                  widgets: newState,
+                  widget: newState,
                 });
                 onSubmit?.({
-                  links: linkList,
-                  blockchainAddresses: addressList,
-                  widgets: newState,
+                  widget: newState,
                 });
               };
 

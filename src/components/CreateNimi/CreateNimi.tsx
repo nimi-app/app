@@ -31,6 +31,7 @@ import {
   LinkWrapper,
   AddresssWrapper,
   AddressesTitle,
+  StyledDots,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -52,7 +53,6 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
-import styled from 'styled-components';
 import { PoapField } from './partials/PoapField/PoapField';
 
 export interface CreateNimiProps {
@@ -61,10 +61,6 @@ export interface CreateNimiProps {
   ensLabelName: string;
   provider: Web3Provider;
 }
-
-const StyledDots = styled.div`
-  display: flex;
-`;
 
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   /**
@@ -123,8 +119,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
   const formWatchPayload = watch();
 
-  console.log('LINKS WATCHING', formWatchPayload.links);
-
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;
     setValue('displayName', lensProfile.name);
@@ -154,10 +148,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     const index = rubric.source.index;
     const item = items[index];
     const type = item.type;
-    console.log('outisde---------------');
-    console.log('titlePassed', item.title);
-    console.log('indexPassed', index);
-    console.log('outisde---------------');
     return (
       <LinkFormGroup ref={provided.innerRef} {...provided.draggableProps} key={'link-input-' + type + index}>
         <StyledDots {...provided.dragHandleProps}>
@@ -345,39 +335,30 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       </InnerWrapper>
       {isAddFieldsModalOpen && (
         <AddFieldsModal
-          initialValues={{
-            links: [],
-            blockchainAddresses: [],
-            widgets: [],
-          }}
           onClose={() => setIsAddFieldsModalOpen(false)}
-          onSubmit={({ links, blockchainAddresses, widgets }) => {
+          onSubmit={({ link, blockchainAddresse, widget }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
 
               const linksData = getValues('links');
 
               let newLinksArray: NimiLinkBaseDetails[] = [];
-              if (links.length == 0) {
+              if (!link) {
                 newLinksArray = [...linksData];
-              } else if (linksData.length === 0) {
-                newLinksArray.push({ content: '', title: '', type: links[0] });
               } else {
-                newLinksArray = [...linksData, { content: '', type: links[0] }];
+                newLinksArray = [...linksData, { content: '', type: link }];
               }
 
               const currentAddresses = getValues('addresses');
               let newAddressesArray: NimiBlockchainAddress[] = [];
-              if (blockchainAddresses.length === 0) {
+              if (!blockchainAddresse) {
                 newAddressesArray = [...currentAddresses];
-              } else if (currentAddresses.length === 0) {
-                newAddressesArray.push({ blockchain: blockchainAddresses[0], address: '' });
               } else {
-                newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresses[0], address: '' }];
+                newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresse, address: '' }];
               }
               const currentWidgets = getValues('widgets');
               let newWidgets: NimiPOAPWidget[] = [];
-              if (widgets.length !== 0 || currentWidgets.length !== 0) {
+              if (widget || currentWidgets.length !== 0) {
                 newWidgets = [{ type: NimiWidgetType.POAP, address: ensAddress }];
               }
 
