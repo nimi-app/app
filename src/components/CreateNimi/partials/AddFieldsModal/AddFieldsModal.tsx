@@ -11,12 +11,13 @@ import {
   ModalSubTitle,
 } from '../../../Modal';
 import { StyledFlexList, StyledGridList } from '../../styled';
-import { ChangeEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
 
 import { LinksSection } from './LinksSection';
 import { ButtonGroup } from '../../../form/Button';
 import { renderSVG } from '../../../../utils';
+import { useFormContext } from 'react-hook-form';
 
 const ModalHeader = styled(ModalHeaderBase)`
   padding: 82px 82px 0 82px;
@@ -37,6 +38,11 @@ const SectionWrapper = styled.div`
 const SectionTitle = styled.h2`
   color: #4e5d78;
   margin-bottom: 28px;
+`;
+
+const StyledPoapLogo = styled(PoapLogo)`
+  width: 20px;
+  height: 20px;
 `;
 
 interface AddFieldsOptions {
@@ -90,6 +96,7 @@ const PortfolioSectionLinks = [
  */
 export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: AddFieldsModalProps) {
   const { t } = useTranslation('nimi');
+  const { getValues } = useFormContext();
 
   // Take the intial state values from props if they exist
   initialValues = initialValues || {
@@ -118,6 +125,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
       widgets: widgetList,
     });
   };
+  console.log('here', widgetList);
   return (
     <Modal maxWidth={'620px'}>
       <ModalHeader>
@@ -170,14 +178,15 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
             {nimiWidgetTypes.map((widget) => {
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
-              const checked = widgetList.includes(widget as NimiWidgetType);
-
-              const inputOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+              const checked = getValues('widgets').some(({ type }) => type === widget);
+              console.log('checked', checked);
+              const inputOnChange = () => {
+                console.log('jere', checked);
+                console.log('widgerlist', widgetList);
                 // Compute the new state and then batch it previous state for onChange have newest state
-                const newState = event.target.checked
-                  ? [...widgetList, widget as NimiWidgetType]
-                  : widgetList.filter((item) => item !== widget);
+                const newState = [widget as NimiWidgetType];
 
+                console.log('newStaet', ...newState);
                 setWidgetList(newState);
 
                 // emit the change event
@@ -195,7 +204,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
 
               return (
                 <ButtonGroup active={checked} key={inputId} id={inputId} onClick={inputOnChange}>
-                  {PoapLogo}
+                  <StyledPoapLogo />
                   {t(i18nKey)}
                 </ButtonGroup>
               );

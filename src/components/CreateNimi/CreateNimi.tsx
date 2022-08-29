@@ -7,7 +7,16 @@ import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { Nimi, nimiCard, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType, NimiBlockchainAddress } from 'nimi-card';
+import {
+  Nimi,
+  nimiCard,
+  NimiLinkType,
+  NimiLinkBaseDetails,
+  NimiWidgetType,
+  NimiBlockchainAddress,
+  NimiWidget,
+  NimiPOAPWidget,
+} from 'nimi-card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -109,10 +118,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
   const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
 
-  // Manages the links blockchain address list
-  const [formLinkList, setFormLinkList] = useState<NimiLinkType[]>([]);
-
-  const [formWidgetList, setFormWidgetList] = useState<NimiWidgetType[]>([NimiWidgetType.POAP]);
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
@@ -132,18 +137,14 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     // Ignore drop outside droppable container
     if (!droppedItem.destination) return;
     const updatedList = [...links];
-    console.log('updatedList', ...links);
+
     // Remove dragged item
-    console.log('droppedItem', droppedItem.source);
-    console.log('destionatin', droppedItem.destination.index);
     const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-    console.log('reorderedIte', reorderedItem);
-    console.log('updatedList', ...updatedList);
+
     // Add dropped item
     updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
 
     // Update State
-    console.log('newUpdate', ...updatedList);
     setValue('links', updatedList);
   };
 
@@ -154,9 +155,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     const item = items[rubric.source.index];
     const index = rubric.source.index;
     const type = item.type;
-    console.log('item', item);
-    console.log('index', index);
-    console.log('type', type);
+
     return (
       <LinkFormGroup ref={provided.innerRef} {...provided.draggableProps} key={'link-input-' + type + index}>
         <StyledDots {...provided.dragHandleProps}>
@@ -292,8 +291,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     {...register('description')}
                   ></TextArea>
                 </FormGroup>
-                {/* drag and drop with laggy offset */}
-
                 <DragDropContext onDragEnd={handleDrop}>
                   <Droppable droppableId="list-container" renderClone={getRenderItem(links)}>
                     {(provided) => (
@@ -349,32 +346,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           initialValues={{
             links: [],
             blockchainAddresses: [],
-            widgets: formWidgetList,
+            widgets: [],
           }}
           onClose={() => setIsAddFieldsModalOpen(false)}
           onSubmit={({ links, blockchainAddresses, widgets }) => {
             unstable_batchedUpdates(() => {
               setIsAddFieldsModalOpen(false);
 
-              // const arrayOfWidgetsItemsToBeRemoved = formWidgetList.filter((item) => !nimiWidgetList.includes(item));
-              // if (arrayOfWidgetsItemsToBeRemoved.length > 0) {
-              //   const formData = getValues('widgets');
-              //   const newArray = formData.filter((item) => !arrayOfWidgetsItemsToBeRemoved.includes(item.type));
-
-              setValue(
-                'widgets',
-                widgets.map((widget) => {
-                  if (widget === NimiWidgetType.POAP) {
-                    return {
-                      type: NimiWidgetType.POAP,
-                      address: ensAddress,
-                    };
-                  }
-
-                  return widget;
-                })
-              );
-              console.log('links', links);
               const linksData = getValues('links');
 
               let newLinksArray: NimiLinkBaseDetails[] = [];
@@ -385,7 +363,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               } else {
                 newLinksArray = [...linksData, { content: '', type: links[0] }];
               }
-              console.log('newLinksArray', newLinksArray);
+
               const currentAddresses = getValues('addresses');
               let newAddressesArray: NimiBlockchainAddress[] = [];
               if (blockchainAddresses.length === 0) {
@@ -395,12 +373,16 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               } else {
                 newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresses[0], address: '' }];
               }
+              const currentWidgets = getValues('widgets');
+              let newWidgets: NimiPOAPWidget[] = [];
+              if (widgets.length !== 0 || currentWidgets.length !== 0) {
+                newWidgets = [{ type: NimiWidgetType.POAP, address: ensAddress }];
+              }
 
               setValue('links', newLinksArray);
-              // setFormLinkList(links);
-              setValue('addresses', newAddressesArray);
 
-              setFormWidgetList(widgets);
+              setValue('addresses', newAddressesArray);
+              setValue('widgets', newWidgets);
             });
           }}
         />
@@ -410,30 +392,17 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           onClose={() => setIsImportFromTwitterModalOpen(false)}
           onDataImport={(data) => {
             unstable_batchedUpdates(() => {
-              const label = t(`formLabel.twitter`);
               // Set the fields and close the modal
               setValue('displayName', data.name);
               setValue('description', data.description);
               setValue('displayImageUrl', data.profileImageUrl);
 
-              // Handle Twitter
-              const hasTwitter = formLinkList.some((element) => element === NimiLinkType.TWITTER);
-              if (!hasTwitter) {
-                setFormLinkList([...formLinkList, NimiLinkType.TWITTER]);
-              }
-
               const prevLinkState = getValues('links') || [];
 
-              const hasLink = prevLinkState.some((prevLink) => prevLink.type === NimiLinkType.TWITTER);
-              const newState: NimiLinkBaseDetails[] = hasLink
-                ? prevLinkState.map((curr) => {
-                    if (curr.type === NimiLinkType.TWITTER) {
-                      return { ...curr, content: data.username };
-                    }
-
-                    return curr;
-                  })
-                : [...prevLinkState, { type: NimiLinkType.TWITTER, label, content: data.username }];
+              const newState: NimiLinkBaseDetails[] = [
+                ...prevLinkState,
+                { type: NimiLinkType.TWITTER, title: '', content: data.username },
+              ];
 
               setValue('links', newState);
 
