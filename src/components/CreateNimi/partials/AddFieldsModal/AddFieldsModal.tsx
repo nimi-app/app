@@ -125,7 +125,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
       widgets: widgetList,
     });
   };
-  console.log('here', widgetList);
+
   return (
     <Modal maxWidth={'620px'}>
       <ModalHeader>
@@ -148,7 +148,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
               const onChangeHandler = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state
                 const newState = [...addressList, blockchain as NimiBlockchain];
-                console.log('addressList', addressList);
+
                 setAddressList(newState);
                 // emit the change event
                 onChange?.({
@@ -179,14 +179,11 @@ export function AddFieldsModal({ onChange, onClose, onSubmit, initialValues }: A
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
               const checked = getValues('widgets').some(({ type }) => type === widget);
-              console.log('checked', checked);
+
               const inputOnChange = () => {
-                console.log('jere', checked);
-                console.log('widgerlist', widgetList);
                 // Compute the new state and then batch it previous state for onChange have newest state
                 const newState = [widget as NimiWidgetType];
 
-                console.log('newStaet', ...newState);
                 setWidgetList(newState);
 
                 // emit the change event

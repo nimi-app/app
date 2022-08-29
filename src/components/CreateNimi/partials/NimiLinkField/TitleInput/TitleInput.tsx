@@ -1,9 +1,7 @@
-import { useState, ChangeEventHandler } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { StyledCross, StyledInputWrapper } from '../../../../Input';
 import { ReactComponent as Pen } from '../../../../../assets/svg/pen.svg';
-import { useFormContext } from 'react-hook-form';
-import { Nimi, NimiLinkBaseDetails } from 'nimi-card';
 
 const TitleWrapper = styled.div`
   margin-bottom: 10px;
@@ -45,41 +43,31 @@ const StyledPen = styled(Pen)`
 `;
 
 export interface TitleInputProps {
-  setTitle: any;
-  title: string;
+  onTitleChange: any;
+  title?: string;
   defaultTitle: string;
-  index: number;
 }
 
 /**
  * Handles the input for the link type
  */
-export function TitleInput({ title, setTitle, index, defaultTitle }: TitleInputProps) {
+export function TitleInput({ onTitleChange, title, defaultTitle }: TitleInputProps) {
   const [showInput, setShowInput] = useState(false);
-  const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
-  console.log('here');
-  const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    // Extract the value from the event
-    const targetValue = event.target.value;
-    setTitle(targetValue);
-    // Vlidate
 
-    const linksPrevState = getFormValues('links') || [];
-
-    console.log('linksPrevState', linksPrevState);
-    const currentState = linksPrevState[index] as NimiLinkBaseDetails;
-    linksPrevState[index] = { type: currentState.type, title: targetValue, content: currentState.content };
-    setFormValue('links', linksPrevState);
-  };
   return (
     <TitleWrapper>
-      {showInput ? (
+      {showInput || title ? (
         <StyledInputWrapper>
-          <StyledInput placeholder="Custom Title" type="text" onChange={onChange} value={title} />
-          {title.length > 0 && (
+          <StyledInput
+            placeholder="Custom Title"
+            type="text"
+            onChange={(event) => onTitleChange(event?.target.value)}
+            value={title}
+          />
+          {title && title?.length > 0 && (
             <StyledCross
               onClick={() => {
-                setTitle('');
+                onTitleChange('');
                 setShowInput(false);
               }}
             />

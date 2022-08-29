@@ -12,7 +12,6 @@ import { PoapButton, PoapWrapper, InnerPoapWrapper } from './styled';
 export function PoapField() {
   const { setValue: setFormValue } = useFormContext<Nimi>();
   const handleDelete = () => {
-    console.log('here');
     setFormValue('widgets', []);
   };
   return (

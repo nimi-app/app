@@ -1,1 +1,1 @@
-export * from './LabelInput';
+export * from './TitleInput';

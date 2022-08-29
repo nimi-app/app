@@ -14,7 +14,6 @@ import {
   NimiLinkBaseDetails,
   NimiWidgetType,
   NimiBlockchainAddress,
-  NimiWidget,
   NimiPOAPWidget,
 } from 'nimi-card';
 import { CardBody, Card } from '../Card';
@@ -152,10 +151,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
   // eslint-disable-next-line react/display-name
   const getRenderItem = (items) => (provided, snapshot, rubric) => {
-    const item = items[rubric.source.index];
     const index = rubric.source.index;
+    const item = items[index];
     const type = item.type;
-
+    console.log('outisde---------------');
+    console.log('titlePassed', item.title);
+    console.log('indexPassed', index);
+    console.log('outisde---------------');
     return (
       <LinkFormGroup ref={provided.innerRef} {...provided.draggableProps} key={'link-input-' + type + index}>
         <StyledDots {...provided.dragHandleProps}>
@@ -164,7 +166,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
         <NimiLinkField
           key={'link-input' + type + index}
-          title={t(`formLabel.${type.toLowerCase()}`)}
+          title={item.title}
           link={type as NimiLinkType}
           index={index}
           content={item.content}

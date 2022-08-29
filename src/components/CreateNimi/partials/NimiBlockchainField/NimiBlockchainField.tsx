@@ -2,7 +2,6 @@ import { NimiBlockchain, Nimi, blockchainAddresses, NIMI_BLOCKCHAIN_LOGO_URL } f
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler, useMemo, useState } from 'react';
 
-import { Input, Label } from '../../../form';
 import { InputFieldWithIcon } from '../../../Input';
 import { renderSVG } from '../../../../utils';
 
@@ -19,7 +18,7 @@ export function NimiBlockchainField({ blockchain, label, index }: NimiBlockchain
   const { setValue: setAddressValue, getValues } = useFormContext<Nimi>();
   const [value, setValue] = useState('');
   const [isValueValid, setIsValueValid] = useState(false);
-  console.log('isValueValid', isValueValid);
+  console.log('isValueValid,', isValueValid);
   const logo = useMemo(() => {
     return renderSVG(NIMI_BLOCKCHAIN_LOGO_URL[blockchain], 20);
   }, [blockchain]);
@@ -29,13 +28,13 @@ export function NimiBlockchainField({ blockchain, label, index }: NimiBlockchain
     setValue(targetValue);
 
     blockchainAddresses
-      .isValid({
-        blockchain: blockchain,
-        address: targetValue,
-      })
+      .isValid([
+        {
+          blockchain: blockchain,
+          address: targetValue,
+        },
+      ])
       .then((isGut) => {
-        console.log({ value });
-        console.log('isValidShit', isGut);
         if (isGut) handleFormValue(targetValue);
 
         setIsValueValid(isGut);
@@ -52,9 +51,8 @@ export function NimiBlockchainField({ blockchain, label, index }: NimiBlockchain
 
   const onDelete = () => {
     const addressesState = getValues('addresses') || [];
-    console.log('linksPrevState', addressesState);
+
     addressesState.splice(index, 1);
-    console.log('index', index);
 
     setAddressValue('addresses', addressesState);
   };

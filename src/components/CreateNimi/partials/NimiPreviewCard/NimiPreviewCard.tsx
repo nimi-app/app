@@ -26,7 +26,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   useEffect(() => {
     // Filter invalid links
     const filteredNimi = filterEmptyFields(nimi);
-    console.log('fitleredShit', filteredNimi);
+
     nimiValidator
       .validate(filteredNimi, {
         abortEarly: false,

@@ -2,18 +2,19 @@ import { Nimi, NimiLinkType, nimiLinkValidator, nimiLinkDetailsExtended } from '
 import isURL from 'validator/lib/isURL';
 
 import { useFormContext } from 'react-hook-form';
-import { ChangeEventHandler, FocusEventHandler, useMemo, useState } from 'react';
+import { FocusEventHandler, useEffect, useMemo, useState } from 'react';
 
 import { LinkFieldWrapper } from './NimiLinkField.styled';
 import { renderSVG } from '../../../../utils';
 
-import { TitleInput } from './TitleInput';
 import { nimiLinkTypePlaceholder } from '../../../../constants';
 import { InputFieldWithIcon } from '../../../Input';
+import { useTranslation } from 'react-i18next';
+import { TitleInput } from './TitleInput';
 
 export interface NimiLinkFieldProps {
   link: NimiLinkType;
-  title: string;
+  title?: string;
   index: number;
   key: string;
   content: string;
@@ -23,21 +24,23 @@ export interface NimiLinkFieldProps {
  * Handles the input for the link type
  */
 export function NimiLinkField({ link, index, content: defaultContent, title: defaultTitle }: NimiLinkFieldProps) {
+  const { t } = useTranslation('nimi');
   // Form context
   const { setValue: setFormValue, getValues: getFormValues } = useFormContext<Nimi>();
   // Local state for the input value
   const [value, setValue] = useState(defaultContent);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(defaultTitle);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isValueValid, setIsValueValid] = useState(true);
-
+  console.log('isInputFocues', isInputFocused);
+  console.log('isValid', isValueValid);
   const logo = useMemo(() => {
     return renderSVG(nimiLinkDetailsExtended[link].logo, 20);
   }, [link]);
   // Handle the input change
-  const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onLinkChange = (event) => {
     // Extract the value from the event
-    const targetValue = event.target.value;
+    const targetValue = event;
     setValue(targetValue);
     // Vlidate
     nimiLinkValidator
@@ -46,14 +49,39 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
         content: targetValue,
       })
       .then((isGut) => {
-        console.log({ value });
-        console.log('isValidShit', isGut);
         if (isGut) handleFormValue(targetValue);
 
         setIsValueValid(isGut);
       })
       .catch(() => setIsValueValid(false));
   };
+
+  const onTitleChange = (event) => {
+    // Extract the value from the event
+    const targetValue = event;
+    setTitle(targetValue);
+    console.log('setting', targetValue);
+    // Vlidate
+
+    const linksPrevState = getFormValues('links') || [];
+
+    linksPrevState[index] = { type: link, title: targetValue, content: value };
+    setFormValue('links', linksPrevState);
+  };
+
+  useEffect(() => {
+    const linksPrevState = getFormValues('links') || [];
+    onTitleChange(linksPrevState[index].title);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index, defaultTitle]);
+  useEffect(() => {
+    //handle index change
+    // onLinkChange(defaultContent);
+    onLinkChange(defaultContent);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index, defaultContent]);
 
   const onBlur: FocusEventHandler<HTMLInputElement> = (event) => {
     const targetValue = event.target.value;
@@ -74,19 +102,14 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
 
   const handleFormValue = (newValue: string) => {
     const linksPrevState = getFormValues('links') || [];
-    console.log('currentLink', link);
-    console.log('linksPrevState', linksPrevState);
 
-    linksPrevState[index] = { type: link, title, content: newValue };
+    linksPrevState[index] = { type: link, title: linksPrevState[index].title, content: newValue };
     setFormValue('links', linksPrevState);
   };
   const handleDelete = () => {
-    console.log(isInputFocused, isValueValid);
-    console.log('delete');
     const linksPrevState = getFormValues('links') || [];
-    console.log('linksPrevState', linksPrevState);
+
     linksPrevState.splice(index, 1);
-    console.log('index', index);
 
     setFormValue('links', linksPrevState);
   };
@@ -101,13 +124,17 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
 
   return (
     <LinkFieldWrapper>
-      <TitleInput setTitle={setTitle} title={title} index={index} defaultTitle={defaultTitle} />
+      <TitleInput
+        onTitleChange={onTitleChange}
+        title={title}
+        defaultTitle={t(`formLabel.${link.toLocaleLowerCase()}`)}
+      />
       <InputFieldWithIcon
         logo={logo}
         placeholder={nimiLinkTypePlaceholder[link]}
         onInputFocus={() => setIsInputFocused(true)}
         onBlur={onBlur}
-        onChange={onChange}
+        onChange={(event) => onLinkChange(event.target.value)}
         value={value}
         onDelete={handleDelete}
         onInputReset={() => setValue('')}
