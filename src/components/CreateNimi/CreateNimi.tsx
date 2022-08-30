@@ -300,11 +300,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   <AddresssWrapper>
                     <AddressesTitle>Addresses</AddressesTitle>
                     {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                      const label = t(`formLabel.${blockchain.toLowerCase()}`);
-
                       return (
                         <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
-                          <NimiBlockchainField index={index} label={label} blockchain={blockchain} />
+                          <NimiBlockchainField index={index} blockchain={blockchain} />
                         </FormGroup>
                       );
                     })}

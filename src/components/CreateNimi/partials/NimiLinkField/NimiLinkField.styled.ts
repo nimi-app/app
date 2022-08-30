@@ -5,8 +5,3 @@ export const LinkFieldWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-export const StyledErrorText = styled.div`
-  color: red;
-  margin-top: 5px;
-`;

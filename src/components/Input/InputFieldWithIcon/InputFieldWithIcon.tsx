@@ -1,17 +1,18 @@
 import { StyledInputWrapper, StyledInput, TrashCanStyle, StyledCross } from '../styleds';
 
 import { ReactComponent as TrashCan } from '../../../assets/svg/trashcan.svg';
+import { FocusEventHandler } from 'react';
 
 export interface InputFieldWithIcon {
-  logo: any;
+  logo?: JSX.Element;
   placeholder: string;
-  onInputFocus?: any;
-  onBlur?: any;
-  onChange: any;
-  onDelete: any;
-  onInputReset: any;
-  value: any;
-  id: any;
+  onInputFocus?: FocusEventHandler<HTMLInputElement>;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onDelete: () => void;
+  onInputReset: () => void;
+  value: string;
+  id: string;
 }
 
 /**

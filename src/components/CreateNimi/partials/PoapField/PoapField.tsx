@@ -7,7 +7,7 @@ import { TrashCanStyle } from '../../../Input';
 import { PoapButton, PoapWrapper, InnerPoapWrapper } from './styled';
 
 /**
- * Handles the input for blockchain address
+ * Shows poap section with the delete button
  */
 export function PoapField() {
   const { setValue: setFormValue } = useFormContext<Nimi>();
