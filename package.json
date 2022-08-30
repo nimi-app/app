@@ -38,7 +38,7 @@
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-xhr-backend": "^3.2.2",
     "multicodec": "^3.2.1",
-    "nimi-card": "file:.yalc/nimi-card",
+    "nimi-card": "^0.8.0-rc.5",
     "polished": "^4.2.2",
     "qrcode": "^1.5.1",
     "react": "^18.0.0",
