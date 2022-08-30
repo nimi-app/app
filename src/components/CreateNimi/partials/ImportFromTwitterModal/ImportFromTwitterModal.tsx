@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ChangeEventHandler, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { getAPIBaseURL } from '../../../../modules/api-service';
 import { Button } from '../../../Button';
 import { FormGroup, Input } from '../../../form';
 import { Loader, LoaderWrapper } from '../../../Loader';
@@ -52,8 +53,10 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
     setIsLoading(true);
     setError(undefined);
 
+    const url = new URL('/twitter-info', getAPIBaseURL());
+
     axios
-      .get<{ data: TwitterData }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/twitter-info`, {
+      .get<{ data: TwitterData }>(url.toString(), {
         params: {
           username: username.charAt(0) === '@' ? username.substring(1) : username,
         },
