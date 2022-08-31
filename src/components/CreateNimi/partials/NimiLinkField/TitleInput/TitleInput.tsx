@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { StyledCross, StyledInputWrapper } from '../../../../Input';
 import { ReactComponent as Pen } from '../../../../../assets/svg/pen.svg';
+import { LinkState } from '../NimiLinkField';
 
 const TitleWrapper = styled.div`
   margin-bottom: 10px;
@@ -53,16 +54,19 @@ export interface TitleInputProps {
  */
 export function TitleInput({ onTitleChange, title, defaultTitle }: TitleInputProps) {
   const [showInput, setShowInput] = useState(false);
+  const [titleState, setTitleState] = useState<LinkState>(LinkState.IDLE);
 
   return (
     <TitleWrapper>
       {showInput || title ? (
-        <StyledInputWrapper>
+        <StyledInputWrapper state={titleState}>
           <StyledInput
             placeholder="Custom Title"
             type="text"
             onChange={(event) => onTitleChange(event?.target.value)}
             value={title}
+            onBlur={() => setTitleState(LinkState.IDLE)}
+            onFocus={() => setTitleState(LinkState.ACTIVE)}
           />
           {title && title?.length > 0 && (
             <StyledCross

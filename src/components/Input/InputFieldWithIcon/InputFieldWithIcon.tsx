@@ -1,10 +1,14 @@
 import { StyledInputWrapper, StyledInput, TrashCanStyle, StyledCross } from '../styleds';
 
 import { ReactComponent as TrashCan } from '../../../assets/svg/trashcan.svg';
+import { ReactComponent as Error } from '../../../assets/svg/alert.svg';
+
 import { FocusEventHandler } from 'react';
+import { LinkState } from '../../CreateNimi/partials/NimiLinkField';
 
 export interface InputFieldWithIcon {
   logo?: JSX.Element;
+  state?: LinkState;
   placeholder: string;
   onInputFocus?: FocusEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -20,6 +24,7 @@ export interface InputFieldWithIcon {
  */
 export function InputFieldWithIcon({
   logo,
+  state,
   placeholder,
   onInputFocus,
   onBlur,
@@ -30,8 +35,8 @@ export function InputFieldWithIcon({
   id,
 }: InputFieldWithIcon) {
   return (
-    <StyledInputWrapper>
-      {logo && logo}
+    <StyledInputWrapper state={state}>
+      {state === LinkState.ERROR ? <Error /> : logo}
       <StyledInput
         onFocus={onInputFocus}
         onBlur={onBlur}

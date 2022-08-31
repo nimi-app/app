@@ -119,6 +119,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
   const formWatchPayload = watch();
 
+  const links = useMemo(() => formWatchPayload.links, [formWatchPayload]);
+
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;
     setValue('displayName', lensProfile.name);
@@ -140,8 +142,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     // Update State
     setValue('links', updatedList);
   };
-
-  const links = useMemo(() => formWatchPayload.links, [formWatchPayload]);
 
   // eslint-disable-next-line react/display-name
   const getRenderItem = (items) => (provided, snapshot, rubric) => {
