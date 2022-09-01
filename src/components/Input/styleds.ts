@@ -4,7 +4,6 @@ import { InputState } from './InputFieldWithIcon';
 
 export const StyledInputWrapper = styled.div<{ state?: InputState }>`
   display: flex;
-  border-radius: 20px;
   background: #ffffff;
   align-items: center;
   padding: 5.56px 6px;
@@ -15,13 +14,13 @@ export const StyledInputWrapper = styled.div<{ state?: InputState }>`
   box-sizing: border-box;
   background-clip: padding-box;
   border: 1px solid transparent;
-
   &:before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 20px;
     padding: 2px; /* control the border thickness */
+
     background: ${({ state }) =>
       state === InputState.ERROR
         ? '#EB5757'

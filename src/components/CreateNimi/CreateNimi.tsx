@@ -54,6 +54,7 @@ import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { PoapField } from './partials/PoapField/PoapField';
+import { InputState, StyledInputWrapper } from '../Input';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -271,17 +272,22 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
-                  <Input placeholder="Name" id="displayName" {...register('displayName')} />
+
+                  <StyledInputWrapper state={InputState.ACTIVE}>
+                    <Input placeholder="Name" id="displayName" {...register('displayName')} />
+                  </StyledInputWrapper>
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <TextArea
-                    onKeyDown={handleKeyDown}
-                    maxLength={300}
-                    placeholder="Description"
-                    id="description"
-                    {...register('description')}
-                  />
+                  <StyledInputWrapper state={InputState.ACTIVE}>
+                    <TextArea
+                      onKeyDown={handleKeyDown}
+                      maxLength={300}
+                      placeholder="Description"
+                      id="description"
+                      {...register('description')}
+                    />
+                  </StyledInputWrapper>
                 </FormGroup>
                 <DragDropContext onDragEnd={handleDrop}>
                   <Droppable droppableId="list-container" renderClone={getRenderItem(links)}>
