@@ -92,7 +92,7 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
           ) : (
             <>
               <FormGroup>
-                <StyledInputWrapper state={InputState.ACTIVE}>
+                <StyledInputWrapper isSimple state={InputState.ACTIVE}>
                   <Input
                     type="text"
                     value={username}

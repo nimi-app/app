@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { ReactComponent as Cross } from '../../assets/svg/cross.svg';
 import { InputState } from './InputFieldWithIcon';
 
-export const StyledInputWrapper = styled.div<{ state?: InputState }>`
+export const StyledInputWrapper = styled.div<{ state?: InputState; isSimple?: boolean }>`
   display: flex;
   background: #ffffff;
   align-items: center;
@@ -14,19 +14,23 @@ export const StyledInputWrapper = styled.div<{ state?: InputState }>`
   box-sizing: border-box;
   background-clip: padding-box;
   border: 1px solid transparent;
+  &:focus-within {
+    &:before {
+      background: ${({ state }) =>
+        state === InputState.ERROR
+          ? '#EB5757'
+          : state === InputState.ACTIVE
+          ? 'linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);'
+          : 'transperent'};
+    }
+  }
   &:before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 20px;
     padding: 2px; /* control the border thickness */
-
-    background: ${({ state }) =>
-      state === InputState.ERROR
-        ? '#EB5757'
-        : state === InputState.ACTIVE
-        ? 'linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);'
-        : 'transperent'};
+    background: ${({ isSimple }) => isSimple && '#A1AAB8'};
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;

@@ -273,13 +273,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
 
-                  <StyledInputWrapper state={InputState.ACTIVE}>
+                  <StyledInputWrapper isSimple state={InputState.ACTIVE}>
                     <Input placeholder="Name" id="displayName" {...register('displayName')} />
                   </StyledInputWrapper>
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <StyledInputWrapper state={InputState.ACTIVE}>
+                  <StyledInputWrapper isSimple state={InputState.ACTIVE}>
                     <TextArea
                       onKeyDown={handleKeyDown}
                       maxLength={300}
