@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Button } from '../../../Button';
 import { FormGroup, Input } from '../../../form';
-import { InputState, StyledInputWrapper } from '../../../Input';
+import { StyledInputWrapper } from '../../../Input';
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {
   Modal,
@@ -92,7 +92,7 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
           ) : (
             <>
               <FormGroup>
-                <StyledInputWrapper isSimple state={InputState.ACTIVE}>
+                <StyledInputWrapper isSimple>
                   <Input
                     type="text"
                     value={username}

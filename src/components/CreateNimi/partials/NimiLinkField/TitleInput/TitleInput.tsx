@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { InputState, StyledCross, StyledInputWrapper } from '../../../../Input';
+import { StyledCross, StyledInputWrapper } from '../../../../Input';
 import { ReactComponent as Pen } from '../../../../../assets/svg/pen.svg';
 
 const TitleWrapper = styled.div`
@@ -53,19 +53,16 @@ export interface TitleInputProps {
  */
 export function TitleInput({ onTitleChange, title, defaultTitle }: TitleInputProps) {
   const [showInput, setShowInput] = useState(false);
-  const [titleState, setTitleState] = useState<InputState>(InputState.IDLE);
 
   return (
     <TitleWrapper>
       {showInput || title ? (
-        <StyledInputWrapper state={titleState}>
+        <StyledInputWrapper>
           <StyledInput
             placeholder="Custom Title"
             type="text"
             onChange={(event) => onTitleChange(event?.target.value)}
             value={title}
-            onBlur={() => setTitleState(InputState.IDLE)}
-            onFocus={() => setTitleState(InputState.ACTIVE)}
           />
           {title && title?.length > 0 && (
             <StyledCross

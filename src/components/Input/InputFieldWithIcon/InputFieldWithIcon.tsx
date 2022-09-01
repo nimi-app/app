@@ -7,7 +7,6 @@ import { FocusEventHandler, useEffect, useState } from 'react';
 
 export interface InputFieldWithIcon {
   logo?: JSX.Element;
-  state?: InputState;
   placeholder: string;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -18,19 +17,12 @@ export interface InputFieldWithIcon {
   id: string;
 }
 
-export enum InputState {
-  IDLE,
-  ACTIVE,
-  ERROR,
-}
-
 /**
  * Handles the input for the link type
  */
 export function InputFieldWithIcon({
   logo,
   isValid,
-  state,
   placeholder,
   onBlur,
   onChange,
@@ -39,33 +31,32 @@ export function InputFieldWithIcon({
   value,
   id,
 }: InputFieldWithIcon) {
-  const [linkState, setLinkState] = useState<InputState>();
+  const [isError, setIsError] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
-    //hook for handling input state
+    //hook for handling error state
     if (!isValid && value.length !== 0) {
       const newTimeoutId = setTimeout(() => {
-        setLinkState(InputState.ERROR);
+        setIsError(true);
       }, 2222);
-      if (isInputFocused) setLinkState(InputState.ACTIVE);
-      else setLinkState(InputState.IDLE);
+
       return () => {
         clearTimeout(newTimeoutId);
       };
-    } else if (isInputFocused) setLinkState(InputState.ACTIVE);
-    else return setLinkState(InputState.IDLE);
+    } else {
+      setIsError(false);
+    }
   }, [isInputFocused, isValid, value]);
 
   return (
-    <StyledInputWrapper state={linkState}>
-      {state === InputState.ERROR ? <Error /> : logo}
+    <StyledInputWrapper isError={isError}>
+      {isError ? <Error /> : logo}
       <StyledInput
         onFocus={() => setIsInputFocused(true)}
         onBlur={(event) => {
           onBlur && onBlur(event);
-          if (!isValid) setLinkState(InputState.ERROR);
-          else setIsInputFocused(false);
+          if (!isValid) setIsError(true);
         }}
         onChange={onChange}
         value={value}

@@ -54,7 +54,7 @@ import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { PoapField } from './partials/PoapField/PoapField';
-import { InputState, StyledInputWrapper } from '../Input';
+import { StyledInputWrapper } from '../Input';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -273,13 +273,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
 
-                  <StyledInputWrapper isSimple state={InputState.ACTIVE}>
+                  <StyledInputWrapper isSimple>
                     <Input placeholder="Name" id="displayName" {...register('displayName')} />
                   </StyledInputWrapper>
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <StyledInputWrapper isSimple state={InputState.ACTIVE}>
+                  <StyledInputWrapper isSimple>
                     <TextArea
                       onKeyDown={handleKeyDown}
                       maxLength={300}
