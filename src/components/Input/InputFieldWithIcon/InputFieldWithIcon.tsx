@@ -3,20 +3,25 @@ import { StyledInputWrapper, StyledInput, TrashCanStyle, StyledCross } from '../
 import { ReactComponent as TrashCan } from '../../../assets/svg/trashcan.svg';
 import { ReactComponent as Error } from '../../../assets/svg/alert.svg';
 
-import { FocusEventHandler } from 'react';
-import { LinkState } from '../../CreateNimi/partials/NimiLinkField';
+import { FocusEventHandler, useEffect, useState } from 'react';
 
 export interface InputFieldWithIcon {
   logo?: JSX.Element;
-  state?: LinkState;
+  state?: InputState;
   placeholder: string;
-  onInputFocus?: FocusEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDelete: () => void;
   onInputReset: () => void;
+  isValid: boolean;
   value: string;
   id: string;
+}
+
+export enum InputState {
+  IDLE,
+  ACTIVE,
+  ERROR,
 }
 
 /**
@@ -24,9 +29,9 @@ export interface InputFieldWithIcon {
  */
 export function InputFieldWithIcon({
   logo,
+  isValid,
   state,
   placeholder,
-  onInputFocus,
   onBlur,
   onChange,
   onDelete,
@@ -34,12 +39,34 @@ export function InputFieldWithIcon({
   value,
   id,
 }: InputFieldWithIcon) {
+  const [linkState, setLinkState] = useState<InputState>();
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  useEffect(() => {
+    //hook for handling input state
+    if (!isValid && value.length !== 0) {
+      const newTimeoutId = setTimeout(() => {
+        setLinkState(InputState.ERROR);
+      }, 2222);
+      if (isInputFocused) setLinkState(InputState.ACTIVE);
+      else setLinkState(InputState.IDLE);
+      return () => {
+        clearTimeout(newTimeoutId);
+      };
+    } else if (isInputFocused) setLinkState(InputState.ACTIVE);
+    else return setLinkState(InputState.IDLE);
+  }, [isInputFocused, isValid, value]);
+
   return (
-    <StyledInputWrapper state={state}>
-      {state === LinkState.ERROR ? <Error /> : logo}
+    <StyledInputWrapper state={linkState}>
+      {state === InputState.ERROR ? <Error /> : logo}
       <StyledInput
-        onFocus={onInputFocus}
-        onBlur={onBlur}
+        onFocus={() => setIsInputFocused(true)}
+        onBlur={(event) => {
+          onBlur && onBlur(event);
+          if (!isValid) setLinkState(InputState.ERROR);
+          else setIsInputFocused(false);
+        }}
         onChange={onChange}
         value={value}
         placeholder={placeholder}

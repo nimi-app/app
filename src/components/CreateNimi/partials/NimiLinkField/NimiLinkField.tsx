@@ -20,12 +20,6 @@ export interface NimiLinkFieldProps {
   content: string;
 }
 
-export enum LinkState {
-  IDLE,
-  ACTIVE,
-  ERROR,
-}
-
 /**
  * Handles the input for the link type
  */
@@ -36,33 +30,14 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
   // Local state for the input value
   const [value, setValue] = useState(defaultContent);
   const [title, setTitle] = useState(defaultTitle);
-  const [isInputFocused, setIsInputFocused] = useState(false);
+
   const [isValueValid, setIsValueValid] = useState(true);
-  const [linkState, setLinkState] = useState<LinkState>();
 
   //TODO: handle focused and error values for links
-  console.log('isInputFocues', isInputFocused);
-  console.log('isValid', isValueValid);
 
-  console.log('linkState', linkState);
   const logo = useMemo(() => {
     return renderSVG(nimiLinkDetailsExtended[link].logo, 20);
   }, [link]);
-
-  useEffect(() => {
-    //hook for handling input state
-    if (!isValueValid && value.length !== 0) {
-      const newTimeoutId = setTimeout(() => {
-        setLinkState(LinkState.ERROR);
-      }, 2222);
-      if (isInputFocused) setLinkState(LinkState.ACTIVE);
-      else setLinkState(LinkState.IDLE);
-      return () => {
-        clearTimeout(newTimeoutId);
-      };
-    } else if (isInputFocused) setLinkState(LinkState.ACTIVE);
-    else return setLinkState(LinkState.IDLE);
-  }, [isInputFocused, isValueValid, value]);
 
   // Handle content change
   const onLinkChange = (value) => {
@@ -119,9 +94,6 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
         setIsValueValid(true);
       }
     }
-
-    setIsInputFocused(false);
-    if (!isValueValid) setLinkState(LinkState.ERROR);
   };
 
   const handleFormValue = (newValue: string) => {
@@ -148,10 +120,9 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
         defaultTitle={t(`formLabel.${link.toLocaleLowerCase()}`)}
       />
       <InputFieldWithIcon
-        state={linkState}
+        isValid={isValueValid}
         logo={logo}
         placeholder={nimiLinkTypePlaceholder[link]}
-        onInputFocus={() => setIsInputFocused(true)}
         onBlur={onBlur}
         onChange={(event) => onLinkChange(event.target.value)}
         value={value}

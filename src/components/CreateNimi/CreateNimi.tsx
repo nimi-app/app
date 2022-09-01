@@ -281,7 +281,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     placeholder="Description"
                     id="description"
                     {...register('description')}
-                  ></TextArea>
+                  />
                 </FormGroup>
                 <DragDropContext onDragEnd={handleDrop}>
                   <Droppable droppableId="list-container" renderClone={getRenderItem(links)}>

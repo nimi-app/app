@@ -65,6 +65,7 @@ export function NimiBlockchainField({ blockchain, index }: NimiBlockchainFieldPr
   return (
     <InputFieldWithIcon
       logo={logo}
+      isValid={isValueValid}
       onChange={onChange}
       placeholder={`${label} address`}
       onDelete={onDelete}

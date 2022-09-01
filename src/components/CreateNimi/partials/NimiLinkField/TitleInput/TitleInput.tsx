@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { StyledCross, StyledInputWrapper } from '../../../../Input';
+import { InputState, StyledCross, StyledInputWrapper } from '../../../../Input';
 import { ReactComponent as Pen } from '../../../../../assets/svg/pen.svg';
-import { LinkState } from '../NimiLinkField';
 
 const TitleWrapper = styled.div`
   margin-bottom: 10px;
@@ -54,7 +53,7 @@ export interface TitleInputProps {
  */
 export function TitleInput({ onTitleChange, title, defaultTitle }: TitleInputProps) {
   const [showInput, setShowInput] = useState(false);
-  const [titleState, setTitleState] = useState<LinkState>(LinkState.IDLE);
+  const [titleState, setTitleState] = useState<InputState>(InputState.IDLE);
 
   return (
     <TitleWrapper>
@@ -65,8 +64,8 @@ export function TitleInput({ onTitleChange, title, defaultTitle }: TitleInputPro
             type="text"
             onChange={(event) => onTitleChange(event?.target.value)}
             value={title}
-            onBlur={() => setTitleState(LinkState.IDLE)}
-            onFocus={() => setTitleState(LinkState.ACTIVE)}
+            onBlur={() => setTitleState(InputState.IDLE)}
+            onFocus={() => setTitleState(InputState.ACTIVE)}
           />
           {title && title?.length > 0 && (
             <StyledCross

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { ReactComponent as Cross } from '../../assets/svg/cross.svg';
-import { LinkState } from '../CreateNimi/partials/NimiLinkField';
+import { InputState } from './InputFieldWithIcon';
 
-export const StyledInputWrapper = styled.div<{ state?: LinkState }>`
+export const StyledInputWrapper = styled.div<{ state?: InputState }>`
   display: flex;
   border-radius: 20px;
   background: #ffffff;
@@ -23,9 +23,9 @@ export const StyledInputWrapper = styled.div<{ state?: LinkState }>`
     border-radius: 20px;
     padding: 2px; /* control the border thickness */
     background: ${({ state }) =>
-      state === LinkState.ERROR
+      state === InputState.ERROR
         ? '#EB5757'
-        : state === LinkState.ACTIVE
+        : state === InputState.ACTIVE
         ? 'linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);'
         : 'transperent'};
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
