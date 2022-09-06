@@ -117,6 +117,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   );
 
   const formWatchPayload = watch();
+  console.log('form', formWatchPayload);
 
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;

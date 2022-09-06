@@ -12,6 +12,7 @@ import { Loader } from '../../components/Loader';
 import { ENSNameCard } from '../../components/ENSNameCard';
 import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
+import { useDomainsData } from '../../hooks/useDomainsData';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -62,6 +63,8 @@ function Domains({ address }: DomainsProps) {
       address: address.toLowerCase(),
     },
   });
+  const data2 = useDomainsData(address);
+  console.log('datamainns', data2);
   const { t } = useTranslation('nimi');
 
   if (loading || !data) {
