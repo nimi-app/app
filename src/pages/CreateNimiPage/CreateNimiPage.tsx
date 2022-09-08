@@ -6,9 +6,10 @@ import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
 import { Container } from '../../components/Container';
 import { useWeb3React } from '@web3-react/core';
+import { SUPPORTED_CHAIN_IDS } from '../../constants';
 
 export function CreateNimiPage() {
-  const { account } = useWeb3React();
+  const { account, provider, chainId } = useWeb3React();
   const { ensName } = useParams();
   const nodeHash = ensNameHash(ensName as string);
 
@@ -29,12 +30,17 @@ export function CreateNimiPage() {
     return <div>{error?.message}</div>;
   }
 
+  if (!provider || !SUPPORTED_CHAIN_IDS.includes(chainId as number)) {
+    return <div>Wrong network</div>;
+  }
+
   return (
     <Container>
       <CreateNimi
         ensAddress={account as string}
         ensName={data.domain.name as string}
         ensLabelName={data.domain.labelName as string}
+        provider={provider}
       />
     </Container>
   );

@@ -41,16 +41,19 @@ import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { publishNimi, uploadImage } from './api';
+import { publishNimiViaIPNS, uploadImage } from './api';
+import { Web3Provider } from '@ethersproject/providers';
+import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { supportedImageTypes } from '../../constants';
 
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
   ensLabelName: string;
+  provider: Web3Provider;
 }
 
-export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
+export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   /**
    * @todo replace this API
    */
@@ -69,6 +72,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
   const publicResolverContract = useENSPublicResolverContract();
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPublishingNimi, setIsPublishingNimi] = useState(false);
+  const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
@@ -78,7 +82,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
   // Form state manager
   const useFormContext = useForm<Nimi>({
-    resolver: yupResolver(nimiCard),
+    resolver: yupResolver(nimiCard, {
+      stripUnknown: true,
+      abortEarly: false,
+    }),
     defaultValues: {
       displayName: ensName,
       displayImageUrl: ensMetadata?.image,
@@ -134,6 +141,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
       setIsPublishNimiModalOpen(true);
       setIsPublishingNimi(true);
       setPublishNimiError(undefined);
+      setIsNimiPublished(false);
     });
 
     try {
@@ -143,18 +151,38 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
       publishNimiAbortController.current = new AbortController();
 
-      const { cid } = await publishNimi(data, publishNimiAbortController.current);
+      const signature = await provider.getSigner().signMessage(JSON.stringify(data));
 
-      if (!cid) {
-        throw new Error('No CID returned from publishNimi');
+      const { cidV1, ipns } = await publishNimiViaIPNS({
+        nimi: data,
+        signature,
+        controller: publishNimiAbortController.current,
+      });
+
+      if (!cidV1) {
+        throw new Error('No CID returned from publishNimiViaIPNS');
+      }
+
+      // Get current content hash from ENS contract
+      const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
+      const contentHash = `ipns://${ipns}`;
+      const newContentHashEncoded = encodeContenthash(contentHash).encoded as unknown as string;
+
+      // User already uses the Nimi IPNS
+      if (newContentHashEncoded === currentContentHashEncoded) {
+        unstable_batchedUpdates(() => {
+          setIsNimiPublished(true);
+          setIsPublishingNimi(false);
+        });
+        return;
       }
 
       // Set the content
-      setPublishNimiResponseIpfsHash(cid);
+      setPublishNimiResponseIpfsHash(ipns);
       const setContentHashTransaction = await setENSNameContentHash({
         contract: publicResolverContract,
         name: data.ensName,
-        contentHash: `ipfs://${cid}`,
+        contentHash,
       });
 
       setSetContentHashTransaction(setContentHashTransaction);
@@ -163,6 +191,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
       unstable_batchedUpdates(() => {
         setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
+        setIsNimiPublished(true);
         setIsPublishingNimi(false);
       });
     } catch (error) {
@@ -213,6 +242,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
 
         setValue('displayImageUrl', `https://ipfs.io/ipfs/${IpfsHash}`);
       } catch (error) {
+        setImaErrorMessage('Network Error');
+        setTimeout(() => {
+          setImaErrorMessage('');
+        }, 5000);
         console.log('error', error);
       }
     }
@@ -260,11 +293,10 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
                     id="description"
                     {...register('description')}
                   ></TextArea>
-                  {/* <span  role="textbox" contenteditable  {...register('description')}></span> */}
                 </FormGroup>
 
                 {selectedLinkFieldList.map((link) => {
-                  const label = t(`formLabel.${link}`);
+                  const label = t(`formLabel.${link.toLowerCase()}`);
 
                   return (
                     <LinkFormGroup key={'blockchain-input-' + link}>
@@ -403,6 +435,7 @@ export function CreateNimi({ ensAddress, ensName }: CreateNimiProps) {
           ensName={ensName}
           ipfsHash={publishNimiResponseIpfsHash}
           isPublishing={isPublishingNimi}
+          isPublished={isNimiPublished}
           publishError={publishNimiError}
           setContentHashTransaction={setContentHashTransaction}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}

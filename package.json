@@ -1,6 +1,6 @@
 {
   "name": "nimi-app",
-  "version": "0.1.0-beta",
+  "version": "0.2.0-beta",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.10",
@@ -37,7 +37,7 @@
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-xhr-backend": "^3.2.2",
     "multicodec": "^3.2.1",
-    "nimi-card": "^0.8.0-rc.1",
+    "nimi-card": "^0.8.0-rc.5",
     "polished": "^4.2.2",
     "qrcode": "^1.5.1",
     "react": "^18.0.0",

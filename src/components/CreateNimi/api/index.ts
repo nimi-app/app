@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Nimi } from 'nimi-card';
+import { getAPIBaseURL } from '../../../modules/api-service';
 
 interface PublishNimiApiResponseDeprecated {
   IpfsHash: string;
@@ -27,10 +28,12 @@ interface UploadAssets {
  * @returns A promise with IPFS hash
  */
 export function publishNimi(payload: Nimi, controller?: AbortController): Promise<PublishNimiResponse> {
+  const url = new URL('/nimi/publish', getAPIBaseURL());
+
   return axios
     .post<{
       data: PublishNimiApiResponse | PublishNimiApiResponseDeprecated;
-    }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/nimi/publish`, payload, {
+    }>(url.toString(), payload, {
       signal: controller ? controller.signal : undefined,
     })
     .then(({ data }) => {
@@ -46,6 +49,53 @@ export function publishNimi(payload: Nimi, controller?: AbortController): Promis
         cid: (data.data as PublishNimiApiResponseDeprecated).IpfsHash,
       };
     });
+}
+
+interface PublishNimiViaIPNSParams {
+  /**
+   * Nimi
+   */
+  nimi: Nimi;
+  /**
+   * EIP-712 signature
+   */
+  signature: string;
+  /**
+   * Abort controller
+   */
+  controller?: AbortController;
+}
+
+interface PublishNimiViaIPNSResponse {
+  cidV1: string;
+  ipns: string;
+}
+
+/**
+ *
+ * @param payload the payload from the form
+ * @param controller Abort controller
+ * @returns A promise with IPFS hash
+ */
+export function publishNimiViaIPNS({
+  nimi,
+  signature,
+  controller,
+}: PublishNimiViaIPNSParams): Promise<PublishNimiViaIPNSResponse> {
+  return axios
+    .post<{
+      data: PublishNimiViaIPNSResponse;
+    }>(
+      `${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/publish/ipns`,
+      {
+        nimi,
+        signature,
+      },
+      {
+        signal: controller ? controller.signal : undefined,
+      }
+    )
+    .then(({ data }) => data.data);
 }
 
 /**
@@ -64,6 +114,6 @@ export function uploadImage(file: File) {
   return axios
     .post<{
       data: UploadAssets;
-    }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/nimi/assets`, formData, config)
+    }>(`${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/assets`, formData, config)
     .then(({ data }) => data.data);
 }
