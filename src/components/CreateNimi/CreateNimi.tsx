@@ -6,7 +6,15 @@ import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 
-import { Nimi, nimiCard, NimiBlockchain, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
+import {
+  Nimi,
+  nimiValidator,
+  NimiBlockchain,
+  NimiLinkType,
+  NimiLinkBaseDetails,
+  NimiWidgetType,
+  NimiImageType,
+} from '@nimi.io/card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -75,15 +83,19 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const publishNimiAbortController = useRef<AbortController>();
 
+  const image = ensMetadata?.image
+    ? {
+        type: NimiImageType.URL,
+        url: ensMetadata?.image || '',
+      }
+    : undefined;
+
   // Form state manager
   const useFormContext = useForm<Nimi>({
-    resolver: yupResolver(nimiCard, {
-      stripUnknown: true,
-      abortEarly: false,
-    }),
+    resolver: yupResolver(nimiValidator),
     defaultValues: {
       displayName: ensName,
-      displayImageUrl: ensMetadata?.image,
+      image,
       description: '',
       ensAddress: ensAddress,
       ensName,
@@ -122,7 +134,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     if (!lensProfile) return;
     setValue('displayName', lensProfile.name);
     setValue('description', lensProfile.description);
-    setValue('displayImageUrl', lensProfile?.pictureUrl);
+    setValue('image', {
+      type: NimiImageType.URL,
+      url: lensProfile?.pictureUrl,
+    });
   }, [setValue, lensProfile]);
 
   /**
@@ -211,11 +226,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              {formWatchPayload.displayImageUrl ? (
-                <ProfileImage src={formWatchPayload.displayImageUrl} />
-              ) : (
-                <ProfileImagePlaceholder />
-              )}
+              {formWatchPayload.image ? <ProfileImage src={formWatchPayload.image.url} /> : <ProfileImagePlaceholder />}
 
               <ImportButtonsWrapper>
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
@@ -350,7 +361,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               // Set the fields and close the modal
               setValue('displayName', data.name);
               setValue('description', data.description);
-              setValue('displayImageUrl', data.profileImageUrl);
+              setValue('image', {
+                type: NimiImageType.URL,
+                url: data.profileImageUrl,
+              });
 
               // Handle Twitter
               const hasTwitter = formLinkList.some((element) => element === NimiLinkType.TWITTER);
