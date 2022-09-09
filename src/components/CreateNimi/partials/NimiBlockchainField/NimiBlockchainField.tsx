@@ -1,4 +1,4 @@
-import { NimiBlockchain, Nimi, NimiBlockchainAddress } from 'nimi-card';
+import { NimiBlockchain, Nimi, NimiBlockchainAddress } from '@nimi.io/card';
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler } from 'react';
 
