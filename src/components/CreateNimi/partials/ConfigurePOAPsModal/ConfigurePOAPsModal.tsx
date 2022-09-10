@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { Reorder } from 'framer-motion/dist/framer-motion';
 
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../../../theme';
@@ -19,6 +20,7 @@ const NavigationLink = ({ children, onClick, selected }: NavigationLinkProps) =>
 
 export function ConfigurePOAPsModal() {
   const [customOrder, setCustomOrder] = useState(false);
+  const [items, setItems] = useState(['mirko', 'basic', 'tamara', 'kolenkas']);
 
   const setCustomOrderHandler = (v: boolean) => () => setCustomOrder(v);
 
@@ -41,7 +43,24 @@ export function ConfigurePOAPsModal() {
             </NavigationLink>
           </BodyNavigation>
         </BodyControls>
-        <POAPsContainer></POAPsContainer>
+        <Reorder.Group axis="x" values={items} onReorder={setItems} as="div">
+          {items.map((el) => (
+            <Reorder.Item
+              style={{
+                width: 108,
+                height: 108,
+                display: 'inline-block',
+                background: 'red',
+                borderRadius: '50%',
+                marginRight: '-20px',
+                position: 'relative',
+              }}
+              key={el}
+              value={el}
+              as="div"
+            />
+          ))}
+        </Reorder.Group>
       </Body>
     </Modal>
   );
@@ -126,9 +145,18 @@ const LinkUnderline = styled.div`
   background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
 `;
 
-const POAPsContainer = styled.div`
-  height: 108px;
-  margin-top: 32px;
+const POAPsContainer = styled(Reorder.Group)`
+  display: flex;
 
   background-color: green;
+`;
+
+const PoapItem = styled(Reorder.Item)`
+  height: 108px;
+  width: 108px;
+  position: relative;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: white;
+  margin-right: -20px;
 `;
