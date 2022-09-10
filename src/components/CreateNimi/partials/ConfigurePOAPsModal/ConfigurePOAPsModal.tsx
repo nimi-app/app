@@ -20,7 +20,7 @@ const NavigationLink = ({ children, onClick, selected }: NavigationLinkProps) =>
 
 export function ConfigurePOAPsModal() {
   const [customOrder, setCustomOrder] = useState(false);
-  const [items, setItems] = useState(['mirko', 'basic', 'tamara', 'kolenkas']);
+  const [items, setItems] = useState(['mirko', 'basic', 'tamara', 'kolenkas', 'dzonja', 'beka']);
 
   const setCustomOrderHandler = (v: boolean) => () => setCustomOrder(v);
 
@@ -43,24 +43,30 @@ export function ConfigurePOAPsModal() {
             </NavigationLink>
           </BodyNavigation>
         </BodyControls>
-        <Reorder.Group axis="x" values={items} onReorder={setItems} as="div">
-          {items.map((el) => (
-            <Reorder.Item
-              style={{
-                width: 108,
-                height: 108,
-                display: 'inline-block',
-                background: 'red',
-                borderRadius: '50%',
-                marginRight: '-20px',
-                position: 'relative',
-              }}
-              key={el}
-              value={el}
-              as="div"
-            />
-          ))}
-        </Reorder.Group>
+        <POAPsContainer>
+          <Reorder.Group axis="x" values={items} onReorder={setItems} as="div">
+            {console.log(items)}
+            {items.map((el) => (
+              <Reorder.Item
+                dragElastic={0.1}
+                whileTap={{ scale: 1.1 }}
+                style={{
+                  width: 108,
+                  height: 108,
+                  display: 'inline-block',
+                  background: 'white',
+                  borderRadius: '50%',
+                  marginRight: '-33px',
+                  position: 'relative',
+                  border: '2px solid red',
+                }}
+                key={el}
+                value={el}
+                as="div"
+              />
+            ))}
+          </Reorder.Group>
+        </POAPsContainer>
       </Body>
     </Modal>
   );
@@ -145,18 +151,6 @@ const LinkUnderline = styled.div`
   background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
 `;
 
-const POAPsContainer = styled(Reorder.Group)`
-  display: flex;
-
-  background-color: green;
-`;
-
-const PoapItem = styled(Reorder.Item)`
-  height: 108px;
-  width: 108px;
-  position: relative;
-  display: inline-block;
-  border-radius: 50%;
-  background-color: white;
-  margin-right: -20px;
+const POAPsContainer = styled.div`
+  margin-top: 32px;
 `;
