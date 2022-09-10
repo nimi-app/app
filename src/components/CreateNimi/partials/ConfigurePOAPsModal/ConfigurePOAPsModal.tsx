@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import styled from 'styled-components';
-import { Reorder } from 'framer-motion/dist/framer-motion';
+import { Reorder, motion, AnimatePresence } from 'framer-motion/dist/framer-motion';
 
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../../../theme';
@@ -433,37 +433,66 @@ export function ConfigurePOAPsModal() {
             </NavigationLink>
           </BodyNavigation>
         </BodyControls>
-        <POAPsContainer>
+        <AnimatePresence mode="wait">
           {customOrder ? (
-            <Reorder.Group axis="x" values={items} onReorder={setItems} as="div">
-              {items.map((item) => (
-                <Reorder.Item
-                  key={item.tokenId}
-                  value={item}
-                  dragElastic={0.1}
-                  whileTap={{ scale: 1.1 }}
-                  style={{
-                    width: 108,
-                    height: 108,
-                    display: 'inline-block',
-                    background: 'white',
-                    borderRadius: '50%',
-                    marginRight: '-33px',
-                    position: 'relative',
-                    border: '2px solid red',
-                  }}
-                  as="div"
-                />
-              ))}
-            </Reorder.Group>
+            <CustomizePOAPs key="custom-poaps" items={items} setItems={setItems} />
           ) : (
-            items.map((item) => <StaticPOAP key={item.tokenId} src={item.event.image_url} />)
+            <RecentPOAPs key="recent-poaps" items={items} />
           )}
-        </POAPsContainer>
+        </AnimatePresence>
       </Body>
     </Modal>
   );
 }
+
+const AnimatedSection = ({ children }: { children: ReactNode }) => (
+  <AnimatedContainer
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.5 }}
+    transition={{ duration: 0.2 }}
+  >
+    {children}
+  </AnimatedContainer>
+);
+
+const RecentPOAPs = ({ items }) => (
+  <AnimatedSection>
+    <POAPsContainer>
+      {items.map((item) => (
+        <StaticPOAP key={item.tokenId} src={item.event.image_url} />
+      ))}
+    </POAPsContainer>
+  </AnimatedSection>
+);
+
+const CustomizePOAPs = ({ items, setItems }) => (
+  <AnimatedSection>
+    <POAPsContainer>
+      <Reorder.Group axis="x" values={items} onReorder={setItems} as="div">
+        {items.map((item) => (
+          <Reorder.Item
+            key={item.tokenId}
+            value={item}
+            dragElastic={0.1}
+            whileTap={{ scale: 1.1 }}
+            as="div"
+            style={{
+              width: 108,
+              height: 108,
+              display: 'inline-block',
+              background: 'white',
+              borderRadius: '50%',
+              marginRight: '-33px',
+              position: 'relative',
+              border: '2px solid red',
+            }}
+          />
+        ))}
+      </Reorder.Group>
+    </POAPsContainer>
+  </AnimatedSection>
+);
 
 const Modal = styled.div`
   width: 620px;
@@ -556,4 +585,9 @@ const StaticPOAP = styled.img`
   margin-right: -33px;
 
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+`;
+
+const AnimatedContainer = styled(motion.div)`
+  width: 100%;
+  height: 108px;
 `;
