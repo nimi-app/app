@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
@@ -17,6 +18,10 @@ const NavigationLink = ({ children, onClick, selected }: NavigationLinkProps) =>
 );
 
 export function ConfigurePOAPsModal() {
+  const [customOrder, setCustomOrder] = useState(false);
+
+  const setCustomOrderHandler = (v: boolean) => () => setCustomOrder(v);
+
   return (
     <Modal>
       <Header>
@@ -28,10 +33,15 @@ export function ConfigurePOAPsModal() {
         <BodyControls>
           <BodyTitle>POAPs</BodyTitle>
           <BodyNavigation>
-            <NavigationLink selected={true}>Most Recent</NavigationLink>
-            <NavigationLink selected={false}>Custom Order</NavigationLink>
+            <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
+              Most Recent
+            </NavigationLink>
+            <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
+              Custom Order
+            </NavigationLink>
           </BodyNavigation>
         </BodyControls>
+        <POAPsContainer></POAPsContainer>
       </Body>
     </Modal>
   );
@@ -83,8 +93,6 @@ const BodyControls = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  background-color: red;
 `;
 
 const BodyTitle = styled.h2`
@@ -94,23 +102,33 @@ const BodyTitle = styled.h2`
 `;
 
 const BodyNavigation = styled.nav`
-  height: 26px;
+  height: 21px;
 `;
 
 const LinkContainer = styled.div`
-  height: 36px;
   display: inline-block;
   margin-left: 18px;
 `;
 
 const Link = styled.a`
+  display: inline-block;
+  vertical-align: top;
   line-height: 15px;
   font-size: 14px;
   ${NimiSignatureColor}
+  cursor: pointer;
+  margin-bottom: 4px;
 `;
 
 const LinkUnderline = styled.div`
   width: 100%;
   height: 2px;
   background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
+`;
+
+const POAPsContainer = styled.div`
+  height: 108px;
+  margin-top: 32px;
+
+  background-color: green;
 `;
