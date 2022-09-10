@@ -3,6 +3,19 @@ import styled from 'styled-components';
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../../../theme';
 
+type NavigationLinkProps = {
+  children: string;
+  onClick?: () => void;
+  selected: boolean;
+};
+
+const NavigationLink = ({ children, onClick, selected }: NavigationLinkProps) => (
+  <LinkContainer>
+    <Link onClick={onClick}>{children}</Link>
+    {selected && <LinkUnderline />}
+  </LinkContainer>
+);
+
 export function ConfigurePOAPsModal() {
   return (
     <Modal>
@@ -14,7 +27,10 @@ export function ConfigurePOAPsModal() {
       <Body>
         <BodyControls>
           <BodyTitle>POAPs</BodyTitle>
-          <BodyNavigation></BodyNavigation>
+          <BodyNavigation>
+            <NavigationLink selected={true}>Most Recent</NavigationLink>
+            <NavigationLink selected={false}>Custom Order</NavigationLink>
+          </BodyNavigation>
         </BodyControls>
       </Body>
     </Modal>
@@ -79,4 +95,22 @@ const BodyTitle = styled.h2`
 
 const BodyNavigation = styled.nav`
   height: 26px;
+`;
+
+const LinkContainer = styled.div`
+  height: 36px;
+  display: inline-block;
+  margin-left: 18px;
+`;
+
+const Link = styled.a`
+  line-height: 15px;
+  font-size: 14px;
+  ${NimiSignatureColor}
+`;
+
+const LinkUnderline = styled.div`
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
 `;
