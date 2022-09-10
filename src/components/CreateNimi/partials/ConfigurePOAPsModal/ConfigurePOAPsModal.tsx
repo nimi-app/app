@@ -476,7 +476,8 @@ const CustomizePOAPs = ({ items, setItems }) => (
             value={item}
             dragElastic={0.1}
             whileTap={{ scale: 1.1 }}
-            as="div"
+            as="img"
+            src={item.event.image_url}
             style={{
               width: 108,
               height: 108,
@@ -485,8 +486,9 @@ const CustomizePOAPs = ({ items, setItems }) => (
               borderRadius: '50%',
               marginRight: '-33px',
               position: 'relative',
-              border: '2px solid red',
               cursor: 'pointer',
+
+              boxShadow: '0 0 5px 0 rgba(0, 0, 0, 0.5)',
             }}
           />
         ))}
