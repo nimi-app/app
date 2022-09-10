@@ -486,6 +486,7 @@ const CustomizePOAPs = ({ items, setItems }) => (
               marginRight: '-33px',
               position: 'relative',
               border: '2px solid red',
+              cursor: 'pointer',
             }}
           />
         ))}
