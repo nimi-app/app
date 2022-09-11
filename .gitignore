@@ -24,6 +24,8 @@ yarn-error.log*
 
 # generated stuff
 src/generated/
+.yalc
+yalc.lock
 
 # Disable yarn
 yarn.lock
