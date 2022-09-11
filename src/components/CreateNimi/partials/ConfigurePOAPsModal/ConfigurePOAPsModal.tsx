@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Reorder, motion, AnimatePresence, useDragControls } from 'framer-motion/dist/framer-motion';
 
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
+import { ReactComponent as DotsIcon } from '../../../../assets/svg/dots.svg';
 import { NimiSignatureColor } from '../../../../theme';
 
 type NavigationLinkProps = {
@@ -497,7 +498,9 @@ const ReorderItem = ({ value }) => {
         marginRight: '-33px',
       }}
     >
-      <Dragger onPointerDown={(e) => controls.start(e)} />
+      <Dragger onPointerDown={(e) => controls.start(e)}>
+        <Dots />
+      </Dragger>
       <StaticPOAP src={value.event.image_url} />
     </Reorder.Item>
   );
@@ -616,4 +619,11 @@ const Dragger = styled.div`
   cursor: pointer;
 
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+`;
+
+const Dots = styled(DotsIcon)`
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translate(-50%, 0);
 `;
