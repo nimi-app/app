@@ -1,6 +1,6 @@
 import { useState, ReactNode } from 'react';
 import styled from 'styled-components';
-import { Reorder, motion, AnimatePresence } from 'framer-motion/dist/framer-motion';
+import { Reorder, motion, AnimatePresence, useDragControls } from 'framer-motion/dist/framer-motion';
 
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../../../theme';
@@ -471,31 +471,37 @@ const CustomizePOAPs = ({ items, setItems }) => (
     <POAPsContainer>
       <Reorder.Group axis="x" values={items} onReorder={setItems} as="div">
         {items.map((item) => (
-          <Reorder.Item
-            key={item.tokenId}
-            value={item}
-            dragElastic={0.1}
-            whileTap={{ scale: 1.1 }}
-            as="img"
-            src={item.event.image_url}
-            style={{
-              width: 108,
-              height: 108,
-              display: 'inline-block',
-              background: 'white',
-              borderRadius: '50%',
-              marginRight: '-33px',
-              position: 'relative',
-              cursor: 'pointer',
-
-              boxShadow: '0 0 5px 0 rgba(0, 0, 0, 0.5)',
-            }}
-          />
+          <ReorderItem key={item.tokenId} value={item} />
         ))}
       </Reorder.Group>
     </POAPsContainer>
   </AnimatedSection>
 );
+
+const ReorderItem = ({ value }) => {
+  const controls = useDragControls();
+
+  return (
+    <Reorder.Item
+      value={value}
+      dragListener={false}
+      dragControls={controls}
+      dragElastic={0.1}
+      whileTap={{ scale: 1.1 }}
+      as="div"
+      style={{
+        width: 108,
+        height: 108,
+        position: 'relative',
+        display: 'inline-block',
+        marginRight: '-33px',
+      }}
+    >
+      <Dragger onPointerDown={(e) => controls.start(e)} />
+      <StaticPOAP src={value.event.image_url} />
+    </Reorder.Item>
+  );
+};
 
 const Modal = styled.div`
   width: 620px;
@@ -583,9 +589,11 @@ const POAPsContainer = styled.div`
 const StaticPOAP = styled.img`
   width: 108px;
   height: 108px;
+  position: relative;
   display: inline-block;
   border-radius: 50%;
   margin-right: -33px;
+  background-color: white;
 
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
 `;
@@ -593,4 +601,19 @@ const StaticPOAP = styled.img`
 const AnimatedContainer = styled(motion.div)`
   width: 100%;
   height: 108px;
+`;
+
+const Dragger = styled.div`
+  width: 34px;
+  height: 50px;
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border-radius: 0 0 8px 8px;
+  background-color: white;
+  user-select: none;
+  cursor: pointer;
+
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
 `;
