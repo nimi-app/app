@@ -104,7 +104,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       widgets: [
         {
           type: NimiWidgetType.POAP,
-          address: ensAddress,
         },
       ],
     },
@@ -337,7 +336,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   if (widget === NimiWidgetType.POAP) {
                     return {
                       type: NimiWidgetType.POAP,
-                      address: ensAddress,
                     };
                   }
 
