@@ -511,8 +511,7 @@ const Modal = styled.div`
   padding: 32px;
   border-radius: 24px;
   background-color: white;
-
-  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0 62px rgba(52, 55, 100, 0.15);
 `;
 
 const Header = styled.header`
@@ -597,8 +596,7 @@ const StaticPOAP = styled.img`
   border-radius: 50%;
   margin-right: -33px;
   background-color: white;
-
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
 `;
 
 const AnimatedContainer = styled(motion.div)`
@@ -617,8 +615,7 @@ const Dragger = styled.div`
   background-color: white;
   user-select: none;
   cursor: pointer;
-
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
 `;
 
 const Dots = styled(DotsIcon)`
