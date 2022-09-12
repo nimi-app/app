@@ -49,6 +49,7 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
+import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -63,6 +64,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
    */
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
+  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
+  const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
+
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata;
 
@@ -74,7 +78,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
    * @todo create a reducer or context for this
    */
   const publicResolverContract = useENSPublicResolverContract();
-  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPublishingNimi, setIsPublishingNimi] = useState(false);
   const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
@@ -97,7 +100,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       displayName: ensName,
       image,
       description: '',
-      ensAddress: ensAddress,
+      ensAddress,
       ensName,
       addresses: [],
       links: [],
@@ -218,6 +221,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
+  console.log('formWatchPayload', formWatchPayload);
+
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -273,12 +278,16 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 })}
 
                 <FormGroup>
-                  {formWidgetList.includes(NimiWidgetType.POAP) && (
+                  {/* {formWidgetList.includes(NimiWidgetType.POAP) && (
                     <PoapButton>
                       <PoapLogo />
                       POAPs
                     </PoapButton>
-                  )}
+                  )} */}
+                  <PoapButton onClick={() => setIsPOAPModalOpened(true)}>
+                    <PoapLogo />
+                    POAPs
+                  </PoapButton>
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
                     + {t('buttonLabel.addFields')}
                   </AddFieldsButton>
@@ -294,10 +303,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
         <PreviewContent showMobile={showPreviewMobile}>
           <BackButton onClick={() => setShowPreviewMobile(false)}>← Back To Editor</BackButton>
           <PageSectionTitle>{t('preview')}</PageSectionTitle>
-
           <NimiPreviewCard nimi={formWatchPayload} />
         </PreviewContent>
       </InnerWrapper>
+      {isPOAPModalOpened && <ConfigurePOAPsModal closeModal={() => setIsPOAPModalOpened(false)} />}
       {isAddFieldsModalOpen && (
         <AddFieldsModal
           initialValues={{
