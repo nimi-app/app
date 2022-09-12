@@ -99,27 +99,11 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     if (event.target === event.currentTarget) closeModal();
   };
 
-  // {
-  //   event: {
-  //     id: 55123,
-  //     fancy_id: 'ethcc-paris-2022-lens-booth-2022',
-  //     name: 'ETHCC Paris 2022 - Lens Booth',
-  //     event_url: 'https://aave.com/',
-  //     image_url: 'https://assets.poap.xyz/ethcc-paris-2022-lens-booth-2022-logo-1657894392878.png',
-  //     country: 'France',
-  //     city: 'Paris',
-  //     description: 'Grow with Lens: This POAP was planted in your wallet at ETHCC 2022',
-  //     year: 2022,
-  //     start_date: '19-Jul-2022',
-  //     end_date: '21-Jul-2022',
-  //     expiry_date: '22-Jul-2022',
-  //     supply: 435,
-  //   },
-  //   tokenId: '5365161',
-  //   owner: '0x26358e62c2eded350e311bfde51588b8383a9315',
-  //   chain: 'xdai',
-  //   created: '2022-07-19 09:10:40',
-  // },
+  const addPOAPToSelectedItems = (poap: POAPToken) => {
+    if (!selectedItems.some((item) => item.tokenId === poap.tokenId) && selectedItems.length < 6) {
+      setSelectedItems((selectedItems) => [...selectedItems, poap]);
+    }
+  };
 
   return createPortal(
     <Backdrop onClick={handleCloseModal}>
@@ -156,6 +140,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
                   items={items}
                   selectedItems={selectedItems}
                   setSelectedItems={setSelectedItems}
+                  addPOAPToSelectedItems={addPOAPToSelectedItems}
                 />
               ) : (
                 <RecentPOAPs key="recent-poaps" items={items} />
@@ -190,7 +175,7 @@ const RecentPOAPs = ({ items }) => (
   </AnimatedSection>
 );
 
-const CustomizePOAPs = ({ items, selectedItems, setSelectedItems }) => (
+const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelectedItems }) => (
   <AnimatedSection>
     <PresentedPOAPsContainer>
       <Reorder.Group axis="x" values={items} onReorder={setSelectedItems} as="div">
@@ -204,12 +189,13 @@ const CustomizePOAPs = ({ items, selectedItems, setSelectedItems }) => (
         <AvailablePOAPsTitle>Choose Which POAP to Show</AvailablePOAPsTitle>
       </AvailablePOAPsTitleContainer>
       <AvailablePOAPsList>
-        {items.map((item) => (
+        {items.map((poap) => (
           <StaticPOAP
-            key={item.tokenId}
-            src={item.event.image_url}
+            key={poap.tokenId}
+            src={poap.event.image_url}
             marginRight="-16px"
-            onClick={() => setSelectedItems((state) => [...state, item])}
+            onClick={() => addPOAPToSelectedItems(poap)}
+            cursorPointer
           />
         ))}
       </AvailablePOAPsList>
@@ -360,7 +346,12 @@ const AvailablePOAPsList = styled.div`
   white-space: nowrap;
 `;
 
-const StaticPOAP = styled.img<{ marginRight?: string }>`
+type StaticPOAPProps = {
+  marginRight?: string;
+  cursorPointer?: boolean;
+};
+
+const StaticPOAP = styled.img<StaticPOAPProps>`
   width: 108px;
   height: 108px;
   position: relative;
@@ -370,6 +361,8 @@ const StaticPOAP = styled.img<{ marginRight?: string }>`
   margin-right: ${(props) => props.marginRight || '-28px'};
   background-color: white;
   box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
+
+  ${({ cursorPointer }) => cursorPointer && 'cursor: pointer;'}
 `;
 
 const AnimatedContainer = styled(motion.div)`
