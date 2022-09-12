@@ -22,43 +22,43 @@ export function useDomainsData(address: string) {
   });
 
   useEffect(() => {
-    console.log('dataInside', data?.account?.domains);
     const fetchData = async () => {
-      setMainLoader(true);
       if (data?.account?.domains) {
         try {
+          setMainLoader(true);
           const allUserDomains = data.account?.domains;
           const arrayOfNames = allUserDomains.map((item) => {
-            return axios.get(`https://${item.name}.limo/data.json`);
+            return axios.get(`https://api.nimi.io/v1.4/nimi/by?ens=${item.name}`);
           });
-          const dataFetcg = await Promise.allSettled(arrayOfNames);
-          console.log('dataFetched', dataFetcg);
-          const domainsArray: DomainDataType[] = [];
+          const fetchedDomains: any[] = await Promise.allSettled(arrayOfNames);
+
+          const domainArray: DomainDataType[] = [];
           const emptyDomainArray: DomainDataType[] = [];
 
-          dataFetcg.forEach((item, index) => {
-            console.log('data', data);
-
+          fetchedDomains.forEach((item, index) => {
+            const domain = item.value.data.data;
             const baseObject = {
               id: allUserDomains[index].id,
               name: allUserDomains[index].name,
               labelName: allUserDomains[index].labelName,
               data: {},
             } as DomainDataType;
-            console.log('item', item);
+
             console.log('object', baseObject);
-            if (item.status === 'rejected') emptyDomainArray.push(baseObject);
+            if (item.status === 'rejected' || domain.length === 0) emptyDomainArray.push(baseObject);
             else {
-              baseObject.data = item.value.data;
-              domainsArray.push(baseObject);
+              baseObject.data = domain[domain.length - 1].nimi;
+              domainArray.push(baseObject);
             }
-            setDomainArray(domainArray);
-            setEmptyDomainArray(emptyDomainArray);
           });
+
+          setDomainArray(domainArray);
+          setEmptyDomainArray(emptyDomainArray);
         } catch (e) {
           console.log('error', e);
+        } finally {
+          setMainLoader(false);
         }
-        setMainLoader(false);
       }
     };
     fetchData();

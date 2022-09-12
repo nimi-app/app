@@ -55,8 +55,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
    */
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
-  const location = useLocation();
-  const ensMetadata = location.state as ENSMetadata;
+  const { state } = useLocation();
+  const ensMetadata = state as ENSMetadata;
+  console.log('ensMetadata', ensMetadata);
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
