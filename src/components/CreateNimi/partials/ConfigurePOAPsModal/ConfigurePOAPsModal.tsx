@@ -1,4 +1,5 @@
-import { useState, ReactNode } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { Reorder, motion, AnimatePresence, useDragControls } from 'framer-motion/dist/framer-motion';
 
@@ -19,7 +20,12 @@ const NavigationLink = ({ children, onClick, selected }: NavigationLinkProps) =>
   </LinkContainer>
 );
 
-export function ConfigurePOAPsModal() {
+type ConfigurePOAPsModalProps = {
+  closeModal: () => void;
+};
+
+export function ConfigurePOAPsModal({ closeModal }: ConfigurePOAPsModalProps) {
+  const [modalContainer] = useState(() => document.createElement('div'));
   const [customOrder, setCustomOrder] = useState(false);
   const [items, setItems] = useState([
     {
@@ -391,7 +397,22 @@ export function ConfigurePOAPsModal() {
     // },
   ]);
 
+  useEffect(() => {
+    modalContainer.classList.add('modal-root');
+    document.body.appendChild(modalContainer);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.removeChild(modalContainer);
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   const setCustomOrderHandler = (v: boolean) => () => setCustomOrder(v);
+
+  const handleCloseModal = (event) => {
+    if (event.target === event.currentTarget) closeModal();
+  };
 
   // {
   //   event: {
@@ -415,34 +436,37 @@ export function ConfigurePOAPsModal() {
   //   created: '2022-07-19 09:10:40',
   // },
 
-  return (
-    <Modal>
-      <Header>
-        <ModalTitle>Configure POAPs</ModalTitle>
-        <ModalSubtitle>Add your POAPs in the order you want to showcase them.</ModalSubtitle>
-        <CloseButton />
-      </Header>
-      <Body>
-        <BodyControls>
-          <BodyTitle>POAPs</BodyTitle>
-          <BodyNavigation>
-            <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
-              Most Recent
-            </NavigationLink>
-            <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
-              Custom Order
-            </NavigationLink>
-          </BodyNavigation>
-        </BodyControls>
-        <AnimatePresence mode="wait">
-          {customOrder ? (
-            <CustomizePOAPs key="custom-poaps" items={items} setItems={setItems} />
-          ) : (
-            <RecentPOAPs key="recent-poaps" items={items} />
-          )}
-        </AnimatePresence>
-      </Body>
-    </Modal>
+  return createPortal(
+    <Backdrop onClick={handleCloseModal}>
+      <Modal>
+        <Header>
+          <ModalTitle>Configure POAPs</ModalTitle>
+          <ModalSubtitle>Add your POAPs in the order you want to showcase them.</ModalSubtitle>
+          <CloseButton onClick={handleCloseModal} />
+        </Header>
+        <Body>
+          <BodyControls>
+            <BodyTitle>POAPs</BodyTitle>
+            <BodyNavigation>
+              <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
+                Most Recent
+              </NavigationLink>
+              <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
+                Custom Order
+              </NavigationLink>
+            </BodyNavigation>
+          </BodyControls>
+          <AnimatePresence mode="wait">
+            {customOrder ? (
+              <CustomizePOAPs key="custom-poaps" items={items} setItems={setItems} />
+            ) : (
+              <RecentPOAPs key="recent-poaps" items={items} />
+            )}
+          </AnimatePresence>
+        </Body>
+      </Modal>
+    </Backdrop>,
+    modalContainer
   );
 }
 
@@ -505,6 +529,15 @@ const ReorderItem = ({ value }) => {
     </Reorder.Item>
   );
 };
+
+const Backdrop = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.9);
+`;
 
 const Modal = styled.div`
   width: 620px;
