@@ -6,6 +6,7 @@ import { Reorder, motion, AnimatePresence, useDragControls } from 'framer-motion
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
 import { ReactComponent as DotsIcon } from '../../../../assets/svg/dots.svg';
 import { NimiSignatureColor } from '../../../../theme';
+import { NimiPOAPWidget } from '@nimi.io/card';
 
 type NavigationLinkProps = {
   children: string;
@@ -21,10 +22,15 @@ const NavigationLink = ({ children, onClick, selected }: NavigationLinkProps) =>
 );
 
 type ConfigurePOAPsModalProps = {
+  ensAddress: string;
+  widget: NimiPOAPWidget;
   closeModal: () => void;
 };
 
-export function ConfigurePOAPsModal({ closeModal }: ConfigurePOAPsModalProps) {
+export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: ConfigurePOAPsModalProps) {
+  console.log('ENS ADDRESS', ensAddress);
+  console.log('WIDGET', widget);
+
   const [modalContainer] = useState(() => document.createElement('div'));
   const [customOrder, setCustomOrder] = useState(false);
   const [items, setItems] = useState([
