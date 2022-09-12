@@ -438,7 +438,12 @@ export function ConfigurePOAPsModal({ closeModal }: ConfigurePOAPsModalProps) {
 
   return createPortal(
     <Backdrop onClick={handleCloseModal}>
-      <Modal>
+      {/* // TODO: UPDATE EXIT ANIMATION */}
+      <Modal
+        initial={{ opacity: 0, scale: 0.5, y: '-100%' }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.5, y: '-100%' }}
+      >
         <Header>
           <ModalTitle>Configure POAPs</ModalTitle>
           <ModalSubtitle>Add your POAPs in the order you want to showcase them.</ModalSubtitle>
@@ -539,7 +544,7 @@ const Backdrop = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
 `;
 
-const Modal = styled.div`
+const Modal = styled(motion.div)`
   width: 620px;
   padding: 32px;
   border-radius: 24px;
