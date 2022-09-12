@@ -33,7 +33,12 @@ import {
 import { Label, Input, TextArea, FormGroup } from '../form';
 
 // Partials
-import { ImportButtonsWrapper, ImportFromLensProtocolButton, ImportFromTwitterButton } from './partials/buttons';
+import {
+  ButtonsContainer,
+  ImportButtonsWrapper,
+  ImportFromLensProtocolButton,
+  ImportFromTwitterButton,
+} from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiLinkField } from './partials/NimiLinkField';
 import { AddFieldsModal } from './partials/AddFieldsModal';
@@ -49,6 +54,8 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
+import { NFTSelectorModal } from './partials/NFTSelectorModal';
+import { Button } from '../Button';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -68,6 +75,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
+
+  /**
+   * NFT
+   */
+  const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
 
   /**
    * Publish Nimi state
@@ -227,7 +239,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <Card>
             <CardBody>
               {formWatchPayload.image ? <ProfileImage src={formWatchPayload.image.url} /> : <ProfileImagePlaceholder />}
-
+              <ButtonsContainer>
+                <Button onClick={() => setIsNFTSelectorModalOpen(true)}>Select an NFT</Button>
+              </ButtonsContainer>
               <ImportButtonsWrapper>
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
                   {t('buttonLabel.importFromTwitter')}
@@ -404,6 +418,26 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           cancel={() => {
             setIsPublishNimiModalOpen(false);
             publishNimiAbortController?.current?.abort();
+          }}
+        />
+      )}
+      {isNFTSelectorModalOpen && (
+        <NFTSelectorModal
+          address={ensAddress}
+          onClose={(nftAsset) => {
+            if (nftAsset) {
+              setValue('image', {
+                type: NimiImageType.ERC721,
+                contract: nftAsset.assetContract.address,
+                tokenId: nftAsset.tokenId as any,
+                tokenUri: nftAsset.externalLink,
+                url: nftAsset.imageUrl,
+              });
+            } else {
+              setValue('image', undefined);
+            }
+
+            setIsNFTSelectorModalOpen(false);
           }}
         />
       )}
