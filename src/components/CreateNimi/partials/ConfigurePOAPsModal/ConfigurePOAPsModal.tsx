@@ -61,6 +61,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
   const [customOrder, setCustomOrder] = useState(false);
   const [items, setItems] = useState<POAPToken[]>([]);
   const [fetchingItems, setFetchingItems] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<POAPToken[]>([]);
 
   useEffect(() => {
     async function fetchPOAPs() {
@@ -150,7 +151,12 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
             </BodyControls>
             <AnimatePresence mode="wait">
               {customOrder ? (
-                <CustomizePOAPs key="custom-poaps" items={items} setItems={setItems} />
+                <CustomizePOAPs
+                  key="custom-poaps"
+                  items={items}
+                  selectedItems={selectedItems}
+                  setSelectedItems={setSelectedItems}
+                />
               ) : (
                 <RecentPOAPs key="recent-poaps" items={items} />
               )}
@@ -176,23 +182,28 @@ const AnimatedSection = ({ children }: { children: ReactNode }) => (
 
 const RecentPOAPs = ({ items }) => (
   <AnimatedSection>
-    <POAPsContainer>
+    <PresentedPOAPsContainer>
       {items.slice(0, 6).map((item) => (
         <StaticPOAP key={item.tokenId} src={item.event.image_url} />
       ))}
-    </POAPsContainer>
+    </PresentedPOAPsContainer>
   </AnimatedSection>
 );
 
-const CustomizePOAPs = ({ items, setItems }) => (
+const CustomizePOAPs = ({ items, selectedItems, setSelectedItems }) => (
   <AnimatedSection>
-    <POAPsContainer>
-      <Reorder.Group axis="x" values={items} onReorder={setItems} as="div">
-        {items.map((item) => (
+    <PresentedPOAPsContainer>
+      <Reorder.Group axis="x" values={items} onReorder={setSelectedItems} as="div">
+        {selectedItems.map((item) => (
           <ReorderItem key={item.tokenId} value={item} />
         ))}
       </Reorder.Group>
-    </POAPsContainer>
+    </PresentedPOAPsContainer>
+    <AvailablePOAPsContainer>
+      {items.map((item) => (
+        <StaticPOAP key={item.tokenId} src={item.event.image_url} />
+      ))}
+    </AvailablePOAPsContainer>
   </AnimatedSection>
 );
 
@@ -306,10 +317,22 @@ const LinkUnderline = styled.div`
   background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
 `;
 
-const POAPsContainer = styled.div`
+const PresentedPOAPsContainer = styled.div`
   padding: 22px;
   background-color: #f1f2f5;
   border-radius: 76px;
+`;
+
+const AvailablePOAPsContainer = styled.div`
+  width: 100%;
+  background-color: #f1f2f5;
+  border-radius: 12px;
+  padding: 28px 0;
+  margin-top: 24px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 `;
 
 const StaticPOAP = styled.img`
