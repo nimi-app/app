@@ -200,9 +200,19 @@ const CustomizePOAPs = ({ items, selectedItems, setSelectedItems }) => (
       </Reorder.Group>
     </PresentedPOAPsContainer>
     <AvailablePOAPsContainer>
-      {items.map((item) => (
-        <StaticPOAP key={item.tokenId} src={item.event.image_url} />
-      ))}
+      <AvailablePOAPsTitleContainer>
+        <AvailablePOAPsTitle>Choose Which POAP to Show</AvailablePOAPsTitle>
+      </AvailablePOAPsTitleContainer>
+      <AvailablePOAPsList>
+        {items.map((item) => (
+          <StaticPOAP
+            key={item.tokenId}
+            src={item.event.image_url}
+            marginRight="-16px"
+            onClick={() => setSelectedItems((state) => [...state, item])}
+          />
+        ))}
+      </AvailablePOAPsList>
     </AvailablePOAPsContainer>
   </AnimatedSection>
 );
@@ -329,20 +339,35 @@ const AvailablePOAPsContainer = styled.div`
   border-radius: 12px;
   padding: 28px 0;
   margin-top: 24px;
+`;
 
+const AvailablePOAPsTitleContainer = styled.div`
+  height: 56px;
+  padding: 19px 36px;
+  margin-bottom: 32px;
+`;
+
+const AvailablePOAPsTitle = styled.h3`
+  line-height: 18px;
+  font-size: 18px;
+  color: black;
+`;
+
+const AvailablePOAPsList = styled.div`
+  width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
 `;
 
-const StaticPOAP = styled.img`
+const StaticPOAP = styled.img<{ marginRight?: string }>`
   width: 108px;
   height: 108px;
   position: relative;
   display: inline-block;
   vertical-align: top;
   border-radius: 50%;
-  margin-right: -28px;
+  margin-right: ${(props) => props.marginRight || '-28px'};
   background-color: white;
   box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
 `;
