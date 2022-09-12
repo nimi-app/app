@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { Nimi } from 'nimi-card';
+import { Nimi } from '@nimi.io/card';
+import { getAPIBaseURL } from '../../../modules/api-service';
 
 interface PublishNimiApiResponseDeprecated {
   IpfsHash: string;
@@ -23,10 +24,12 @@ interface PublishNimiResponse {
  * @returns A promise with IPFS hash
  */
 export function publishNimi(payload: Nimi, controller?: AbortController): Promise<PublishNimiResponse> {
+  const url = new URL('/nimi/publish', getAPIBaseURL());
+
   return axios
     .post<{
       data: PublishNimiApiResponse | PublishNimiApiResponseDeprecated;
-    }>(`${process.env.REACT_APP_NIMI_SERVICES_ENDPOINT}/nimi/publish`, payload, {
+    }>(url.toString(), payload, {
       signal: controller ? controller.signal : undefined,
     })
     .then(({ data }) => {

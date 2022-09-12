@@ -1,5 +1,5 @@
 import Frame, { FrameContextConsumer } from 'react-frame-component';
-import { Nimi, nimiValidator, NimiCard } from 'nimi-card';
+import { Nimi, NimiCard, validateNimi } from '@nimi.io/card';
 import { useEffect, useState } from 'react';
 import styled, { StyleSheetManager } from 'styled-components';
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
@@ -26,10 +26,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   useEffect(() => {
     // Filter invalid links
 
-    nimiValidator
-      .validate(nimi, {
-        abortEarly: false,
-      })
+    validateNimi(nimi)
       .then((validatedNimi) => {
         if (process.env.NODE_ENV !== 'production') {
           console.log({
