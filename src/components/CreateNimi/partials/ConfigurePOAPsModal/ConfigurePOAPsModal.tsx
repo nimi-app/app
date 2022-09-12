@@ -1,4 +1,5 @@
-import { useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, ReactNode, useRef } from 'react';
+import axios from 'axios';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { Reorder, motion, AnimatePresence, useDragControls } from 'framer-motion/dist/framer-motion';
@@ -7,6 +8,30 @@ import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.s
 import { ReactComponent as DotsIcon } from '../../../../assets/svg/dots.svg';
 import { NimiSignatureColor } from '../../../../theme';
 import { NimiPOAPWidget } from '@nimi.io/card';
+
+type POAPToken = {
+  event: POAPEvent;
+  tokenId: string;
+  owner: string;
+  chain: string;
+  created: string;
+};
+
+type POAPEvent = {
+  id: number;
+  fancy_id: string;
+  name: string;
+  event_url: string;
+  image_url: string;
+  country: string;
+  city: string;
+  description: string;
+  year: number;
+  start_date: string;
+  end_date: string;
+  expiry_date: string;
+  supply: number;
+};
 
 type NavigationLinkProps = {
   children: string;
@@ -402,11 +427,31 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     //   created: '2020-12-01 12:29:30',
     // },
   ]);
+  const [fetchingItems, setFetchingItems] = useState(false);
 
   useEffect(() => {
+    async function fetchPOAPs() {
+      setFetchingItems(true);
+      let tokens: POAPToken[] = [];
+
+      try {
+        const { data: tokensData } = await axios.get(`https://api.poap.tech/actions/scan/${ensAddress}`);
+
+        tokens = tokensData;
+      } catch (error) {
+        // TODO: HANDLE ERROR
+        console.error(error);
+      } finally {
+        setItems(tokens);
+        setFetchingItems(false);
+      }
+    }
+
     modalContainer.classList.add('modal-root');
     document.body.appendChild(modalContainer);
     document.body.style.overflow = 'hidden';
+
+    fetchPOAPs();
 
     return () => {
       document.body.removeChild(modalContainer);
@@ -455,26 +500,30 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
           <ModalSubtitle>Add your POAPs in the order you want to showcase them.</ModalSubtitle>
           <CloseButton onClick={handleCloseModal} />
         </Header>
-        <Body>
-          <BodyControls>
-            <BodyTitle>POAPs</BodyTitle>
-            <BodyNavigation>
-              <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
-                Most Recent
-              </NavigationLink>
-              <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
-                Custom Order
-              </NavigationLink>
-            </BodyNavigation>
-          </BodyControls>
-          <AnimatePresence mode="wait">
-            {customOrder ? (
-              <CustomizePOAPs key="custom-poaps" items={items} setItems={setItems} />
-            ) : (
-              <RecentPOAPs key="recent-poaps" items={items} />
-            )}
-          </AnimatePresence>
-        </Body>
+        {fetchingItems ? (
+          <div>Fetching POAPs...</div>
+        ) : (
+          <Body>
+            <BodyControls>
+              <BodyTitle>POAPs</BodyTitle>
+              <BodyNavigation>
+                <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
+                  Most Recent
+                </NavigationLink>
+                <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
+                  Custom Order
+                </NavigationLink>
+              </BodyNavigation>
+            </BodyControls>
+            <AnimatePresence mode="wait">
+              {customOrder ? (
+                <CustomizePOAPs key="custom-poaps" items={items} setItems={setItems} />
+              ) : (
+                <RecentPOAPs key="recent-poaps" items={items} />
+              )}
+            </AnimatePresence>
+          </Body>
+        )}
       </Modal>
     </Backdrop>,
     modalContainer
