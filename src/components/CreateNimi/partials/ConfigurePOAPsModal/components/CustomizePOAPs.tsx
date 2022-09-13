@@ -83,6 +83,10 @@ export const CustomizePOAPs = ({
               />
             ))}
         </AvailablePOAPsList>
+        <SelectedPOAPsInfo>
+          <NumberOfSelectedPOAPs>0 out of 6 selected</NumberOfSelectedPOAPs>
+          <ClearSelectionButton>Clear Selection</ClearSelectionButton>
+        </SelectedPOAPsInfo>
       </AvailablePOAPsContainer>
     </AnimatedSection>
   );
@@ -92,7 +96,7 @@ const AvailablePOAPsContainer = styled.div`
   width: 100%;
   background-color: #f1f2f5;
   border-radius: 12px;
-  padding: 28px 0 0;
+  padding: 36px 0;
   margin-top: 24px;
 `;
 
@@ -127,5 +131,25 @@ const AvailablePOAPsList = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-  padding: 32px 0 28px 22px;
+  padding: 24px 22px;
+`;
+
+const SelectedPOAPsInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 36px;
+`;
+
+const NumberOfSelectedPOAPs = styled.p`
+  line-height: 15px;
+  font-size: 14px;
+  color: #7a7696;
+`;
+
+const ClearSelectionButton = styled.a`
+  line-height: 15px;
+  font-size: 14px;
+  color: #7a7696;
+  text-decoration: underline;
+  cursor: pointer;
 `;
