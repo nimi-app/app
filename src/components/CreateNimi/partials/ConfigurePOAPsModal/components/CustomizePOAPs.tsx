@@ -19,6 +19,7 @@ export const CustomizePOAPs = ({
 }) => {
   const [filterValue, setFilterValue] = useState('');
   const [childOutside, setChildOutside] = useState<'left' | 'right' | 'none'>('none');
+  const [movingChild, setMovingChild] = useState(false);
 
   const checkIfMatchesFilter = (token: POAPToken) =>
     token.event.name.toLowerCase().includes(filterValue.toLowerCase()) ||
@@ -27,6 +28,7 @@ export const CustomizePOAPs = ({
     token.event.city.toLowerCase().includes(filterValue.toLowerCase());
 
   const getDraggingEvent = (event: DragEvent) => {
+    setMovingChild(true);
     const element = document.getElementById('reorder-group');
     const rect = element?.getBoundingClientRect();
 
@@ -40,6 +42,8 @@ export const CustomizePOAPs = ({
 
   const getDraggingEventEnd = (event: DragEvent, poap: POAPToken) => {
     setChildOutside('none');
+    setMovingChild(false);
+
     const element = document.getElementById('reorder-group');
     const rect = element?.getBoundingClientRect();
 
@@ -57,6 +61,7 @@ export const CustomizePOAPs = ({
               index={index}
               getDraggingEvent={getDraggingEvent}
               getDraggingEventEnd={getDraggingEventEnd}
+              movingChild={movingChild}
             />
           ))}
         </Reorder.Group>
