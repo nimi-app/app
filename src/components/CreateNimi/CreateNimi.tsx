@@ -221,8 +221,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
-  console.log('formWatchPayload', formWatchPayload);
-
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
