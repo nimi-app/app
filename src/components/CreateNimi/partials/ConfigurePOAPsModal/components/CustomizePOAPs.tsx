@@ -92,7 +92,7 @@ const AvailablePOAPsContainer = styled.div`
   width: 100%;
   background-color: #f1f2f5;
   border-radius: 12px;
-  padding: 28px 0;
+  padding: 28px 0 0;
   margin-top: 24px;
 `;
 
@@ -102,7 +102,6 @@ const AvailablePOAPsTitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 36px;
-  margin-bottom: 32px;
 `;
 
 const AvailablePOAPsTitle = styled.h3`
@@ -124,9 +123,9 @@ const FilterInput = styled.input`
 
 const AvailablePOAPsList = styled.div`
   width: 100%;
-  height: 108px;
+  height: 162px;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-  padding-left: 22px;
+  padding: 32px 0 28px 22px;
 `;
