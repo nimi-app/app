@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion/dist/framer-motion';
+import { AnimatePresence } from 'framer-motion/dist/framer-motion';
 
-import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
+import { ModalBase } from '../ModalBase';
 import { NimiSignatureColor } from '../../../../theme';
 import { NimiPOAPWidget } from '@nimi.io/card';
 import { POAPToken } from './types';
@@ -83,98 +83,45 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
   };
 
   return createPortal(
-    <Backdrop onClick={handleCloseModal}>
-      {/* // TODO: UPDATE EXIT ANIMATION */}
-      <Modal
-        initial={{ opacity: 0, scale: 0.5, y: '-100%' }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.5, y: '-100%' }}
-      >
-        <Header>
-          <ModalTitle>Configure POAPs</ModalTitle>
-          <ModalSubtitle>Add your POAPs in the order you want to showcase them.</ModalSubtitle>
-          <CloseButton onClick={handleCloseModal} />
-        </Header>
-        {fetchingItems ? (
-          <div>Fetching POAPs...</div>
-        ) : (
-          <Body>
-            <BodyControls>
-              <BodyTitle>POAPs</BodyTitle>
-              <BodyNavigation>
-                <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
-                  Most Recent
-                </NavigationLink>
-                <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
-                  Custom Order
-                </NavigationLink>
-              </BodyNavigation>
-            </BodyControls>
-            <AnimatePresence mode="wait">
-              {customOrder ? (
-                <CustomizePOAPs
-                  key="custom-poaps"
-                  items={items}
-                  selectedItems={selectedItems}
-                  setSelectedItems={setSelectedItems}
-                  addPOAPToSelectedItems={addPOAPToSelectedItems}
-                />
-              ) : (
-                <RecentPOAPs key="recent-poaps" items={items} />
-              )}
-            </AnimatePresence>
-          </Body>
-        )}
-      </Modal>
-    </Backdrop>,
+    <ModalBase
+      title="Configure POAPs"
+      subtitle="Add your POAPs in the order you want to showcase them."
+      handleCloseModal={handleCloseModal}
+    >
+      {fetchingItems ? (
+        <div>Fetching POAPs...</div>
+      ) : (
+        <>
+          <BodyControls>
+            <BodyTitle>POAPs</BodyTitle>
+            <BodyNavigation>
+              <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
+                Most Recent
+              </NavigationLink>
+              <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
+                Custom Order
+              </NavigationLink>
+            </BodyNavigation>
+          </BodyControls>
+          <AnimatePresence mode="wait">
+            {customOrder ? (
+              <CustomizePOAPs
+                key="custom-poaps"
+                items={items}
+                selectedItems={selectedItems}
+                setSelectedItems={setSelectedItems}
+                addPOAPToSelectedItems={addPOAPToSelectedItems}
+              />
+            ) : (
+              <RecentPOAPs key="recent-poaps" items={items} />
+            )}
+          </AnimatePresence>
+        </>
+      )}
+    </ModalBase>,
     modalContainer
   );
 }
-
-const Backdrop = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  padding-top: 40px;
-`;
-
-const Modal = styled(motion.div)`
-  width: 620px;
-  padding: 32px;
-  border-radius: 24px;
-  background-color: white;
-  box-shadow: 0px 0 62px rgba(52, 55, 100, 0.15);
-  margin: 0 auto;
-`;
-
-const Header = styled.header`
-  position: relative;
-  margin-bottom: 24px;
-`;
-
-const ModalTitle = styled.h1`
-  line-height: 28px;
-  font-size: 28px;
-  ${NimiSignatureColor}
-  margin-bottom: 16px;
-`;
-
-const ModalSubtitle = styled.p`
-  line-height: 15px;
-  font-size: 14px;
-  color: #7a7696;
-`;
-
-const CloseButton = styled(CloseIcon)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
-`;
-
-const Body = styled.main`
-  width: 100%;
-`;
 
 const BodyControls = styled.div`
   height: 38px;
