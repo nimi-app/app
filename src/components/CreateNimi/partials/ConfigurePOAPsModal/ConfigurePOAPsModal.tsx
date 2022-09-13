@@ -260,10 +260,8 @@ const ReorderItem = ({ value, index }) => {
 const Backdrop = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: rgba(0, 0, 0, 0.9);
+  padding-top: 40px;
 `;
 
 const Modal = styled(motion.div)`
@@ -272,6 +270,7 @@ const Modal = styled(motion.div)`
   border-radius: 24px;
   background-color: white;
   box-shadow: 0px 0 62px rgba(52, 55, 100, 0.15);
+  margin: 0 auto;
 `;
 
 const Header = styled.header`
