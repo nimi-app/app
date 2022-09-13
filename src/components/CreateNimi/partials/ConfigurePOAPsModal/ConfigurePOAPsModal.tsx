@@ -80,6 +80,8 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     }
   };
 
+  const clearSelectedItems = () => setSelectedItems(new Array(6).fill(null));
+
   //TODO: HANDLE NO POAPS STATE
   return createPortal(
     <ModalBase
@@ -111,6 +113,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
                 handleReordering={handleReordering}
                 addPOAPToSelectedItems={addPOAPToSelectedItems}
                 removePOAPFromSelectedItems={removePOAPFromSelectedItems}
+                clearSelectedItems={clearSelectedItems}
               />
             ) : (
               <RecentPOAPs key="recent-poaps" items={items} />
