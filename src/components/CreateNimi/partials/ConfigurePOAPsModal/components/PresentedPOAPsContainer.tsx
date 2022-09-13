@@ -1,9 +1,16 @@
 import styled from 'styled-components';
 
-export const PresentedPOAPsContainer = styled.div<{ childOutside?: boolean }>`
+const backgroundAlert = (childOutside) =>
+  childOutside === 'left'
+    ? 'background: linear-gradient(90deg, rgba(255, 0, 0, 0.2) -1.26%, rgba(255, 0, 0, 0) 37.05%), #F1F2F5;'
+    : childOutside === 'right'
+    ? 'background: linear-gradient(270deg, rgba(255, 0, 0, 0.2) -1.26%, rgba(255, 0, 0, 0) 37.05%), #F1F2F5;'
+    : '';
+
+export const PresentedPOAPsContainer = styled.div<{ childOutside?: 'left' | 'right' | 'none' }>`
   padding: 22px;
   background-color: #f1f2f5;
   border-radius: 76px;
 
-  ${({ childOutside }) => childOutside && 'background-color: red;'}
+  ${({ childOutside }) => backgroundAlert(childOutside)}
 `;
