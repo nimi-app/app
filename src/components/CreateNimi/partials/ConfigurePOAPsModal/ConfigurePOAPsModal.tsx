@@ -60,11 +60,27 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     if (event.target === event.currentTarget) closeModal();
   };
 
+  const handleReordering = (items) => {
+    console.log('HANDLE REORDERING TRIGGERED');
+
+    setSelectedItems([...items, ...new Array(6 - items.length).fill(null)]);
+  };
+
   const addPOAPToSelectedItems = (poap: POAPToken) => {
     const addedPoaps = selectedItems.filter((item) => item !== null);
 
     if (!addedPoaps.some((item) => item.tokenId === poap.tokenId) && addedPoaps.length < 6) {
       setSelectedItems([...addedPoaps, poap, ...new Array(5 - addedPoaps.length).fill(null)]);
+    }
+  };
+
+  const removePOAPFromSelectedItems = (poap: POAPToken) => {
+    const addedPoaps = selectedItems.filter((item) => item !== null);
+
+    if (addedPoaps.length) {
+      const updatedPOAPs = addedPoaps.filter((item) => item.tokenId !== poap.tokenId);
+
+      setSelectedItems([...updatedPOAPs, , ...new Array(6 - updatedPOAPs.length).fill(null)]);
     }
   };
 
@@ -96,8 +112,9 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
                 key="custom-poaps"
                 items={items}
                 selectedItems={selectedItems}
-                setSelectedItems={setSelectedItems}
+                handleReordering={handleReordering}
                 addPOAPToSelectedItems={addPOAPToSelectedItems}
+                removePOAPFromSelectedItems={removePOAPFromSelectedItems}
               />
             ) : (
               <RecentPOAPs key="recent-poaps" items={items} />
