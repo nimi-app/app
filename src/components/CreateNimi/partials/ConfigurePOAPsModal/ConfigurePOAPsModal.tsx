@@ -1,37 +1,15 @@
-import { useState, useEffect, ReactNode, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { createPortal } from 'react-dom';
-import styled, { css } from 'styled-components';
-import { Reorder, motion, AnimatePresence, useDragControls } from 'framer-motion/dist/framer-motion';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion/dist/framer-motion';
 
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
-import { ReactComponent as DotsIcon } from '../../../../assets/svg/dots.svg';
 import { NimiSignatureColor } from '../../../../theme';
 import { NimiPOAPWidget } from '@nimi.io/card';
+import { POAPToken } from './types';
 
-type POAPToken = {
-  event: POAPEvent;
-  tokenId: string;
-  owner: string;
-  chain: string;
-  created: string;
-};
-
-type POAPEvent = {
-  id: number;
-  fancy_id: string;
-  name: string;
-  event_url: string;
-  image_url: string;
-  country: string;
-  city: string;
-  description: string;
-  year: number;
-  start_date: string;
-  end_date: string;
-  expiry_date: string;
-  supply: number;
-};
+import { RecentPOAPs, CustomizePOAPs } from './components';
 
 type NavigationLinkProps = {
   children: string;
@@ -54,9 +32,6 @@ type ConfigurePOAPsModalProps = {
 };
 
 export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: ConfigurePOAPsModalProps) {
-  console.log('ENS ADDRESS', ensAddress);
-  console.log('WIDGET', widget);
-
   const [modalContainer] = useState(() => document.createElement('div'));
   const [customOrder, setCustomOrder] = useState(false);
   const [items, setItems] = useState<POAPToken[]>([]);
@@ -91,7 +66,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
       document.body.removeChild(modalContainer);
       document.body.style.overflow = 'auto';
     };
-  }, []);
+  }, [ensAddress, modalContainer]);
 
   const setCustomOrderHandler = (v: boolean) => () => setCustomOrder(v);
 
@@ -155,107 +130,6 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     modalContainer
   );
 }
-
-const AnimatedSection = ({ children }: { children: ReactNode }) => (
-  <AnimatedContainer
-    initial={{ opacity: 0, scale: 0.5 }}
-    animate={{ opacity: 1, scale: 1 }}
-    exit={{ opacity: 0, scale: 0.5 }}
-    transition={{ duration: 0.2 }}
-  >
-    {children}
-  </AnimatedContainer>
-);
-
-const RecentPOAPs = ({ items }) => (
-  <AnimatedSection>
-    <PresentedPOAPsContainer>
-      {items.slice(0, 6).map((item) => (
-        <StaticPOAP key={item.tokenId} src={item.event.image_url} />
-      ))}
-    </PresentedPOAPsContainer>
-  </AnimatedSection>
-);
-
-const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelectedItems }) => {
-  const [filterValue, setFilterValue] = useState('');
-
-  const checkIfMatchesFilter = (token: POAPToken) =>
-    token.event.name.toLowerCase().includes(filterValue.toLowerCase()) ||
-    token.event.description.toLowerCase().includes(filterValue.toLowerCase()) ||
-    token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
-    token.event.city.toLowerCase().includes(filterValue.toLowerCase());
-
-  return (
-    <AnimatedSection>
-      <PresentedPOAPsContainer>
-        <Reorder.Group
-          axis="x"
-          values={items}
-          onReorder={(items) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)])}
-          as="div"
-        >
-          {selectedItems.map((item, index) => (
-            <ReorderItem key={item?.tokenId || index} value={item} index={index} />
-          ))}
-        </Reorder.Group>
-      </PresentedPOAPsContainer>
-      <AvailablePOAPsContainer>
-        <AvailablePOAPsTitleContainer>
-          <AvailablePOAPsTitle>Choose Which POAP to Show</AvailablePOAPsTitle>
-          <FilterInput
-            placeholder="Filter"
-            value={filterValue}
-            onChange={(event) => setFilterValue(event.target.value)}
-            spellCheck={false}
-          />
-        </AvailablePOAPsTitleContainer>
-        <AvailablePOAPsList>
-          {items
-            .filter((item) => checkIfMatchesFilter(item))
-            .map((poap) => (
-              <StaticPOAP
-                key={poap.tokenId}
-                src={poap.event.image_url}
-                marginRight="-16px"
-                onClick={() => addPOAPToSelectedItems(poap)}
-                cursorPointer
-              />
-            ))}
-        </AvailablePOAPsList>
-      </AvailablePOAPsContainer>
-    </AnimatedSection>
-  );
-};
-
-const ReorderItem = ({ value, index }) => {
-  const controls = useDragControls();
-
-  return value ? (
-    <Reorder.Item
-      value={value}
-      dragListener={false}
-      dragControls={controls}
-      dragElastic={0.1}
-      whileTap={{ scale: 1.1 }}
-      as="div"
-      style={{
-        width: 108,
-        height: 108,
-        position: 'relative',
-        display: 'inline-block',
-        marginRight: '-28px',
-      }}
-    >
-      <Dragger onPointerDown={(e) => controls.start(e)}>
-        <Dots />
-      </Dragger>
-      <StaticPOAP src={value.event.image_url} zIndex={index + 1} />
-    </Reorder.Item>
-  ) : (
-    <POAPPlaceholder zIndex={index + 1} />
-  );
-};
 
 const Backdrop = styled.div`
   width: 100%;
@@ -337,111 +211,4 @@ const LinkUnderline = styled.div`
   width: 100%;
   height: 2px;
   background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
-`;
-
-const PresentedPOAPsContainer = styled.div`
-  padding: 22px;
-  background-color: #f1f2f5;
-  border-radius: 76px;
-`;
-
-const AvailablePOAPsContainer = styled.div`
-  width: 100%;
-  background-color: #f1f2f5;
-  border-radius: 12px;
-  padding: 28px 0;
-  margin-top: 24px;
-`;
-
-const AvailablePOAPsTitleContainer = styled.div`
-  height: 56px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 36px;
-  margin-bottom: 32px;
-`;
-
-const AvailablePOAPsTitle = styled.h3`
-  height: 18px;
-  line-height: 18px;
-  font-size: 18px;
-  color: black;
-`;
-
-const FilterInput = styled.input`
-  height: 36px;
-  width: 171px;
-  padding: 6px 16px;
-  border: 2px solid #e6e8ec;
-  border-radius: 12px;
-  background-color: white;
-  outline: none;
-`;
-
-const AvailablePOAPsList = styled.div`
-  width: 100%;
-  height: 108px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  padding-left: 22px;
-`;
-
-type StaticPOAPProps = {
-  marginRight?: string;
-  cursorPointer?: boolean;
-  zIndex?: number;
-};
-
-const POAPsSharedStyling = css`
-  width: 108px;
-  height: 108px;
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
-  border-radius: 50%;
-  background-color: white;
-  box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
-  margin-right: -28px;
-`;
-
-const StaticPOAP = styled.img<StaticPOAPProps>`
-  ${POAPsSharedStyling}
-
-  ${({ marginRight }) => marginRight && `margin-right: ${marginRight};`}
-  ${({ cursorPointer }) => cursorPointer && 'cursor: pointer;'}
-  ${({ zIndex }) => zIndex && `z-index: ${zIndex};`}
-`;
-
-const POAPPlaceholder = styled.div<{ zIndex: number }>`
-  ${POAPsSharedStyling}
-  border: 1px dashed #ccc7c7;
-
-  ${({ zIndex }) => zIndex && `z-index: ${zIndex};`}
-`;
-
-const AnimatedContainer = styled(motion.div)`
-  width: 100%;
-`;
-
-const Dragger = styled.div`
-  width: 34px;
-  height: 50px;
-  position: absolute;
-  bottom: -17px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  border-radius: 0 0 8px 8px;
-  background-color: white;
-  user-select: none;
-  cursor: pointer;
-  box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
-`;
-
-const Dots = styled(DotsIcon)`
-  position: absolute;
-  bottom: 7px;
-  left: 50%;
-  transform: translate(-50%, 0);
 `;
