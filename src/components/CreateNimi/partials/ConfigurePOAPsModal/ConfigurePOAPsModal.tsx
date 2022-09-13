@@ -11,20 +11,6 @@ import { POAPToken } from './types';
 
 import { RecentPOAPs, CustomizePOAPs } from './components';
 
-type NavigationLinkProps = {
-  children: string;
-  onClick?: () => void;
-  selected: boolean;
-};
-
-// TODO: UPDATE NAVIGATION LINK WITH BORDER BOTTOM
-const NavigationLink = ({ children, onClick, selected }: NavigationLinkProps) => (
-  <LinkContainer>
-    <Link onClick={onClick}>{children}</Link>
-    {selected && <LinkUnderline />}
-  </LinkContainer>
-);
-
 type ConfigurePOAPsModalProps = {
   ensAddress: string;
   widget: NimiPOAPWidget;
@@ -82,6 +68,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     }
   };
 
+  //TODO: HANDLE NO POAPS STATE
   return createPortal(
     <ModalBase
       title="Configure POAPs"
@@ -94,14 +81,14 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
         <>
           <BodyControls>
             <BodyTitle>POAPs</BodyTitle>
-            <BodyNavigation>
+            <Navigation>
               <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
                 Most Recent
               </NavigationLink>
               <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
                 Custom Order
               </NavigationLink>
-            </BodyNavigation>
+            </Navigation>
           </BodyControls>
           <AnimatePresence mode="wait">
             {customOrder ? (
@@ -137,25 +124,22 @@ const BodyTitle = styled.h2`
   color: black;
 `;
 
-const BodyNavigation = styled.nav``;
+const Navigation = styled.nav``;
 
-const LinkContainer = styled.div`
-  display: inline-block;
-  margin-left: 18px;
-`;
-
-const Link = styled.a`
+const NavigationLink = styled.a<{ selected: boolean }>`
   display: inline-block;
   vertical-align: top;
   line-height: 15px;
   font-size: 14px;
   ${NimiSignatureColor}
   cursor: pointer;
-  margin-bottom: 4px;
-`;
-
-const LinkUnderline = styled.div`
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
+  margin-left: 18px;
+  ${({ selected }) =>
+    selected &&
+    `
+      border-bottom: 2px solid;
+      border-image-source: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
+      border-image-slice: 1;
+      padding-bottom: 4px;
+  `}
 `;
