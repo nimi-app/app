@@ -1,7 +1,7 @@
 import { useState, useEffect, ReactNode, useRef } from 'react';
 import axios from 'axios';
 import { createPortal } from 'react-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Reorder, motion, AnimatePresence, useDragControls } from 'framer-motion/dist/framer-motion';
 
 import { ReactComponent as CloseIcon } from '../../../../assets/svg/close-icon.svg';
@@ -361,34 +361,29 @@ type StaticPOAPProps = {
   zIndex?: number;
 };
 
-const;
-
-const StaticPOAP = styled.img<StaticPOAPProps>`
+const POAPsSharedStyling = css`
   width: 108px;
   height: 108px;
   position: relative;
   display: inline-block;
   vertical-align: top;
   border-radius: 50%;
-  margin-right: ${(props) => props.marginRight || '-28px'};
   background-color: white;
   box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
+  margin-right: -28px;
+`;
 
+const StaticPOAP = styled.img<StaticPOAPProps>`
+  ${POAPsSharedStyling}
+
+  ${({ marginRight }) => marginRight && `margin-right: ${marginRight};`}
   ${({ cursorPointer }) => cursorPointer && 'cursor: pointer;'}
   ${({ zIndex }) => zIndex && `z-index: ${zIndex};`}
 `;
 
 const POAPPlaceholder = styled.div<{ zIndex: number }>`
-  width: 108px;
-  height: 108px;
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
-  border-radius: 50%;
+  ${POAPsSharedStyling}
   border: 1px dashed #ccc7c7;
-  margin-right: -28px;
-  background-color: white;
-  box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
 
   ${({ zIndex }) => zIndex && `z-index: ${zIndex};`}
 `;
