@@ -60,11 +60,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     if (event.target === event.currentTarget) closeModal();
   };
 
-  const handleReordering = (items) => {
-    console.log('HANDLE REORDERING TRIGGERED');
-
-    setSelectedItems([...items, ...new Array(6 - items.length).fill(null)]);
-  };
+  const handleReordering = (items) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)]);
 
   const addPOAPToSelectedItems = (poap: POAPToken) => {
     const addedPoaps = selectedItems.filter((item) => item !== null);

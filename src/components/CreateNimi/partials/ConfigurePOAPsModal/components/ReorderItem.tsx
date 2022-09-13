@@ -4,7 +4,7 @@ import { Reorder, useDragControls } from 'framer-motion/dist/framer-motion';
 import { StaticPOAP, POAPPlaceholder } from './POAPs';
 import { ReactComponent as DotsIcon } from '../../../../../assets/svg/dots.svg';
 
-export const ReorderItem = ({ value, index, getDragging, getDragEvent }) => {
+export const ReorderItem = ({ value, index, getDraggingEvent, getDraggingEventEnd }) => {
   const controls = useDragControls();
 
   return value ? (
@@ -22,8 +22,8 @@ export const ReorderItem = ({ value, index, getDragging, getDragEvent }) => {
         display: 'inline-block',
         marginRight: '-28px',
       }}
-      onDrag={getDragging}
-      onDragEnd={(event) => getDragEvent(event, value)}
+      onDrag={getDraggingEvent}
+      onDragEnd={(event) => getDraggingEventEnd(event, value)}
     >
       <Dragger onPointerDown={(e) => controls.start(e)}>
         <Dots />

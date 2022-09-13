@@ -17,7 +17,7 @@ export const CustomizePOAPs = ({
   removePOAPFromSelectedItems,
 }) => {
   const [filterValue, setFilterValue] = useState('');
-  const [childOutside, setChildOutside] = useState(false);
+  const [childOutside, setChildOutside] = useState<'left' | 'right' | 'none'>('none');
 
   const checkIfMatchesFilter = (token: POAPToken) =>
     token.event.name.toLowerCase().includes(filterValue.toLowerCase()) ||
@@ -25,27 +25,24 @@ export const CustomizePOAPs = ({
     token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
     token.event.city.toLowerCase().includes(filterValue.toLowerCase());
 
-  const getDragging = (event: DragEvent) => {
-    console.log(event);
+  const getDraggingEvent = (event: DragEvent) => {
     const element = document.getElementById('reorder-group');
     const rect = element?.getBoundingClientRect();
 
-    if (rect && (event.x < rect.x || event.x > rect.x + rect.width)) {
-      setChildOutside(true);
-    } else {
-      setChildOutside(false);
+    if (rect) {
+      if (event.x < rect.x) return setChildOutside('left');
+      if (event.x > rect.x + rect.width) return setChildOutside('right');
     }
+
+    setChildOutside('none');
   };
 
-  const getDragEvent = (event: DragEvent, poap: POAPToken) => {
-    setChildOutside(false);
+  const getDraggingEventEnd = (event: DragEvent, poap: POAPToken) => {
+    setChildOutside('none');
     const element = document.getElementById('reorder-group');
     const rect = element?.getBoundingClientRect();
-    console.log(rect);
 
-    if (rect && (event.x < rect.x || event.x > rect.x + rect.width)) {
-      removePOAPFromSelectedItems(poap);
-    }
+    if (rect && (event.x < rect.x || event.x > rect.x + rect.width)) removePOAPFromSelectedItems(poap);
   };
 
   return (
@@ -57,8 +54,8 @@ export const CustomizePOAPs = ({
               key={item?.tokenId || index}
               value={item}
               index={index}
-              getDragging={getDragging}
-              getDragEvent={getDragEvent}
+              getDraggingEvent={getDraggingEvent}
+              getDraggingEventEnd={getDraggingEventEnd}
             />
           ))}
         </Reorder.Group>
