@@ -151,6 +151,7 @@ const NavigationLink = styled.a<{ selected: boolean }>`
   ${NimiSignatureColor}
   cursor: pointer;
   margin-left: 18px;
+
   ${({ selected }) =>
     selected &&
     `
