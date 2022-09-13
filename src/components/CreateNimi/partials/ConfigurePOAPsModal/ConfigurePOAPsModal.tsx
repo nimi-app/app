@@ -180,6 +180,19 @@ const RecentPOAPs = ({ items }) => (
 const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelectedItems }) => {
   const [filterValue, setFilterValue] = useState('');
 
+  const checkIfMatchesFilter = (token: POAPToken) => {
+    if (
+      token.event.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+      token.event.description.toLowerCase().includes(filterValue.toLowerCase()) ||
+      token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
+      token.event.city.toLowerCase().includes(filterValue.toLowerCase())
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <AnimatedSection>
       <PresentedPOAPsContainer>
@@ -205,15 +218,17 @@ const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelec
           />
         </AvailablePOAPsTitleContainer>
         <AvailablePOAPsList>
-          {items.map((poap) => (
-            <StaticPOAP
-              key={poap.tokenId}
-              src={poap.event.image_url}
-              marginRight="-16px"
-              onClick={() => addPOAPToSelectedItems(poap)}
-              cursorPointer
-            />
-          ))}
+          {items
+            .filter((item) => checkIfMatchesFilter(item))
+            .map((poap) => (
+              <StaticPOAP
+                key={poap.tokenId}
+                src={poap.event.image_url}
+                marginRight="-16px"
+                onClick={() => addPOAPToSelectedItems(poap)}
+                cursorPointer
+              />
+            ))}
         </AvailablePOAPsList>
       </AvailablePOAPsContainer>
     </AnimatedSection>
