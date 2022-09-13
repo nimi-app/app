@@ -54,10 +54,10 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
     setIsLoading(true);
     setError(undefined);
 
-    const url = new URL('/twitter-info', getAPIBaseURL());
+    const url = `${getAPIBaseURL()}/twitter/info`;
 
     axios
-      .get<{ data: TwitterData }>(url.toString(), {
+      .get<{ data: TwitterData }>(url, {
         params: {
           username: username.charAt(0) === '@' ? username.substring(1) : username,
         },

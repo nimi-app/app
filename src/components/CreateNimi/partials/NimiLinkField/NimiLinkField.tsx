@@ -1,4 +1,4 @@
-import { Nimi, NimiLinkType, nimiLinkValidator, nimiLinkDetailsExtended } from 'nimi-card';
+import { Nimi, nimiLinkDetailsExtended, NimiLinkType, nimiLinkValidator } from '@nimi.io/card';
 import isURL from 'validator/lib/isURL';
 
 import { useFormContext } from 'react-hook-form';

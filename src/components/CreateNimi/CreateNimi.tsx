@@ -4,18 +4,19 @@ import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
-
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+
 import {
   Nimi,
-  nimiCard,
+  nimiValidator,
   NimiLinkType,
   NimiLinkBaseDetails,
   NimiWidgetType,
+  NimiImageType,
   NimiBlockchainAddress,
   NimiPOAPWidget,
-} from 'nimi-card';
+} from '@nimi.io/card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -89,15 +90,19 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const publishNimiAbortController = useRef<AbortController>();
 
+  const image = ensMetadata?.image
+    ? {
+        type: NimiImageType.URL,
+        url: ensMetadata?.image || '',
+      }
+    : undefined;
+
   // Form state manager
   const useFormContext = useForm<Nimi>({
-    resolver: yupResolver(nimiCard, {
-      stripUnknown: true,
-      abortEarly: false,
-    }),
+    resolver: yupResolver(nimiValidator),
     defaultValues: {
       displayName: ensName,
-      displayImageUrl: ensMetadata?.image,
+      image,
       description: '',
       ensAddress: ensAddress,
       ensName,
@@ -126,7 +131,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     if (!lensProfile) return;
     setValue('displayName', lensProfile.name);
     setValue('description', lensProfile.description);
-    setValue('displayImageUrl', lensProfile?.pictureUrl);
+    setValue('image', {
+      type: NimiImageType.URL,
+      url: lensProfile?.pictureUrl,
+    });
   }, [setValue, lensProfile]);
 
   const handleDrop = (droppedItem) => {
@@ -253,11 +261,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              {formWatchPayload.displayImageUrl ? (
-                <ProfileImage src={formWatchPayload.displayImageUrl} />
-              ) : (
-                <ProfileImagePlaceholder />
-              )}
+              {formWatchPayload.image ? <ProfileImage src={formWatchPayload.image.url} /> : <ProfileImagePlaceholder />}
 
               <ImportButtonsWrapper>
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
@@ -378,7 +382,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               // Set the fields and close the modal
               setValue('displayName', data.name);
               setValue('description', data.description);
-              setValue('displayImageUrl', data.profileImageUrl);
+              setValue('image', { type: NimiImageType.URL, url: data.profileImageUrl });
 
               const prevLinkState = getValues('links') || [];
 

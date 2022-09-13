@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { NimiBlockchain, NimiWidgetType, NimiLinkType, NIMI_BLOCKCHAIN_LOGO_URL } from 'nimi-card';
+import { NimiBlockchain, NimiWidgetType, NimiLinkType, NIMI_BLOCKCHAIN_LOGO_URL } from '@nimi.io/card';
 
 import {
   Modal,
