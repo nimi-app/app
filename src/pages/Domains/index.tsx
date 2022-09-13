@@ -51,7 +51,6 @@ const BuyDomainLink = styled.p`
   margin-top: 17px;
   cursor: pointer;
 `;
-const SectionWrapper = styled.div``;
 
 interface DomainsProps {
   address: string;
@@ -68,35 +67,30 @@ function Domains({ address }: DomainsProps) {
 
   return (
     <Container>
-      {domainArray.length && (
-        <SectionWrapper>
-          <DomainsHeader>Your Nimis</DomainsHeader>
-          <StyledDomainsWrapper>
-            {domainArray.map((item, index) => {
-              return <PopulatedENSCard data={item.data} key={index} />;
-            })}
-          </StyledDomainsWrapper>
-        </SectionWrapper>
-      )}
-
-      <SectionWrapper>
-        <DomainsHeader>Your Identities</DomainsHeader>
-        {!emptyDomainArray.length || !domainArray.length ? (
-          <BigBanner>
-            {t('noEnsFound')}
-            <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-              {t('buyDomain')}
-            </BuyDomainLink>
-          </BigBanner>
-        ) : (
-          <StyledDomainsWrapper>
-            {emptyDomainArray.map(({ id, name, labelName }) => {
+      <DomainsHeader>Your Identities</DomainsHeader>
+      {!emptyDomainArray.length || !domainArray.length ? (
+        <BigBanner>
+          {t('noEnsFound')}
+          <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+            {t('buyDomain')}
+          </BuyDomainLink>
+        </BigBanner>
+      ) : (
+        <StyledDomainsWrapper>
+          {domainArray.length && (
+            <StyledDomainsWrapper>
+              {domainArray.map((item, index) => {
+                return <PopulatedENSCard data={item.data} key={index} />;
+              })}
+            </StyledDomainsWrapper>
+          )}
+          {emptyDomainArray.length &&
+            emptyDomainArray.map(({ id, name, labelName }) => {
               return <BasicENSCard key={id} name={name || ''} labelName={labelName || ''} />;
             })}
-            <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
-          </StyledDomainsWrapper>
-        )}
-      </SectionWrapper>
+          <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
+        </StyledDomainsWrapper>
+      )}
     </Container>
   );
 }

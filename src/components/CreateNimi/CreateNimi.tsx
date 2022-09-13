@@ -63,9 +63,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
    */
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
-  const { state } = useLocation();
-  const ensMetadata = state as ENSMetadata;
-  console.log('ensMetadata', ensMetadata);
+  const { state }: any = useLocation();
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -84,25 +82,20 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const publishNimiAbortController = useRef<AbortController>();
 
-  const image = ensMetadata?.image
-    ? {
-        type: NimiImageType.URL,
-        url: ensMetadata?.image || '',
-      }
-    : undefined;
-
+  const image = state.image || undefined;
+  console.log('state', state);
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
-      displayName: ensName,
+      displayName: state.displayName || ensName,
       image,
-      description: '',
+      description: state.description || '',
       ensAddress: ensAddress,
       ensName,
-      addresses: [],
-      links: [],
-      widgets: [
+      addresses: state.addresses || [],
+      links: state.links || [],
+      widgets: state.widgets || [
         {
           type: NimiWidgetType.POAP,
           address: ensAddress,

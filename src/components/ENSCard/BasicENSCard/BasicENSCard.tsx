@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { StyledENSNameCardWrapper, ENSNameCardImage, StyledDomainName } from '../styleds';
 import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { Loader } from '../../Loader';
+import { NimiImageType } from 'nimi-card';
 
 export interface ENSNameCardProps {
   name: string;
@@ -19,14 +20,19 @@ const DomainName: FC<ENSDomainNameProps> = ({ name }) => <StyledDomainName>{name
 
 export function BasicENSCard({ name }: ENSNameCardProps) {
   const { data, loading } = useENSMetadata(name);
-  console.log('data', data);
+
+  console.log('BASIC BITCH DATA', data);
+  const imageFormatted = {
+    type: NimiImageType.URL,
+    url: data?.image || '',
+  };
 
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        <Link to={`/domains/${name}`} state={data}>
+        <Link to={`/domains/${name}`} state={{ image: imageFormatted }}>
           <StyledENSNameCardWrapper>
             <ENSNameCardImage alt={data ? data.image : PurpleCircle} src={data ? data.image : PurpleCircle} />
             <DomainName name={name} />

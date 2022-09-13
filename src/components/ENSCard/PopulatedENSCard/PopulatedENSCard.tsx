@@ -17,6 +17,7 @@ interface ENSDomainNameProps {
 const DomainName: FC<ENSDomainNameProps> = ({ name }) => <StyledDomainName>{name}</StyledDomainName>;
 
 export function PopulatedENSCard({ data }: ENSNameCardProps) {
+  console.log('data', data);
   return (
     <Link to={`/domains/${data.ensName}`} state={data}>
       <StyledENSNameCardWrapper>
