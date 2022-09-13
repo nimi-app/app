@@ -17,6 +17,7 @@ export const CustomizePOAPs = ({
   removePOAPFromSelectedItems,
 }) => {
   const [filterValue, setFilterValue] = useState('');
+  const [childOutside, setChildOutside] = useState(false);
 
   const checkIfMatchesFilter = (token: POAPToken) =>
     token.event.name.toLowerCase().includes(filterValue.toLowerCase()) ||
@@ -24,9 +25,23 @@ export const CustomizePOAPs = ({
     token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
     token.event.city.toLowerCase().includes(filterValue.toLowerCase());
 
-  const getDragEvent = (event: DragEvent, poap: POAPToken) => {
+  const getDragging = (event: DragEvent) => {
+    console.log(event);
     const element = document.getElementById('reorder-group');
     const rect = element?.getBoundingClientRect();
+
+    if (rect && (event.x < rect.x || event.x > rect.x + rect.width)) {
+      setChildOutside(true);
+    } else {
+      setChildOutside(false);
+    }
+  };
+
+  const getDragEvent = (event: DragEvent, poap: POAPToken) => {
+    setChildOutside(false);
+    const element = document.getElementById('reorder-group');
+    const rect = element?.getBoundingClientRect();
+    console.log(rect);
 
     if (rect && (event.x < rect.x || event.x > rect.x + rect.width)) {
       removePOAPFromSelectedItems(poap);
@@ -35,10 +50,16 @@ export const CustomizePOAPs = ({
 
   return (
     <AnimatedSection>
-      <PresentedPOAPsContainer>
+      <PresentedPOAPsContainer childOutside={childOutside}>
         <Reorder.Group id="reorder-group" axis="x" values={items} onReorder={handleReordering} as="div">
           {selectedItems.map((item, index) => (
-            <ReorderItem key={item?.tokenId || index} value={item} index={index} getDragEvent={getDragEvent} />
+            <ReorderItem
+              key={item?.tokenId || index}
+              value={item}
+              index={index}
+              getDragging={getDragging}
+              getDragEvent={getDragEvent}
+            />
           ))}
         </Reorder.Group>
       </PresentedPOAPsContainer>
