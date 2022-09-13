@@ -15,6 +15,7 @@ export const CustomizePOAPs = ({
   handleReordering,
   addPOAPToSelectedItems,
   removePOAPFromSelectedItems,
+  clearSelectedItems,
 }) => {
   const [filterValue, setFilterValue] = useState('');
   const [childOutside, setChildOutside] = useState<'left' | 'right' | 'none'>('none');
@@ -84,8 +85,10 @@ export const CustomizePOAPs = ({
             ))}
         </AvailablePOAPsList>
         <SelectedPOAPsInfo>
-          <NumberOfSelectedPOAPs>0 out of 6 selected</NumberOfSelectedPOAPs>
-          <ClearSelectionButton>Clear Selection</ClearSelectionButton>
+          <NumberOfSelectedPOAPs>
+            {selectedItems.filter((item) => item !== null).length} out of 6 selected
+          </NumberOfSelectedPOAPs>
+          <ClearSelectionButton onClick={clearSelectedItems}>Clear Selection</ClearSelectionButton>
         </SelectedPOAPsInfo>
       </AvailablePOAPsContainer>
     </AnimatedSection>
