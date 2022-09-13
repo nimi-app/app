@@ -180,18 +180,11 @@ const RecentPOAPs = ({ items }) => (
 const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelectedItems }) => {
   const [filterValue, setFilterValue] = useState('');
 
-  const checkIfMatchesFilter = (token: POAPToken) => {
-    if (
-      token.event.name.toLowerCase().includes(filterValue.toLowerCase()) ||
-      token.event.description.toLowerCase().includes(filterValue.toLowerCase()) ||
-      token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
-      token.event.city.toLowerCase().includes(filterValue.toLowerCase())
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
+  const checkIfMatchesFilter = (token: POAPToken) =>
+    token.event.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+    token.event.description.toLowerCase().includes(filterValue.toLowerCase()) ||
+    token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
+    token.event.city.toLowerCase().includes(filterValue.toLowerCase());
 
   return (
     <AnimatedSection>
@@ -389,9 +382,11 @@ const FilterInput = styled.input`
 
 const AvailablePOAPsList = styled.div`
   width: 100%;
+  height: 108px;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+  padding-left: 22px;
 `;
 
 type StaticPOAPProps = {
