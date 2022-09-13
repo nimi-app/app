@@ -177,38 +177,48 @@ const RecentPOAPs = ({ items }) => (
   </AnimatedSection>
 );
 
-const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelectedItems }) => (
-  <AnimatedSection>
-    <PresentedPOAPsContainer>
-      <Reorder.Group
-        axis="x"
-        values={items}
-        onReorder={(items) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)])}
-        as="div"
-      >
-        {selectedItems.map((item, index) => (
-          <ReorderItem key={item?.tokenId || index} value={item} index={index} />
-        ))}
-      </Reorder.Group>
-    </PresentedPOAPsContainer>
-    <AvailablePOAPsContainer>
-      <AvailablePOAPsTitleContainer>
-        <AvailablePOAPsTitle>Choose Which POAP to Show</AvailablePOAPsTitle>
-      </AvailablePOAPsTitleContainer>
-      <AvailablePOAPsList>
-        {items.map((poap) => (
-          <StaticPOAP
-            key={poap.tokenId}
-            src={poap.event.image_url}
-            marginRight="-16px"
-            onClick={() => addPOAPToSelectedItems(poap)}
-            cursorPointer
+const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelectedItems }) => {
+  const [filterValue, setFilterValue] = useState('');
+
+  return (
+    <AnimatedSection>
+      <PresentedPOAPsContainer>
+        <Reorder.Group
+          axis="x"
+          values={items}
+          onReorder={(items) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)])}
+          as="div"
+        >
+          {selectedItems.map((item, index) => (
+            <ReorderItem key={item?.tokenId || index} value={item} index={index} />
+          ))}
+        </Reorder.Group>
+      </PresentedPOAPsContainer>
+      <AvailablePOAPsContainer>
+        <AvailablePOAPsTitleContainer>
+          <AvailablePOAPsTitle>Choose Which POAP to Show</AvailablePOAPsTitle>
+          <FilterInput
+            placeholder="Filter"
+            value={filterValue}
+            onChange={(event) => setFilterValue(event.target.value)}
+            spellCheck={false}
           />
-        ))}
-      </AvailablePOAPsList>
-    </AvailablePOAPsContainer>
-  </AnimatedSection>
-);
+        </AvailablePOAPsTitleContainer>
+        <AvailablePOAPsList>
+          {items.map((poap) => (
+            <StaticPOAP
+              key={poap.tokenId}
+              src={poap.event.image_url}
+              marginRight="-16px"
+              onClick={() => addPOAPToSelectedItems(poap)}
+              cursorPointer
+            />
+          ))}
+        </AvailablePOAPsList>
+      </AvailablePOAPsContainer>
+    </AnimatedSection>
+  );
+};
 
 const ReorderItem = ({ value, index }) => {
   const controls = useDragControls();
@@ -338,14 +348,28 @@ const AvailablePOAPsContainer = styled.div`
 
 const AvailablePOAPsTitleContainer = styled.div`
   height: 56px;
-  padding: 19px 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 36px;
   margin-bottom: 32px;
 `;
 
 const AvailablePOAPsTitle = styled.h3`
+  height: 18px;
   line-height: 18px;
   font-size: 18px;
   color: black;
+`;
+
+const FilterInput = styled.input`
+  height: 36px;
+  width: 171px;
+  padding: 6px 16px;
+  border: 2px solid #e6e8ec;
+  border-radius: 12px;
+  background-color: white;
+  outline: none;
 `;
 
 const AvailablePOAPsList = styled.div`
