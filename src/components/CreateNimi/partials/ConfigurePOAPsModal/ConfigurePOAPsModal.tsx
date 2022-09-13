@@ -61,7 +61,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
   const [customOrder, setCustomOrder] = useState(false);
   const [items, setItems] = useState<POAPToken[]>([]);
   const [fetchingItems, setFetchingItems] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<POAPToken[]>([]);
+  const [selectedItems, setSelectedItems] = useState<POAPToken[]>(new Array(6).fill(null));
 
   useEffect(() => {
     async function fetchPOAPs() {
@@ -100,8 +100,10 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
   };
 
   const addPOAPToSelectedItems = (poap: POAPToken) => {
-    if (!selectedItems.some((item) => item.tokenId === poap.tokenId) && selectedItems.length < 6) {
-      setSelectedItems((selectedItems) => [...selectedItems, poap]);
+    const addedPoaps = selectedItems.filter((item) => item !== null);
+
+    if (!addedPoaps.some((item) => item.tokenId === poap.tokenId) && addedPoaps.length < 6) {
+      setSelectedItems([...addedPoaps, poap, ...new Array(5 - addedPoaps.length).fill(null)]);
     }
   };
 
@@ -178,9 +180,14 @@ const RecentPOAPs = ({ items }) => (
 const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelectedItems }) => (
   <AnimatedSection>
     <PresentedPOAPsContainer>
-      <Reorder.Group axis="x" values={items} onReorder={setSelectedItems} as="div">
-        {selectedItems.map((item) => (
-          <ReorderItem key={item.tokenId} value={item} />
+      <Reorder.Group
+        axis="x"
+        values={items}
+        onReorder={(items) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)])}
+        as="div"
+      >
+        {selectedItems.map((item, index) => (
+          <ReorderItem key={item?.tokenId || index} value={item} index={index} />
         ))}
       </Reorder.Group>
     </PresentedPOAPsContainer>
@@ -203,10 +210,10 @@ const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelec
   </AnimatedSection>
 );
 
-const ReorderItem = ({ value }) => {
+const ReorderItem = ({ value, index }) => {
   const controls = useDragControls();
 
-  return (
+  return value ? (
     <Reorder.Item
       value={value}
       dragListener={false}
@@ -219,14 +226,16 @@ const ReorderItem = ({ value }) => {
         height: 108,
         position: 'relative',
         display: 'inline-block',
-        marginRight: '-33px',
+        marginRight: '-28px',
       }}
     >
       <Dragger onPointerDown={(e) => controls.start(e)}>
         <Dots />
       </Dragger>
-      <StaticPOAP src={value.event.image_url} />
+      <StaticPOAP src={value.event.image_url} zIndex={index + 1} />
     </Reorder.Item>
+  ) : (
+    <POAPPlaceholder zIndex={index + 1} />
   );
 };
 
@@ -349,7 +358,10 @@ const AvailablePOAPsList = styled.div`
 type StaticPOAPProps = {
   marginRight?: string;
   cursorPointer?: boolean;
+  zIndex?: number;
 };
+
+const;
 
 const StaticPOAP = styled.img<StaticPOAPProps>`
   width: 108px;
@@ -363,6 +375,22 @@ const StaticPOAP = styled.img<StaticPOAPProps>`
   box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
 
   ${({ cursorPointer }) => cursorPointer && 'cursor: pointer;'}
+  ${({ zIndex }) => zIndex && `z-index: ${zIndex};`}
+`;
+
+const POAPPlaceholder = styled.div<{ zIndex: number }>`
+  width: 108px;
+  height: 108px;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 50%;
+  border: 1px dashed #ccc7c7;
+  margin-right: -28px;
+  background-color: white;
+  box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
+
+  ${({ zIndex }) => zIndex && `z-index: ${zIndex};`}
 `;
 
 const AnimatedContainer = styled(motion.div)`
