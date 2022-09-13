@@ -24,17 +24,21 @@ export const CustomizePOAPs = ({
     token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
     token.event.city.toLowerCase().includes(filterValue.toLowerCase());
 
+  const getDragEvent = (event: DragEvent, poap: POAPToken) => {
+    const element = document.getElementById('reorder-group');
+    const rect = element?.getBoundingClientRect();
+
+    if (rect && (event.x < rect.x || event.x > rect.x + rect.width)) {
+      removePOAPFromSelectedItems(poap);
+    }
+  };
+
   return (
     <AnimatedSection>
       <PresentedPOAPsContainer>
-        <Reorder.Group axis="x" values={items} onReorder={handleReordering} as="div">
+        <Reorder.Group id="reorder-group" axis="x" values={items} onReorder={handleReordering} as="div">
           {selectedItems.map((item, index) => (
-            <ReorderItem
-              key={item?.tokenId || index}
-              value={item}
-              index={index}
-              removePOAPFromSelectedItems={removePOAPFromSelectedItems}
-            />
+            <ReorderItem key={item?.tokenId || index} value={item} index={index} getDragEvent={getDragEvent} />
           ))}
         </Reorder.Group>
       </PresentedPOAPsContainer>
