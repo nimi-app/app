@@ -9,7 +9,13 @@ import { ReorderItem } from './ReorderItem';
 
 import { POAPToken } from '../types';
 
-export const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAPToSelectedItems }) => {
+export const CustomizePOAPs = ({
+  items,
+  selectedItems,
+  handleReordering,
+  addPOAPToSelectedItems,
+  removePOAPFromSelectedItems,
+}) => {
   const [filterValue, setFilterValue] = useState('');
 
   const checkIfMatchesFilter = (token: POAPToken) =>
@@ -21,14 +27,14 @@ export const CustomizePOAPs = ({ items, selectedItems, setSelectedItems, addPOAP
   return (
     <AnimatedSection>
       <PresentedPOAPsContainer>
-        <Reorder.Group
-          axis="x"
-          values={items}
-          onReorder={(items) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)])}
-          as="div"
-        >
+        <Reorder.Group axis="x" values={items} onReorder={handleReordering} as="div">
           {selectedItems.map((item, index) => (
-            <ReorderItem key={item?.tokenId || index} value={item} index={index} />
+            <ReorderItem
+              key={item?.tokenId || index}
+              value={item}
+              index={index}
+              removePOAPFromSelectedItems={removePOAPFromSelectedItems}
+            />
           ))}
         </Reorder.Group>
       </PresentedPOAPsContainer>
