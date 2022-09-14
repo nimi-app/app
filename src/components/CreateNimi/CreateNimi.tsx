@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 import {
   Nimi,
@@ -164,28 +163,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     setValue('links', updatedList);
   };
 
-  // eslint-disable-next-line react/display-name
-  const getRenderItem = (items) => (provided, snapshot, rubric) => {
-    const index = rubric.source.index;
-    const item = items[index];
-    const type = item.type;
-    return (
-      <LinkFormGroup ref={provided.innerRef} {...provided.draggableProps} key={'link-input-' + type + index}>
-        <StyledDots {...provided.dragHandleProps}>
-          <DragDots />
-        </StyledDots>
-
-        <NimiLinkField
-          key={'link-input' + type + index}
-          title={item.title}
-          link={type as NimiLinkType}
-          index={index}
-          content={item.content}
-        />
-      </LinkFormGroup>
-    );
-  };
-
   /**
    * Handle the form submit via ENS contract interaction
    * @param data a validated Nimi object
@@ -307,19 +284,27 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     />
                   </StyledInputWrapper>
                 </FormGroup>
-                <DragDropContext onDragEnd={handleDrop}>
-                  <Droppable droppableId="list-container" renderClone={getRenderItem(links)}>
-                    {(provided) => (
-                      <LinkWrapper {...provided.droppableProps} ref={provided.innerRef}>
-                        {links.map(({ type }, index) => (
-                          <Draggable key={index.toString() + type} draggableId={index.toString()} index={index}>
-                            {getRenderItem(links)}
-                          </Draggable>
-                        ))}
-                      </LinkWrapper>
-                    )}
-                  </Droppable>
-                </DragDropContext>
+
+                <LinkWrapper>
+                  {links.map(({ type, title, content }, index) => {
+                    return (
+                      <LinkFormGroup key={'link-input-' + type + index}>
+                        <StyledDots>
+                          <DragDots />
+                        </StyledDots>
+
+                        <NimiLinkField
+                          key={'link-input' + type + index}
+                          title={title}
+                          link={type as NimiLinkType}
+                          index={index}
+                          content={content}
+                        />
+                      </LinkFormGroup>
+                    );
+                  })}
+                </LinkWrapper>
+
                 {formWatchPayload.addresses.length > 0 && (
                   <AddresssWrapper>
                     <AddressesTitle>Addresses</AddressesTitle>
