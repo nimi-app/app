@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import axios from 'axios';
 import styled from 'styled-components';
 import { AnimatePresence } from 'framer-motion/dist/framer-motion';
 
 import { ModalBase } from '../ModalBase';
 import { NimiSignatureColor } from '../../../../theme';
 import { NimiPOAPWidget } from '@nimi.io/card';
-import { POAPToken } from './types';
 
 import { RecentPOAPs, CustomizePOAPs } from './components';
+import { POAPToken } from './types';
+
+import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 
 type ConfigurePOAPsModalProps = {
   ensAddress: string;
@@ -18,15 +20,25 @@ type ConfigurePOAPsModalProps = {
 };
 
 export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: ConfigurePOAPsModalProps) {
-  const [modalContainer] = useState(() => document.createElement('div'));
-  const [customOrder, setCustomOrder] = useState(false);
-  const [items, setItems] = useState<POAPToken[]>([]);
-  const [fetchingItems, setFetchingItems] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<POAPToken[]>(new Array(6).fill(null));
+  const {
+    modalContainer,
+    customOrder,
+    setCustomOrderHandler,
+    items,
+    setItems,
+    fetchingItems,
+    setFetchingItems,
+    selectedItems,
+    handleReordering,
+    addPOAPToSelectedItems,
+    removePOAPFromSelectedItems,
+    clearSelectedItems,
+  } = useConfigurePOAPsModal();
 
   useEffect(() => {
     async function fetchPOAPs() {
       setFetchingItems(true);
+
       let tokens: POAPToken[] = [];
 
       try {
@@ -52,35 +64,9 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
       document.body.removeChild(modalContainer);
       document.body.style.overflow = 'auto';
     };
-  }, [ensAddress, modalContainer]);
+  }, [ensAddress, modalContainer, setItems, setFetchingItems]);
 
-  const setCustomOrderHandler = (v: boolean) => () => setCustomOrder(v);
-
-  const handleCloseModal = (event) => {
-    if (event.target === event.currentTarget) closeModal();
-  };
-
-  const handleReordering = (items) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)]);
-
-  const addPOAPToSelectedItems = (poap: POAPToken) => {
-    const addedPoaps = selectedItems.filter((item) => item !== null);
-
-    if (!addedPoaps.some((item) => item.tokenId === poap.tokenId) && addedPoaps.length < 6) {
-      setSelectedItems([...addedPoaps, poap, ...new Array(5 - addedPoaps.length).fill(null)]);
-    }
-  };
-
-  const removePOAPFromSelectedItems = (poap: POAPToken) => {
-    const addedPoaps = selectedItems.filter((item) => item !== null);
-
-    if (addedPoaps.length) {
-      const updatedPOAPs = addedPoaps.filter((item) => item.tokenId !== poap.tokenId);
-
-      setSelectedItems([...updatedPOAPs, , ...new Array(6 - updatedPOAPs.length).fill(null)]);
-    }
-  };
-
-  const clearSelectedItems = () => setSelectedItems(new Array(6).fill(null));
+  const handleCloseModal = (event) => event.target === event.currentTarget && closeModal();
 
   //TODO: HANDLE NO POAPS STATE
   return createPortal(
