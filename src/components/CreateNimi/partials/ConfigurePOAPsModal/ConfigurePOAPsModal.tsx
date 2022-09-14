@@ -8,7 +8,7 @@ import { ModalBase } from '../ModalBase';
 import { NimiSignatureColor } from '../../../../theme';
 import { NimiPOAPWidget } from '@nimi.io/card';
 
-import { RecentPOAPs, CustomizePOAPs } from './components';
+import { BodyNavigation, RecentPOAPs, CustomizePOAPs } from './components';
 import { POAPToken } from './types';
 
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
@@ -20,6 +20,8 @@ type ConfigurePOAPsModalProps = {
 };
 
 export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: ConfigurePOAPsModalProps) {
+  console.log(widget);
+
   const {
     modalContainer,
     page,
@@ -80,17 +82,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
         <div>Fetching POAPs...</div>
       ) : (
         <>
-          <BodyControls>
-            <BodyTitle>POAPs</BodyTitle>
-            <Navigation>
-              <NavigationLink selected={page === 'recent'} onClick={openRecentPage}>
-                Most Recent
-              </NavigationLink>
-              <NavigationLink selected={page === 'custom'} onClick={openCustomPage}>
-                Custom Order
-              </NavigationLink>
-            </Navigation>
-          </BodyControls>
+          <BodyNavigation page={page} openRecentPage={openRecentPage} openCustomPage={openCustomPage} />
           <AnimatePresence mode="wait">
             {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}
             {page === 'custom' && (
@@ -111,38 +103,3 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     modalContainer
   );
 }
-
-const BodyControls = styled.div`
-  height: 38px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-`;
-
-const BodyTitle = styled.h2`
-  line-height: 26px;
-  font-size: 26px;
-  color: black;
-`;
-
-const Navigation = styled.nav``;
-
-const NavigationLink = styled.a<{ selected: boolean }>`
-  display: inline-block;
-  vertical-align: top;
-  line-height: 15px;
-  font-size: 14px;
-  ${NimiSignatureColor}
-  cursor: pointer;
-  margin-left: 18px;
-
-  ${({ selected }) =>
-    selected &&
-    `
-      border-bottom: 2px solid;
-      border-image-source: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
-      border-image-slice: 1;
-      padding-bottom: 4px;
-  `}
-`;
