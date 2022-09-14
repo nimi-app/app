@@ -6,13 +6,7 @@ import { NFTAsset, NFTSelectorProps } from './NFTSelector.types';
 import { Loader, LoaderWrapper } from '../Loader';
 import { fetchAssets } from './api';
 import { AssetListInnerWrapper, AssetListItem /* SearchBar */ } from './NFTSelector.styled';
-import { OpenSeaAsset } from 'opensea-js/lib/types';
-
-const mapOpeanSeaAssetsToNFTAssets = (assets: OpenSeaAsset[]): NFTAsset[] =>
-  assets.map((asset) => ({
-    ...asset,
-    value: `${asset.tokenAddress} -${asset.tokenId}`,
-  }));
+import { isENSName, mapOpenSeaAssetToNFTAsset } from './api/utils';
 
 export function NFTSelector({ address, onChange }: NFTSelectorProps) {
   const [isFetching, setIsFetching] = useState(true);
@@ -36,7 +30,8 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
       cursor: nextCursor,
     }).then(({ assets, next }) => {
       unstable_batchedUpdates(() => {
-        setAssetList((prev) => [...prev, ...mapOpeanSeaAssetsToNFTAssets(assets)]);
+        const appendedAssets = assets.map(mapOpenSeaAssetToNFTAsset).filter((asset) => !isENSName(asset));
+        setAssetList((prev) => [...prev, ...appendedAssets]);
         setNextCursor(next);
         setIsFetchingMore(false);
       });
@@ -59,7 +54,8 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
       cursor: nextCursor,
     }).then(({ assets, next }) => {
       unstable_batchedUpdates(() => {
-        setAssetList(mapOpeanSeaAssetsToNFTAssets(assets));
+        const appendedAssets = assets.map(mapOpenSeaAssetToNFTAsset).filter((asset) => !isENSName(asset));
+        setAssetList(appendedAssets);
         setIsFetching(false);
         setNextCursor(next);
       });
