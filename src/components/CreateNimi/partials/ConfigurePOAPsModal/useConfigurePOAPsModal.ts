@@ -32,6 +32,8 @@ export function useConfigurePOAPsModal() {
     setSelectedItems([...updatedPOAPs, ...new Array(6 - updatedPOAPs.length).fill(null)]);
   };
 
+  const checkIfPOAPIsSelected = (poap: POAPToken) => getAddedPOAPs().some((item) => item.tokenId === poap.tokenId);
+
   const clearSelectedItems = () => setSelectedItems(new Array(6).fill(null));
 
   return {
@@ -48,5 +50,6 @@ export function useConfigurePOAPsModal() {
     addPOAPToSelectedItems,
     removePOAPFromSelectedItems,
     clearSelectedItems,
+    checkIfPOAPIsSelected,
   };
 }
