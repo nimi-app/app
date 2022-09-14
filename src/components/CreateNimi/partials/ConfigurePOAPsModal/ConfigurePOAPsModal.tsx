@@ -22,8 +22,9 @@ type ConfigurePOAPsModalProps = {
 export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: ConfigurePOAPsModalProps) {
   const {
     modalContainer,
-    customOrder,
-    setCustomOrderHandler,
+    page,
+    openRecentPage,
+    openCustomPage,
     items,
     setItems,
     fetchingItems,
@@ -82,16 +83,17 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
           <BodyControls>
             <BodyTitle>POAPs</BodyTitle>
             <Navigation>
-              <NavigationLink selected={!customOrder} onClick={setCustomOrderHandler(false)}>
+              <NavigationLink selected={page === 'recent'} onClick={openRecentPage}>
                 Most Recent
               </NavigationLink>
-              <NavigationLink selected={customOrder} onClick={setCustomOrderHandler(true)}>
+              <NavigationLink selected={page === 'custom'} onClick={openCustomPage}>
                 Custom Order
               </NavigationLink>
             </Navigation>
           </BodyControls>
           <AnimatePresence mode="wait">
-            {customOrder ? (
+            {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}
+            {page === 'custom' && (
               <CustomizePOAPs
                 key="custom-poaps"
                 items={items}
@@ -101,8 +103,6 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
                 removePOAPFromSelectedItems={removePOAPFromSelectedItems}
                 clearSelectedItems={clearSelectedItems}
               />
-            ) : (
-              <RecentPOAPs key="recent-poaps" items={items} />
             )}
           </AnimatePresence>
         </>
