@@ -1,4 +1,4 @@
-import { Nimi, NimiLinkBaseDetails, NimiLinkType, link as linkValidator } from 'nimi-card';
+import { Nimi, NimiLinkBaseDetails, NimiLinkType, nimiLinkValidator } from '@nimi.io/card';
 import isURL from 'validator/lib/isURL';
 
 import { useFormContext } from 'react-hook-form';
@@ -24,6 +24,14 @@ const nimiLinkTypePlaceholder: Record<NimiLinkType, string> = {
   [NimiLinkType.YOUTUBE_CHANNEL]: 'Username',
   [NimiLinkType.LINKEDIN]: 'Username',
   [NimiLinkType.TWITCH]: 'Twitch Username',
+  [NimiLinkType.WHATSAPP]: 'Whatsapp Username',
+  [NimiLinkType.MESSENGER]: 'Messanger username',
+  [NimiLinkType.KEYBASE]: 'Keybase Username',
+  [NimiLinkType.WECHAT]: 'Wechat Username',
+  [NimiLinkType.SNAPCHAT]: 'Snapchat Username',
+  [NimiLinkType.FACEBOOK]: 'Facebook Username',
+  [NimiLinkType.DRIBBBLE]: 'Dribble Username',
+  [NimiLinkType.FIGMA]: 'Figma Username',
 };
 
 export interface NimiLinkFieldProps {
@@ -50,7 +58,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
     const targetValue = event.target.value;
     setValue(targetValue);
     // Vlidate
-    linkValidator
+    nimiLinkValidator
       .validate({
         type: link,
         content: targetValue,
