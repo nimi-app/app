@@ -27,13 +27,9 @@ export function useConfigurePOAPsModal() {
   };
 
   const removePOAPFromSelectedItems = (poap: POAPToken) => {
-    const addedPoaps = getAddedPOAPs();
+    const updatedPOAPs = getAddedPOAPs().filter((item) => item.tokenId !== poap.tokenId);
 
-    if (addedPoaps.length) {
-      const updatedPOAPs = addedPoaps.filter((item) => item.tokenId !== poap.tokenId);
-
-      setSelectedItems([...updatedPOAPs, , ...new Array(6 - updatedPOAPs.length).fill(null)]);
-    }
+    setSelectedItems([...updatedPOAPs, ...new Array(6 - updatedPOAPs.length).fill(null)]);
   };
 
   const clearSelectedItems = () => setSelectedItems(new Array(6).fill(null));
