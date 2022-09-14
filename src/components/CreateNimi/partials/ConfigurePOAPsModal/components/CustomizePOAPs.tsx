@@ -92,7 +92,9 @@ export const CustomizePOAPs = ({
                   marginRight="0"
                   cursorPointer
                 />
-                {checkIfPOAPIsSelected(poap) && <SelectedInfo>Selected</SelectedInfo>}
+                {checkIfPOAPIsSelected(poap) && (
+                  <SelectedInfo onClick={() => removePOAPFromSelectedItems(poap)}>Selected</SelectedInfo>
+                )}
               </AvailablePOAPContainer>
             ))}
         </AvailablePOAPsList>
@@ -199,5 +201,5 @@ const SelectedInfo = styled.div`
   text-align: center;
   color: white;
   background-color: #393939cc;
-  cursor: not-allowed;
+  cursor: pointer;
 `;
