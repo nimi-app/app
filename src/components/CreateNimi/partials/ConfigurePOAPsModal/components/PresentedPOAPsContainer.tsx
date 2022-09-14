@@ -8,6 +8,7 @@ const backgroundAlert = (childOutside) =>
     : '';
 
 export const PresentedPOAPsContainer = styled.div<{ childOutside?: 'left' | 'right' | 'none' }>`
+  position: relative;
   padding: 22px;
   background-color: #f1f2f5;
   border-radius: 76px;

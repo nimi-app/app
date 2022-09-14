@@ -7,6 +7,8 @@ import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { StaticPOAP } from './POAPs';
 import { ReorderItem } from './ReorderItem';
 
+import { ReactComponent as TrashCanSVG } from '../../../../../assets/svg/trash-can.svg';
+
 import { POAPToken } from '../types';
 
 export const CustomizePOAPs = ({
@@ -66,6 +68,7 @@ export const CustomizePOAPs = ({
             />
           ))}
         </Reorder.Group>
+        {childOutside !== 'none' && <TrashCan childOutside={childOutside} />}
       </PresentedPOAPsContainer>
       <AvailablePOAPsContainer>
         <AvailablePOAPsTitleContainer>
@@ -100,6 +103,14 @@ export const CustomizePOAPs = ({
     </AnimatedSection>
   );
 };
+
+const TrashCan = styled(TrashCanSVG)<{ childOutside: 'left' | 'right' | 'none' }>`
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+
+  ${({ childOutside }) => `${childOutside}: 30px;`}
+`;
 
 const AvailablePOAPsContainer = styled.div`
   width: 100%;

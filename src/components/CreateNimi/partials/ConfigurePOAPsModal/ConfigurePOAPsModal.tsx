@@ -1,11 +1,9 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
-import styled from 'styled-components';
 import { AnimatePresence } from 'framer-motion/dist/framer-motion';
 
 import { ModalBase } from '../ModalBase';
-import { NimiSignatureColor } from '../../../../theme';
 import { NimiPOAPWidget } from '@nimi.io/card';
 
 import { BodyNavigation, RecentPOAPs, CustomizePOAPs } from './components';
