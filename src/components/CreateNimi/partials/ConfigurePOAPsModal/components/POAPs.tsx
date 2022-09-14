@@ -7,7 +7,8 @@ const POAPsSharedStyling = css`
   display: inline-block;
   vertical-align: top;
   border-radius: 50%;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
   box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
   margin-right: -28px;
 `;
