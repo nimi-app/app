@@ -27,10 +27,12 @@ export const CustomizePOAPs = ({
     token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
     token.event.city.toLowerCase().includes(filterValue.toLowerCase());
 
+  const getReorderingGroupRectangle = () => document.getElementById('reorder-group')?.getBoundingClientRect();
+
   const getDraggingEvent = (event: DragEvent) => {
     setMovingChild(true);
-    const element = document.getElementById('reorder-group');
-    const rect = element?.getBoundingClientRect();
+
+    const rect = getReorderingGroupRectangle();
 
     if (rect) {
       if (event.x < rect.x) return setChildOutside('left');
@@ -44,8 +46,7 @@ export const CustomizePOAPs = ({
     setChildOutside('none');
     setMovingChild(false);
 
-    const element = document.getElementById('reorder-group');
-    const rect = element?.getBoundingClientRect();
+    const rect = getReorderingGroupRectangle();
 
     if (rect && (event.x < rect.x || event.x > rect.x + rect.width)) removePOAPFromSelectedItems(poap);
   };
