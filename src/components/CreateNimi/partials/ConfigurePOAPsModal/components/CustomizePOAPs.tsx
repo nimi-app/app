@@ -102,7 +102,12 @@ export const CustomizePOAPs = ({
           <NumberOfSelectedPOAPs>
             {selectedItems.filter((item) => item !== null).length} out of 6 selected
           </NumberOfSelectedPOAPs>
-          <ClearSelectionButton onClick={clearSelectedItems}>Clear Selection</ClearSelectionButton>
+          <ClearSelectionButton
+            anyItemSelected={!!selectedItems.filter((item) => item !== null).length}
+            onClick={clearSelectedItems}
+          >
+            Clear Selection
+          </ClearSelectionButton>
         </SelectedPOAPsInfo>
       </AvailablePOAPsContainer>
     </AnimatedSection>
@@ -171,12 +176,18 @@ const NumberOfSelectedPOAPs = styled.p`
   color: #7a7696;
 `;
 
-const ClearSelectionButton = styled.a`
+const ClearSelectionButton = styled.a<{ anyItemSelected: boolean }>`
   line-height: 15px;
   font-size: 14px;
   color: #7a7696;
   text-decoration: underline;
-  cursor: pointer;
+  ${({ anyItemSelected }) =>
+    anyItemSelected
+      ? 'cursor: pointer;'
+      : `
+        opacity: 0.5;
+        cursor: not-allowed;
+  `}
 `;
 
 const AvailablePOAPContainer = styled.div`
