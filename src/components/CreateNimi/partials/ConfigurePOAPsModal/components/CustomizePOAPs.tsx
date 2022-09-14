@@ -63,6 +63,7 @@ export const CustomizePOAPs = ({
               key={item?.tokenId || index}
               value={item}
               zIndex={index}
+              getReorderingGroupRectangle={getReorderingGroupRectangle}
               getDraggingEvent={getDraggingEvent}
               getDraggingEventEnd={getDraggingEventEnd}
               movingChild={movingChild}

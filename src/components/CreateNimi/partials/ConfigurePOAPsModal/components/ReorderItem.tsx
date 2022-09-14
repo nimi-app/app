@@ -3,9 +3,35 @@ import { Reorder, useDragControls } from 'framer-motion/dist/framer-motion';
 
 import { StaticPOAP, POAPPlaceholder } from './POAPs';
 import { ReactComponent as DotsIcon } from '../../../../../assets/svg/dots.svg';
+import { useState } from 'react';
 
-export const ReorderItem = ({ value, zIndex, getDraggingEvent, getDraggingEventEnd, movingChild }) => {
+export const ReorderItem = ({
+  value,
+  zIndex,
+  getReorderingGroupRectangle,
+  getDraggingEvent,
+  getDraggingEventEnd,
+  movingChild,
+}) => {
+  const [amountOfRed, setAmountOfRed] = useState(0);
   const controls = useDragControls();
+
+  const onDragHandler = (event: DragEvent) => {
+    getDraggingEvent(event);
+
+    const rect = getReorderingGroupRectangle();
+    if (event.x - 50 < rect.x) return setAmountOfRed(event.x < rect.x ? 50 : rect.x + 50 - event.x);
+    if (event.x + 50 > rect.x + rect.width)
+      return setAmountOfRed(event.x > rect.x + rect.width ? 50 : event.x + 50 - rect.x - rect.width);
+
+    setAmountOfRed(0);
+  };
+
+  const onDragEndHandler = (event: DragEvent) => {
+    getDraggingEventEnd(event, value);
+
+    setAmountOfRed(0);
+  };
 
   return value ? (
     <Reorder.Item
@@ -23,16 +49,17 @@ export const ReorderItem = ({ value, zIndex, getDraggingEvent, getDraggingEventE
         zIndex,
         marginRight: '-28px',
       }}
-      onDrag={getDraggingEvent}
-      onDragEnd={(event) => getDraggingEventEnd(event, value)}
+      onDrag={onDragHandler}
+      onDragEnd={onDragEndHandler}
     >
       <Dragger onPointerDown={(e) => controls.start(e)}>
         <Dots />
       </Dragger>
-      <StaticPOAP src={value.event.image_url} zIndex={zIndex + 1} />
+      <StaticPOAP src={value.event.image_url} zIndex={zIndex * 2} />
+      {amountOfRed !== 0 && <RedAlert zIndex={zIndex * 2 + 1} amountOfRed={amountOfRed} />}
     </Reorder.Item>
   ) : movingChild ? null : (
-    <POAPPlaceholder zIndex={zIndex + 1} />
+    <POAPPlaceholder zIndex={zIndex * 2} />
   );
 };
 
@@ -55,4 +82,27 @@ const Dots = styled(DotsIcon)`
   bottom: 7px;
   left: 50%;
   transform: translate(-50%, 0);
+`;
+
+type RedAlertProps = {
+  zIndex: number;
+  amountOfRed: number;
+};
+
+const RedAlert = styled.div<RedAlertProps>`
+  width: 108px;
+  height: 108px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: ${({ zIndex }) => zIndex};
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 50%;
+  ${({ amountOfRed }) =>
+    `background: linear-gradient(
+      180deg,
+      rgba(255, 0, 0, ${(amountOfRed / 50) * 0.21}) 0%,
+      rgba(255, 0, 0, ${(amountOfRed / 50) * 0.7}) 100%);
+    `}
 `;
