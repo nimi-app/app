@@ -282,10 +282,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                       POAPs
                     </PoapButton>
                   )} */}
-                  <PoapButton onClick={() => setIsPOAPModalOpened(true)}>
-                    <PoapLogo />
-                    POAPs
-                  </PoapButton>
+                  {getValues('widgets').filter((el) => el.type === NimiWidgetType.POAP).length !== 0 && (
+                    <PoapButton onClick={() => setIsPOAPModalOpened(true)}>
+                      <PoapLogo />
+                      Configure POAPs
+                    </PoapButton>
+                  )}
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
                     + {t('buttonLabel.addFields')}
                   </AddFieldsButton>
