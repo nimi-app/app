@@ -32,6 +32,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     addPOAPToSelectedItems,
     removePOAPFromSelectedItems,
     clearSelectedItems,
+    checkIfPOAPIsSelected,
   } = useConfigurePOAPsModal();
 
   useEffect(() => {
@@ -89,6 +90,7 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
               addPOAPToSelectedItems={addPOAPToSelectedItems}
               removePOAPFromSelectedItems={removePOAPFromSelectedItems}
               clearSelectedItems={clearSelectedItems}
+              checkIfPOAPIsSelected={checkIfPOAPIsSelected}
             />
           )}
         </AnimatePresence>

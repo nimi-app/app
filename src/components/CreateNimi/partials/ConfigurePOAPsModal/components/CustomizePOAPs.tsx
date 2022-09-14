@@ -18,6 +18,7 @@ export const CustomizePOAPs = ({
   addPOAPToSelectedItems,
   removePOAPFromSelectedItems,
   clearSelectedItems,
+  checkIfPOAPIsSelected,
 }) => {
   const [filterValue, setFilterValue] = useState('');
   const [childOutside, setChildOutside] = useState<'left' | 'right' | 'none'>('none');
@@ -61,7 +62,7 @@ export const CustomizePOAPs = ({
             <ReorderItem
               key={item?.tokenId || index}
               value={item}
-              index={index}
+              zIndex={index}
               getDraggingEvent={getDraggingEvent}
               getDraggingEventEnd={getDraggingEventEnd}
               movingChild={movingChild}
@@ -84,13 +85,15 @@ export const CustomizePOAPs = ({
           {items
             .filter((item) => checkIfMatchesFilter(item))
             .map((poap) => (
-              <StaticPOAP
-                key={poap.tokenId}
-                src={poap.event.image_url}
-                marginRight="-16px"
-                onClick={() => addPOAPToSelectedItems(poap)}
-                cursorPointer
-              />
+              <AvailablePOAPContainer key={poap.tokenId}>
+                <StaticPOAP
+                  src={poap.event.image_url}
+                  onClick={() => addPOAPToSelectedItems(poap)}
+                  marginRight="0"
+                  cursorPointer
+                />
+                {checkIfPOAPIsSelected(poap) && <SelectedInfo>Selected</SelectedInfo>}
+              </AvailablePOAPContainer>
             ))}
         </AvailablePOAPsList>
         <SelectedPOAPsInfo>
@@ -172,4 +175,29 @@ const ClearSelectionButton = styled.a`
   color: #7a7696;
   text-decoration: underline;
   cursor: pointer;
+`;
+
+const AvailablePOAPContainer = styled.div`
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: -16px;
+`;
+
+const SelectedInfo = styled.div`
+  width: 108px;
+  height: 108px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  line-height: 108px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  color: white;
+  background-color: #393939cc;
+  cursor: not-allowed;
 `;
