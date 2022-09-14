@@ -305,11 +305,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
         </PreviewContent>
       </InnerWrapper>
       {isPOAPModalOpened && (
-        <ConfigurePOAPsModal
-          ensAddress={ensAddress}
-          widget={getValues('widgets').filter((el) => el.type === NimiWidgetType.POAP)[0]}
-          closeModal={() => setIsPOAPModalOpened(false)}
-        />
+        <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
       )}
       {isAddFieldsModalOpen && (
         <AddFieldsModal

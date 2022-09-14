@@ -4,20 +4,22 @@ import axios from 'axios';
 import { AnimatePresence } from 'framer-motion/dist/framer-motion';
 
 import { ModalBase } from '../ModalBase';
-import { NimiPOAPWidget } from '@nimi.io/card';
+import { NimiWidgetType } from '@nimi.io/card';
 
 import { BodyNavigation, PreloaderPOAPs, RecentPOAPs, CustomizePOAPs } from './components';
 import { POAPToken } from './types';
 
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
+import { useFormContext } from 'react-hook-form';
 
 type ConfigurePOAPsModalProps = {
   ensAddress: string;
-  widget: NimiPOAPWidget;
   closeModal: () => void;
 };
 
-export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: ConfigurePOAPsModalProps) {
+export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsModalProps) {
+  const { getValues, setValue } = useFormContext();
+
   const {
     modalContainer,
     page,
@@ -66,7 +68,24 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
     };
   }, [ensAddress, modalContainer, setItems, setFetchingItems]);
 
-  const handleCloseModal = (event) => event.target === event.currentTarget && closeModal();
+  const handleCloseModal = (event) => {
+    if (event.target === event.currentTarget) {
+      const otherWidgets = getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP);
+      const selectedTokens = selectedItems.filter((item) => item !== null);
+
+      setValue('widgets', [
+        ...otherWidgets,
+        {
+          type: NimiWidgetType.POAP,
+          ...(selectedTokens.length && {
+            tokens: selectedTokens.map((token) => token.tokenId),
+          }),
+        },
+      ]);
+
+      closeModal();
+    }
+  };
 
   //TODO: HANDLE NO POAPS STATE
   return createPortal(
