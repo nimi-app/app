@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion/dist/framer-motion';
 import { ModalBase } from '../ModalBase';
 import { NimiPOAPWidget } from '@nimi.io/card';
 
-import { BodyNavigation, RecentPOAPs, CustomizePOAPs } from './components';
+import { BodyNavigation, PreloaderPOAPs, RecentPOAPs, CustomizePOAPs } from './components';
 import { POAPToken } from './types';
 
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
@@ -18,8 +18,6 @@ type ConfigurePOAPsModalProps = {
 };
 
 export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: ConfigurePOAPsModalProps) {
-  console.log(widget);
-
   const {
     modalContainer,
     page,
@@ -76,26 +74,24 @@ export function ConfigurePOAPsModal({ ensAddress, widget, closeModal }: Configur
       subtitle="Add your POAPs in the order you want to showcase them."
       handleCloseModal={handleCloseModal}
     >
+      <BodyNavigation page={page} openRecentPage={openRecentPage} openCustomPage={openCustomPage} />
       {fetchingItems ? (
-        <div>Fetching POAPs...</div>
+        <PreloaderPOAPs />
       ) : (
-        <>
-          <BodyNavigation page={page} openRecentPage={openRecentPage} openCustomPage={openCustomPage} />
-          <AnimatePresence mode="wait">
-            {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}
-            {page === 'custom' && (
-              <CustomizePOAPs
-                key="custom-poaps"
-                items={items}
-                selectedItems={selectedItems}
-                handleReordering={handleReordering}
-                addPOAPToSelectedItems={addPOAPToSelectedItems}
-                removePOAPFromSelectedItems={removePOAPFromSelectedItems}
-                clearSelectedItems={clearSelectedItems}
-              />
-            )}
-          </AnimatePresence>
-        </>
+        <AnimatePresence mode="wait">
+          {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}
+          {page === 'custom' && (
+            <CustomizePOAPs
+              key="custom-poaps"
+              items={items}
+              selectedItems={selectedItems}
+              handleReordering={handleReordering}
+              addPOAPToSelectedItems={addPOAPToSelectedItems}
+              removePOAPFromSelectedItems={removePOAPFromSelectedItems}
+              clearSelectedItems={clearSelectedItems}
+            />
+          )}
+        </AnimatePresence>
       )}
     </ModalBase>,
     modalContainer

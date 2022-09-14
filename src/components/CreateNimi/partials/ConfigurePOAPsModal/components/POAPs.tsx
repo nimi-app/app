@@ -12,6 +12,11 @@ const POAPsSharedStyling = css`
   margin-right: -28px;
 `;
 
+export const PreloaderPOAP = styled.div`
+  ${POAPsSharedStyling}
+  background-color: #F1F2F5;
+`;
+
 type StaticPOAPProps = {
   marginRight?: string;
   cursorPointer?: boolean;
