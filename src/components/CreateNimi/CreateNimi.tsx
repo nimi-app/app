@@ -276,7 +276,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   </StyledInputWrapper>
                 </FormGroup>
                 {/* links */}
-                <Reorder.Group axis="y" values={reorderItems} onReorder={setReorderItems}>
+                <Reorder.Group
+                  axis="y"
+                  values={reorderItems}
+                  onReorder={setReorderItems}
+                  as="div"
+                  style={{ width: '100%' }}
+                >
                   {reorderItems.map((item) => (
                     <ReorderItem key={item} value={item} />
                   ))}
