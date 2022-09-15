@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails } from '@nimi.io/card';
 
+import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
+
 type ReorderInput = {
   value: NimiLinkBaseDetails;
   updateLink: (linkId: string, key: string, value: string) => void;
@@ -18,6 +20,7 @@ export function ReorderInput({ value, updateLink }) {
           onChange={(event) => updateLink(value.id, 'title', event.target.value)}
           spellCheck={false}
         />
+        {title && <ClearButton onClick={() => updateLink(value.id, 'title', '')} />}
       </InputContainer>
       <InputContainer>
         <ContentInput
@@ -49,6 +52,10 @@ const SharedInputStyles = css`
     background-origin: border-box;
     background-clip: padding-box, border-box;
     box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
+
+    & + svg {
+      display: block;
+    }
   }
 `;
 
@@ -71,4 +78,17 @@ const ContentInput = styled.input`
   ${SharedInputStyles}
   background-color: white;
   margin-top: 10px;
+`;
+
+const ClearButton = styled(XSVG)`
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translate(0, -50%);
+  cursor: pointer;
+
+  &:hover path {
+    fill: #8c90a0;
+  }
 `;
