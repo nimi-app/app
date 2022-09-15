@@ -230,6 +230,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const onSubmitInvalid = (data) => {
     console.log(data);
   };
+
   const handleKeyDown = (e) => {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -360,7 +361,19 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               if (link) {
                 let newLinksArray: NimiLinkBaseDetails[] = [];
                 const linksData = getValues('links');
-                newLinksArray = [...linksData, { id: new Date().valueOf().toString(), type: link, content: '' }];
+                newLinksArray = [
+                  ...linksData,
+                  {
+                    id: new Date().valueOf().toString(),
+                    type: link,
+                    // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
+                    title: link.replace(
+                      /(^\w)(\S*)/g,
+                      (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
+                    ),
+                    content: '',
+                  },
+                ];
                 setValue('links', newLinksArray);
               }
               //if address is submitted
