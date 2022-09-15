@@ -242,6 +242,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     setValue('links', updatedLinks);
   };
 
+  const removeLink = (linkId: string) =>
+    setValue(
+      'links',
+      getValues('links').filter((link) => link.id !== linkId)
+    );
+
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -287,7 +293,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   </StyledInputWrapper>
                 </FormGroup>
                 {/* reorder group */}
-                <button onClick={() => console.log(getValues('links'))}>Test</button>
+                <button onClick={() => console.log(getValues('links'))}>Log Links</button>
                 {/* <ReorderGroup values={reorderItems} onReorder={setReorderItems}>
                   {reorderItems.map((item) => (
                     <ReorderInput key={item.content} value={item} />
@@ -295,7 +301,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 </ReorderGroup> */}
                 <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                   {links.map((link) => (
-                    <ReorderInput key={link.id} value={link} updateLink={updateLink} />
+                    <ReorderInput key={link.id} value={link} updateLink={updateLink} removeLink={removeLink} />
                   ))}
                 </ReorderGroup>
                 {/* links */}

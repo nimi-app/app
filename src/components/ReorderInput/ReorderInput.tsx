@@ -8,9 +8,10 @@ import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';
 type ReorderInput = {
   value: NimiLinkBaseDetails;
   updateLink: (linkId: string, key: string, value: string) => void;
+  removeLink: (linkId: string) => void;
 };
 
-export function ReorderInput({ value, updateLink }) {
+export function ReorderInput({ value, updateLink, removeLink }) {
   const { type, title, content } = value;
 
   return (
@@ -29,7 +30,7 @@ export function ReorderInput({ value, updateLink }) {
           onChange={(event) => updateLink(value.id, 'content', event.target.value)}
           spellCheck={false}
         />
-        <InputButton />
+        <InputButton onClick={() => removeLink(value.id)} />
       </InputContainer>
     </ReorderItem>
   );
@@ -118,9 +119,14 @@ const StyledButton = styled.button`
 
 const TrashCanIcon = styled(TrashCanSVG)``;
 
-const InputButton = ({ variant = '123', onClick = '123' }) => {
+type InputButtonProps = {
+  variant?: string;
+  onClick: () => void;
+};
+
+const InputButton = ({ onClick }: InputButtonProps) => {
   return (
-    <StyledButton>
+    <StyledButton onClick={onClick}>
       <TrashCanIcon />
     </StyledButton>
   );
