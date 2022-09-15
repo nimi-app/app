@@ -1,12 +1,19 @@
 import styled, { css } from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
+import { NimiLinkBaseDetails } from '@nimi.io/card';
 
-export function ReorderInput({ value }) {
+type ReorderInput = {
+  value: NimiLinkBaseDetails;
+  updateLink: (linkId: string, key: string, value: string) => void;
+};
+
+export function ReorderInput({ value, updateLink }) {
   const { type, title, content } = value;
+
   return (
     <ReorderItem value={value}>
-      <TitleInput value={title} />
-      <ContentInput value={content} />
+      <TitleInput value={title} onChange={(event) => updateLink(value.id, 'title', event.target.value)} />
+      <ContentInput value={content} onChange={(event) => updateLink(value.id, 'content', event.target.value)} />
     </ReorderItem>
   );
 }
