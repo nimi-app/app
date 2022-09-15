@@ -62,6 +62,7 @@ import { NFTSelectorModal } from './partials/NFTSelectorModal';
 import { Button } from '../Button';
 import { PoapField } from './partials/PoapField/PoapField';
 import { StyledInputWrapper } from '../Input';
+import { ReorderGroup } from '../ReorderGroup';
 import { ReorderItem } from '../ReorderItem';
 
 import { Reorder } from 'framer-motion/dist/framer-motion';
@@ -276,19 +277,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   </StyledInputWrapper>
                 </FormGroup>
                 {/* links */}
-                <Reorder.Group
-                  axis="y"
-                  values={reorderItems}
-                  onReorder={setReorderItems}
-                  as="div"
-                  style={{ width: '100%' }}
-                >
+                <ReorderGroup values={reorderItems} onReorder={setReorderItems}>
                   {reorderItems.map((item) => (
                     <ReorderItem key={item} value={item}>
                       {item}
                     </ReorderItem>
                   ))}
-                </Reorder.Group>
+                </ReorderGroup>
                 <LinkWrapper>
                   {links.map(({ type, title, content }, index) => {
                     return (

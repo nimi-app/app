@@ -9,7 +9,7 @@ type ReorderItemProps = {
   children: ReactNode;
 };
 
-export const ReorderItem = ({ value, children }: ReorderItemProps) => {
+export function ReorderItem({ value, children }: ReorderItemProps) {
   const style = {
     width: '100%',
     display: 'flex',
@@ -28,7 +28,7 @@ export const ReorderItem = ({ value, children }: ReorderItemProps) => {
       <DraggingDots />
     </Reorder.Item>
   );
-};
+}
 
 const DraggingDots = styled(DragDotsSVG)`
   position: absolute;
