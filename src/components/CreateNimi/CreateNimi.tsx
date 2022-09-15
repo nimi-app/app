@@ -74,25 +74,23 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   /**
    * @todo replace this API
    */
-  const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
-  const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata;
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
 
-  /**
-   * NFT
-   */
+  // TODO: UPDATE MODAL STATE HANLING
+  const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
+  const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
+  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
 
   /**
    * Publish Nimi state
    * @todo create a reducer or context for this
    */
   const publicResolverContract = useENSPublicResolverContract();
-  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPublishingNimi, setIsPublishingNimi] = useState(false);
   const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
@@ -147,21 +145,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       url: lensProfile?.pictureUrl,
     });
   }, [setValue, lensProfile]);
-
-  const handleDrop = (droppedItem) => {
-    // Ignore drop outside droppable container
-    if (!droppedItem.destination) return;
-    const updatedList = [...links];
-
-    // Remove dragged item
-    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-
-    // Add dropped item
-    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-
-    // Update State
-    setValue('links', updatedList);
-  };
 
   /**
    * Handle the form submit via ENS contract interaction
