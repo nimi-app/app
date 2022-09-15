@@ -12,13 +12,26 @@ export function ReorderInput({ value, updateLink }) {
 
   return (
     <ReorderItem value={value}>
-      <TitleInput value={title} onChange={(event) => updateLink(value.id, 'title', event.target.value)} />
-      <ContentInput value={content} onChange={(event) => updateLink(value.id, 'content', event.target.value)} />
+      <InputContainer>
+        <TitleInput
+          value={title}
+          onChange={(event) => updateLink(value.id, 'title', event.target.value)}
+          spellCheck={false}
+        />
+      </InputContainer>
+      <InputContainer>
+        <ContentInput
+          value={content}
+          onChange={(event) => updateLink(value.id, 'content', event.target.value)}
+          spellCheck={false}
+        />
+      </InputContainer>
     </ReorderItem>
   );
 }
 
 const SharedInputStyles = css`
+  width: 100%;
   line-height: 22px;
   font-size: 16px;
   font-weight: 400;
@@ -35,8 +48,14 @@ const SharedInputStyles = css`
   }
 `;
 
+const InputContainer = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
 const TitleInput = styled.input`
   height: 38px;
+  position: relative;
   padding: 8px 6px 8px 20px;
   ${SharedInputStyles}
   background-color: #f1f1f1;
