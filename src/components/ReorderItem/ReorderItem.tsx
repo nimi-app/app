@@ -10,22 +10,20 @@ type ReorderItemProps = {
 };
 
 export const ReorderItem = ({ value, children }: ReorderItemProps) => {
+  const style = {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    padding: '15px 15px 15px 39px',
+    borderRadius: '12px',
+    backgroundColor: '#F1F1F1',
+    marginBottom: '20px',
+    cursor: 'pointer',
+  };
+
   return (
-    <Reorder.Item
-      value={value}
-      as="div"
-      style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        padding: '15px 15px 15px 39px',
-        borderRadius: '12px',
-        backgroundColor: '#F1F1F1',
-        marginBottom: '20px',
-        cursor: 'pointer',
-      }}
-    >
+    <Reorder.Item value={value} as="div" style={style}>
       {children}
       <DraggingDots />
     </Reorder.Item>

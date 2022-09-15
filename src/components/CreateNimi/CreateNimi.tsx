@@ -284,7 +284,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   style={{ width: '100%' }}
                 >
                   {reorderItems.map((item) => (
-                    <ReorderItem key={item} value={item} />
+                    <ReorderItem key={item} value={item}>
+                      {item}
+                    </ReorderItem>
                   ))}
                 </Reorder.Group>
                 <LinkWrapper>
