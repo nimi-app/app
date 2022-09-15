@@ -4,6 +4,7 @@ import { NimiLinkBaseDetails } from '@nimi.io/card';
 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
 import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';
+import { ReactComponent as SlidersSVG } from '../../assets/svg/sliders.svg';
 
 type ReorderInput = {
   value: NimiLinkBaseDetails;
@@ -124,10 +125,11 @@ type InputButtonProps = {
   onClick: () => void;
 };
 
-const InputButton = ({ onClick }: InputButtonProps) => {
+const InputButton = ({ variant = 'trash-can', onClick }: InputButtonProps) => {
   return (
     <StyledButton onClick={onClick}>
-      <TrashCanIcon />
+      {variant === 'trash-can' && <TrashCanSVG />}
+      {variant === 'sliders' && <SlidersSVG />}
     </StyledButton>
   );
 };
