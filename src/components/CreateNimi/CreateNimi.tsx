@@ -66,8 +66,6 @@ import { ReorderGroup } from '../ReorderGroup';
 import { ReorderItem } from '../ReorderItem';
 import { ReorderInput } from '../ReorderInput';
 
-import { Reorder } from 'framer-motion/dist/framer-motion';
-
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
@@ -91,7 +89,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
 
-  const [reorderItems, setReorderItems] = useState(['Mirko', 'Tamara', 'Nikola']);
+  const [reorderItems, setReorderItems] = useState([
+    { type: 'WhatsApp', title: 'Label 1', content: 'Mirko' },
+    { type: 'Twitter', title: 'Label 2', content: 'Tamara' },
+    { type: 'Instagram', title: 'Label 3', content: 'Nikola' },
+  ]);
 
   /**
    * Publish Nimi state
@@ -277,12 +279,19 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     />
                   </StyledInputWrapper>
                 </FormGroup>
-                {/* links */}
+                {/* reorder group */}
+                <button onClick={() => console.log(getValues('links'))}>Test</button>
                 <ReorderGroup values={reorderItems} onReorder={setReorderItems}>
                   {reorderItems.map((item) => (
-                    <ReorderInput key={item} value={item} />
+                    <ReorderInput key={item.content} value={item} />
                   ))}
                 </ReorderGroup>
+                <ReorderGroup values={links} onReorder={setReorderItems}>
+                  {links.map((link) => (
+                    <ReorderInput key={link.id} value={link} />
+                  ))}
+                </ReorderGroup>
+                {/* links */}
                 <LinkWrapper>
                   {links.map(({ type, title, content }, index) => {
                     return (
@@ -351,7 +360,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               if (link) {
                 let newLinksArray: NimiLinkBaseDetails[] = [];
                 const linksData = getValues('links');
-                newLinksArray = [...linksData, { content: '', type: link }];
+                newLinksArray = [...linksData, { id: new Date().valueOf().toString(), type: link, content: '' }];
                 setValue('links', newLinksArray);
               }
               //if address is submitted

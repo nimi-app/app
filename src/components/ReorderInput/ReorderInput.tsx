@@ -2,10 +2,11 @@ import styled, { css } from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
 
 export function ReorderInput({ value }) {
+  const { type, title, content } = value;
   return (
     <ReorderItem value={value}>
-      <TitleInput />
-      <ContentInput />
+      <TitleInput value={title} />
+      <ContentInput value={content} />
     </ReorderItem>
   );
 }
