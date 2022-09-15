@@ -3,6 +3,7 @@ import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails } from '@nimi.io/card';
 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
+import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';
 
 type ReorderInput = {
   value: NimiLinkBaseDetails;
@@ -14,7 +15,7 @@ export function ReorderInput({ value, updateLink }) {
 
   return (
     <ReorderItem value={value}>
-      <InputContainer>
+      <InputContainer marginBottom="10px">
         <TitleInput
           value={title}
           onChange={(event) => updateLink(value.id, 'title', event.target.value)}
@@ -28,6 +29,7 @@ export function ReorderInput({ value, updateLink }) {
           onChange={(event) => updateLink(value.id, 'content', event.target.value)}
           spellCheck={false}
         />
+        <InputButton />
       </InputContainer>
     </ReorderItem>
   );
@@ -59,9 +61,11 @@ const SharedInputStyles = css`
   }
 `;
 
-const InputContainer = styled.div`
+const InputContainer = styled.div<{ marginBottom?: string }>`
   width: 100%;
   position: relative;
+
+  ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 `;
 
 const TitleInput = styled.input`
@@ -74,10 +78,9 @@ const TitleInput = styled.input`
 
 const ContentInput = styled.input`
   height: 50px;
-  padding: 8px 6px 8px 20px;
+  padding: 8px 70px 8px 20px;
   ${SharedInputStyles}
   background-color: white;
-  margin-top: 10px;
 `;
 
 const ClearButton = styled(XSVG)`
@@ -92,3 +95,33 @@ const ClearButton = styled(XSVG)`
     fill: #8c90a0;
   }
 `;
+
+const StyledButton = styled.button`
+  height: 38px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translate(0, -50%);
+  border: 2px solid #f3f3f1;
+  border-radius: 15px;
+  background-color: white;
+  cursor: pointer;
+
+  &:hover path {
+    fill: #8c90a0;
+  }
+`;
+
+const TrashCanIcon = styled(TrashCanSVG)``;
+
+const InputButton = ({ variant = '123', onClick = '123' }) => {
+  return (
+    <StyledButton>
+      <TrashCanIcon />
+    </StyledButton>
+  );
+};
