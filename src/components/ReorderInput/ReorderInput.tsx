@@ -44,6 +44,10 @@ const SharedInputStyles = css`
     background-color: white;
     font-size: 18px;
     font-weight: 500;
+    border: double 2px transparent;
+    background-image: linear-gradient(white, white), linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
     box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
   }
 `;
