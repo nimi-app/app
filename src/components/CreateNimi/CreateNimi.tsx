@@ -62,6 +62,9 @@ import { NFTSelectorModal } from './partials/NFTSelectorModal';
 import { Button } from '../Button';
 import { PoapField } from './partials/PoapField/PoapField';
 import { StyledInputWrapper } from '../Input';
+import { ReorderItem } from '../ReorderItem';
+
+import { Reorder } from 'framer-motion/dist/framer-motion';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -85,6 +88,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
+
+  const [reorderItems, setReorderItems] = useState(['Mirko', 'Tamara', 'Nikola']);
 
   /**
    * Publish Nimi state
@@ -247,7 +252,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   </ImportFromLensProtocolButton>
                 )}
               </ImportButtonsWrapper>
+
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
+                {/* display name input */}
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
 
@@ -255,6 +262,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     <Input placeholder="Name" id="displayName" {...register('displayName')} />
                   </StyledInputWrapper>
                 </FormGroup>
+                {/* description input */}
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
                   <StyledInputWrapper isSimple>
@@ -267,7 +275,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     />
                   </StyledInputWrapper>
                 </FormGroup>
-
+                {/* links */}
+                <Reorder.Group axis="y" values={reorderItems} onReorder={setReorderItems}>
+                  {reorderItems.map((item) => (
+                    <ReorderItem key={item} value={item} />
+                  ))}
+                </Reorder.Group>
                 <LinkWrapper>
                   {links.map(({ type, title, content }, index) => {
                     return (
@@ -287,7 +300,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     );
                   })}
                 </LinkWrapper>
-
+                {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
                   <AddresssWrapper>
                     <AddressesTitle>Addresses</AddressesTitle>
@@ -300,14 +313,16 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     })}
                   </AddresssWrapper>
                 )}
-
+                {/* add fields button */}
                 <FormGroup>
+                  {/* poap */}
                   {formWatchPayload.widgets.some((item) => NimiWidgetType.POAP === item.type) && <PoapField />}
 
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
                     + {t('buttonLabel.addFields')}
                   </AddFieldsButton>
                 </FormGroup>
+                {/* publish button */}
                 <FormGroup>
                   <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
                 </FormGroup>
