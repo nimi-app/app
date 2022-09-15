@@ -236,6 +236,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
+  const updateLink = (linkId: string, key: string, value: string) => {
+    const updatedLinks = getValues('links').map((link) => (link.id === linkId ? { ...link, [key]: value } : link));
+
+    setValue('links', updatedLinks);
+  };
+
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -282,18 +288,18 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 </FormGroup>
                 {/* reorder group */}
                 <button onClick={() => console.log(getValues('links'))}>Test</button>
-                <ReorderGroup values={reorderItems} onReorder={setReorderItems}>
+                {/* <ReorderGroup values={reorderItems} onReorder={setReorderItems}>
                   {reorderItems.map((item) => (
                     <ReorderInput key={item.content} value={item} />
                   ))}
-                </ReorderGroup>
-                <ReorderGroup values={links} onReorder={setReorderItems}>
+                </ReorderGroup> */}
+                <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                   {links.map((link) => (
-                    <ReorderInput key={link.id} value={link} />
+                    <ReorderInput key={link.id} value={link} updateLink={updateLink} />
                   ))}
                 </ReorderGroup>
                 {/* links */}
-                <LinkWrapper>
+                {/* <LinkWrapper>
                   {links.map(({ type, title, content }, index) => {
                     return (
                       <LinkFormGroup key={'link-input-' + type + index}>
@@ -311,7 +317,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                       </LinkFormGroup>
                     );
                   })}
-                </LinkWrapper>
+                </LinkWrapper> */}
                 {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
                   <AddresssWrapper>
@@ -361,6 +367,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               if (link) {
                 let newLinksArray: NimiLinkBaseDetails[] = [];
                 const linksData = getValues('links');
+
                 newLinksArray = [
                   ...linksData,
                   {
@@ -374,6 +381,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     content: '',
                   },
                 ];
+                console.log(newLinksArray);
                 setValue('links', newLinksArray);
               }
               //if address is submitted
