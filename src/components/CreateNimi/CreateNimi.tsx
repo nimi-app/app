@@ -64,6 +64,7 @@ import { PoapField } from './partials/PoapField/PoapField';
 import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderItem } from '../ReorderItem';
+import { ReorderInput } from '../ReorderInput';
 
 import { Reorder } from 'framer-motion/dist/framer-motion';
 
@@ -279,9 +280,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 {/* links */}
                 <ReorderGroup values={reorderItems} onReorder={setReorderItems}>
                   {reorderItems.map((item) => (
-                    <ReorderItem key={item} value={item}>
-                      {item}
-                    </ReorderItem>
+                    <ReorderInput key={item} value={item} />
                   ))}
                 </ReorderGroup>
                 <LinkWrapper>
