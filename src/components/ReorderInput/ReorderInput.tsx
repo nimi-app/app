@@ -31,6 +31,7 @@ export function ReorderInput({ value, updateLink, removeLink }) {
           onChange={(event) => updateLink(value.id, 'content', event.target.value)}
           spellCheck={false}
         />
+        {content && <ClearButton right="57px" onClick={() => updateLink(value.id, 'content', '')} />}
         <InputButton onClick={() => removeLink(value.id)} />
       </InputContainer>
     </ReorderItem>
@@ -58,7 +59,8 @@ const SharedInputStyles = css`
     box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
 
     & + svg {
-      display: block;
+      visibility: visible;
+      opacity: 1;
     }
   }
 `;
@@ -85,13 +87,18 @@ const ContentInput = styled.input`
   background-color: white;
 `;
 
-const ClearButton = styled(XSVG)`
-  display: none;
+const ClearButton = styled(XSVG)<{ right?: string }>`
+  visibility: none;
+  opacity: 0;
   position: absolute;
   top: 50%;
   right: 10px;
   transform: translate(0, -50%);
   cursor: pointer;
+  ${({ right }) => right && `right: ${right};`}
+  transition-property: opacity;
+  transition-duration: 1s;
+  transition-delay: 0.1;
 
   &:hover path {
     fill: #8c90a0;
@@ -117,8 +124,6 @@ const StyledButton = styled.button`
     fill: #8c90a0;
   }
 `;
-
-const TrashCanIcon = styled(TrashCanSVG)``;
 
 type InputButtonProps = {
   variant?: string;
