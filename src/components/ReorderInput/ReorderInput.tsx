@@ -1,10 +1,12 @@
 import styled, { css } from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
-import { NimiLinkBaseDetails } from '@nimi.io/card';
+import { NimiLinkBaseDetails, nimiLinkDetailsExtended } from '@nimi.io/card';
 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
 import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';
 import { ReactComponent as SlidersSVG } from '../../assets/svg/sliders.svg';
+
+import { renderSVG } from '../../utils';
 
 type ReorderInput = {
   value: NimiLinkBaseDetails;
@@ -26,6 +28,7 @@ export function ReorderInput({ value, updateLink, removeLink }) {
         {title && <ClearButton onClick={() => updateLink(value.id, 'title', '')} />}
       </InputContainer>
       <InputContainer>
+        <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
         <ContentInput
           value={content}
           onChange={(event) => updateLink(value.id, 'content', event.target.value)}
@@ -47,6 +50,7 @@ const SharedInputStyles = css`
   border-radius: 20px;
   border: none;
   outline: none;
+  transition: all 0.1s linear;
 
   &:focus {
     background-color: white;
@@ -82,7 +86,7 @@ const TitleInput = styled.input`
 
 const ContentInput = styled.input`
   height: 50px;
-  padding: 8px 70px 8px 20px;
+  padding: 8px 80px 8px 40px;
   ${SharedInputStyles}
   background-color: white;
 `;
@@ -138,3 +142,13 @@ const InputButton = ({ variant = 'trash-can', onClick }: InputButtonProps) => {
     </StyledButton>
   );
 };
+
+const LogoContainer = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 18px;
+  transform: translate(0, -50%);
+`;
+
+const Logo = ({ logo }) => <LogoContainer>{logo}</LogoContainer>;
