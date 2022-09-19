@@ -93,7 +93,12 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
       subtitle="Add your POAPs in the order you want to showcase them."
       handleCloseModal={handleCloseModal}
     >
-      <BodyNavigation page={page} openRecentPage={openRecentPage} openCustomPage={openCustomPage} />
+      <BodyNavigation
+        page={page}
+        openRecentPage={openRecentPage}
+        openCustomPage={openCustomPage}
+        noPOAPs={items.length === 0}
+      />
       {(() => {
         if (fetchingItems) return <PreloaderPOAPs />;
         if (items.length === 0) return <NoPOAPs />;
