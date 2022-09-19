@@ -54,6 +54,8 @@ export const CustomizePOAPs = ({
     if (rect && (event.x < rect.x || event.x > rect.x + rect.width)) removePOAPFromSelectedItems(poap);
   };
 
+  const getFilteredItems = () => items.filter((item) => checkIfMatchesFilter(item));
+
   return (
     <AnimatedSection>
       <PresentedPOAPsContainer childOutside={childOutside}>
@@ -83,9 +85,8 @@ export const CustomizePOAPs = ({
           />
         </AvailablePOAPsTitleContainer>
         <AvailablePOAPsList>
-          {items
-            .filter((item) => checkIfMatchesFilter(item))
-            .map((poap) => (
+          {getFilteredItems().length ? (
+            getFilteredItems().map((poap) => (
               <AvailablePOAPContainer key={poap.tokenId}>
                 <StaticPOAP
                   src={poap.event.image_url}
@@ -97,7 +98,10 @@ export const CustomizePOAPs = ({
                   <SelectedInfo onClick={() => removePOAPFromSelectedItems(poap)}>Selected</SelectedInfo>
                 )}
               </AvailablePOAPContainer>
-            ))}
+            ))
+          ) : (
+            <NoPOAPsText>No data matching the given filter criteria</NoPOAPsText>
+          )}
         </AvailablePOAPsList>
         <SelectedPOAPsInfo>
           <NumberOfSelectedPOAPs>
@@ -159,6 +163,7 @@ const FilterInput = styled.input`
 const AvailablePOAPsList = styled.div`
   width: 100%;
   height: 162px;
+  position: relative;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
@@ -214,4 +219,13 @@ const SelectedInfo = styled.div`
   color: white;
   background-color: #393939cc;
   cursor: pointer;
+`;
+
+const NoPOAPsText = styled.p`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #7a7696;
+  padding: 0 14px;
 `;
