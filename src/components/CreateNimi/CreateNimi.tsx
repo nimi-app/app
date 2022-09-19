@@ -343,15 +343,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
 
               setValue(
                 'widgets',
-                widgets.map((widget) => {
-                  if (widget === NimiWidgetType.POAP) {
-                    return {
-                      type: NimiWidgetType.POAP,
-                    };
-                  }
-
-                  return widget;
-                })
+                widgets.map((widget) => ({
+                  type: widget,
+                }))
               );
 
               setFormLinkList(links);
