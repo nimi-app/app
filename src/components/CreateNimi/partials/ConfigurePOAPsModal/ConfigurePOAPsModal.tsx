@@ -87,7 +87,6 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
     }
   };
 
-  //TODO: HANDLE NO POAPS STATE
   return createPortal(
     <ModalBase
       title="Configure POAPs"
@@ -95,27 +94,27 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
       handleCloseModal={handleCloseModal}
     >
       <BodyNavigation page={page} openRecentPage={openRecentPage} openCustomPage={openCustomPage} />
-      {fetchingItems ? (
-        <PreloaderPOAPs />
-      ) : items.length === 0 ? (
-        <NoPOAPs />
-      ) : (
-        <AnimatePresence mode="wait">
-          {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}
-          {page === 'custom' && (
-            <CustomizePOAPs
-              key="custom-poaps"
-              items={items}
-              selectedItems={selectedItems}
-              handleReordering={handleReordering}
-              addPOAPToSelectedItems={addPOAPToSelectedItems}
-              removePOAPFromSelectedItems={removePOAPFromSelectedItems}
-              clearSelectedItems={clearSelectedItems}
-              checkIfPOAPIsSelected={checkIfPOAPIsSelected}
-            />
-          )}
-        </AnimatePresence>
-      )}
+      {(() => {
+        if (fetchingItems) return <PreloaderPOAPs />;
+        if (items.length === 0) return <NoPOAPs />;
+        return (
+          <AnimatePresence mode="wait">
+            {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}
+            {page === 'custom' && (
+              <CustomizePOAPs
+                key="custom-poaps"
+                items={items}
+                selectedItems={selectedItems}
+                handleReordering={handleReordering}
+                addPOAPToSelectedItems={addPOAPToSelectedItems}
+                removePOAPFromSelectedItems={removePOAPFromSelectedItems}
+                clearSelectedItems={clearSelectedItems}
+                checkIfPOAPIsSelected={checkIfPOAPIsSelected}
+              />
+            )}
+          </AnimatePresence>
+        );
+      })()}
     </ModalBase>,
     modalContainer
   );
