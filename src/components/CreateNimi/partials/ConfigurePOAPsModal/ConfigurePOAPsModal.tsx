@@ -78,7 +78,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
         {
           type: NimiWidgetType.POAP,
           ...(selectedTokens.length && {
-            tokens: selectedTokens.map((token) => token.tokenId),
+            tokenIds: selectedTokens.map((token) => token.tokenId),
           }),
         },
       ]);
