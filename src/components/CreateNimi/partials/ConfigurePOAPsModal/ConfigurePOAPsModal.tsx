@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion/dist/framer-motion';
 import { ModalBase } from '../ModalBase';
 import { NimiWidgetType } from '@nimi.io/card';
 
-import { BodyNavigation, PreloaderPOAPs, RecentPOAPs, CustomizePOAPs } from './components';
+import { BodyNavigation, PreloaderPOAPs, NoPOAPs, RecentPOAPs, CustomizePOAPs } from './components';
 import { POAPToken } from './types';
 
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
@@ -97,6 +97,8 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
       <BodyNavigation page={page} openRecentPage={openRecentPage} openCustomPage={openCustomPage} />
       {fetchingItems ? (
         <PreloaderPOAPs />
+      ) : items.length === 0 ? (
+        <NoPOAPs />
       ) : (
         <AnimatePresence mode="wait">
           {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}
