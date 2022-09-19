@@ -18,6 +18,12 @@ export const PreloaderPOAP = styled.div`
   background-color: #F1F2F5;
 `;
 
+export const NoPOAP = styled.div`
+  ${POAPsSharedStyling}
+  background-color: white;
+  border: 1px solid #f1f2f5;
+`;
+
 type StaticPOAPProps = {
   marginRight?: string;
   cursorPointer?: boolean;
