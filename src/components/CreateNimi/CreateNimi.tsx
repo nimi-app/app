@@ -276,12 +276,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 })}
 
                 <FormGroup>
-                  {/* {formWidgetList.includes(NimiWidgetType.POAP) && (
-                    <PoapButton>
-                      <PoapLogo />
-                      POAPs
-                    </PoapButton>
-                  )} */}
                   {getValues('widgets').filter((el) => el.type === NimiWidgetType.POAP).length !== 0 && (
                     <PoapButton onClick={() => setIsPOAPModalOpened(true)}>
                       <PoapLogo />
@@ -335,11 +329,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 const newArray = formData.filter((item) => !arrayOfAddressItemsToBeRemoved.includes(item.blockchain));
                 if (newArray) setValue('addresses', newArray);
               }
-
-              // const arrayOfWidgetsItemsToBeRemoved = formWidgetList.filter((item) => !nimiWidgetList.includes(item));
-              // if (arrayOfWidgetsItemsToBeRemoved.length > 0) {
-              //   const formData = getValues('widgets');
-              //   const newArray = formData.filter((item) => !arrayOfWidgetsItemsToBeRemoved.includes(item.type));
 
               setValue(
                 'widgets',

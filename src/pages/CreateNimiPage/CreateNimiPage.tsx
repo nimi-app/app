@@ -37,7 +37,7 @@ export function CreateNimiPage() {
   return (
     <Container>
       <CreateNimi
-        ensAddress={account as string}
+        ensAddress="0x26358E62C2eDEd350e311bfde51588b8383A9315"
         ensName={data.domain.name as string}
         ensLabelName={data.domain.labelName as string}
         provider={provider}
