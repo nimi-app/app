@@ -41,11 +41,10 @@ import {
   ImportFromTwitterButton,
 } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
-import { NimiLinkField } from './partials/NimiLinkField';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
-import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
+import { FormWrapper } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
 import { ENSMetadata } from '../../hooks/useENSMetadata';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
@@ -60,7 +59,6 @@ import { Button } from '../Button';
 import { PoapField } from './partials/PoapField/PoapField';
 import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
-import { ReorderItem } from '../ReorderItem';
 import { ReorderInput } from '../ReorderInput';
 
 export interface CreateNimiProps {
@@ -285,11 +283,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 {/* links */}
                 {/* reorder group */}
                 <button onClick={() => console.log(getValues('links'))}>Log Links</button>
-                <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
-                  {links.map((link) => (
-                    <ReorderInput key={link.id} value={link} updateLink={updateLink} removeLink={removeLink} />
-                  ))}
-                </ReorderGroup>
+                {links.length !== 0 && (
+                  <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
+                    {links.map((link) => (
+                      <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
+                    ))}
+                  </ReorderGroup>
+                )}
                 {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
                   <AddresssWrapper>
