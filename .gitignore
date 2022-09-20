@@ -10,6 +10,7 @@
 
 # production
 /build
+.yalc
 
 # misc
 .DS_Store
