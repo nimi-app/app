@@ -4,7 +4,6 @@ import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
-import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
 
 import {
   Nimi,
@@ -28,10 +27,8 @@ import {
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
-  LinkWrapper,
   AddresssWrapper,
   AddressesTitle,
-  StyledDots,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -88,12 +85,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
-
-  const [reorderItems, setReorderItems] = useState([
-    { type: 'WhatsApp', title: 'Label 1', content: 'Mirko' },
-    { type: 'Twitter', title: 'Label 2', content: 'Tamara' },
-    { type: 'Instagram', title: 'Label 3', content: 'Nikola' },
-  ]);
 
   /**
    * Publish Nimi state
@@ -292,38 +283,14 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     />
                   </StyledInputWrapper>
                 </FormGroup>
+                {/* links */}
                 {/* reorder group */}
                 <button onClick={() => console.log(getValues('links'))}>Log Links</button>
-                {/* <ReorderGroup values={reorderItems} onReorder={setReorderItems}>
-                  {reorderItems.map((item) => (
-                    <ReorderInput key={item.content} value={item} />
-                  ))}
-                </ReorderGroup> */}
                 <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                   {links.map((link) => (
                     <ReorderInput key={link.id} value={link} updateLink={updateLink} removeLink={removeLink} />
                   ))}
                 </ReorderGroup>
-                {/* links */}
-                {/* <LinkWrapper>
-                  {links.map(({ type, title, content }, index) => {
-                    return (
-                      <LinkFormGroup key={'link-input-' + type + index}>
-                        <StyledDots>
-                          <DragDots />
-                        </StyledDots>
-
-                        <NimiLinkField
-                          key={'link-input' + type + index}
-                          title={title}
-                          link={type as NimiLinkType}
-                          index={index}
-                          content={content}
-                        />
-                      </LinkFormGroup>
-                    );
-                  })}
-                </LinkWrapper> */}
                 {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
                   <AddresssWrapper>
