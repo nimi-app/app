@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styled, { css } from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails, nimiLinkDetailsExtended } from '@nimi.io/card';
