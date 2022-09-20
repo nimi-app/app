@@ -6,7 +6,7 @@ import { ReactComponent as DragDotsSVG } from '../../assets/svg/dragdots.svg';
 
 type ReorderItemProps<T> = {
   value: T;
-  children?: ReactNode[];
+  children: ReactNode[];
 };
 
 export function ReorderItem<T extends unknown>({ value, children }: ReorderItemProps<T>) {

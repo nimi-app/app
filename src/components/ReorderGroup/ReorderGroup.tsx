@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Reorder } from 'framer-motion/dist/framer-motion';
 
 interface ReorderGroupProps {
-  children?: ReactNode;
+  children: ReactNode;
   values: any[];
   onReorder: (v: any[]) => void;
 }
