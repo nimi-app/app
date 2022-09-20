@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import styled, { css } from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails, nimiLinkDetailsExtended } from '@nimi.io/card';
@@ -8,13 +9,14 @@ import { ReactComponent as SlidersSVG } from '../../assets/svg/sliders.svg';
 
 import { renderSVG } from '../../utils';
 
-type ReorderInput = {
+type ReorderInputProps = {
+  key?: string;
   value: NimiLinkBaseDetails;
   updateLink: (linkId: string, key: string, value: string) => void;
   removeLink: (linkId: string) => void;
 };
 
-export function ReorderInput({ value, updateLink, removeLink }) {
+export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
   const { type, title, content } = value;
 
   return (
@@ -22,20 +24,20 @@ export function ReorderInput({ value, updateLink, removeLink }) {
       <InputContainer marginBottom="10px">
         <TitleInput
           value={title}
-          onChange={(event) => updateLink(value.id, 'title', event.target.value)}
+          onChange={(event) => updateLink(value.id!, 'title', event.target.value)}
           spellCheck={false}
         />
-        {title && <ClearButton onClick={() => updateLink(value.id, 'title', '')} />}
+        {title && <ClearButton onClick={() => updateLink(value.id!, 'title', '')} />}
       </InputContainer>
       <InputContainer>
         <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
         <ContentInput
           value={content}
-          onChange={(event) => updateLink(value.id, 'content', event.target.value)}
+          onChange={(event) => updateLink(value.id!, 'content', event.target.value)}
           spellCheck={false}
         />
-        {content && <ClearButton right="57px" onClick={() => updateLink(value.id, 'content', '')} />}
-        <InputButton onClick={() => removeLink(value.id)} />
+        {content && <ClearButton right="57px" onClick={() => updateLink(value.id!, 'content', '')} />}
+        <InputButton onClick={() => removeLink(value.id!)} />
       </InputContainer>
     </ReorderItem>
   );
