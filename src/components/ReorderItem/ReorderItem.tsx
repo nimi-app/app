@@ -4,12 +4,12 @@ import { Reorder } from 'framer-motion/dist/framer-motion';
 
 import { ReactComponent as DragDotsSVG } from '../../assets/svg/dragdots.svg';
 
-type ReorderItemProps = {
-  value: string;
-  children: ReactNode;
+type ReorderItemProps<T> = {
+  value: T;
+  children?: ReactNode[];
 };
 
-export function ReorderItem({ value, children }: ReorderItemProps) {
+export function ReorderItem<T extends unknown>({ value, children }: ReorderItemProps<T>) {
   const style = {
     width: '100%',
     display: 'flex',
