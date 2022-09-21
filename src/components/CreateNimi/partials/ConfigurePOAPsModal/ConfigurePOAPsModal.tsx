@@ -7,7 +7,7 @@ import { ModalBase } from '../ModalBase';
 import { NimiWidgetType } from '@nimi.io/card';
 
 import { BodyNavigation, PreloaderPOAPs, NoPOAPs, RecentPOAPs, CustomizePOAPs } from './components';
-import { POAPToken } from './types';
+import { POAPToken } from '@nimi.io/card';
 
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 import { useFormContext } from 'react-hook-form';
@@ -78,7 +78,9 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
         {
           type: NimiWidgetType.POAP,
           ...(selectedTokens.length && {
-            tokenIds: selectedTokens.map((token) => token.tokenId),
+            context: {
+              tokenIds: selectedTokens.map((token) => token.tokenId),
+            },
           }),
         },
       ]);
