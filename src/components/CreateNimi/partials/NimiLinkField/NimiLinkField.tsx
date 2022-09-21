@@ -63,7 +63,7 @@ export function NimiLinkField({ link, label }: NimiLinkFieldProps) {
         type: link,
         content: targetValue,
       })
-      .then((validatedLink: NimiLinkBaseDetails) => {
+      .then(() => {
         handleFormValue(targetValue);
         setIsValueValid(true);
       })
