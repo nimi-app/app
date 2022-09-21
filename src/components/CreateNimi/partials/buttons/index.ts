@@ -2,15 +2,20 @@ import styled from 'styled-components';
 import { MEDIA_WIDTHS } from '../../../../theme';
 import { Button } from '../../../Button';
 
-export const ImportButtonsWrapper = styled.div`
+export const ButtonsContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   margin-bottom: 32px;
-  margin-top: 28px;
+`;
+
+export const ImportButtonsWrapper = styled(ButtonsContainer)`
+  flex-direction: row;
+  justify-content: center;
   gap: 16px;
   @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
     flex-wrap: wrap;
-
     justify-content: center;
   }
 `;

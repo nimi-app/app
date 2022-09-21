@@ -3,7 +3,6 @@ import { Flex } from 'rebass';
 
 import { CardBody } from '../Card';
 import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
-import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 import { Button } from '../Button';
 import { DottedButtonBase } from '../Button/styled';
 
@@ -100,12 +99,7 @@ export const ProfileImage = styled.img`
   width: 209.8px;
   z-index: 1;
 `;
-export const ProfileImagePlaceholder = styled.img`
-  align-self: center;
-`;
-ProfileImagePlaceholder.defaultProps = {
-  src: PlaceholderMini,
-};
+
 export const SaveAndDeployButton = styled(Button)`
   background: linear-gradient(291.35deg, #4368ea -25.85%, #c490dd 73.38%);
   opacity: 0.8;

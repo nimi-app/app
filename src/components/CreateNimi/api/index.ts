@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Nimi } from 'nimi-card';
+import { Nimi } from '@nimi.io/card';
 import { getAPIBaseURL } from '../../../modules/api-service';
 
 interface PublishNimiApiResponseDeprecated {
@@ -15,10 +15,6 @@ interface PublishNimiApiResponse {
 interface PublishNimiResponse {
   cidVersion: number;
   cid: string;
-}
-
-interface UploadAssets {
-  IpfsHash: string;
 }
 
 /**
@@ -113,7 +109,7 @@ export function uploadImage(file: File) {
   };
   return axios
     .post<{
-      data: UploadAssets;
+      data: PublishNimiApiResponse;
     }>(`${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/assets`, formData, config)
     .then(({ data }) => data.data);
 }

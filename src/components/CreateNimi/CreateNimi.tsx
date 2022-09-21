@@ -5,8 +5,17 @@ import { useTranslation } from 'react-i18next';
 import { useMemo, useRef, useState, useCallback } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
+import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 
-import { Nimi, nimiCard, NimiBlockchain, NimiLinkType, NimiLinkBaseDetails, NimiWidgetType } from 'nimi-card';
+import {
+  Nimi,
+  nimiValidator,
+  NimiBlockchain,
+  NimiLinkType,
+  NimiLinkBaseDetails,
+  NimiWidgetType,
+  NimiImageType,
+} from '@nimi.io/card';
 import { CardBody, Card } from '../Card';
 import {
   InnerWrapper,
@@ -14,7 +23,6 @@ import {
   PreviewContent,
   PageSectionTitle,
   ProfileImage,
-  ProfileImagePlaceholder,
   AddFieldsButton,
   SaveAndDeployButton,
   PreviewMobile,
@@ -28,7 +36,12 @@ import {
 import { Label, Input, TextArea, FormGroup } from '../form';
 
 // Partials
-import { ImportButtonsWrapper, ImportFromLensProtocolButton, ImportFromTwitterButton } from './partials/buttons';
+import {
+  ButtonsContainer,
+  ImportButtonsWrapper,
+  ImportFromLensProtocolButton,
+  ImportFromTwitterButton,
+} from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiLinkField } from './partials/NimiLinkField';
 import { AddFieldsModal } from './partials/AddFieldsModal';
@@ -44,6 +57,8 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimiViaIPNS, uploadImage } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
+import { NFTSelectorModal } from './partials/NFTSelectorModal';
+import { Button } from '../Button';
 import { supportedImageTypes } from '../../constants';
 
 export interface CreateNimiProps {
@@ -66,6 +81,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const { t } = useTranslation('nimi');
 
   /**
+   * NFT
+   */
+  const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
+
+  /**
    * Publish Nimi state
    * @todo create a reducer or context for this
    */
@@ -77,18 +97,22 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
-  const [imgErrorMessage, setImaErrorMessage] = useState('');
+  const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
+
+  const image = ensMetadata?.image
+    ? {
+        type: NimiImageType.URL,
+        url: ensMetadata?.image || '',
+      }
+    : undefined;
 
   // Form state manager
   const useFormContext = useForm<Nimi>({
-    resolver: yupResolver(nimiCard, {
-      stripUnknown: true,
-      abortEarly: false,
-    }),
+    resolver: yupResolver(nimiValidator),
     defaultValues: {
       displayName: ensName,
-      displayImageUrl: ensMetadata?.image,
+      image,
       description: '',
       ensAddress: ensAddress,
       ensName,
@@ -129,7 +153,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     if (!lensProfile) return;
     setValue('displayName', lensProfile.name);
     setValue('description', lensProfile.description);
-    setValue('displayImageUrl', lensProfile?.pictureUrl);
+    setValue('image', {
+      type: NimiImageType.URL,
+      url: lensProfile?.pictureUrl,
+    });
   }, [setValue, lensProfile]);
 
   /**
@@ -216,17 +243,17 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       const file = event.target.files[0];
 
       if (file.size > 2000000) {
-        setImaErrorMessage('File too big!');
+        setImgErrorMessage('File too big!');
         setTimeout(() => {
-          setImaErrorMessage('');
+          setImgErrorMessage('');
         }, 5000);
         return;
       }
       if (!supportedImageTypes.includes(file.type)) {
-        setImaErrorMessage('File type unsupported!');
+        setImgErrorMessage('File type unsupported!');
 
         setTimeout(() => {
-          setImaErrorMessage('');
+          setImgErrorMessage('');
         }, 5000);
 
         return;
@@ -238,15 +265,18 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       };
 
       try {
-        const { IpfsHash } = await uploadImage(file);
+        const { cidV1 } = await uploadImage(file);
 
-        setValue('displayImageUrl', `https://ipfs.io/ipfs/${IpfsHash}`);
+        setValue('image', {
+          type: NimiImageType.URL,
+          url: `https://ipfs.io/ipfs/${cidV1}`,
+        });
       } catch (error) {
-        setImaErrorMessage('Network Error');
-        setTimeout(() => {
-          setImaErrorMessage('');
-        }, 5000);
         console.log('error', error);
+        setImgErrorMessage('Network Error');
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
       }
     }
   };
@@ -258,17 +288,17 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              {customImg || formWatchPayload.displayImageUrl ? (
-                <ProfileImage src={customImg ? customImg : formWatchPayload.displayImageUrl} />
-              ) : (
-                <ProfileImagePlaceholder />
-              )}
+              <ProfileImage
+                src={customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini}
+              />
+              <ButtonsContainer>
+                <Button onClick={() => setIsNFTSelectorModalOpen(true)}>Select an NFT</Button>
+              </ButtonsContainer>{' '}
               {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
               <ImportButton>
                 <FileInput name="myfile" type="file" onChange={handleUpload} />
                 Upload Profile Picture
               </ImportButton>
-
               <ImportButtonsWrapper>
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
                   {t('buttonLabel.importFromTwitter')}
@@ -402,7 +432,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               // Set the fields and close the modal
               setValue('displayName', data.name);
               setValue('description', data.description);
-              setValue('displayImageUrl', data.profileImageUrl);
+              setValue('image', {
+                type: NimiImageType.URL,
+                url: data.profileImageUrl,
+              });
 
               // Handle Twitter
               const hasTwitter = formLinkList.some((element) => element === NimiLinkType.TWITTER);
@@ -442,6 +475,26 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           cancel={() => {
             setIsPublishNimiModalOpen(false);
             publishNimiAbortController?.current?.abort();
+          }}
+        />
+      )}
+      {isNFTSelectorModalOpen && (
+        <NFTSelectorModal
+          address={ensAddress}
+          onClose={(nftAsset) => {
+            if (nftAsset) {
+              setValue('image', {
+                type: NimiImageType.ERC721,
+                contract: nftAsset.assetContract.address,
+                tokenId: nftAsset.tokenId as any,
+                tokenUri: nftAsset.externalLink,
+                url: nftAsset.imageUrl,
+              });
+            } else {
+              setValue('image', undefined);
+            }
+
+            setIsNFTSelectorModalOpen(false);
           }}
         />
       )}
