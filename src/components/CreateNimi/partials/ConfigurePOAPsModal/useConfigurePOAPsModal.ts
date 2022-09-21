@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { POAPToken } from './types';
+import { POAPToken } from '@nimi.io/card';
 
 export function useConfigurePOAPsModal() {
   const [modalContainer] = useState(() => document.createElement('div'));

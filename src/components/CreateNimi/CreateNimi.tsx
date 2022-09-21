@@ -226,8 +226,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   };
 
   const onSubmitInvalid = (data) => {
-    console.log(data);
+    console.log('SUBMIT INVALID', data);
   };
+
   const handleKeyDown = (e) => {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight}px`;

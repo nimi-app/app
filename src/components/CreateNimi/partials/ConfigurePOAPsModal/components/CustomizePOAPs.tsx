@@ -9,7 +9,7 @@ import { ReorderItem } from './ReorderItem';
 
 import { ReactComponent as TrashCanSVG } from '../../../../../assets/svg/trash-can.svg';
 
-import { POAPToken } from '../types';
+import { POAPToken } from '@nimi.io/card';
 
 export const CustomizePOAPs = ({
   items,

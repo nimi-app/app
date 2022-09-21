@@ -66,7 +66,6 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
       })
       .catch((error) => {
         setError(error.message);
-        console.log(error);
       })
       .then(() => setIsLoading(false));
   };
