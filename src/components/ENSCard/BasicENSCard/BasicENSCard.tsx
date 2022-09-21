@@ -10,6 +10,7 @@ import { NimiImageType } from 'nimi-card';
 export interface ENSNameCardProps {
   name: string;
   labelName: string;
+  id: string;
 }
 
 interface ENSDomainNameProps {
@@ -18,21 +19,22 @@ interface ENSDomainNameProps {
 
 const DomainName: FC<ENSDomainNameProps> = ({ name }) => <StyledDomainName>{name}</StyledDomainName>;
 
-export function BasicENSCard({ name }: ENSNameCardProps) {
+export function BasicENSCard({ name, id }: ENSNameCardProps) {
   const { data, loading } = useENSMetadata(name);
 
-  console.log('BASIC BITCH DATA', data);
+  console.log('basic key', id);
   const imageFormatted = {
     type: NimiImageType.URL,
     url: data?.image || '',
   };
+  console.log('Basic passed', { image: imageFormatted, id });
 
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        <Link to={`/domains/${name}`} state={{ image: imageFormatted }}>
+        <Link to={`/domains/${name}`} state={{ image: imageFormatted, id }}>
           <StyledENSNameCardWrapper>
             <ENSNameCardImage alt={data ? data.image : PurpleCircle} src={data ? data.image : PurpleCircle} />
             <DomainName name={name} />

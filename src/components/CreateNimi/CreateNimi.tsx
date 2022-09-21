@@ -46,7 +46,6 @@ import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
-import { ENSMetadata } from '../../hooks/useENSMetadata';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
@@ -71,6 +70,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const { state }: any = useLocation();
+  console.log('STATE', state);
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -94,14 +94,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const publishNimiAbortController = useRef<AbortController>();
 
-  const image = state.image || undefined;
-  console.log('state', state);
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
       displayName: state.displayName || ensName,
-      image,
+      image: state.image.url ? state.image : undefined,
       description: state.description || '',
       ensAddress: ensAddress,
       ensName,
@@ -135,7 +133,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   );
 
   const formWatchPayload = watch();
-  console.log('form', formWatchPayload);
 
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;

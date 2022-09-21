@@ -1,5 +1,4 @@
-import { namehash as ensNameHash } from '@ethersproject/hash';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useGetDomainFromSubgraphQuery } from '../../generated/graphql/ens';
 import { CreateNimi } from '../../components/CreateNimi';
@@ -10,15 +9,15 @@ import { SUPPORTED_CHAIN_IDS } from '../../constants';
 
 export function CreateNimiPage() {
   const { account, provider, chainId } = useWeb3React();
-  const { ensName } = useParams();
-  const nodeHash = ensNameHash(ensName as string);
+
+  const { state }: any = useLocation();
 
   /**
    * @todo - prevent accessing if the user does not own the domain
    */
   const { data, loading, error } = useGetDomainFromSubgraphQuery({
     variables: {
-      domainId: nodeHash.toLowerCase(),
+      domainId: state.id.toLowerCase(),
     },
   });
 

@@ -8,6 +8,7 @@ import { Nimi } from 'nimi-card';
 
 export interface ENSNameCardProps {
   data: Nimi;
+  id: string;
 }
 
 interface ENSDomainNameProps {
@@ -16,8 +17,9 @@ interface ENSDomainNameProps {
 
 const DomainName: FC<ENSDomainNameProps> = ({ name }) => <StyledDomainName>{name}</StyledDomainName>;
 
-export function PopulatedENSCard({ data }: ENSNameCardProps) {
-  console.log('data', data);
+export function PopulatedENSCard({ data, id }: ENSNameCardProps) {
+  data['id'] = id;
+
   return (
     <Link to={`/domains/${data.ensName}`} state={data}>
       <StyledENSNameCardWrapper>

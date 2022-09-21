@@ -79,14 +79,14 @@ function Domains({ address }: DomainsProps) {
         <StyledDomainsWrapper>
           {domainArray.length && (
             <StyledDomainsWrapper>
-              {domainArray.map((item, index) => {
-                return <PopulatedENSCard data={item.data} key={index} />;
+              {domainArray.map((item) => {
+                return <PopulatedENSCard data={item.data} key={item.id} id={item.id} />;
               })}
             </StyledDomainsWrapper>
           )}
           {emptyDomainArray.length &&
             emptyDomainArray.map(({ id, name, labelName }) => {
-              return <BasicENSCard key={id} name={name || ''} labelName={labelName || ''} />;
+              return <BasicENSCard key={id} id={id} name={name || ''} labelName={labelName || ''} />;
             })}
           <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
         </StyledDomainsWrapper>

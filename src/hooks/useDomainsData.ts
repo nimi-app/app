@@ -28,7 +28,7 @@ export function useDomainsData(address: string) {
           setMainLoader(true);
           const allUserDomains = data.account?.domains;
           const arrayOfNames = allUserDomains.map((item) => {
-            return axios.get(`https://api.nimi.io/v1.4/nimi/by?ens=${item.name}`);
+            return axios.get(`${process.env.REACT_APP_NIMI_API_BASE_URL}/nimi/by?ens=${item.name}`);
           });
           const fetchedDomains: any[] = await Promise.allSettled(arrayOfNames);
 
@@ -37,6 +37,7 @@ export function useDomainsData(address: string) {
 
           fetchedDomains.forEach((item, index) => {
             const domain = item.value.data.data;
+
             const baseObject = {
               id: allUserDomains[index].id,
               name: allUserDomains[index].name,
@@ -44,7 +45,6 @@ export function useDomainsData(address: string) {
               data: {},
             } as DomainDataType;
 
-            console.log('object', baseObject);
             if (item.status === 'rejected' || domain.length === 0) emptyDomainArray.push(baseObject);
             else {
               baseObject.data = domain[domain.length - 1].nimi;
