@@ -6,5 +6,6 @@ export const Container = styled.div`
   margin-right: auto;
   max-width: ${MEDIA_WIDTHS.upToMedium}px;
   width: 100%;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
