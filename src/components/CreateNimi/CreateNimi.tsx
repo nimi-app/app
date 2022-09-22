@@ -346,10 +346,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     id: new Date().valueOf().toString(),
                     type: link,
                     // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
-                    title: link.replace(
-                      /(^\w)(\S*)/g,
-                      (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
-                    ),
+                    title: '',
                     content: '',
                   },
                 ];
