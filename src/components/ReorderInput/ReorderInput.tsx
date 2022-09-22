@@ -25,6 +25,10 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
           value={title}
           onChange={(event) => updateLink(value.id!, 'title', event.target.value)}
           spellCheck={false}
+          placeholder={type.replace(
+            /(^\w)(\S*)/g,
+            (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
+          )}
         />
         {title && <ClearButton onClick={() => updateLink(value.id!, 'title', '')} />}
       </InputContainer>
