@@ -9,7 +9,7 @@
     "@ethersproject/providers": "^5.7.0",
     "@hello-pangea/dnd": "^15.0.0",
     "@hookform/resolvers": "^2.8.10",
-    "@nimi.io/card": "^0.8.6-rc.5",
+    "@nimi.io/card": "github:nimi-app/card#7fa2dcd",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
