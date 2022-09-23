@@ -63,30 +63,31 @@ const SharedInputStyles = css<{ inputInvalid?: boolean }>`
   outline: none;
   transition: all 0.1s linear;
 
-  ${({ inputInvalid }) =>
-    inputInvalid
-      ? `
-        border: 2px solid #EB5757;
-        color: #EB5757;
-      `
-      : `
-        &:focus {
-          background-color: white;
-          font-size: 18px;
-          font-weight: 500;
+  &:focus {
+    background-color: white;
+    font-size: 18px;
+    font-weight: 500;
+    box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
+
+    & + svg {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    ${({ inputInvalid }) =>
+      inputInvalid
+        ? `
+          border: 2px solid #EB5757;
+          color: #EB5757;
+        `
+        : `
           color: #5274ff;
           border: double 2px transparent;
           background-image: linear-gradient(white, white), linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
           background-origin: border-box;
           background-clip: padding-box, border-box;
-          box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
-
-          & + svg {
-            visibility: visible;
-            opacity: 1;
-          }
-        }
-    `}
+        `}
+  }
 `;
 
 const InputContainer = styled.div<{ marginBottom?: string }>`
