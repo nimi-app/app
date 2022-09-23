@@ -1,4 +1,6 @@
-// TODO: Define regular expression validator for each of the types
+// TODO: Check with the team what should be validated for each link type.
+// TODO: Define regular expression validator for each of the types!
+
 export const inputValidators = {
   URL: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
   EMAIL: /^[a-zA-Z0-9]{3,}$/,
