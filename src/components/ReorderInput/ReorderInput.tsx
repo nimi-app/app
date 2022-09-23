@@ -33,7 +33,7 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
         content: event.target.value,
       })
       .then((isValidLink) => {
-        setInvalidInput(isValidLink);
+        setInvalidInput(!isValidLink);
       })
       .catch(() => {
         setInvalidInput(true);
