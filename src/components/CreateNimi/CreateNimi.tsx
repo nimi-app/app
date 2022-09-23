@@ -291,7 +291,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 })}
 
                 <FormGroup>
-                  {getValues('widgets').filter((el) => el.type === NimiWidgetType.POAP).length !== 0 && (
+                  {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
                     <PoapButton onClick={() => setIsPOAPModalOpened(true)}>
                       <PoapLogo />
                       Configure POAPs
