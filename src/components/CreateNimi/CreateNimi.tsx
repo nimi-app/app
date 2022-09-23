@@ -54,6 +54,7 @@ import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData
 import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
+import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
 import { Button } from '../Button';
 
@@ -70,6 +71,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
    */
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
+  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
+  const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
+
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata;
 
@@ -86,7 +90,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
    * @todo create a reducer or context for this
    */
   const publicResolverContract = useENSPublicResolverContract();
-  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPublishingNimi, setIsPublishingNimi] = useState(false);
   const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
@@ -109,14 +112,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       displayName: ensName,
       image,
       description: '',
-      ensAddress: ensAddress,
+      ensAddress,
       ensName,
       addresses: [],
       links: [],
       widgets: [
         {
           type: NimiWidgetType.POAP,
-          address: ensAddress,
         },
       ],
     },
@@ -224,8 +226,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   };
 
   const onSubmitInvalid = (data) => {
-    console.log(data);
+    console.log('SUBMIT INVALID', data);
   };
+
   const handleKeyDown = (e) => {
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -288,10 +291,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 })}
 
                 <FormGroup>
-                  {formWidgetList.includes(NimiWidgetType.POAP) && (
-                    <PoapButton>
+                  {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
+                    <PoapButton onClick={() => setIsPOAPModalOpened(true)}>
                       <PoapLogo />
-                      POAPs
+                      Configure POAPs
                     </PoapButton>
                   )}
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
@@ -309,10 +312,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
         <PreviewContent showMobile={showPreviewMobile}>
           <BackButton onClick={() => setShowPreviewMobile(false)}>← Back To Editor</BackButton>
           <PageSectionTitle>{t('preview')}</PageSectionTitle>
-
           <NimiPreviewCard nimi={formWatchPayload} />
         </PreviewContent>
       </InnerWrapper>
+      {isPOAPModalOpened && (
+        <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
+      )}
       {isAddFieldsModalOpen && (
         <AddFieldsModal
           initialValues={{
@@ -340,23 +345,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 if (newArray) setValue('addresses', newArray);
               }
 
-              // const arrayOfWidgetsItemsToBeRemoved = formWidgetList.filter((item) => !nimiWidgetList.includes(item));
-              // if (arrayOfWidgetsItemsToBeRemoved.length > 0) {
-              //   const formData = getValues('widgets');
-              //   const newArray = formData.filter((item) => !arrayOfWidgetsItemsToBeRemoved.includes(item.type));
-
               setValue(
                 'widgets',
-                widgets.map((widget) => {
-                  if (widget === NimiWidgetType.POAP) {
-                    return {
-                      type: NimiWidgetType.POAP,
-                      address: ensAddress,
-                    };
-                  }
-
-                  return widget;
-                })
+                widgets.map((widget) => ({
+                  type: widget,
+                }))
               );
 
               setFormLinkList(links);
