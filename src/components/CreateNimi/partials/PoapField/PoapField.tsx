@@ -9,13 +9,13 @@ import { PoapButton, PoapWrapper, InnerPoapWrapper } from './styled';
 /**
  * Shows poap section with the delete button
  */
-export function PoapField() {
+export function PoapField({ onClick }: { onClick: () => void }) {
   const { setValue: setFormValue } = useFormContext<Nimi>();
   const handleDelete = () => {
     setFormValue('widgets', []);
   };
   return (
-    <PoapWrapper>
+    <PoapWrapper onClick={onClick}>
       <InnerPoapWrapper>
         <PoapButton>
           <PoapLogo />

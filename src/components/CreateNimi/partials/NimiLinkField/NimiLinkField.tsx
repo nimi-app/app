@@ -48,9 +48,9 @@ export function NimiLinkField({ link, index, content: defaultContent, title: def
         type: link,
         content: value,
       })
-      .then((isValidLink) => {
-        if (isValidLink) handleFormValue(value);
-        setIsValueValid(isValidLink);
+      .then(() => {
+        handleFormValue(value);
+        setIsValueValid(true);
       })
       .catch(() => {
         setIsValueValid(false);

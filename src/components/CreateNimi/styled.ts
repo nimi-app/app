@@ -164,17 +164,12 @@ export const AddresssWrapper = styled.div`
 export const AddressesTitle = styled.div`
   font-weight: 400;
   font-size: 16px;
-  line-height: 18px;
-  color: #8c90a0;
-`;
-
-export const StyledDots = styled.div`
-  display: flex;
-`;
-
-export const LinkWrapper = styled.div`
-  gap: 16px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  color: #a78aff;
+  letter-spacing: 0.1em;
+  line-height: 24px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 28px;
+  gap: 12px;
+  cursor: pointer;
 `;

@@ -30,9 +30,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
     validateNimi(filteredNimi)
       .then((validatedNimi) => {
         if (process.env.NODE_ENV !== 'production') {
-          console.log({
-            validatedNimi,
-          });
+          // console.log({ validatedNimi });
         }
         setPreviewNimi(validatedNimi as unknown as Nimi);
       })
