@@ -1,5 +1,5 @@
 import Frame, { FrameContextConsumer } from 'react-frame-component';
-import { filterEmptyFields, Nimi, NimiCard, validateNimi } from '@nimi.io/card';
+import { filterEmptyFields, Nimi, NimiCard, validateNimi, nimiLinkValidator } from '@nimi.io/card';
 import { useEffect, useState } from 'react';
 import styled, { StyleSheetManager } from 'styled-components';
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
@@ -23,19 +23,46 @@ const PreviewFrame = styled(Frame)`
 export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   const [previewNimi, setPreviewNimi] = useState<Nimi>();
 
+  const removeInvalidLinks = async (links) => {
+    const result = await Promise.all(
+      links.map((link) =>
+        nimiLinkValidator
+          .isValid({
+            type: link.type,
+            content: link.content,
+          })
+          .then((isLinkValid) => {
+            console.log('isLinkValidFilter', isLinkValid);
+            return isLinkValid;
+          })
+          .catch((error) => {
+            console.log('error', error);
+            return false;
+          })
+      )
+    );
+
+    return links.filter((_, index) => result[index]);
+  };
+
   useEffect(() => {
     // Filter invalid links
-    const filteredNimi = filterEmptyFields(nimi);
-    validateNimi(filteredNimi)
-      .then((validatedNimi) => {
-        if (process.env.NODE_ENV !== 'production') {
-          // console.log({ validatedNimi });
-        }
-        setPreviewNimi(validatedNimi as Nimi);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    (async () => {
+      const filteredNimi = filterEmptyFields(nimi);
+
+      const filteredLinks = await removeInvalidLinks(filteredNimi.links);
+
+      validateNimi({ ...filteredNimi, links: filteredLinks })
+        .then((validatedNimi) => {
+          if (process.env.NODE_ENV !== 'production') {
+            // console.log({ validatedNimi });
+          }
+          setPreviewNimi(validatedNimi as Nimi);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    })();
   }, [nimi]);
 
   if (!previewNimi) {
