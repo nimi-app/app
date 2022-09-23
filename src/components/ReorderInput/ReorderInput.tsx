@@ -18,6 +18,10 @@ type ReorderInputProps = {
   removeLink: (linkId: string) => void;
 };
 
+// Zett, are you sure you want to change link type SVG icon to exclamation mark in case of invalid input?
+// User might change title to e.g. bejzik8 and he might forget what is the type of link.
+// I can easily update this if necessary.
+
 export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
   const [inputTouched, setInputTouched] = useState(false);
   const { type, title, content } = value;
