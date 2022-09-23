@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
-import { NimiLinkBaseDetails, nimiLinkDetailsExtended } from '@nimi.io/card';
+import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
 import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';
@@ -8,8 +8,6 @@ import { ReactComponent as SlidersSVG } from '../../assets/svg/sliders.svg';
 
 import { renderSVG } from '../../utils';
 import { useState } from 'react';
-
-import { inputValidators } from './inputValidators';
 
 type ReorderInputProps = {
   key?: string;
@@ -24,7 +22,23 @@ type ReorderInputProps = {
 
 export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
   const [inputTouched, setInputTouched] = useState(false);
+  const [isInvalidInput, setInvalidInput] = useState(false);
   const { type, title, content } = value;
+
+  const onChange = (event) => {
+    updateLink(value.id!, 'content', event.target.value);
+    nimiLinkValidator
+      .isValid({
+        type,
+        content: event.target.value,
+      })
+      .then((isValidLink) => {
+        setInvalidInput(isValidLink);
+      })
+      .catch(() => {
+        setInvalidInput(true);
+      });
+  };
 
   return (
     <ReorderItem value={value}>
@@ -43,9 +57,9 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
       <InputContainer>
         <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
         <ContentInput
-          inputInvalid={inputTouched && !inputValidators[type].test(content)}
+          inputInvalid={inputTouched && isInvalidInput}
           value={content}
-          onChange={(event) => updateLink(value.id!, 'content', event.target.value)}
+          onChange={onChange}
           spellCheck={false}
           onBlur={setInputTouched.bind(null, true)}
         />
