@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { StyledENSNameCardWrapper, ENSNameCardImage, StyledDomainName } from '../styleds';
 import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { Loader } from '../../Loader';
-import { NimiImageType } from 'nimi-card';
+import { NimiImageType } from '@nimi.io/card';
 
 export interface ENSNameCardProps {
   name: string;

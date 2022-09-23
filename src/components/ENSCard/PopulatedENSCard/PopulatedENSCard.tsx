@@ -4,7 +4,7 @@ import PurpleCircle from '../../../assets/svg/purpleCircle.svg';
 import { Link } from 'react-router-dom';
 
 import { StyledENSNameCardWrapper, ENSNameCardImage, StyledDomainName } from '../styleds';
-import { Nimi } from 'nimi-card';
+import { Nimi } from '@nimi.io/card';
 
 export interface ENSNameCardProps {
   data: Nimi;

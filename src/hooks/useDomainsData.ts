@@ -22,7 +22,7 @@ export function useDomainsData(address: string) {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    async () => {
       if (data?.account?.domains) {
         try {
           setMainLoader(true);
@@ -61,7 +61,6 @@ export function useDomainsData(address: string) {
         }
       }
     };
-    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading]);
 

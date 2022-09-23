@@ -1,12 +1,7 @@
 import type { AddEthereumChainParameter } from '@web3-react/types';
 export const NetworkContextName = 'NETWORK';
-import LensterLogo from '../assets/svg/socialIcons/lenster.svg';
-import InstagramLogo from '../assets/svg/socialIcons/instagram.svg';
-import TwitterLogo from '../assets/svg/socialIcons/twitter.svg';
-import EmailLogo from '../assets/svg/socialIcons/mail.svg';
-import LinkedInLogo from '../assets/svg/socialIcons/linkedIn.svg';
-import WebsiteLogo from '../assets/svg/socialIcons/website.svg';
-import TelegramLogo from '../assets/svg/socialIcons/telegram.svg';
+
+import { NimiLinkType } from '@nimi.io/card';
 
 export interface NetworkDetails {
   chainId: string;
@@ -28,6 +23,7 @@ export enum Fields {
   EMAIL = 'Email',
   WEBSITE = 'Website',
 }
+
 export interface FieldType {
   name: string;
   dataType: string;
@@ -51,14 +47,31 @@ export const defaultFields: FieldType[] = [
   },
 ];
 
-export const FieldsMapping = {
-  [Fields.LENSTER]: { name: 'Lenster', dataType: 'text', placeholder: 'Username', logo: LensterLogo },
-  [Fields.TWITTER]: { name: 'Twitter', dataType: 'text', placeholder: 'Username', logo: TwitterLogo },
-  [Fields.TELEGRAM]: { name: 'Telegram', dataType: 'text', placeholder: 'Username', logo: TelegramLogo },
-  [Fields.INSTAGRAM]: { name: 'Instagram', dataType: 'text', placeholder: 'Username', logo: InstagramLogo },
-  [Fields.LINKEDIN]: { name: 'LinkedIn', dataType: 'text', placeholder: 'Username', logo: LinkedInLogo },
-  [Fields.EMAIL]: { name: 'Email', dataType: 'text', placeholder: 'email', logo: EmailLogo },
-  [Fields.WEBSITE]: { name: 'Website', dataType: 'URL', placeholder: 'url', logo: WebsiteLogo },
+/**
+ * Map NimiLinkType to the correct placeholder text
+ */
+export const nimiLinkTypePlaceholder: Record<NimiLinkType, string> = {
+  [NimiLinkType.URL]: 'https://nimi.eth.limo',
+  [NimiLinkType.EMAIL]: 'email@email.com',
+  [NimiLinkType.TWITTER]: '0xNimi',
+  [NimiLinkType.INSTAGRAM]: '0xNimi',
+  [NimiLinkType.TELEGRAM]: 'NimiEth',
+  [NimiLinkType.GITHUB]: 'nimi-app',
+  [NimiLinkType.MEDIUM]: '0xNimi',
+  [NimiLinkType.REDDIT]: '0xNimi',
+  [NimiLinkType.LENSTER]: 'nimi.lens',
+  [NimiLinkType.DISCORD]: 'nimi#0001',
+  [NimiLinkType.YOUTUBE_CHANNEL]: 'Username',
+  [NimiLinkType.LINKEDIN]: 'Username',
+  [NimiLinkType.TWITCH]: 'Twitch Username',
+  [NimiLinkType.WHATSAPP]: 'Whatsapp Username',
+  [NimiLinkType.MESSENGER]: 'Messanger username',
+  [NimiLinkType.KEYBASE]: 'Keybase Username',
+  [NimiLinkType.WECHAT]: 'Wechat Username',
+  [NimiLinkType.SNAPCHAT]: 'Snapchat Username',
+  [NimiLinkType.FACEBOOK]: 'Facebook Username',
+  [NimiLinkType.DRIBBBLE]: 'Dribble Username',
+  [NimiLinkType.FIGMA]: 'Figma Username',
 };
 
 export const MULTICALL2_ADDRESS: Record<number, string> = {

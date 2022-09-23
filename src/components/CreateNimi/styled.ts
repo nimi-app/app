@@ -80,6 +80,12 @@ export const StyledGridList = styled.div`
   grid-row-gap: 0px;
 `;
 
+export const StyledFlexList = styled.div`
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+`;
+
 export const PageSectionTitle = styled.h1`
   ${NimiSignatureColor}
   font-size: 36px;
@@ -146,6 +152,36 @@ export const BackButton = styled.button`
   }
 `;
 
+export const AddresssWrapper = styled.div`
+  background-color: #f1f1f1;
+  padding: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 12px;
+`;
+export const AddressesTitle = styled.div`
+  font-weight: 400;
+  font-size: 16px;
+<<<<<<< HEAD
+=======
+  line-height: 18px;
+  color: #8c90a0;
+`;
+
+export const StyledDots = styled.div`
+  display: flex;
+`;
+
+export const LinkWrapper = styled.div`
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  cursor: pointer;
+`;
+
 export const PoapButton = styled.div`
   display: flex;
   border: 2px solid #a78aff;
@@ -153,6 +189,7 @@ export const PoapButton = styled.div`
   padding: 12px 36px 12px 8px;
   font-weight: 600;
   font-size: 16px;
+>>>>>>> nimi-form-update-v2
   color: #a78aff;
   letter-spacing: 0.1em;
   line-height: 24px;
@@ -160,4 +197,5 @@ export const PoapButton = styled.div`
   align-items: center;
   margin-bottom: 28px;
   gap: 12px;
+  cursor: pointer;
 `;

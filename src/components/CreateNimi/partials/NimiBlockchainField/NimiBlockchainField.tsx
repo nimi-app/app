@@ -1,40 +1,77 @@
-import { NimiBlockchain, Nimi, NimiBlockchainAddress } from '@nimi.io/card';
+import { NimiBlockchain, Nimi, blockchainAddresses, NIMI_BLOCKCHAIN_LOGO_URL } from '@nimi.io/card';
 import { useFormContext } from 'react-hook-form';
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, useMemo, useState } from 'react';
 
-import { Input, Label } from '../../../form';
+import { InputFieldWithIcon } from '../../../Input';
+import { renderSVG } from '../../../../utils';
+import { useTranslation } from 'react-i18next';
 
 export interface NimiBlockchainFieldProps {
   blockchain: NimiBlockchain;
-  label: string;
+  index: number;
 }
 
 /**
  * Handles the input for blockchain address
  */
-export function NimiBlockchainField({ blockchain, label }: NimiBlockchainFieldProps) {
-  const { setValue, getValues } = useFormContext<Nimi>();
+export function NimiBlockchainField({ blockchain, index }: NimiBlockchainFieldProps) {
+  const { t } = useTranslation('nimi');
+  const label = t(`formLabel.${blockchain.toLowerCase()}`);
 
+  const { setValue: setAddressValue, getValues } = useFormContext<Nimi>();
+  const [value, setValue] = useState('');
+  const [isValueValid, setIsValueValid] = useState(false);
+  console.log('isValueValid,', isValueValid);
+
+  const logo = useMemo(() => {
+    return renderSVG(NIMI_BLOCKCHAIN_LOGO_URL[blockchain], 20);
+  }, [blockchain]);
+
+  //checks if address is valid and submits it to form if its
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const prevState = getValues('addresses') || [];
-    const hasLink = prevState.some((prevLink) => prevLink.blockchain === blockchain);
-    const newState: NimiBlockchainAddress[] = hasLink
-      ? prevState.map((curr) => {
-          if (curr.blockchain === blockchain) {
-            return { ...curr, address: event.target.value };
-          }
+    const targetValue = event.target.value;
 
-          return curr;
-        })
-      : [...prevState, { blockchain, address: event.target.value }];
+    setValue(targetValue);
 
-    setValue('addresses', newState);
+    blockchainAddresses
+      .isValid([
+        {
+          blockchain: blockchain,
+          address: targetValue,
+        },
+      ])
+      .then((isValidAddress) => {
+        if (isValidAddress) {
+          const addressPrevState = getValues('addresses') || [];
+
+          addressPrevState[index] = { blockchain: blockchain, address: targetValue };
+          setAddressValue('addresses', addressPrevState);
+        }
+
+        setIsValueValid(isValidAddress);
+      })
+      .catch(() => setIsValueValid(false));
+  };
+
+  //deletes address from the form
+  const onDelete = () => {
+    const addressesState = getValues('addresses') || [];
+
+    addressesState.splice(index, 1);
+
+    setAddressValue('addresses', addressesState);
   };
 
   return (
-    <>
-      <Label htmlFor={blockchain}>{label}</Label>
-      <Input placeholder={`${label} address`} type="text" id={blockchain} onChange={onChange} />
-    </>
+    <InputFieldWithIcon
+      logo={logo}
+      isValid={isValueValid}
+      onChange={onChange}
+      placeholder={`${label} address`}
+      onDelete={onDelete}
+      onInputReset={() => setValue('')}
+      value={value}
+      id={blockchain + index}
+    />
   );
 }

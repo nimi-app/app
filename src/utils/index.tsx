@@ -2,6 +2,7 @@ import { getAddress, isAddress } from '@ethersproject/address';
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
+import { FC, SVGProps } from 'react';
 
 export * from './explorer';
 
@@ -76,4 +77,16 @@ export function loadFathom(siteId: string) {
     script.onload = () => resolve;
     document.body.appendChild(script);
   });
+}
+
+/**
+ * Returns svg in correct format so it can be displated
+ * @param logo Logo returned from Nimi-Card
+ * @returns
+ */
+export function renderSVG(logo?: FC<SVGProps<SVGSVGElement>>, size = 20): JSX.Element | undefined {
+  if (!logo) return;
+  const Logo = logo;
+
+  return <Logo height={size} width={size} />;
 }
