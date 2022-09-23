@@ -164,6 +164,8 @@ export const AddresssWrapper = styled.div`
 export const AddressesTitle = styled.div`
   font-weight: 400;
   font-size: 16px;
+<<<<<<< HEAD
+=======
   line-height: 18px;
   color: #8c90a0;
 `;
@@ -187,6 +189,7 @@ export const PoapButton = styled.div`
   padding: 12px 36px 12px 8px;
   font-weight: 600;
   font-size: 16px;
+>>>>>>> nimi-form-update-v2
   color: #a78aff;
   letter-spacing: 0.1em;
   line-height: 24px;

@@ -4,9 +4,6 @@ import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
-import { ReactComponent as DragDots } from '../../assets/svg/dragdots.svg';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { ReactComponent as PoapLogo } from '../../assets/svg/poap-logo.svg';
 
 import {
   Nimi,
@@ -30,11 +27,8 @@ import {
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
-  LinkWrapper,
   AddresssWrapper,
   AddressesTitle,
-  StyledDots,
-  PoapButton,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -47,11 +41,10 @@ import {
   ImportFromTwitterButton,
 } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
-import { NimiLinkField } from './partials/NimiLinkField';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
-import { FormWrapper, LinkFormGroup } from '../form/FormGroup';
+import { FormWrapper } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
 import { ENSMetadata } from '../../hooks/useENSMetadata';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
@@ -65,6 +58,9 @@ import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
 import { Button } from '../Button';
 import { StyledInputWrapper } from '../Input';
+import { ReorderGroup } from '../ReorderGroup';
+import { ReorderInput } from '../ReorderInput';
+import { PoapField } from './partials/PoapField';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -77,10 +73,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   /**
    * @todo replace this API
    */
-  const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
-  const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
-  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
-  const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
 
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata;
@@ -88,10 +80,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
 
-  /**
-   * NFT
-   */
+  // TODO: UPDATE MODAL STATE HANLING
+  const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
+  const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
+  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
+  const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
 
   /**
    * Publish Nimi state
@@ -151,43 +145,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       url: lensProfile?.pictureUrl,
     });
   }, [setValue, lensProfile]);
-
-  const handleDrop = (droppedItem) => {
-    // Ignore drop outside droppable container
-    if (!droppedItem.destination) return;
-    const updatedList = [...links];
-
-    // Remove dragged item
-    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-
-    // Add dropped item
-    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-
-    // Update State
-    setValue('links', updatedList);
-  };
-
-  // eslint-disable-next-line react/display-name
-  const getRenderItem = (items) => (provided, snapshot, rubric) => {
-    const index = rubric.source.index;
-    const item = items[index];
-    const type = item.type;
-    return (
-      <LinkFormGroup ref={provided.innerRef} {...provided.draggableProps} key={'link-input-' + type + index}>
-        <StyledDots {...provided.dragHandleProps}>
-          <DragDots />
-        </StyledDots>
-
-        <NimiLinkField
-          key={'link-input' + type + index}
-          title={item.title}
-          link={type as NimiLinkType}
-          index={index}
-          content={item.content}
-        />
-      </LinkFormGroup>
-    );
-  };
 
   /**
    * Handle the form submit via ENS contract interaction
@@ -270,6 +227,18 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
+  const updateLink = (linkId: string, key: string, value: string) => {
+    const updatedLinks = getValues('links').map((link) => (link.id === linkId ? { ...link, [key]: value } : link));
+
+    setValue('links', updatedLinks);
+  };
+
+  const removeLink = (linkId: string) =>
+    setValue(
+      'links',
+      getValues('links').filter((link) => link.id !== linkId)
+    );
+
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -291,7 +260,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   </ImportFromLensProtocolButton>
                 )}
               </ImportButtonsWrapper>
+
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
+                {/* display name input */}
                 <FormGroup>
                   <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
 
@@ -299,6 +270,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     <Input placeholder="Name" id="displayName" {...register('displayName')} />
                   </StyledInputWrapper>
                 </FormGroup>
+                {/* description input */}
                 <FormGroup>
                   <Label htmlFor="description">{t('formLabel.description')}</Label>
                   <StyledInputWrapper isSimple>
@@ -311,19 +283,16 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     />
                   </StyledInputWrapper>
                 </FormGroup>
-                <DragDropContext onDragEnd={handleDrop}>
-                  <Droppable droppableId="list-container" renderClone={getRenderItem(links)}>
-                    {(provided) => (
-                      <LinkWrapper {...provided.droppableProps} ref={provided.innerRef}>
-                        {links.map(({ type }, index) => (
-                          <Draggable key={index.toString() + type} draggableId={index.toString()} index={index}>
-                            {getRenderItem(links)}
-                          </Draggable>
-                        ))}
-                      </LinkWrapper>
-                    )}
-                  </Droppable>
-                </DragDropContext>
+                {/* links */}
+                {/* reorder group */}
+                {links.length !== 0 && (
+                  <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
+                    {links.map((link) => (
+                      <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
+                    ))}
+                  </ReorderGroup>
+                )}
+                {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
                   <AddresssWrapper>
                     <AddressesTitle>Addresses</AddressesTitle>
@@ -336,18 +305,16 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     })}
                   </AddresssWrapper>
                 )}
-
+                {/* add fields button */}
                 <FormGroup>
                   {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
-                    <PoapButton onClick={() => setIsPOAPModalOpened(true)}>
-                      <PoapLogo />
-                      Configure POAPs
-                    </PoapButton>
+                    <PoapField onClick={() => setIsPOAPModalOpened(true)} />
                   )}
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
                     + {t('buttonLabel.addFields')}
                   </AddFieldsButton>
                 </FormGroup>
+                {/* publish button */}
                 <FormGroup>
                   <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
                 </FormGroup>
@@ -376,7 +343,18 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               if (link) {
                 let newLinksArray: NimiLinkBaseDetails[] = [];
                 const linksData = getValues('links');
-                newLinksArray = [...linksData, { content: '', type: link }];
+
+                newLinksArray = [
+                  ...linksData,
+                  {
+                    id: new Date().valueOf().toString(),
+                    type: link,
+                    // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
+                    title: '',
+                    content: '',
+                  },
+                ];
+                console.log(newLinksArray);
                 setValue('links', newLinksArray);
               }
               //if address is submitted
@@ -387,6 +365,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 setValue('addresses', newAddressesArray);
               }
 
+              //if widget is submitted
               const currentWidgets = getValues('widgets');
               if (widget || currentWidgets.length !== 0) {
                 let newWidgets: NimiPOAPWidget[] = [];
