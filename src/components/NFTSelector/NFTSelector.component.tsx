@@ -39,7 +39,7 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
   };
 
   useEffect(() => {
-    console.log('useEffect: address', address);
+    // console.log('useEffect: address', address);
 
     // reset state
     unstable_batchedUpdates(() => {

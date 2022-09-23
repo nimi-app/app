@@ -14,7 +14,7 @@ export * from './components';
 export const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
   upToSmall: 720,
-  upToMedium: 960,
+  upToMedium: 1000,
   upToLarge: 1280,
 };
 
@@ -258,8 +258,18 @@ html {
 }
 
 body {
+  position: relative;
   min-height: 100vh;
   background-repeat: no-repeat;
   margin: 0 !important;
+}
+
+.modal-root {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
 }
 `;
