@@ -164,6 +164,32 @@ export const AddresssWrapper = styled.div`
 export const AddressesTitle = styled.div`
   font-weight: 400;
   font-size: 16px;
+<<<<<<< HEAD
+=======
+  line-height: 18px;
+  color: #8c90a0;
+`;
+
+export const StyledDots = styled.div`
+  display: flex;
+`;
+
+export const LinkWrapper = styled.div`
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  cursor: pointer;
+`;
+
+export const PoapButton = styled.div`
+  display: flex;
+  border: 2px solid #a78aff;
+  border-radius: 12px;
+  padding: 12px 36px 12px 8px;
+  font-weight: 600;
+  font-size: 16px;
+>>>>>>> nimi-form-update-v2
   color: #a78aff;
   letter-spacing: 0.1em;
   line-height: 24px;

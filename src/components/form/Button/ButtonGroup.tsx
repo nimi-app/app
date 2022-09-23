@@ -1,11 +1,11 @@
-import { NIMI_CARDS_WIDTH } from 'nimi-card';
+import { NIMI_CARDS_WIDTH } from '@nimi.io/card';
 import styled from 'styled-components';
 
 export const StyledButton = styled.button<{ disabled: boolean }>`
   display: flex;
   height: 42px;
   border-color: transparent;
-  cursor: ${({ disabled }) => (disabled ? 'unset' : 'pointer')};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   padding: 12px 16px;
   width: fit-content;
   gap: 8.7px;

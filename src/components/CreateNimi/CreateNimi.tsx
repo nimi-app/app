@@ -57,10 +57,10 @@ import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
 import { Button } from '../Button';
-import { PoapField } from './partials/PoapField/PoapField';
 import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
+import { PoapField } from './partials/PoapField';
 
 export interface CreateNimiProps {
   ensAddress: string;

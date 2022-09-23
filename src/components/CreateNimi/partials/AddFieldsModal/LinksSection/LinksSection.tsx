@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { nimiLinkDetailsExtended } from 'nimi-card';
+import { nimiLinkDetailsExtended } from '@nimi.io/card';
 import { StyledFlexList } from '../../../styled';
 
 import { ButtonGroup } from '../../../../form/Button';

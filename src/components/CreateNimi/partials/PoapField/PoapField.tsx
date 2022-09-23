@@ -1,4 +1,4 @@
-import { Nimi } from 'nimi-card';
+import { Nimi } from '@nimi.io/card';
 import { useFormContext } from 'react-hook-form';
 import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
 import { ReactComponent as TrashCan } from '../../../../assets/svg/trashcan.svg';

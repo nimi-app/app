@@ -1,6 +1,7 @@
 import './i18n';
 
 import { Web3ReactProvider } from '@web3-react/core';
+import { StrictMode } from 'react';
 
 import { createRoot } from 'react-dom/client';
 import { Provider as ReduxStoreProvider } from 'react-redux';
@@ -24,28 +25,30 @@ window.addEventListener('error', (error) => {
 const root = createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <ReduxStoreProvider store={store}>
-    <FixedGlobalStyle />
-    <Web3ConnectorsProvider>
-      <Web3ConnectorsContext.Consumer>
-        {(context) => {
-          if (!context) {
-            throw new Error('Web3ConnectorsContext is not available');
-          }
-          // Web3ReactProvider requires a 2d array of connectors
-          const providerConnectors = getWeb3ReactProviderConnectors(context.connectors);
-          return (
-            <Web3ReactProvider connectors={providerConnectors}>
-              <ThemeProvider>
-                <ThemedGlobalStyle />
-                <HashRouter>
-                  <App />
-                </HashRouter>
-              </ThemeProvider>
-            </Web3ReactProvider>
-          );
-        }}
-      </Web3ConnectorsContext.Consumer>
-    </Web3ConnectorsProvider>
-  </ReduxStoreProvider>
+  <StrictMode>
+    <ReduxStoreProvider store={store}>
+      <FixedGlobalStyle />
+      <Web3ConnectorsProvider>
+        <Web3ConnectorsContext.Consumer>
+          {(context) => {
+            if (!context) {
+              throw new Error('Web3ConnectorsContext is not available');
+            }
+            // Web3ReactProvider requires a 2d array of connectors
+            const providerConnectors = getWeb3ReactProviderConnectors(context.connectors);
+            return (
+              <Web3ReactProvider connectors={providerConnectors}>
+                <ThemeProvider>
+                  <ThemedGlobalStyle />
+                  <HashRouter>
+                    <App />
+                  </HashRouter>
+                </ThemeProvider>
+              </Web3ReactProvider>
+            );
+          }}
+        </Web3ConnectorsContext.Consumer>
+      </Web3ConnectorsProvider>
+    </ReduxStoreProvider>
+  </StrictMode>
 );
