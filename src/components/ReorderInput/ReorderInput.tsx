@@ -7,6 +7,32 @@ import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';
 import { ReactComponent as SlidersSVG } from '../../assets/svg/sliders.svg';
 
 import { renderSVG } from '../../utils';
+import { useState } from 'react';
+
+// TODO: Define regular expression validator for each of the types
+const inputValidators = {
+  URL: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+  EMAIL: /^[a-zA-Z0-9]{3,}$/,
+  TWITTER: /^[a-zA-Z0-9]{3,}$/,
+  INSTAGRAM: /^[a-zA-Z0-9]{3,}$/,
+  LINKEDIN: /^[a-zA-Z0-9]{3,}$/,
+  YOUTUBE_CHANNEL: /^[a-zA-Z0-9]{3,}$/,
+  TWITCH: /^[a-zA-Z0-9]{3,}$/,
+  GITHUB: /^[a-zA-Z0-9]{3,}$/,
+  MEDIUM: /^[a-zA-Z0-9]{3,}$/,
+  LENSTER: /^[a-zA-Z0-9]{3,}$/,
+  TELEGRAM: /^[a-zA-Z0-9]{3,}$/,
+  REDDIT: /^[a-zA-Z0-9]{3,}$/,
+  DISCORD: /^[a-zA-Z0-9]{3,}$/,
+  WHATSAPP: /^[a-zA-Z0-9]{3,}$/,
+  MESSENGER: /^[a-zA-Z0-9]{3,}$/,
+  WECHAT: /^[a-zA-Z0-9]{3,}$/,
+  KEYBASE: /^[a-zA-Z0-9]{3,}$/,
+  SNAPCHAT: /^[a-zA-Z0-9]{3,}$/,
+  FACEBOOK: /^[a-zA-Z0-9]{3,}$/,
+  DRIBBBLE: /^[a-zA-Z0-9]{3,}$/,
+  FIGMA: /^[a-zA-Z0-9]{3,}$/,
+};
 
 type ReorderInputProps = {
   key?: string;
@@ -16,6 +42,7 @@ type ReorderInputProps = {
 };
 
 export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
+  const [inputTouched, setInputTouched] = useState(false);
   const { type, title, content } = value;
 
   return (
@@ -35,9 +62,11 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
       <InputContainer>
         <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
         <ContentInput
+          inputInvalid={inputTouched && !inputValidators[type].test(content)}
           value={content}
           onChange={(event) => updateLink(value.id!, 'content', event.target.value)}
           spellCheck={false}
+          onBlur={setInputTouched.bind(null, true)}
         />
         {content && <ClearButton right="57px" onClick={() => updateLink(value.id!, 'content', '')} />}
         <InputButton onClick={() => removeLink(value.id!)} />
@@ -89,11 +118,17 @@ const TitleInput = styled.input`
   background-color: #f1f1f1;
 `;
 
-const ContentInput = styled.input`
+const ContentInput = styled.input<{ inputInvalid: boolean }>`
   height: 50px;
   padding: 8px 80px 8px 40px;
   ${SharedInputStyles}
   background-color: white;
+
+  ${({ inputInvalid }) =>
+    inputInvalid &&
+    `
+    border: 2px solid ##EB5757;
+  `}
 `;
 
 const ClearButton = styled(XSVG)<{ right?: string }>`
