@@ -21,9 +21,9 @@ export const StyledButton = styled.button<{ disabled: boolean }>`
   }
 `;
 
-export const ButtonGroup = ({ id, children, onClick, active = false }) => {
+export const ButtonGroup = ({ id, children, onClick, disabled = false }) => {
   return (
-    <StyledButton disabled={active} id={id} onClick={onClick}>
+    <StyledButton disabled={disabled} id={id} onClick={onClick}>
       {children}
     </StyledButton>
   );

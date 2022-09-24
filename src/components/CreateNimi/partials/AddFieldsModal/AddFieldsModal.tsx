@@ -172,8 +172,13 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
               };
 
               return (
-                <ButtonGroup active={checked} key={inputId} id={inputId} onClick={inputOnChange}>
-                  <StyledPoapLogo />
+                <ButtonGroup
+                  disabled={checked || widget === NimiWidgetType.NFTY_UNIVERSAL_DM}
+                  key={inputId}
+                  id={inputId}
+                  onClick={inputOnChange}
+                >
+                  {widget === NimiWidgetType.POAP && <StyledPoapLogo />}
                   {t(i18nKey)}
                 </ButtonGroup>
               );
