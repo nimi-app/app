@@ -354,7 +354,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     content: '',
                   },
                 ];
-                console.log(newLinksArray);
+
                 setValue('links', newLinksArray);
               }
               //if address is submitted

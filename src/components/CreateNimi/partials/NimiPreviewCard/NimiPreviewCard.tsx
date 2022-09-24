@@ -32,7 +32,6 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
             content: link.content,
           })
           .then((isLinkValid) => {
-            console.log('isLinkValidFilter', isLinkValid);
             return isLinkValid;
           })
           .catch((error) => {
@@ -55,7 +54,6 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
       validateNimi({ ...filteredNimi, links: filteredLinks })
         .then((validatedNimi) => {
           if (process.env.NODE_ENV !== 'production') {
-            // console.log({ validatedNimi });
           }
           setPreviewNimi(validatedNimi as Nimi);
         })
