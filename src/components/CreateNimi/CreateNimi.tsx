@@ -13,7 +13,7 @@ import {
   NimiWidgetType,
   NimiImageType,
   NimiBlockchainAddress,
-  NimiPOAPWidget,
+  NimiWidget,
 } from '@nimi.io/card';
 import { CardBody, Card } from '../Card';
 import {
@@ -346,7 +346,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     content: '',
                   },
                 ];
-                console.log(newLinksArray);
+
                 setValue('links', newLinksArray);
               }
               //if address is submitted
@@ -360,7 +360,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               //if widget is submitted
               const currentWidgets = getValues('widgets');
               if (widget || currentWidgets.length !== 0) {
-                let newWidgets: NimiPOAPWidget[] = [];
+                let newWidgets: NimiWidget[] = [];
                 newWidgets = [{ type: NimiWidgetType.POAP }];
                 setValue('widgets', newWidgets);
               }
