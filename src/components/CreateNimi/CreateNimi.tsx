@@ -109,7 +109,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       description: state.description || '',
       ensAddress,
       ensName,
-      addresses: state.addresses || [],
+      //TODO: Add id-s to links so that it can auto-populate field
+      addresses: [],
       links: state.links || [],
       widgets: state.widgets || [
         {
