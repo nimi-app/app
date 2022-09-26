@@ -5,6 +5,7 @@ import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
 import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';
 import { ReactComponent as SlidersSVG } from '../../assets/svg/sliders.svg';
+import { ReactComponent as PenSVG } from '../../assets/svg/pen.svg';
 
 import { renderSVG } from '../../utils';
 import { useState } from 'react';
@@ -44,6 +45,7 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
     <ReorderItem value={value}>
       <InputContainer marginBottom="10px">
         <TitleInput
+          id="title-input"
           value={title}
           onChange={(event) => updateLink(value.id!, 'title', event.target.value)}
           spellCheck={false}
@@ -52,6 +54,7 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
+        <Pen className="pen-svg" />
         {title && <ClearButton onClick={() => updateLink(value.id!, 'title', '')} />}
       </InputContainer>
       <InputContainer>
@@ -117,9 +120,13 @@ const InputContainer = styled.div<{ marginBottom?: string }>`
 const TitleInput = styled.input`
   height: 38px;
   position: relative;
-  padding: 8px 6px 8px 20px;
+  padding: 8px 30px 8px 20px;
   ${SharedInputStyles}
   background-color: #f1f1f1;
+
+  &:hover + .pen-svg {
+    display: block;
+  }
 `;
 
 const ContentInput = styled.input<{ inputInvalid: boolean }>`
@@ -145,6 +152,15 @@ const ClearButton = styled(XSVG)<{ right?: string }>`
   &:hover path {
     fill: #8c90a0;
   }
+`;
+
+const Pen = styled(PenSVG)`
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translate(0, -50%);
+  cursor: pointer;
 `;
 
 const StyledButton = styled.button`
