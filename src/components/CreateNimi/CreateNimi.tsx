@@ -217,7 +217,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       });
     }
   };
-
+  console.log('formwatch', formWatchPayload);
   const onSubmitInvalid = (data) => {
     console.log('SUBMIT INVALID', data);
   };
@@ -366,10 +366,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               }
 
               //if widget is submitted
-              const currentWidgets = getValues('widgets');
-              if (widget || currentWidgets.length !== 0) {
+              if (widget) {
                 let newWidgets: NimiWidget[] = [];
-                newWidgets = [{ type: NimiWidgetType.POAP }];
+                const currentWidgets = getValues('widgets');
+                newWidgets = [...currentWidgets, { type: widget }];
+
                 setValue('widgets', newWidgets);
               }
             });

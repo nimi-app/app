@@ -70,7 +70,6 @@ const SocialsSectionLinks = [
   NimiLinkType.TWITTER,
   NimiLinkType.LENSTER,
   NimiLinkType.INSTAGRAM,
-  NimiLinkType.DISCORD,
   NimiLinkType.SNAPCHAT,
   NimiLinkType.MEDIUM,
   NimiLinkType.LINKEDIN,
@@ -78,13 +77,7 @@ const SocialsSectionLinks = [
   NimiLinkType.TWITCH,
 ];
 
-const PortfolioSectionLinks = [
-  NimiLinkType.DRIBBBLE,
-  NimiLinkType.FIGMA,
-  NimiLinkType.FACEBOOK,
-  NimiLinkType.GITHUB,
-  NimiLinkType.DISCORD,
-];
+const PortfolioSectionLinks = [NimiLinkType.DRIBBBLE, NimiLinkType.FIGMA, NimiLinkType.GITHUB];
 
 /**
  * A modal to select the fields to add to the Nimi form.
