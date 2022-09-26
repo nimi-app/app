@@ -308,7 +308,18 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 {/* add fields button */}
                 <FormGroup>
                   {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
-                    <PoapField onClick={() => setIsPOAPModalOpened(true)} />
+                    <PoapField
+                      onConfigure={(e) => {
+                        e.stopPropagation();
+                        setIsPOAPModalOpened(true);
+                      }}
+                      onRemove={() =>
+                        setValue(
+                          'widgets',
+                          getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP)
+                        )
+                      }
+                    />
                   )}
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
                     + {t('buttonLabel.addFields')}
