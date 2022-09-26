@@ -60,6 +60,7 @@ import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
+import { generateID } from '../../utils';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -339,7 +340,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 newLinksArray = [
                   ...linksData,
                   {
-                    id: new Date().valueOf().toString(),
+                    id: generateID(),
                     type: link,
                     // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
                     title: '',

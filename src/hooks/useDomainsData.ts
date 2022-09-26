@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import { useGetDomainsQuery } from '../generated/graphql/ens';
+import { generateID } from '../utils';
 
 interface DomainDataType {
   id: string;
@@ -22,7 +23,7 @@ export function useDomainsData(address: string) {
   });
 
   useEffect(() => {
-    async () => {
+    const fetchData = async () => {
       if (data?.account?.domains) {
         try {
           setMainLoader(true);
@@ -47,7 +48,17 @@ export function useDomainsData(address: string) {
 
             if (item.status === 'rejected' || domain.length === 0) emptyDomainArray.push(baseObject);
             else {
-              baseObject.data = domain[domain.length - 1].nimi;
+              console.log('domain', domain);
+              const objectReference = domain[domain.length - 1].nimi;
+              if (objectReference.links) {
+                console.log('Links objec', objectReference.links);
+                objectReference.links = objectReference.links.map((item, index) => {
+                  const generated = generateID(index);
+                  return { ...item, label: undefined, id: generated };
+                });
+              }
+
+              baseObject.data = objectReference;
               domainArray.push(baseObject);
             }
           });
@@ -61,6 +72,7 @@ export function useDomainsData(address: string) {
         }
       }
     };
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading]);
 

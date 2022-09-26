@@ -58,7 +58,8 @@ interface DomainsProps {
 
 function Domains({ address }: DomainsProps) {
   const { emptyDomainArray, domainArray, loading } = useDomainsData(address);
-
+  console.log('emprtyDomains', emptyDomainArray);
+  console.log('domainArray', domainArray);
   const { t } = useTranslation('nimi');
 
   if (loading) {
