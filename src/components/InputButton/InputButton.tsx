@@ -7,31 +7,36 @@ type InputButtonProps = {
   variant?: string;
   displayInlineFlex?: boolean;
   marginRight?: string;
-  onClick: () => void;
+  onClick: (e?: any) => void;
 };
 
 export const InputButton = ({ variant = 'trash-can', displayInlineFlex, marginRight, onClick }: InputButtonProps) => {
   return (
-    <StyledButton onClick={onClick} displayInlineFlex={displayInlineFlex} marginRight={marginRight}>
+    <StyledButton type="button" onClick={onClick} displayInlineFlex={displayInlineFlex} marginRight={marginRight}>
       {variant === 'trash-can' && <TrashCanSVG />}
       {variant === 'sliders' && <SlidersSVG />}
     </StyledButton>
   );
 };
 
-const StyledButton = styled.button<{ displayInlineFlex: boolean }>`
+type StyledButtonProps = {
+  displayInlineFlex?: boolean;
+  marginRight?: string;
+};
+
+const StyledButton = styled.button<StyledButtonProps>`
   ${({ displayInlineFlex }) =>
     displayInlineFlex
       ? `
-        display: inline-flex;
-      `
+      display: inline-flex;
+    `
       : `
-        display: flex;
-        position: absolute;
-        right: 6px;
-        top: 50%;
-        transform: translate(0, -50%);
-      `}
+      display: flex;
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translate(0, -50%);
+    `}
   height: 38px;
   width: 45px;
   justify-content: center;
