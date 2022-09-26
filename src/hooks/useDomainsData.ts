@@ -49,10 +49,8 @@ export function useDomainsData(address: string) {
 
             if (item.status === 'rejected' || domain.length === 0) emptyDomainArray.push(baseObject);
             else {
-              console.log('domain', domain);
               const objectReference = domain[domain.length - 1].nimi;
               if (objectReference.links) {
-                console.log('Links objec', objectReference.links);
                 objectReference.links = objectReference.links.map((item, index) => {
                   const generated = generateID(index);
                   return { ...item, label: undefined, id: generated };

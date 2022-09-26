@@ -22,12 +22,10 @@ const DomainName: FC<ENSDomainNameProps> = ({ name }) => <StyledDomainName>{name
 export function BasicENSCard({ name, id }: ENSNameCardProps) {
   const { data, loading } = useENSMetadata(name);
 
-  console.log('basic key', id);
   const imageFormatted = {
     type: NimiImageType.URL,
     url: data?.image || '',
   };
-  console.log('Basic passed', { image: imageFormatted, id });
 
   return (
     <>
