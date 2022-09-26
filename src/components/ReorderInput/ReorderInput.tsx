@@ -1,14 +1,13 @@
+import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
+import { InputButton } from '../InputButton';
 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
-import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';
-import { ReactComponent as SlidersSVG } from '../../assets/svg/sliders.svg';
 import { ReactComponent as PenSVG } from '../../assets/svg/pen.svg';
 
 import { renderSVG } from '../../utils';
-import { useState } from 'react';
 
 type ReorderInputProps = {
   key?: string;
@@ -162,40 +161,6 @@ const Pen = styled(PenSVG)`
   transform: translate(0, -50%);
   cursor: pointer;
 `;
-
-const StyledButton = styled.button`
-  height: 38px;
-  width: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translate(0, -50%);
-  border: 2px solid #f3f3f1;
-  border-radius: 15px;
-  background-color: white;
-  cursor: pointer;
-
-  &:hover path {
-    fill: #8c90a0;
-  }
-`;
-
-type InputButtonProps = {
-  variant?: string;
-  onClick: () => void;
-};
-
-const InputButton = ({ variant = 'trash-can', onClick }: InputButtonProps) => {
-  return (
-    <StyledButton onClick={onClick}>
-      {variant === 'trash-can' && <TrashCanSVG />}
-      {variant === 'sliders' && <SlidersSVG />}
-    </StyledButton>
-  );
-};
 
 const LogoContainer = styled.div`
   display: flex;
