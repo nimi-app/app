@@ -1,20 +1,21 @@
+import { Nimi } from '@nimi.io/card';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import { useGetDomainsQuery } from '../generated/graphql/ens';
 import { generateID } from '../utils';
 
-interface DomainDataType {
+export interface RepopulateData {
   id: string;
-  name?: string;
-  labelName?: string;
-  data?: any;
+  name: string;
+  labelName: string;
+  data?: Nimi;
 }
 
 export function useDomainsData(address: string) {
   const [mainLoader, setMainLoader] = useState(false);
-  const [domainArray, setDomainArray] = useState<DomainDataType[]>([]);
-  const [emptyDomainArray, setEmptyDomainArray] = useState<DomainDataType[]>([]);
+  const [domainArray, setDomainArray] = useState<RepopulateData[]>([]);
+  const [emptyDomainArray, setEmptyDomainArray] = useState<RepopulateData[]>([]);
 
   const { data, loading } = useGetDomainsQuery({
     variables: {
@@ -33,8 +34,8 @@ export function useDomainsData(address: string) {
           });
           const fetchedDomains: any[] = await Promise.allSettled(arrayOfNames);
 
-          const domainArray: DomainDataType[] = [];
-          const emptyDomainArray: DomainDataType[] = [];
+          const domainArray: RepopulateData[] = [];
+          const emptyDomainArray: RepopulateData[] = [];
 
           fetchedDomains.forEach((item, index) => {
             const domain = item.value.data.data;
@@ -44,7 +45,7 @@ export function useDomainsData(address: string) {
               name: allUserDomains[index].name,
               labelName: allUserDomains[index].labelName,
               data: {},
-            } as DomainDataType;
+            } as RepopulateData;
 
             if (item.status === 'rejected' || domain.length === 0) emptyDomainArray.push(baseObject);
             else {

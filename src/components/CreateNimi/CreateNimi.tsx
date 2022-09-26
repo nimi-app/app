@@ -74,8 +74,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
    * @todo replace this API
    */
 
-  const { state }: any = useLocation();
-  console.log('STATE', state);
+  const location = useLocation();
+
+  const state = location.state as Nimi;
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -105,7 +106,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     resolver: yupResolver(nimiValidator),
     defaultValues: {
       displayName: state.displayName || ensName,
-      image: state.image.url ? state.image : undefined,
+      image: state.image?.url ? state.image : undefined,
       description: state.description || '',
       ensAddress,
       ensName,

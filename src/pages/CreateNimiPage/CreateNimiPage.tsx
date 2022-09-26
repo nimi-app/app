@@ -11,6 +11,7 @@ export function CreateNimiPage() {
   const { account, provider, chainId } = useWeb3React();
 
   const { state }: any = useLocation();
+  console.log('<AIASADfKAJSDKAS', state);
 
   /**
    * @todo - prevent accessing if the user does not own the domain

@@ -81,7 +81,7 @@ function Domains({ address }: DomainsProps) {
           {domainArray.length && (
             <StyledDomainsWrapper>
               {domainArray.map((item) => {
-                return <PopulatedENSCard data={item.data} key={item.id} id={item.id} />;
+                return item.data && <PopulatedENSCard data={item.data} key={item.id} id={item.id} />;
               })}
             </StyledDomainsWrapper>
           )}
