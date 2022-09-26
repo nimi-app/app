@@ -1,10 +1,9 @@
 import { Nimi } from '@nimi.io/card';
 import { useFormContext } from 'react-hook-form';
 import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
-import { ReactComponent as TrashCan } from '../../../../assets/svg/trashcan.svg';
-import { TrashCanStyle } from '../../../Input';
 
 import { PoapButton, PoapWrapper, InnerPoapWrapper } from './styled';
+import { InputButton } from '../../../InputButton';
 
 /**
  * Shows poap section with the delete button
@@ -15,6 +14,7 @@ export function PoapField({ onClick }: { onClick: () => void }) {
     e.stopPropagation();
     setFormValue('widgets', []);
   };
+
   return (
     <PoapWrapper onClick={onClick}>
       <InnerPoapWrapper>
@@ -22,9 +22,8 @@ export function PoapField({ onClick }: { onClick: () => void }) {
           <PoapLogo />
           POAPs
         </PoapButton>
-        <TrashCanStyle onClick={handleDelete}>
-          <TrashCan />
-        </TrashCanStyle>
+        <InputButton variant="sliders" displayInlineFlex marginRight="4px" onClick={() => console.log(123)} />
+        <InputButton variant="trash-can" displayInlineFlex onClick={() => console.log(123)} />
       </InnerPoapWrapper>
     </PoapWrapper>
   );
