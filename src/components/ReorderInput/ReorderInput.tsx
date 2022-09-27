@@ -53,8 +53,8 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
-        <Pen />
         {title && <ClearButton onClick={() => updateLink(value.id!, 'title', '')} />}
+        <Pen />
       </InputContainer>
       <InputContainer>
         <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
