@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 export const PoapButton = styled.div`
   display: flex;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%);
   gap: 10px;
   font-weight: 600;
   font-size: 16px;
@@ -13,19 +17,20 @@ export const PoapButton = styled.div`
 `;
 
 export const PoapWrapper = styled.div`
-  display: flex;
-  background-color: #f1f1f1;
   width: 100%;
-  margin-bottom: 28px;
-  padding: 15px 20px;
+  display: flex;
+  padding: 15px 20px 15px 37px;
   border-radius: 12px;
+  background-color: #f1f1f1;
+  margin-bottom: 20px;
 `;
 
 export const InnerPoapWrapper = styled.div`
   width: 100%;
-  background-color: #ffffff;
-  padding: 12px;
-  border-radius: 12px;
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  padding: 5px 6px;
+  border-radius: 20px;
+  background-color: #ffffff;
 `;

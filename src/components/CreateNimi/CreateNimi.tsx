@@ -212,7 +212,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       });
     }
   };
-
+  console.log('formwatch', formWatchPayload);
   const onSubmitInvalid = (data) => {
     console.log('SUBMIT INVALID', data);
   };
@@ -303,7 +303,18 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 {/* add fields button */}
                 <FormGroup>
                   {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
-                    <PoapField onClick={() => setIsPOAPModalOpened(true)} />
+                    <PoapField
+                      onConfigure={(e) => {
+                        e.stopPropagation();
+                        setIsPOAPModalOpened(true);
+                      }}
+                      onRemove={() =>
+                        setValue(
+                          'widgets',
+                          getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP)
+                        )
+                      }
+                    />
                   )}
                   <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
                     + {t('buttonLabel.addFields')}
@@ -361,10 +372,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               }
 
               //if widget is submitted
-              const currentWidgets = getValues('widgets');
-              if (widget || currentWidgets.length !== 0) {
+              if (widget) {
                 let newWidgets: NimiWidget[] = [];
-                newWidgets = [{ type: NimiWidgetType.POAP }];
+                const currentWidgets = getValues('widgets');
+                newWidgets = [...currentWidgets, { type: widget }];
+
                 setValue('widgets', newWidgets);
               }
             });

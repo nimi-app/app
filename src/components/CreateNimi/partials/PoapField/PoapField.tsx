@@ -1,30 +1,23 @@
-import { Nimi } from '@nimi.io/card';
-import { useFormContext } from 'react-hook-form';
 import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
-import { ReactComponent as TrashCan } from '../../../../assets/svg/trashcan.svg';
-import { TrashCanStyle } from '../../../Input';
 
 import { PoapButton, PoapWrapper, InnerPoapWrapper } from './styled';
+import { InputButton } from '../../../InputButton';
 
-/**
- * Shows poap section with the delete button
- */
-export function PoapField({ onClick }: { onClick: () => void }) {
-  const { setValue: setFormValue } = useFormContext<Nimi>();
-  const handleDelete = (e) => {
-    e.stopPropagation();
-    setFormValue('widgets', []);
-  };
+type POAPFieldProps = {
+  onConfigure: (event: MouseEvent) => void;
+  onRemove: (event: MouseEvent) => void;
+};
+
+export function PoapField({ onConfigure, onRemove }: POAPFieldProps) {
   return (
-    <PoapWrapper onClick={onClick}>
+    <PoapWrapper>
       <InnerPoapWrapper>
         <PoapButton>
           <PoapLogo />
           POAPs
         </PoapButton>
-        <TrashCanStyle onClick={handleDelete}>
-          <TrashCan />
-        </TrashCanStyle>
+        <InputButton displayInlineFlex={true} variant="sliders" marginRight="4px" onClick={onConfigure} />
+        <InputButton displayInlineFlex={true} variant="trash-can" onClick={onRemove} />
       </InnerPoapWrapper>
     </PoapWrapper>
   );
