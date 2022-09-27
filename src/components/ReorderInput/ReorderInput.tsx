@@ -106,9 +106,6 @@ const SharedInputStyles = css<{ inputInvalid?: boolean }>`
       visibility: visible;
       opacity: 1;
     }
-    ${Pen} {
-      display: none;
-    }
 
     color: #5274ff;
     border: double 2px transparent;
