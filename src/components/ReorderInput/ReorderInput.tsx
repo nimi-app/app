@@ -53,7 +53,12 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
-        {!content && <PenComponent type={type} />}
+        <PenComponent
+          text={
+            title ||
+            type.replace(/(^\w)(\S*)/g, (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase())
+          }
+        />
         {title && <ClearButton onClick={() => updateLink(value.id!, 'title', '')} />}
       </InputContainer>
       <InputContainer>
@@ -126,6 +131,10 @@ const TitleInput = styled.input`
   &:hover:not(:focus) + .pen-component {
     display: flex;
   }
+
+  &:focus + .pen-component {
+    display: none;
+  }
 `;
 
 const ContentInput = styled.input<{ inputInvalid: boolean }>`
@@ -153,11 +162,9 @@ const ClearButton = styled(XSVG)<{ right?: string }>`
   }
 `;
 
-const PenComponent = ({ type }) => (
+const PenComponent = ({ text }) => (
   <PenContainer className="pen-component">
-    <PenPlaceholder>
-      {type.replace(/(^\w)(\S*)/g, (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase())}
-    </PenPlaceholder>
+    <PenPlaceholder>{text}</PenPlaceholder>
     <Pen />
   </PenContainer>
 );
