@@ -53,8 +53,8 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
+        {!content && <PenComponent type={type} />}
         {title && <ClearButton onClick={() => updateLink(value.id!, 'title', '')} />}
-        <Pen />
       </InputContainer>
       <InputContainer>
         <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
@@ -72,15 +72,6 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
   );
 }
 
-const Pen = styled(PenSVG)`
-  display: none;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translate(0, -50%);
-  cursor: pointer;
-`;
-
 const SharedInputStyles = css<{ inputInvalid?: boolean }>`
   width: 100%;
   line-height: 22px;
@@ -91,10 +82,6 @@ const SharedInputStyles = css<{ inputInvalid?: boolean }>`
   border: none;
   outline: none;
   transition: all 0.1s linear;
-
-  &:hover:not(:focus) + ${Pen} {
-    display: block;
-  }
 
   &:focus {
     background-color: white;
@@ -135,6 +122,10 @@ const TitleInput = styled.input`
   padding: 8px 30px 8px 20px;
   ${SharedInputStyles}
   background-color: #f1f1f1;
+
+  &:hover:not(:focus) + .pen-component {
+    display: flex;
+  }
 `;
 
 const ContentInput = styled.input<{ inputInvalid: boolean }>`
@@ -160,6 +151,34 @@ const ClearButton = styled(XSVG)<{ right?: string }>`
   &:hover path {
     fill: #8c90a0;
   }
+`;
+
+const PenComponent = ({ type }) => (
+  <PenContainer className="pen-component">
+    <PenPlaceholder>
+      {type.replace(/(^\w)(\S*)/g, (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase())}
+    </PenPlaceholder>
+    <Pen />
+  </PenContainer>
+);
+
+const PenContainer = styled.div`
+  display: none;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translate(0, -50%);
+`;
+
+const PenPlaceholder = styled.p`
+  display: inline-block;
+  visibility: hidden;
+`;
+
+const Pen = styled(PenSVG)`
+  display: inline-block;
+  cursor: pointer;
 `;
 
 const LogoContainer = styled.div`
