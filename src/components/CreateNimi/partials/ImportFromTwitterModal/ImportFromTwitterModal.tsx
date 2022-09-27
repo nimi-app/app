@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { getAPIBaseURL } from '../../../../modules/api-service';
 import { Button } from '../../../Button';
 import { FormGroup, Input } from '../../../form';
+import { StyledInputWrapper } from '../../../Input';
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {
   Modal,
@@ -93,12 +94,14 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
           ) : (
             <>
               <FormGroup>
-                <Input
-                  type="text"
-                  value={username}
-                  onChange={onInputChange}
-                  placeholder={t('importFromTwitterModal.inputPlaceholder')}
-                />
+                <StyledInputWrapper isSimple>
+                  <Input
+                    type="text"
+                    value={username}
+                    onChange={onInputChange}
+                    placeholder={t('importFromTwitterModal.inputPlaceholder')}
+                  />
+                </StyledInputWrapper>
               </FormGroup>
               <Button onClick={fetchTwitterData}>{t('importFromTwitterModal.buttonLabel')}</Button>
               <div>{error && error.message}</div>
