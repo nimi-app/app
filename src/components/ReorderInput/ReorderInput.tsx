@@ -53,13 +53,13 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
+        {title && <ClearButton className="clear-button" onClick={() => updateLink(value.id!, 'title', '')} />}
         <PenComponent
           text={
             title ||
             type.replace(/(^\w)(\S*)/g, (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase())
           }
         />
-        {title && <ClearButton onClick={() => updateLink(value.id!, 'title', '')} />}
       </InputContainer>
       <InputContainer>
         <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
@@ -70,7 +70,9 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
           spellCheck={false}
           onBlur={setInputTouched.bind(null, true)}
         />
-        {content && <ClearButton right="57px" onClick={() => updateLink(value.id!, 'content', '')} />}
+        {content && (
+          <ClearButton className="clear-button" right="57px" onClick={() => updateLink(value.id!, 'content', '')} />
+        )}
         <InputButton onClick={() => removeLink(value.id!)} />
       </InputContainer>
     </ReorderItem>
@@ -94,7 +96,7 @@ const SharedInputStyles = css<{ inputInvalid?: boolean }>`
     font-weight: 500;
     box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
 
-    & + svg {
+    & + .clear-button {
       visibility: visible;
       opacity: 1;
     }
@@ -128,11 +130,11 @@ const TitleInput = styled.input`
   ${SharedInputStyles}
   background-color: #f1f1f1;
 
-  &:hover:not(:focus) + .pen-component {
+  &:hover:not(:focus) ~ .pen-component {
     display: flex;
   }
 
-  &:focus + .pen-component {
+  &:focus ~ .pen-component {
     display: none;
   }
 `;
