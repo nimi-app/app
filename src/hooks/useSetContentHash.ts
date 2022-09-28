@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useENSPublicResolverContract } from './useENSPublicResolverContract';
 import nameHash from '@ensdomains/eth-ens-namehash';
 import { ContractTransaction } from 'ethers';
-import { EnsPublicResolver } from '../generated/contracts';
+import { EnsPublicResolver } from 'generated/contracts';
 import { encodeContenthash } from '@ensdomains/ui';
 
 export interface UseSetContentHash {

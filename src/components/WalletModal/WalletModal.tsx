@@ -8,16 +8,16 @@ import { Connector } from '@web3-react/types';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button } from '../Button';
-import { LoaderWrapper as LoaderWrapperBase, Loader } from '../Loader';
+import { Button } from 'components/Button';
+import { LoaderWrapper as LoaderWrapperBase, Loader } from 'components/Loader';
 
-import { useCloseModals, useModalOpen } from '../../state/application/hooks';
+import { useCloseModals, useModalOpen } from 'state/application/hooks';
 import { ChainId, getAddChainParameters, CHAINS, ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
-import { ApplicationModal } from '../../state/application/actions';
-import { getName, useWeb3Connectors } from '../../connectors';
-import { shortenAddress } from '../../utils';
+import { ApplicationModal } from 'state/application/actions';
+import { getName, useWeb3Connectors } from 'connectors';
+import { shortenAddress } from 'utils';
 
-import { Modal, Header, Footer, Content } from '../Modal';
+import { Modal, Header, Footer, Content } from 'components/Modal';
 import { ConnectorListWrapper } from './styled';
 import { useNavigate } from 'react-router-dom';
 

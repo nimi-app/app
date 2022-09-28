@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useMemo } from 'react';
 
-import { shortenAddress } from '../../utils';
+import { shortenAddress } from 'utils';
 
-import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
-import { useENSAvatar } from '../../hooks/useENSAvatar';
+import { useWalletSwitcherPopoverToggle } from 'state/application/hooks';
+import { useENSAvatar } from 'hooks/useENSAvatar';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
-import { StyledButtonBaseFrame } from '../Button/styled';
+import { StyledButtonBaseFrame } from 'components/Button/styled';
 import { Web3Avatar } from './Web3Avatar';
 
 export interface WrapperProps {

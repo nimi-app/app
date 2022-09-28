@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { ReorderItem } from '../ReorderItem';
+import { ReorderItem } from 'components/ReorderItem';
 import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
-import { InputButton } from '../InputButton';
+import { InputButton } from 'components/InputButton';
 
 import { ReactComponent as XSVG } from 'assets/svg/cross.svg';
 import { ReactComponent as PenSVG } from 'assets/svg/pen.svg';

@@ -4,8 +4,8 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 
-import { defaultEnsClient, ensClients } from '../apollo/client';
-import { useActiveWeb3React } from '../hooks/useWeb3';
+import { defaultEnsClient, ensClients } from 'apollo/client';
+import { useActiveWeb3React } from 'hooks/useWeb3';
 import { Header } from 'components/Header';
 
 import { NotFound } from './NotFound';
@@ -14,9 +14,9 @@ import { DomainsHome } from './Domains';
 import { Footer } from 'components/Footer';
 import { WalletModal } from 'components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
-import { NimiConnectPage } from '../modules/nimi-connect';
-import { loadFathom } from '../utils';
-import { AppWrapper } from '../modules/app-wrapper';
+import { NimiConnectPage } from 'modules/nimi-connect';
+import { loadFathom } from 'utils';
+import { AppWrapper } from 'modules/app-wrapper';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>

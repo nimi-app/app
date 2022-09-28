@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useActiveWeb3React } from './useWeb3';
-import { useGetDefaultLensProfileQuery } from '../generated/graphql/lens';
+import { useGetDefaultLensProfileQuery } from 'generated/graphql/lens';
 import { useLensSubgraphClient } from './useLensSubgraph';
 
 export interface LensDefaultProfileData {
