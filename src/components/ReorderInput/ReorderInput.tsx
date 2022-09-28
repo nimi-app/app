@@ -53,8 +53,13 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
-        {title && <ClearButton onClick={() => updateLink(value.id!, 'title', '')} />}
-        <Pen />
+        {title && <ClearButton className="clear-button" onClick={() => updateLink(value.id!, 'title', '')} />}
+        <PenComponent
+          text={
+            title ||
+            type.replace(/(^\w)(\S*)/g, (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase())
+          }
+        />
       </InputContainer>
       <InputContainer>
         <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
@@ -65,21 +70,14 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
           spellCheck={false}
           onBlur={setInputTouched.bind(null, true)}
         />
-        {content && <ClearButton right="57px" onClick={() => updateLink(value.id!, 'content', '')} />}
+        {content && (
+          <ClearButton className="clear-button" right="57px" onClick={() => updateLink(value.id!, 'content', '')} />
+        )}
         <InputButton onClick={() => removeLink(value.id!)} />
       </InputContainer>
     </ReorderItem>
   );
 }
-
-const Pen = styled(PenSVG)`
-  display: none;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translate(0, -50%);
-  cursor: pointer;
-`;
 
 const SharedInputStyles = css<{ inputInvalid?: boolean }>`
   width: 100%;
@@ -92,17 +90,13 @@ const SharedInputStyles = css<{ inputInvalid?: boolean }>`
   outline: none;
   transition: all 0.1s linear;
 
-  &:hover:not(:focus) + ${Pen} {
-    display: block;
-  }
-
   &:focus {
     background-color: white;
     font-size: 18px;
     font-weight: 500;
     box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
 
-    & + svg {
+    & + .clear-button {
       visibility: visible;
       opacity: 1;
     }
@@ -135,6 +129,14 @@ const TitleInput = styled.input`
   padding: 8px 30px 8px 20px;
   ${SharedInputStyles}
   background-color: #f1f1f1;
+
+  &:hover:not(:focus) ~ .pen-component {
+    display: flex;
+  }
+
+  &:focus ~ .pen-component {
+    display: none;
+  }
 `;
 
 const ContentInput = styled.input<{ inputInvalid: boolean }>`
@@ -160,6 +162,32 @@ const ClearButton = styled(XSVG)<{ right?: string }>`
   &:hover path {
     fill: #8c90a0;
   }
+`;
+
+const PenComponent = ({ text }) => (
+  <PenContainer className="pen-component">
+    <PenPlaceholder>{text}</PenPlaceholder>
+    <Pen />
+  </PenContainer>
+);
+
+const PenContainer = styled.div`
+  display: none;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translate(0, -50%);
+`;
+
+const PenPlaceholder = styled.p`
+  display: inline-block;
+  visibility: hidden;
+`;
+
+const Pen = styled(PenSVG)`
+  display: inline-block;
+  cursor: pointer;
 `;
 
 const LogoContainer = styled.div`
