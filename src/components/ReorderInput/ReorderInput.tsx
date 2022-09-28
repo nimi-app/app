@@ -20,25 +20,26 @@ type ReorderInputProps = {
 // User might change title to e.g. bejzik8 and he might forget what is the type of link.
 // I can easily update this if necessary.
 
+const validateInput = (type, content) => {
+  let isValid = false;
+
+  try {
+    const linkValidity = nimiLinkValidator.isValidSync({
+      type,
+      content,
+    });
+
+    isValid = linkValidity;
+  } catch {
+    return isValid;
+  }
+
+  return isValid;
+};
+
 export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
   const [inputTouched, setInputTouched] = useState(false);
-  const [isInvalidInput, setInvalidInput] = useState(false);
   const { type, title, content } = value;
-
-  const onChange = (event) => {
-    updateLink(value.id!, 'content', event.target.value);
-    nimiLinkValidator
-      .isValid({
-        type,
-        content: event.target.value,
-      })
-      .then((isValidLink) => {
-        setInvalidInput(!isValidLink);
-      })
-      .catch(() => {
-        setInvalidInput(true);
-      });
-  };
 
   return (
     <ReorderItem value={value}>
@@ -64,9 +65,9 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
       <InputContainer>
         <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
         <ContentInput
-          inputInvalid={inputTouched && isInvalidInput}
+          inputInvalid={inputTouched && !validateInput(type, content)}
           value={content}
-          onChange={onChange}
+          onChange={(event) => updateLink(value.id!, 'content', event.target.value)}
           spellCheck={false}
           onBlur={setInputTouched.bind(null, true)}
         />
