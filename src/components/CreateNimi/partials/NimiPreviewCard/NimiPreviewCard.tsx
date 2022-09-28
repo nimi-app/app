@@ -2,8 +2,8 @@ import Frame, { FrameContextConsumer } from 'react-frame-component';
 import { filterEmptyFields, Nimi, NimiCard, validateNimi, nimiLinkValidator } from '@nimi.io/card';
 import { useEffect, useState } from 'react';
 import styled, { StyleSheetManager } from 'styled-components';
-import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
-import { Card as CardBase } from '../../../Card';
+import { FixedGlobalStyle, ThemeProvider } from 'theme';
+import { Card as CardBase } from 'components/Card';
 
 export interface NimiPreviewCardProps {
   nimi: Nimi;

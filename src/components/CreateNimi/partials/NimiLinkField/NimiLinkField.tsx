@@ -5,10 +5,10 @@ import { useFormContext } from 'react-hook-form';
 import { FocusEventHandler, useEffect, useMemo, useState } from 'react';
 
 import { LinkFieldWrapper } from './NimiLinkField.styled';
-import { renderSVG } from '../../../../utils';
+import { renderSVG } from 'utils';
 
 import { nimiLinkTypePlaceholder } from '../../../../constants';
-import { InputFieldWithIcon } from '../../../Input';
+import { InputFieldWithIcon } from 'components/Input';
 import { useTranslation } from 'react-i18next';
 import { TitleInput } from './TitleInput';
 

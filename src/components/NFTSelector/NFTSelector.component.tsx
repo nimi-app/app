@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
-import { Button } from '../Button';
+import { Button } from 'components/Button';
 import { AssetCard } from './partials/AssetCard/AssetCard';
 import { NFTAsset, NFTSelectorProps } from './NFTSelector.types';
-import { Loader, LoaderWrapper } from '../Loader';
+import { Loader, LoaderWrapper } from 'components/Loader';
 import { fetchAssets } from './api';
 import { AssetListInnerWrapper, AssetListItem /* SearchBar */ } from './NFTSelector.styled';
 import { isENSName, mapOpenSeaAssetToNFTAsset } from './api/utils';

@@ -1,7 +1,7 @@
-import { StyledInputWrapper, StyledInput, TrashCanStyle, StyledCross } from '../styleds';
+import { StyledInputWrapper, StyledInput, TrashCanStyle, StyledCross } from 'components/Input/styleds';
 
-import { ReactComponent as TrashCan } from '../../../assets/svg/trashcan.svg';
-import { ReactComponent as Error } from '../../../assets/svg/alert.svg';
+import { ReactComponent as TrashCan } from 'assets/svg/trashcan.svg';
+import { ReactComponent as Error } from 'assets/svg/alert.svg';
 
 import { FocusEventHandler, useEffect, useState } from 'react';
 

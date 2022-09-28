@@ -8,10 +8,10 @@ import {
   Content as ModalContentBase,
   Title as ModalTitle,
   Footer as ModalFooterBase,
-} from '../../../Modal';
-import { Loader } from '../../../Loader';
-import { Button } from '../../../Button';
-import { getEtherscanExplorerLink } from '../../../../utils/explorer';
+} from 'components/Modal';
+import { Loader } from 'components/Loader';
+import { Button } from 'components/Button';
+import { getEtherscanExplorerLink } from 'utils/explorer';
 
 const LoaderWrapper = styled.div`
   margin-bottom: 32px;

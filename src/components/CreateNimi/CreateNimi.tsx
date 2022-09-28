@@ -15,7 +15,7 @@ import {
   NimiBlockchainAddress,
   NimiWidget,
 } from '@nimi.io/card';
-import { CardBody, Card } from '../Card';
+import { CardBody, Card } from 'components/Card';
 import {
   InnerWrapper,
   MainContent,
@@ -31,7 +31,7 @@ import {
   AddressesTitle,
 } from './styled';
 
-import { Label, Input, TextArea, FormGroup } from '../form';
+import { Label, Input, TextArea, FormGroup } from 'components/form';
 
 // Partials
 import {
@@ -44,7 +44,7 @@ import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
-import { FormWrapper } from '../form/FormGroup';
+import { FormWrapper } from 'components/form/FormGroup';
 import { useLocation } from 'react-router-dom';
 import { ENSMetadata } from 'hooks/useENSMetadata';
 import { setENSNameContentHash } from 'hooks/useSetContentHash';
@@ -56,8 +56,8 @@ import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
-import { Button } from '../Button';
-import { StyledInputWrapper } from '../Input';
+import { Button } from 'components/Button';
+import { StyledInputWrapper } from 'components/Input';
 import { ReorderGroup } from 'components/ReorderGroup';
 import { ReorderInput } from 'components/ReorderInput';
 import { PoapField } from './partials/PoapField';

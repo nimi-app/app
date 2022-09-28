@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import PurpleCircle from '../../assets/svg/purpleCircle.svg';
+import PurpleCircle from 'assets/svg/purpleCircle.svg';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { StyledENSNameCardWrapper, ENSNameCardImage, StyledDomainName } from './styleds';
-import { useENSMetadata } from '../../hooks/useENSMetadata';
-import { Loader } from '../Loader';
+import { useENSMetadata } from 'hooks/useENSMetadata';
+import { Loader } from 'components/Loader';
 
 export interface ENSNameCardProps {
   name: string;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { ExternalLink, NimiSignatureColor } from '../../theme';
-import { Card } from '../Card';
+import { ExternalLink, NimiSignatureColor } from 'theme';
+import { Card } from 'components/Card';
 
 export const StyledENSNameCardWrapper = styled(Card)`
   justify-content: center;

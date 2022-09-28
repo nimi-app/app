@@ -1,7 +1,7 @@
-import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
+import { ReactComponent as PoapLogo } from 'assets/svg/poap-logo.svg';
 
 import { PoapButton, PoapWrapper, InnerPoapWrapper } from './styled';
-import { InputButton } from '../../../InputButton';
+import { InputButton } from 'components/InputButton';
 
 type POAPFieldProps = {
   onConfigure: (event: MouseEvent) => void;

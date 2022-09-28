@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { MEDIA_WIDTHS } from '../../../../theme';
-import { Button } from '../../../Button';
+import { MEDIA_WIDTHS } from 'theme';
+import { Button } from 'components/Button';
 
 export const ButtonsContainer = styled.div`
   display: flex;

@@ -1,6 +1,6 @@
 import { Flex } from 'rebass/styled-components';
 import styled from 'styled-components';
-import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
+import { MEDIA_WIDTHS, NimiSignatureColor } from 'theme';
 
 export const HeaderWrapper = styled(Flex)`
   padding: 27px 90px;

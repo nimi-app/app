@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { StyledCross, StyledInputWrapper } from '../../../../Input';
-import { ReactComponent as Pen } from '../../../../../assets/svg/pen.svg';
+import { StyledCross, StyledInputWrapper } from 'components/Input';
+import { ReactComponent as Pen } from 'assets/svg/pen.svg';
 
 const TitleWrapper = styled.div`
   margin-bottom: 10px;

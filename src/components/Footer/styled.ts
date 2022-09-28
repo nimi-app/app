@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
-import { MEDIA_WIDTHS } from '../../theme';
+import { ReactComponent as Twitter } from 'assets/svg/twitter-logo.svg';
+import { MEDIA_WIDTHS } from 'theme';
 
 export const FooterMain = styled.footer`
   display: flex;

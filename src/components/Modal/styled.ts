@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 import { Property } from 'csstype';
-import { ReactComponent as CloseIcon } from '../../assets/svg/close-icon.svg';
-import { NimiSignatureColor } from '../../theme';
+import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
+import { NimiSignatureColor } from 'theme';
 
 /**
  * Modal inner components default padding

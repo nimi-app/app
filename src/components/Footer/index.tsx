@@ -3,9 +3,9 @@ import { TwitterLogo, FooterMain, FooterContent, FooterNav, FooterWrapper } from
 
 // SVGs
 
-import { ReactComponent as GitHubLogo } from '../../assets/svg/github-logo.svg';
-import { ExternalLink } from '../../theme';
-import { Container } from '../Container';
+import { ReactComponent as GitHubLogo } from 'assets/svg/github-logo.svg';
+import { ExternalLink } from 'theme';
+import { Container } from 'components/Container';
 
 export function Footer() {
   return (

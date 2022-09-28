@@ -7,7 +7,7 @@ import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { StaticPOAP } from './POAPs';
 import { ReorderItem } from './ReorderItem';
 
-import { ReactComponent as TrashCanSVG } from '../../../../../assets/svg/trash-can.svg';
+import { ReactComponent as TrashCanSVG } from 'assets/svg/trash-can.svg';
 
 import { POAPToken } from '@nimi.io/card';
 
