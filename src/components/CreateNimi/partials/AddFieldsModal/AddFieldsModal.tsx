@@ -9,13 +9,13 @@ import {
   CloseButton as ModalCloseButton,
   Title as ModalTitle,
   ModalSubTitle,
-} from '../../../Modal';
+} from 'components/Modal';
 import { StyledFlexList, StyledGridList } from '../../styled';
-import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
+import { ReactComponent as PoapLogo } from 'assets/svg/poap-logo.svg';
 
 import { LinksSection } from './LinksSection';
-import { ButtonGroup } from '../../../form/Button';
-import { renderSVG } from '../../../../utils';
+import { ButtonGroup } from 'components/form/Button';
+import { renderSVG } from 'utils';
 import { useFormContext } from 'react-hook-form';
 
 const ModalHeader = styled(ModalHeaderBase)`

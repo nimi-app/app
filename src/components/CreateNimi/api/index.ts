@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Nimi } from '@nimi.io/card';
-import { getAPIBaseURL } from '../../../modules/api-service';
+import { getAPIBaseURL } from 'modules/api-service';
 
 interface PublishNimiApiResponseDeprecated {
   IpfsHash: string;

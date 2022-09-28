@@ -2,8 +2,8 @@ import { ReactNode, MouseEvent } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion/dist/framer-motion';
 
-import { ReactComponent as CloseIcon } from '../../../assets/svg/close-icon.svg';
-import { NimiSignatureColor } from '../../../theme';
+import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
+import { NimiSignatureColor } from 'theme';
 
 type ModalProps = {
   children: ReactNode;

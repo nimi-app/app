@@ -3,15 +3,15 @@ import { useState, useCallback } from 'react';
 import Select from 'react-select';
 import * as QRCode from 'qrcode';
 
-import { useGetDomainsQuery } from '../../../../generated/graphql/ens';
-import { Container } from '../../../../components/Container';
-import { Loader } from '../../../../components/Loader';
-import { Button } from '../../../../components/Button';
+import { useGetDomainsQuery } from 'generated/graphql/ens';
+import { Container } from 'components/Container';
+import { Loader } from 'components/Loader';
+import { Button } from 'components/Button';
 import { CreateNimiConnectSessionResponse, getNimiConnectAppJWT } from '../../api';
 import { NIMI_CONNECT_SIGNATURE_TEXT_PAYLOAD } from '../../constants';
-import { Card as CardBase, CardBody, CardTitle } from '../../../../components/Card';
+import { Card as CardBase, CardBody, CardTitle } from 'components/Card';
 import styled from 'styled-components';
-import { FormGroup as FormGroupBase } from '../../../../components/form';
+import { FormGroup as FormGroupBase } from 'components/form';
 import { unstable_batchedUpdates } from 'react-dom';
 
 const Card = styled(CardBase)`

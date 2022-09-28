@@ -1,10 +1,10 @@
 import { namehash as ensNameHash } from '@ethersproject/hash';
 import { useParams } from 'react-router-dom';
 
-import { useGetDomainFromSubgraphQuery } from '../../generated/graphql/ens';
-import { CreateNimi } from '../../components/CreateNimi';
-import { Loader } from '../../components/Loader';
-import { Container } from '../../components/Container';
+import { useGetDomainFromSubgraphQuery } from 'generated/graphql/ens';
+import { CreateNimi } from 'components/CreateNimi';
+import { Loader } from 'components/Loader';
+import { Container } from 'components/Container';
 import { useWeb3React } from '@web3-react/core';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
 
@@ -31,6 +31,7 @@ export function CreateNimiPage() {
   }
 
   if (!provider || !SUPPORTED_CHAIN_IDS.includes(chainId as number)) {
+    console.log(provider);
     return <div>Wrong network</div>;
   }
 

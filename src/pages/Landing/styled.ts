@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import backgroundImageUrl from '../../assets/images/nimi-header-background.jpeg';
-import { NimiSignatureColor } from '../../theme';
+import backgroundImageUrl from 'assets/images/nimi-header-background.jpeg';
+import { NimiSignatureColor } from 'theme';
 
 export const PageWrapper = styled.div`
   display: flex;

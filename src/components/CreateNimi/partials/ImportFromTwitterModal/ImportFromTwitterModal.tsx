@@ -2,18 +2,18 @@ import axios from 'axios';
 import { ChangeEventHandler, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { getAPIBaseURL } from '../../../../modules/api-service';
-import { Button } from '../../../Button';
-import { FormGroup, Input } from '../../../form';
-import { StyledInputWrapper } from '../../../Input';
-import { Loader, LoaderWrapper } from '../../../Loader';
+import { getAPIBaseURL } from 'modules/api-service';
+import { Button } from 'components/Button';
+import { FormGroup, Input } from 'components/form';
+import { StyledInputWrapper } from 'components/Input';
+import { Loader, LoaderWrapper } from 'components/Loader';
 import {
   Modal,
   Header as ModalHeaderBase,
   Content as ModalContentBase,
   CloseButton as ModalCloseButton,
   Title as ModalTitle,
-} from '../../../Modal';
+} from 'components/Modal';
 
 import { ImportTwitterDataModalProps, TwitterData } from './types';
 

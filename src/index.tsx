@@ -31,6 +31,7 @@ root.render(
       <Web3ConnectorsProvider>
         <Web3ConnectorsContext.Consumer>
           {(context) => {
+            console.log('CONTEXT', context);
             if (!context) {
               throw new Error('Web3ConnectorsContext is not available');
             }

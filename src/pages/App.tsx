@@ -6,13 +6,13 @@ import { useTheme } from 'styled-components';
 
 import { defaultEnsClient, ensClients } from '../apollo/client';
 import { useActiveWeb3React } from '../hooks/useWeb3';
-import { Header } from '../components/Header';
+import { Header } from 'components/Header';
 
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 import { DomainsHome } from './Domains';
-import { Footer } from '../components/Footer';
-import { WalletModal } from '../components/WalletModal';
+import { Footer } from 'components/Footer';
+import { WalletModal } from 'components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
 import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';

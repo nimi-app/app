@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { Flex } from 'rebass';
 
 // Queries
-import { useGetDomainsQuery } from '../../generated/graphql/ens';
+import { useGetDomainsQuery } from 'generated/graphql/ens';
 
-import { Container } from '../../components/Container';
-import { Loader } from '../../components/Loader';
-import { ENSNameCard } from '../../components/ENSNameCard';
-import { NimiSignatureColor } from '../../theme';
-import { DottedButtonBase } from '../../components/Button/styled';
+import { Container } from 'components/Container';
+import { Loader } from 'components/Loader';
+import { ENSNameCard } from 'components/ENSNameCard';
+import { NimiSignatureColor } from 'theme';
+import { DottedButtonBase } from 'components/Button/styled';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;

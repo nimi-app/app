@@ -46,11 +46,11 @@ import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
-import { ENSMetadata } from '../../hooks/useENSMetadata';
-import { setENSNameContentHash } from '../../hooks/useSetContentHash';
-import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
+import { ENSMetadata } from 'hooks/useENSMetadata';
+import { setENSNameContentHash } from 'hooks/useSetContentHash';
+import { useENSPublicResolverContract } from 'hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
-import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
+import { useLensDefaultProfileData } from 'hooks/useLensDefaultProfileData';
 import { publishNimiViaIPNS } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
@@ -58,8 +58,8 @@ import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
 import { Button } from '../Button';
 import { StyledInputWrapper } from '../Input';
-import { ReorderGroup } from '../ReorderGroup';
-import { ReorderInput } from '../ReorderInput';
+import { ReorderGroup } from 'components/ReorderGroup';
+import { ReorderInput } from 'components/ReorderInput';
 import { PoapField } from './partials/PoapField';
 
 export interface CreateNimiProps {
@@ -217,7 +217,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       });
     }
   };
-  console.log('formwatch', formWatchPayload);
+
   const onSubmitInvalid = (data) => {
     console.log('SUBMIT INVALID', data);
   };

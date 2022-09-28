@@ -4,10 +4,10 @@ import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
 import { InputButton } from '../InputButton';
 
-import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
-import { ReactComponent as PenSVG } from '../../assets/svg/pen.svg';
+import { ReactComponent as XSVG } from 'assets/svg/cross.svg';
+import { ReactComponent as PenSVG } from 'assets/svg/pen.svg';
 
-import { renderSVG } from '../../utils';
+import { renderSVG } from 'utils';
 
 type ReorderInputProps = {
   key?: string;

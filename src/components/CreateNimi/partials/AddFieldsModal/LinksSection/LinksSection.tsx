@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { nimiLinkDetailsExtended } from '@nimi.io/card';
 import { StyledFlexList } from '../../../styled';
 
-import { ButtonGroup } from '../../../../form/Button';
-import { renderSVG } from '../../../../../utils';
+import { ButtonGroup } from 'components/form/Button';
+import { renderSVG } from 'utils';
 
 const SectionWrapper = styled.div`
   margin-bottom: 30px;

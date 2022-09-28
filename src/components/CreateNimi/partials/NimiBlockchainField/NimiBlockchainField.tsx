@@ -2,8 +2,8 @@ import { NimiBlockchain, Nimi, blockchainAddresses, NIMI_BLOCKCHAIN_LOGO_URL } f
 import { useFormContext } from 'react-hook-form';
 import { ChangeEventHandler, useMemo, useState } from 'react';
 
-import { InputFieldWithIcon } from '../../../Input';
-import { renderSVG } from '../../../../utils';
+import { InputFieldWithIcon } from 'components/Input';
+import { renderSVG } from 'utils';
 import { useTranslation } from 'react-i18next';
 
 export interface NimiBlockchainFieldProps {

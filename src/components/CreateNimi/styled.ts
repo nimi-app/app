@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { Flex } from 'rebass';
 
 import { CardBody } from '../Card';
-import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
-import { ReactComponent as PlaceholderMini } from '../../assets/svg/profile-empty.svg';
+import { MEDIA_WIDTHS, NimiSignatureColor } from 'theme';
+import { ReactComponent as PlaceholderMini } from 'assets/svg/profile-empty.svg';
 import { Button } from '../Button';
 import { DottedButtonBase } from '../Button/styled';
 
