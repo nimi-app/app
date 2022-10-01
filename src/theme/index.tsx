@@ -213,6 +213,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  background-color: #EDF2F7!important;
+  overflow-x: hidden;
 }
 
 html, body, input, label, textarea, button {
@@ -223,6 +225,14 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Archivo', sans-serif;
 }
 
+.background-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  z-index: -1;
+}
 
 
 /** Full-width and height */
@@ -246,6 +256,233 @@ pre, code {
   font-size: 14px;
   line-height: 1.5;
   overflow-x: auto;
+}
+
+
+.nimi-curated {
+  margin: 142px 0;
+}
+
+h2, h3 {
+  background: linear-gradient(45deg, #4368EA, #C490DD);
+  background: -webkit-linear-gradient(45deg, #4368EA, #C490DD);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+// Email form
+
+.email-form {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.email-form h3 {
+  font-weight: 600;
+  font-size: 42px;
+  margin-right: 32px;
+}
+
+.email-field {
+  height: 70px;
+  min-width: 335px;
+  font-weight: 363;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  padding: 20px 65px 20px 26px;
+}
+
+.email-form button {
+  width: 160px;
+  margin-left: -65px;
+}
+
+
+.cards-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 142px 152px;
+}
+
+.card {
+  position:relative;
+  width:calc(25% - 24px);
+  padding:0 42px 42px 42px;
+  background-color:#fff;
+  border-radius:62px;
+  height:525px;
+  padding-top:22%; 
+}
+
+.card svg,
+.card img {
+  margin:0;
+  width:100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.card.circles img {
+  margin-bottom: 80px;
+}
+
+.card.feeds img {
+  width: 80%;
+  left: 35px;
+}
+
+.card h3 {
+  color: #7076E6;
+  margin-bottom: 10px;
+  font-size: 26px;
+  font-variation-settings: "wdth" 95;
+  text-align: left;
+}
+
+.card p {
+  color: #9D9DBF;
+  font-size: 20px;
+  text-align: left;
+}
+
+// Links section
+
+.links-categories {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 82px;
+}
+
+.link-category-label {
+  margin: 0 41px;
+  font-weight: 400;
+  font-size: 24px;
+  color: #9D9DBF;
+}
+
+.link-category-label.active {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(180deg, rgba(192,229,240,1) 0%, rgba(129,131,225,1) 100%);
+  padding: 0 24px;
+  height: 70px;
+  border-radius: 70px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 24px;
+  color: #fff;
+}
+
+.links-section h2 {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.links-section p {
+  color: #9D9DBF;
+  font-size: 28px;
+}
+
+.links-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 72px 317px 0 317px;
+}
+
+.link-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 20px;
+  margin: 8px;
+}
+
+.link-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: fit-content;
+  padding: 12px 16px;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: 0px 5px 18px rgba(156, 149, 233, 0.2);
+}
+
+.link-card span {
+  color: #09244B;
+  margin-left: 8px;
+}
+
+// Made possible
+
+.made-possible-section {
+  margin-top: 172px;
+}
+
+.made-possible-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.made-possible-section h2 {
+  font-weight: 600;
+  font-size: 32px;
+  z-index: 1;
+}
+
+.made-possible-section svg {
+  position: absolute;
+}
+
+.made-possible-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 105px 0 120px 0;
+}
+
+.made-possible-logos svg {
+  position: relative;
+  margin: 0 35px 0 35px;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 150px 0 80px 0;
+}
+
+footer span {
+  margin: 32px 0;
+  font-weight: 600;
+  font-size: 13px;
+  color: #B7B7F3;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-icons svg {
+  margin: 0 30px;
+}
+
+// todo remove
+iframe {
+  display: none;
 }
 `;
 

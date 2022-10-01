@@ -1,10 +1,1 @@
-<svg width="10" height="26" viewBox="0 0 10 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="1.03529" cy="1.53529" r="1.03529" fill="#8C90A0"/>
-<circle cx="8.96449" cy="1.53529" r="1.03529" fill="#8C90A0"/>
-<circle cx="1.03529" cy="9.17842" r="1.03529" fill="#8C90A0"/>
-<circle cx="8.96449" cy="9.17842" r="1.03529" fill="#8C90A0"/>
-<circle cx="1.03529" cy="16.8216" r="1.03529" fill="#8C90A0"/>
-<circle cx="8.96449" cy="16.8216" r="1.03529" fill="#8C90A0"/>
-<circle cx="1.03529" cy="24.4647" r="1.03529" fill="#8C90A0"/>
-<circle cx="8.96449" cy="24.4647" r="1.03529" fill="#8C90A0"/>
-</svg>
+<svg fill="none" height="26" viewBox="0 0 10 26" width="10" xmlns="http://www.w3.org/2000/svg"><g fill="#8c90a0"><circle cx="1.03529" cy="1.53529" r="1.03529"/><circle cx="8.96449" cy="1.53529" r="1.03529"/><circle cx="1.03529" cy="9.17842" r="1.03529"/><circle cx="8.96449" cy="9.17842" r="1.03529"/><circle cx="1.03529" cy="16.8216" r="1.03529"/><circle cx="8.96449" cy="16.8216" r="1.03529"/><circle cx="1.03529" cy="24.4647" r="1.03529"/><circle cx="8.96449" cy="24.4647" r="1.03529"/></g></svg>
