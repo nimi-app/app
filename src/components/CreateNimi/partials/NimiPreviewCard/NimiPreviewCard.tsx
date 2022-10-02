@@ -83,7 +83,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 </style>
                 <FixedGlobalStyle />
                 <ThemeProvider>
-                  <NimiCard nimi={previewNimi} isPreview={true} />
+                  <NimiCard nimi={previewNimi} isPreview={false} />
                 </ThemeProvider>
               </>
             </StyleSheetManager>

@@ -99,16 +99,13 @@ export const PageSectionTitle = styled.h1`
 export const ProfileImage = styled.img`
   background-position: center, center;
   background-size: cover;
-  align-self: center;
   border: 8px solid #ffffff;
   border-radius: 200px;
-  height: 209.8px;
-  width: 209.8px;
+  height: 119px;
+  width: 119px;
   z-index: 1;
 `;
-export const ProfileImagePlaceholder = styled(PlaceholderMini)`
-  align-self: center;
-`;
+export const ProfileImagePlaceholder = styled(PlaceholderMini)``;
 export const SaveAndDeployButton = styled(Button)`
   background: linear-gradient(291.35deg, #4368ea -25.85%, #c490dd 73.38%);
   opacity: 0.8;

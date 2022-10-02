@@ -34,12 +34,7 @@ import {
 import { Label, Input, TextArea, FormGroup } from '../form';
 
 // Partials
-import {
-  ButtonsContainer,
-  ImportButtonsWrapper,
-  ImportFromLensProtocolButton,
-  ImportFromTwitterButton,
-} from './partials/buttons';
+import { ImportButtonsWrapper } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
@@ -56,11 +51,14 @@ import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
-import { Button } from '../Button';
 import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
+import { TemplatePicker } from '../TemplatePicker/TemplatePicker';
+import styled from 'styled-components';
+import { NimiSignatureColor } from '../../theme';
+import { ImporButton } from '../Button/ImportButton';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -69,11 +67,29 @@ export interface CreateNimiProps {
   provider: Web3Provider;
 }
 
-export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
-  /**
-   * @todo replace this API
-   */
+const TopContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin-bottom: 30px;
+`;
+const Toplabel = styled.div`
+  display: flex;
+  margin-bottom: 24px;
+  ${NimiSignatureColor};
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 20px;
+  /* identical to box height */
 
+  letter-spacing: -0.02em;
+`;
+const ImageAndTemplateSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const location = useLocation();
   const ensMetadata = location.state as ENSMetadata;
 
@@ -246,20 +262,28 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              {formWatchPayload.image ? <ProfileImage src={formWatchPayload.image.url} /> : <ProfileImagePlaceholder />}
-              <ButtonsContainer>
-                <Button onClick={() => setIsNFTSelectorModalOpen(true)}>Select an NFT</Button>
-              </ButtonsContainer>
-              <ImportButtonsWrapper>
-                <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
-                  {t('buttonLabel.importFromTwitter')}
-                </ImportFromTwitterButton>
-                {!loadingLensProfile && !!lensProfile && (
-                  <ImportFromLensProtocolButton onClick={handleImportLensProfile}>
-                    {t('buttonLabel.importFromLensProtocol')}
-                  </ImportFromLensProtocolButton>
-                )}
-              </ImportButtonsWrapper>
+              <ImageAndTemplateSection>
+                <TopContainer>
+                  <Toplabel>Profile Picture</Toplabel>
+                  {formWatchPayload.image ? (
+                    <ProfileImage src={formWatchPayload.image.url} />
+                  ) : (
+                    <ProfileImagePlaceholder />
+                  )}
+                </TopContainer>
+                <TopContainer>
+                  <Toplabel>Template</Toplabel>
+                  <TemplatePicker />
+                </TopContainer>
+              </ImageAndTemplateSection>
+              <TopContainer>
+                <Toplabel>Import from</Toplabel>
+                <ImportButtonsWrapper>
+                  <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
+                  <ImporButton type="Lens" onClick={handleImportLensProfile} />
+                  <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
+                </ImportButtonsWrapper>
+              </TopContainer>
 
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 {/* display name input */}
@@ -305,6 +329,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     })}
                   </AddresssWrapper>
                 )}
+                {/* template selector */}
+                <FormGroup>
+                  <Label htmlFor="template">{t('formLabel.template')}</Label>
+                  <TemplatePicker />
+                </FormGroup>
+
                 {/* add fields button */}
                 <FormGroup>
                   {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
