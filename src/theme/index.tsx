@@ -300,41 +300,44 @@ h2, h3 {
   margin-left: -65px;
 }
 
-
 .cards-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 142px 152px;
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin: 142px 110px;
 }
 
 .card {
-  position:relative;
-  width:calc(25% - 24px);
-  padding:0 42px 42px 42px;
-  background-color:#fff;
-  border-radius:62px;
-  height:525px;
-  padding-top:22%; 
+  position: relative;
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
+  flex: 1 0 auto;
+  width: calc(25% - 24px);
+  min-width: 350px;
+  margin: 0 15px 25px 0;
+  padding: 0 42px 42px 42px;
+  background-color: #fff;
+  border-radius: 62px;
+ }
+ 
+
+.card-img-container {
+  height: 320px;
+  width: calc(100% + 82px);
+  margin-left: -41px;
+  margin-bottom: 25px;
 }
 
 .card svg,
 .card img {
-  margin:0;
-  width:100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  margin: 0;
+  max-height: 100%;
+  max-width: 100%;
+  width: unset;
 }
 
-.card.circles img {
-  margin-bottom: 80px;
-}
-
-.card.feeds img {
-  width: 80%;
-  left: 35px;
-}
 
 .card h3 {
   color: #7076E6;
@@ -351,6 +354,12 @@ h2, h3 {
 }
 
 // Links section
+
+.links-section {
+  max-width: 1000px;
+  padding: 0 25px;
+  margin: 0 auto;
+}
 
 .links-categories {
   display: flex;
@@ -394,7 +403,7 @@ h2, h3 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 72px 317px 0 317px;
+  margin: 72px 25px 0 25px;
 }
 
 .link-card {
@@ -440,8 +449,9 @@ h2, h3 {
   z-index: 1;
 }
 
-.made-possible-section svg {
+.made-possible-section img {
   position: absolute;
+  width: 160px;
 }
 
 .made-possible-logos {
@@ -484,6 +494,84 @@ footer span {
 iframe {
   display: none;
 }
+
+// Mobile
+
+@media only screen and (max-width: 950px) {
+
+  body,
+  html,
+  #root {
+    width:100vw;
+  }
+
+  .landing-container {
+    margin: 0 auto;
+    width: 90vw;
+    align-items: center;
+  }
+
+  .nimi-curated {
+    margin: 0;
+    max-width: 90vw;
+  }
+
+  .email-form {
+    flex-direction: column;
+  }
+
+  .email-form h3 {
+    margin: 0 0 50px 0;
+  }
+
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+    margin: 142px 0;
+  }
+
+  .card {
+    width: calc(100% - 30px);
+    margin-bottom: 25px;
+  }
+
+  .card-img-container img {
+    width: unset;
+  }
+
+  .links-section {
+    width:100vw;
+    max-width: 100%;
+  }
+  
+  .links-categories {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .link-category-label {
+    margin: 0 25px 25px 25px;
+  }
+
+  .links-container {
+    margin: 72px 0 0 0;
+  }
+
+  .made-possible-section {
+    width: 100vw;
+  }
+
+  .made-possible-logos {
+    flex-wrap: wrap;
+    margin: 105px 0 60px 0;
+  }
+
+  .made-possible-logos svg {
+    margin: 0 35px 35px 35px;
+  }
+   
+}
+ 
 `;
 
 export const ThemedGlobalStyle = createGlobalStyle`
