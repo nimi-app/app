@@ -1,37 +1,39 @@
+import { NimiThemeType } from '@nimi.io/card';
 import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 import Bogota from '../../assets/svg/bogota.svg';
 import Nimi from '../../assets/svg/nimi-logo-no-text.svg';
 
-const options = ['BOGOTA', 'NIMI'];
 const logos = {
-  BOGOTA: Bogota,
-  NIMI: Nimi,
+  [NimiThemeType.DEVCON]: Bogota,
+  [NimiThemeType.NIMI]: Nimi,
 };
 export function TemplatePicker() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('NIMI');
-
+  const { watch, setValue } = useFormContext();
+  const { theme: CurrentTheme } = watch();
   const toggling = () => setIsOpen(!isOpen);
 
-  const onOptionClicked = (value) => () => {
+  const onOptionClicked = (theme: NimiThemeType) => () => {
     //TODO: Connect with form
-    setSelectedOption(value);
+    setValue('theme', theme);
     setIsOpen(false);
-    console.log(selectedOption);
+    console.log('themeSelected', theme);
+    console.log('currentTheme', CurrentTheme);
   };
 
   return (
     <DropDownContainer>
       <DropDownHeader onClick={toggling}>
-        <img src={logos[selectedOption]} />
+        <img src={logos[CurrentTheme]} />
       </DropDownHeader>
       {isOpen && (
         <DropDownListContainer>
           <DropDownList>
-            {options.map((option, index) => (
-              <ListItem onClick={onOptionClicked(option)} key={index}>
-                <img src={logos[option]} />
+            {Object.values(NimiThemeType).map((theme, index) => (
+              <ListItem onClick={onOptionClicked(theme)} key={index}>
+                <img src={logos[theme]} />
               </ListItem>
             ))}
           </DropDownList>

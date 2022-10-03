@@ -4,6 +4,7 @@ import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
+import { NimiThemeType } from '@nimi.io/card';
 
 import {
   Nimi,
@@ -134,6 +135,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       ensName,
       addresses: [],
       links: [],
+      theme: { type: NimiThemeType.DEVCON },
       widgets: [
         {
           type: NimiWidgetType.POAP,
