@@ -11,7 +11,7 @@ export const StyledButtonStaticBase = styled.div`
 
   height: 70px;
 
-  background: linear-gradient(180deg, rgba(192,229,240,1) 0%, rgba(129,131,225,1) 100%);
+  background: linear-gradient(180deg, rgba(192, 229, 240, 1) 0%, rgba(129, 131, 225, 1) 100%);
 
   font-family: inherit;
   font-weight: 700;
