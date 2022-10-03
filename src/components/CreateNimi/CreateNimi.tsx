@@ -280,7 +280,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 <Toplabel>Import from</Toplabel>
                 <ImportButtonsWrapper>
                   <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
-                  <ImporButton type="Lens" onClick={handleImportLensProfile} />
+                  {!loadingLensProfile && !!lensProfile && (
+                    <ImporButton type="Lens" onClick={handleImportLensProfile} />
+                  )}
+
                   <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
                 </ImportButtonsWrapper>
               </TopContainer>
@@ -329,11 +332,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     })}
                   </AddresssWrapper>
                 )}
-                {/* template selector */}
-                <FormGroup>
-                  <Label htmlFor="template">{t('formLabel.template')}</Label>
-                  <TemplatePicker />
-                </FormGroup>
 
                 {/* add fields button */}
                 <FormGroup>
