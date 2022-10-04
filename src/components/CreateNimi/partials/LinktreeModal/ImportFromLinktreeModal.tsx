@@ -61,7 +61,7 @@ export function ImportFromLinktreeModal({ onClose }) {
     axios
       .get<{ data }>(url, {
         params: {
-          username: linktreeUrl,
+          url: linktreeUrl,
         },
       })
       .then(({ data }) => {

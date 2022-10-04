@@ -82,7 +82,7 @@ export function publishNimiViaIPNS({
     .post<{
       data: PublishNimiViaIPNSResponse;
     }>(
-      `${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/publish/ipns`,
+      `${process.env.REACT_APP_NIMI_API_BASE_URL}/nimi/publish/ipns`,
       {
         nimi,
         signature,

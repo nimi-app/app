@@ -464,7 +464,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
         <ImportFromLinktreeModal
           onClose={(linktreeLinks) => {
             setValue('links', [...linktreeLinks, ...links]);
-            setIsNFTSelectorModalOpen(false);
+            setIsLinktreeOpen(false);
           }}
         />
       )}
