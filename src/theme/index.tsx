@@ -226,22 +226,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .background-img {
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
-  width: 100vw;
+  bottom: 0;
+  height: 100vh;
   z-index: -1;
 }
-
-
+ 
 /** Full-width and height */
 body, html, #root {
   min-height:100vh;
   width: 100%;
 }
-
-
 
 button {
   user-select: none;
@@ -258,9 +254,9 @@ pre, code {
   overflow-x: auto;
 }
 
-
 .nimi-curated {
   margin: 142px 0;
+  padding: 0 30px;
 }
 
 h2, h3 {
@@ -276,12 +272,19 @@ h2, h3 {
   display: flex;
   align-items: center;
   margin: 0 auto;
+  padding: 0 30px;
 }
 
 .email-form h3 {
   font-weight: 600;
   font-size: 42px;
   margin-right: 32px;
+}
+
+.email-field-container {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
 }
 
 .email-field {
@@ -297,6 +300,7 @@ h2, h3 {
 
 .email-form button {
   width: 160px;
+  min-width: 135px;
   margin-left: -65px;
 }
 
@@ -307,21 +311,23 @@ h2, h3 {
   align-items: stretch;
   flex-wrap: wrap;
   margin: 142px 110px;
+  max-width: 1800px;
 }
 
 .card {
   position: relative;
   -webkit-flex: 1 0 auto;
   -ms-flex: 1 0 auto;
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
   flex: 1 0 auto;
   width: calc(25% - 24px);
   min-width: 350px;
-  margin: 0 15px 25px 0;
+  margin: 0 15px 15px 0;
   padding: 0 42px 42px 42px;
   background-color: #fff;
   border-radius: 62px;
- }
- 
+}
 
 .card-img-container {
   height: 320px;
@@ -357,7 +363,6 @@ h2, h3 {
 
 .links-section {
   max-width: 1000px;
-  padding: 0 25px;
   margin: 0 auto;
 }
 
@@ -497,6 +502,12 @@ iframe {
 
 // Mobile
 
+@media only screen and (max-width: 1200px) {
+  .email-form h3 {
+    font-size: 35px;
+  }
+}
+
 @media only screen and (max-width: 950px) {
 
   body,
@@ -513,26 +524,35 @@ iframe {
 
   .nimi-curated {
     margin: 0;
+    padding: 0;
     max-width: 90vw;
   }
 
   .email-form {
     flex-direction: column;
+    max-width: 100%;
+    padding: 0;
   }
 
   .email-form h3 {
     margin: 0 0 50px 0;
   }
 
+  .email-field {
+    max-width: 100%;
+    font-size: 17px;
+  }
+
   .cards-container {
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     margin: 142px 0;
   }
 
   .card {
-    width: calc(100% - 30px);
-    margin-bottom: 25px;
+    width: 100%;
+    margin: 0 0 25px 0;
   }
 
   .card-img-container img {
@@ -558,7 +578,7 @@ iframe {
   }
 
   .made-possible-section {
-    width: 100vw;
+    width: 100%;
   }
 
   .made-possible-logos {
@@ -569,7 +589,6 @@ iframe {
   .made-possible-logos svg {
     margin: 0 35px 35px 35px;
   }
-   
 }
  
 `;
