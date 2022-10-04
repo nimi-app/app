@@ -60,6 +60,7 @@ import { TemplatePicker } from '../TemplatePicker/TemplatePicker';
 import styled from 'styled-components';
 import { NimiSignatureColor } from '../../theme';
 import { ImporButton } from '../Button/ImportButton';
+import { ImportFromLinktreeModal } from './partials/LinktreeModal';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -102,6 +103,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
+  const [isLinktreeOpen, setIsLinktreeOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
 
   /**
@@ -287,6 +289,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   )}
 
                   <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
+                  <ImporButton type="Linktree" onClick={() => setIsLinktreeOpen(true)} />
                 </ImportButtonsWrapper>
               </TopContainer>
 
@@ -457,6 +460,15 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           }}
         />
       )}
+      {isLinktreeOpen && (
+        <ImportFromLinktreeModal
+          onClose={(linktreeLinks) => {
+            setValue('links', [...linktreeLinks, ...links]);
+            setIsNFTSelectorModalOpen(false);
+          }}
+        />
+      )}
+
       {isNFTSelectorModalOpen && (
         <NFTSelectorModal
           address={ensAddress}
