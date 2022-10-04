@@ -17,7 +17,7 @@ export function TemplatePicker() {
 
   const onOptionClicked = (theme: NimiThemeType) => () => {
     //TODO: Connect with form
-    setValue('theme', theme);
+    setValue('theme', { type: theme });
     setIsOpen(false);
     console.log('themeSelected', theme);
     console.log('currentTheme', CurrentTheme);
@@ -26,13 +26,13 @@ export function TemplatePicker() {
   return (
     <DropDownContainer>
       <DropDownHeader onClick={toggling}>
-        <img src={logos[CurrentTheme]} />
+        <img src={logos[CurrentTheme.type]} />
       </DropDownHeader>
       {isOpen && (
         <DropDownListContainer>
           <DropDownList>
             {Object.values(NimiThemeType).map((theme, index) => (
-              <ListItem onClick={onOptionClicked(theme)} key={index}>
+              <ListItem onClick={onOptionClicked(theme)} key={index + theme}>
                 <img src={logos[theme]} />
               </ListItem>
             ))}
