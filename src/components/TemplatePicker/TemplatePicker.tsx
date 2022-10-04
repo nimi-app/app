@@ -2,13 +2,15 @@ import { NimiThemeType } from '@nimi.io/card';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
-import { ReactComponent as Bogota } from '../../assets/svg/bogota.svg';
-import { ReactComponent as Nimi } from '../../assets/svg/nimi-logo-no-text.svg';
+import { ReactComponent as BogotaSvg } from '../../assets/svg/bogota.svg';
+import { ReactComponent as NimiSvg } from '../../assets/svg/nimi-logo-no-text.svg';
+import { ReactComponent as ArrowSvg } from '../../assets/svg/arrow.svg';
 
 const logos = {
-  [NimiThemeType.DEVCON]: Bogota,
-  [NimiThemeType.NIMI]: Nimi,
+  [NimiThemeType.DEVCON]: BogotaSvg,
+  [NimiThemeType.NIMI]: NimiSvg,
 };
+
 export function TemplatePicker() {
   const [isOpen, setIsOpen] = useState(false);
   const { watch, setValue } = useFormContext();
@@ -26,6 +28,9 @@ export function TemplatePicker() {
     <DropDownContainer>
       <DropDownHeader onClick={toggleIsOpen}>
         <CurrentLogo />
+        <ArrowButton isOpen>
+          <ArrowSvg />
+        </ArrowButton>
       </DropDownHeader>
       {isOpen && (
         <DropDownListContainer>
@@ -58,8 +63,19 @@ const DropDownHeader = styled.div`
   padding: 24px;
   display: flex;
   justify-content: center;
+  align-items: center;
 `;
+const ArrowButton = styled.div<{ isOpen: boolean }>`
+  background: rgba(69, 137, 239, 0.2);
+  border-radius: 60px;
+  width: 28px;
+  height: 28px;
+  padding: 10px 12px;
+  display: flex;
 
+  transition: all 0.3s ease-out;
+  transform: ${(props) => (props.isOpen ? `rotate(180deg)` : '')};
+`;
 const DropDownListContainer = styled.div`
   position: absolute;
   z-index: 1;

@@ -45,8 +45,9 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   };
 
   useEffect(() => {
+    console.log('Nimi', nimi);
     // Filter invalid links
-    (async () => {
+    const filterFunction = async () => {
       const filteredNimi = filterEmptyFields(nimi);
 
       const filteredLinks = await removeInvalidLinks(filteredNimi.links);
@@ -60,7 +61,8 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
         .catch((error) => {
           console.error(error);
         });
-    })();
+    };
+    filterFunction();
   }, [nimi]);
 
   if (!previewNimi) {
@@ -70,6 +72,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
       </div>
     );
   }
+  console.log('nimi', nimi);
 
   return (
     <Card>
