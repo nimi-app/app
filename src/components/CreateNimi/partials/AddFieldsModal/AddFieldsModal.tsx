@@ -147,6 +147,11 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           <SectionTitle>{t('addFieldsModal.nfts')}</SectionTitle>
           <StyledGridList>
             {nimiWidgetTypes.map((widget) => {
+              // Hide nfty
+              if (widget === NimiWidgetType.NFTY_UNIVERSAL_DM) {
+                return null;
+              }
+
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
               const checked = getValues('widgets').some(({ type }) => type === widget);
