@@ -46,7 +46,6 @@ import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
-import { ENSMetadata } from '../../hooks/useENSMetadata';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
@@ -61,6 +60,7 @@ import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
+import { generateID } from '../../utils';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -75,7 +75,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
    */
 
   const location = useLocation();
-  const ensMetadata = location.state as ENSMetadata;
+
+  const state = location.state as Nimi;
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -100,25 +101,19 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const publishNimiAbortController = useRef<AbortController>();
 
-  const image = ensMetadata?.image
-    ? {
-        type: NimiImageType.URL,
-        url: ensMetadata?.image || '',
-      }
-    : undefined;
-
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
-      displayName: ensName,
-      image,
-      description: '',
+      displayName: state.displayName || ensName,
+      image: state.image?.url ? state.image : undefined,
+      description: state.description || '',
       ensAddress,
       ensName,
+      //TODO: Add id-s to links so that it can auto-populate field
       addresses: [],
-      links: [],
-      widgets: [
+      links: state.links || [],
+      widgets: state.widgets || [
         {
           type: NimiWidgetType.POAP,
         },
@@ -358,7 +353,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 newLinksArray = [
                   ...linksData,
                   {
-                    id: new Date().valueOf().toString(),
+                    id: generateID(),
                     type: link,
                     // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
                     title: '',

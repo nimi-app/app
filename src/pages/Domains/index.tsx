@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
 
-// Queries
-import { useGetDomainsQuery } from '../../generated/graphql/ens';
-
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
-import { ENSNameCard } from '../../components/ENSNameCard';
+
 import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
+import { useDomainsData } from '../../hooks/useDomainsData';
+import { BasicENSCard } from '../../components/ENSCard/BasicENSCard';
+import { PopulatedENSCard } from '../../components/ENSCard/PopulatedENSCard';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -57,21 +57,18 @@ interface DomainsProps {
 }
 
 function Domains({ address }: DomainsProps) {
-  const { data, loading } = useGetDomainsQuery({
-    variables: {
-      address: address.toLowerCase(),
-    },
-  });
+  const { emptyDomainArray, domainArray, loading } = useDomainsData(address);
+
   const { t } = useTranslation('nimi');
 
-  if (loading || !data) {
+  if (loading) {
     return <Loader />;
   }
 
   return (
     <Container>
       <DomainsHeader>Your Identities</DomainsHeader>
-      {!data.account?.domains || data.account.domains.length === 0 ? (
+      {!emptyDomainArray.length || !domainArray.length ? (
         <BigBanner>
           {t('noEnsFound')}
           <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
@@ -80,9 +77,14 @@ function Domains({ address }: DomainsProps) {
         </BigBanner>
       ) : (
         <StyledDomainsWrapper>
-          {data.account.domains.map(({ id, name, labelName }) => {
-            return <ENSNameCard key={id} name={name || ''} labelName={labelName || ''} />;
-          })}
+          {domainArray.length &&
+            domainArray.map((item) => {
+              return item.data && <PopulatedENSCard data={item.data} key={item.id} id={item.id} />;
+            })}
+          {emptyDomainArray.length &&
+            emptyDomainArray.map(({ id, name, labelName }) => {
+              return <BasicENSCard key={id} id={id} name={name || ''} labelName={labelName || ''} />;
+            })}
           <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
         </StyledDomainsWrapper>
       )}
