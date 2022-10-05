@@ -128,6 +128,15 @@ export const StyledCloseModalButton = styled(CloseIcon)`
 /**
  * Modal Title
  */
-export const StyledModalTitle = styled.h2`
-  ${NimiSignatureColor}
+export const StyledModalTitle = styled.div`
+  font-weight: 700;
+  font-size: 38px;
+  ${NimiSignatureColor};
+`;
+export const ModalSubTitle = styled.div`
+  color: #7a7696;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 28px;
+  margin-top: 16px;
 `;
