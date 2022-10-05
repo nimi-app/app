@@ -77,13 +77,10 @@ function Domains({ address }: DomainsProps) {
         </BigBanner>
       ) : (
         <StyledDomainsWrapper>
-          {domainArray.length && (
-            <StyledDomainsWrapper>
-              {domainArray.map((item) => {
-                return item.data && <PopulatedENSCard data={item.data} key={item.id} id={item.id} />;
-              })}
-            </StyledDomainsWrapper>
-          )}
+          {domainArray.length &&
+            domainArray.map((item) => {
+              return item.data && <PopulatedENSCard data={item.data} key={item.id} id={item.id} />;
+            })}
           {emptyDomainArray.length &&
             emptyDomainArray.map(({ id, name, labelName }) => {
               return <BasicENSCard key={id} id={id} name={name || ''} labelName={labelName || ''} />;
