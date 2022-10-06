@@ -4,6 +4,7 @@ import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
+import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 
 import {
   Nimi,
@@ -22,13 +23,15 @@ import {
   PreviewContent,
   PageSectionTitle,
   ProfileImage,
-  ProfileImagePlaceholder,
   AddFieldsButton,
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
   AddresssWrapper,
   AddressesTitle,
+  FileInput,
+  ImportButton,
+  ErrorMessage,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -50,12 +53,13 @@ import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { publishNimiViaIPNS } from './api';
+import { publishNimiViaIPNS, uploadImage } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
 import { Button } from '../Button';
+import { supportedImageTypes } from '../../constants';
 import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
@@ -99,6 +103,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
+  const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
   // Form state manager
@@ -126,6 +131,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
+
+  const [customImg, setCustomImg] = useState<any>(null);
 
   const formWatchPayload = watch();
 
@@ -234,6 +241,49 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       getValues('links').filter((link) => link.id !== linkId)
     );
 
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files !== null) {
+      const file = event.target.files[0];
+
+      if (file.size > 2000000) {
+        setImgErrorMessage('File too big!');
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+        return;
+      }
+      if (!supportedImageTypes.includes(file.type)) {
+        setImgErrorMessage('File type unsupported!');
+
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+
+        return;
+      }
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setCustomImg([reader.result]);
+      };
+
+      try {
+        const { cidV1 } = await uploadImage(file);
+
+        setValue('image', {
+          type: NimiImageType.URL,
+          url: `https://ipfs.io/ipfs/${cidV1}`,
+        });
+      } catch (error) {
+        console.log('error', error);
+        setImgErrorMessage('Network Error');
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+      }
+    }
+  };
+
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -241,10 +291,17 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              {formWatchPayload.image ? <ProfileImage src={formWatchPayload.image.url} /> : <ProfileImagePlaceholder />}
+              <ProfileImage
+                src={customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini}
+              />
               <ButtonsContainer>
                 <Button onClick={() => setIsNFTSelectorModalOpen(true)}>Select an NFT</Button>
-              </ButtonsContainer>
+              </ButtonsContainer>{' '}
+              {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
+              <ImportButton>
+                <FileInput name="myfile" type="file" onChange={handleUpload} />
+                Upload Profile Picture
+              </ImportButton>
               <ImportButtonsWrapper>
                 <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
                   {t('buttonLabel.importFromTwitter')}
@@ -255,7 +312,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   </ImportFromLensProtocolButton>
                 )}
               </ImportButtonsWrapper>
-
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 {/* display name input */}
                 <FormGroup>
