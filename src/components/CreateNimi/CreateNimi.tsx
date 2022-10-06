@@ -61,7 +61,7 @@ import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
 import { TemplatePicker } from '../TemplatePicker/TemplatePicker';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { NimiSignatureColor } from '../../theme';
 import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
@@ -73,11 +73,19 @@ export interface CreateNimiProps {
   provider: Web3Provider;
 }
 
-const TopContainer = styled.div`
+const NimiModalStyles = css`
+  background: #f0f3fb;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  padding: 16px;
+`;
+
+const ProfilePictureContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   flex-direction: column;
-  margin-bottom: 30px;
+  ${NimiModalStyles};
 `;
 const Toplabel = styled.div`
   display: flex;
@@ -93,6 +101,15 @@ const Toplabel = styled.div`
 const ImageAndTemplateSection = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const TemplateImportContainer = styled.div``;
+
+const TemplateSection = styled.div`
+  ${NimiModalStyles};
+`;
+const ImportSection = styled.div`
+  ${NimiModalStyles};
 `;
 
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
@@ -311,30 +328,36 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <Card>
             <CardBody>
               <ImageAndTemplateSection>
-                <TopContainer>
+                <ProfilePictureContainer>
                   <Toplabel>Profile Picture</Toplabel>
                   <ProfileImage
                     src={
                       customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini
                     }
                   />
-                </TopContainer>
-                <TopContainer>
-                  <Toplabel>Template</Toplabel>
-                  <TemplatePicker />
-                </TopContainer>
-              </ImageAndTemplateSection>
-              <TopContainer>
-                <Toplabel>Import from</Toplabel>
-                <ImportButtonsWrapper>
-                  <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
-                  {!loadingLensProfile && !!lensProfile && (
-                    <ImporButton type="Lens" onClick={handleImportLensProfile} />
-                  )}
+                  <ImportButton>
+                    <FileInput name="myfile" type="file" onChange={handleUpload} />
+                    Change Profile Picture
+                  </ImportButton>
+                </ProfilePictureContainer>
+                <TemplateImportContainer>
+                  <TemplateSection>
+                    <Toplabel>Template</Toplabel>
+                    <TemplatePicker />
+                  </TemplateSection>
+                  <ImportSection>
+                    <Toplabel>Import from</Toplabel>
+                    <ImportButtonsWrapper>
+                      <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
+                      {!loadingLensProfile && !!lensProfile && (
+                        <ImporButton type="Lens" onClick={handleImportLensProfile} />
+                      )}
 
-                  <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
-                </ImportButtonsWrapper>
-              </TopContainer>
+                      <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
+                    </ImportButtonsWrapper>
+                  </ImportSection>
+                </TemplateImportContainer>
+              </ImageAndTemplateSection>
 
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 {/* display name input */}

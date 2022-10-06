@@ -100,9 +100,10 @@ export const ProfileImage = styled.img`
   background-size: cover;
   border: 8px solid #ffffff;
   border-radius: 200px;
-  height: 119px;
-  width: 119px;
+  height: 186px;
+  width: 186px;
   z-index: 1;
+  align-self: center;
 `;
 
 export const SaveAndDeployButton = styled(Button)`
@@ -200,8 +201,8 @@ export const ImportButton = styled.label`
   display: flex;
   position: relative;
   margin: 0 auto;
-  margin-top: 24px;
-  background: #e0e6ff;
+  margin: 22px 0;
+  background: #4589ef;
   padding: 10px 24px;
   font-weight: 600;
   font-size: 16px;
@@ -211,7 +212,7 @@ export const ImportButton = styled.label`
   width: fit-content;
   opacity: 0.8;
   border-radius: 30px;
-  color: #0e4194;
+  color: #ffffff;
   cursor: pointer;
   transition-duration: 0.4s;
   -webkit-transition-duration: 0.4s;
