@@ -2,13 +2,12 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
-import { InputButton } from '../InputButton';
 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
 import { ReactComponent as PenSVG } from '../../assets/svg/pen.svg';
 
-import { renderSVG } from '../../utils';
 import { SharedInputStyles } from '../../theme';
+import { InputFieldWithIcon } from '../Input';
 
 type ReorderInputProps = {
   key?: string;
@@ -22,7 +21,6 @@ type ReorderInputProps = {
 // I can easily update this if necessary.
 
 export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
-  const [inputTouched, setInputTouched] = useState(false);
   const [isInvalidInput, setInvalidInput] = useState(false);
   const { type, title, content } = value;
 
@@ -62,20 +60,16 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
           }
         />
       </InputContainer>
-      <InputContainer>
-        <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
-        <ContentInput
-          inputInvalid={inputTouched && isInvalidInput}
-          value={content}
-          onChange={onChange}
-          spellCheck={false}
-          onBlur={setInputTouched.bind(null, true)}
-        />
-        {content && (
-          <ClearButton className="clear-button" right="57px" onClick={() => updateLink(value.id!, 'content', '')} />
-        )}
-        <InputButton onClick={() => removeLink(value.id!)} />
-      </InputContainer>
+      <InputFieldWithIcon
+        inputLogo={nimiLinkDetailsExtended[type].logo}
+        isInvalidInput={isInvalidInput}
+        content={content}
+        onChange={onChange}
+        onClearClick={() => updateLink(value.id!, 'content', '')}
+        onInputClick={() => removeLink(value.id!)}
+        placeholder={''}
+        id={value.id || ''}
+      />
     </ReorderItem>
   );
 }
@@ -153,13 +147,3 @@ const Pen = styled(PenSVG)`
   display: inline-block;
   cursor: pointer;
 `;
-
-const LogoContainer = styled.div`
-  display: flex;
-  position: absolute;
-  top: 50%;
-  left: 18px;
-  transform: translate(0, -50%);
-`;
-
-const Logo = ({ logo }) => <LogoContainer>{logo}</LogoContainer>;

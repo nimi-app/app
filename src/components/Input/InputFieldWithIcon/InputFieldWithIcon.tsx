@@ -1,19 +1,18 @@
-import { StyledInputWrapper, StyledInput, TrashCanStyle, StyledCross } from '../styleds';
-
-import { ReactComponent as TrashCan } from '../../../assets/svg/trashcan.svg';
-import { ReactComponent as Error } from '../../../assets/svg/alert.svg';
-
-import { FocusEventHandler, useEffect, useState } from 'react';
+import { FC, SVGProps, useState } from 'react';
+import { InputButton } from '../../InputButton';
+import styled from 'styled-components';
+import { SharedInputStyles } from '../../../theme';
+import { ReactComponent as XSVG } from '../../../assets/svg/cross.svg';
+import { renderSVG } from '../../../utils';
 
 export interface InputFieldWithIcon {
-  logo?: JSX.Element;
+  inputLogo?: FC<SVGProps<SVGSVGElement>>;
   placeholder: string;
-  onBlur?: FocusEventHandler<HTMLInputElement>;
+  content: string;
+  onClearClick: any;
+  onInputClick: any;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onDelete: () => void;
-  onInputReset: () => void;
-  isValid: boolean;
-  value: string;
+  isInvalidInput: boolean;
   id: string;
 }
 
@@ -21,53 +20,66 @@ export interface InputFieldWithIcon {
  * Handles the input for the link type
  */
 export function InputFieldWithIcon({
-  logo,
-  isValid,
-  placeholder,
-  onBlur,
+  inputLogo,
+  isInvalidInput,
+  content,
   onChange,
-  onDelete,
-  onInputReset,
-  value,
+  onClearClick,
+  onInputClick,
   id,
 }: InputFieldWithIcon) {
-  const [isError, setIsError] = useState(false);
-  const [isInputFocused, setIsInputFocused] = useState(false);
-
-  useEffect(() => {
-    //hook for handling error state
-    if (!isValid && value.length !== 0) {
-      const newTimeoutId = setTimeout(() => {
-        setIsError(true);
-      }, 2222);
-
-      return () => {
-        clearTimeout(newTimeoutId);
-      };
-    } else {
-      setIsError(false);
-    }
-  }, [isInputFocused, isValid, value]);
-
+  const [inputTouched, setInputTouched] = useState(false);
   return (
-    <StyledInputWrapper isError={isError}>
-      {isError ? <Error /> : logo}
-      <StyledInput
-        onFocus={() => setIsInputFocused(true)}
-        onBlur={(event) => {
-          onBlur && onBlur(event);
-          if (!isValid) setIsError(true);
-        }}
+    <InputContainer id={id}>
+      <Logo logo={renderSVG(inputLogo, 15)} />
+      <ContentInput
+        inputInvalid={inputTouched && isInvalidInput}
+        value={content}
         onChange={onChange}
-        value={value}
-        placeholder={placeholder}
-        type="text"
-        id={id}
+        spellCheck={false}
+        onBlur={setInputTouched.bind(null, true)}
       />
-      {value.length > 0 && <StyledCross onClick={onInputReset} />}
-      <TrashCanStyle onClick={onDelete}>
-        <TrashCan />
-      </TrashCanStyle>
-    </StyledInputWrapper>
+      {content && <ClearButton className="clear-button" right="57px" onClick={onClearClick} />}
+      <InputButton onClick={onInputClick} />
+    </InputContainer>
   );
 }
+
+const InputContainer = styled.div<{ marginBottom?: string }>`
+  width: 100%;
+  position: relative;
+  background: #f0f3fb;
+  ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
+`;
+export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string }>`
+  height: 50px;
+  padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
+  ${SharedInputStyles};
+  background-color: white;
+`;
+const ClearButton = styled(XSVG)<{ right?: string }>`
+  visibility: none;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translate(0, -50%);
+  cursor: pointer;
+  ${({ right }) => right && `right: ${right};`}
+  transition-property: opacity;
+  transition-duration: 1s;
+  transition-delay: 0.1;
+
+  &:hover path {
+    fill: #8c90a0;
+  }
+`;
+const LogoContainer = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 18px;
+  transform: translate(0, -50%);
+`;
+
+const Logo = ({ logo }) => <LogoContainer>{logo}</LogoContainer>;

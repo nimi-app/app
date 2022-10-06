@@ -108,6 +108,11 @@ const FormItem = styled.div`
   flex-direction: column;
   padding: 15px;
 `;
+const BlockchainAddresses = styled.div`
+  display: flex;
+  gap: 14px;
+  flex-direction: column;
+`;
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const location = useLocation();
 
@@ -394,15 +399,17 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   <FormGroup>
                     <FormItem>
                       <Label>Addresses</Label>
-                      {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                        return (
-                          <NimiBlockchainField
-                            key={'blockchain-input-' + blockchain.toLowerCase()}
-                            index={index}
-                            blockchain={blockchain}
-                          />
-                        );
-                      })}
+                      <BlockchainAddresses>
+                        {formWatchPayload.addresses.map(({ blockchain }, index) => {
+                          return (
+                            <NimiBlockchainField
+                              key={'blockchain-input-' + blockchain.toLowerCase()}
+                              index={index}
+                              blockchain={blockchain}
+                            />
+                          );
+                        })}
+                      </BlockchainAddresses>
                     </FormItem>
                   </FormGroup>
                 )}
