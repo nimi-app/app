@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
 import { InputButton } from '../InputButton';
@@ -8,6 +8,7 @@ import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
 import { ReactComponent as PenSVG } from '../../assets/svg/pen.svg';
 
 import { renderSVG } from '../../utils';
+import { SharedInputStyles } from '../../theme';
 
 type ReorderInputProps = {
   key?: string;
@@ -79,43 +80,6 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
   );
 }
 
-const SharedInputStyles = css<{ inputInvalid?: boolean }>`
-  width: 100%;
-  line-height: 22px;
-  font-size: 16px;
-  font-weight: 400;
-  color: #8c90a0;
-  border-radius: 20px;
-  border: none;
-  outline: none;
-  transition: all 0.1s linear;
-
-  &:focus {
-    background-color: white;
-    font-size: 18px;
-    font-weight: 500;
-    box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
-
-    & + .clear-button {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    color: #5274ff;
-    border: double 2px transparent;
-    background-image: linear-gradient(white, white), linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-  }
-
-  ${({ inputInvalid }) =>
-    inputInvalid &&
-    `
-      border: 2px solid #EB5757;
-      color: #EB5757;
-    `}
-`;
-
 const InputContainer = styled.div<{ marginBottom?: string }>`
   width: 100%;
   position: relative;
@@ -139,10 +103,10 @@ const TitleInput = styled.input`
   }
 `;
 
-const ContentInput = styled.input<{ inputInvalid: boolean }>`
+export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string }>`
   height: 50px;
-  padding: 8px 80px 8px 40px;
-  ${SharedInputStyles}
+  padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
+  ${SharedInputStyles};
   background-color: white;
 `;
 

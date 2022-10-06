@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Flex } from 'rebass';
 
 import { CardBody } from '../Card';
-import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
+import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
 import { Button } from '../Button';
 import { DottedButtonBase } from '../Button/styled';
 
@@ -149,21 +149,6 @@ export const BackButton = styled.button`
   @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
     display: flex;
   }
-`;
-
-export const AddresssWrapper = styled.div`
-  padding: 15px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #f0f3fb;
-  border-radius: 12px;
-`;
-export const AddressesTitle = styled.div`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 18px;
-  color: #8c90a0;
 `;
 
 export const StyledDots = styled.div`

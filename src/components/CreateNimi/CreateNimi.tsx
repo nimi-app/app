@@ -28,14 +28,11 @@ import {
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
-  AddresssWrapper,
-  AddressesTitle,
   FileInput,
   ImportButton,
-  ErrorMessage,
 } from './styled';
 
-import { Label, Input, TextArea, FormGroup } from '../form';
+import { Label, TextArea, FormGroup } from '../form';
 
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
@@ -54,14 +51,12 @@ import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
-import { Button } from '../Button';
 import { supportedImageTypes } from '../../constants';
-import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
-import { ReorderInput } from '../ReorderInput';
+import { ContentInput, ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
 import { TemplatePicker } from '../TemplatePicker/TemplatePicker';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
@@ -365,21 +360,24 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 <FormGroup>
                   <FormItem>
                     <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
-                    <StyledInputWrapper isSimple>
-                      <Input placeholder="Name" id="displayName" {...register('displayName')} />
-                    </StyledInputWrapper>
+                    <ContentInput
+                      inputInvalid={false}
+                      paddingLeft={'20px'}
+                      placeholder="Name"
+                      id="displayName"
+                      {...register('displayName')}
+                    />
                   </FormItem>
                   <FormItem>
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
-                    <StyledInputWrapper isSimple>
-                      <TextArea
-                        onKeyDown={handleKeyDown}
-                        maxLength={300}
-                        placeholder="Description"
-                        id="description"
-                        {...register('description')}
-                      />
-                    </StyledInputWrapper>
+
+                    <TextArea
+                      onKeyDown={handleKeyDown}
+                      maxLength={300}
+                      placeholder="Description"
+                      id="description"
+                      {...register('description')}
+                    />
                   </FormItem>
                 </FormGroup>
                 {/* links */}
@@ -393,16 +391,20 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 )}
                 {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
-                  <AddresssWrapper>
-                    <Label>Addresses</Label>
-                    {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                      return (
-                        <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
-                          <NimiBlockchainField index={index} blockchain={blockchain} />
-                        </FormGroup>
-                      );
-                    })}
-                  </AddresssWrapper>
+                  <FormGroup>
+                    <FormItem>
+                      <Label>Addresses</Label>
+                      {formWatchPayload.addresses.map(({ blockchain }, index) => {
+                        return (
+                          <NimiBlockchainField
+                            key={'blockchain-input-' + blockchain.toLowerCase()}
+                            index={index}
+                            blockchain={blockchain}
+                          />
+                        );
+                      })}
+                    </FormItem>
+                  </FormGroup>
                 )}
                 {/* widgets */}
                 {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (

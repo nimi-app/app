@@ -21,7 +21,6 @@ export function NimiBlockchainField({ blockchain, index }: NimiBlockchainFieldPr
   const { setValue: setAddressValue, getValues } = useFormContext<Nimi>();
   const [value, setValue] = useState('');
   const [isValueValid, setIsValueValid] = useState(false);
-  console.log('isValueValid,', isValueValid);
 
   const logo = useMemo(() => {
     return renderSVG(NIMI_BLOCKCHAIN_LOGO_URL[blockchain], 20);
