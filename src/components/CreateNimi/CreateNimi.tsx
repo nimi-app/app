@@ -62,7 +62,7 @@ import { ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
 import { TemplatePicker } from '../TemplatePicker/TemplatePicker';
 import styled, { css } from 'styled-components';
-import { NimiSignatureColor } from '../../theme';
+import { NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
 
@@ -73,18 +73,12 @@ export interface CreateNimiProps {
   provider: Web3Provider;
 }
 
-const NimiModalStyles = css`
-  background: #f0f3fb;
-  border-radius: 12px;
-  margin-bottom: 30px;
-  padding: 16px;
-`;
-
 const ProfilePictureContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   flex-direction: column;
+  flex-grow: 1;
   ${NimiModalStyles};
 `;
 const Toplabel = styled.div`
@@ -100,18 +94,25 @@ const Toplabel = styled.div`
 `;
 const ImageAndTemplateSection = styled.div`
   display: flex;
-  justify-content: space-between;
+
+  margin-bottom: 14px;
+  gap: 14px;
 `;
 
 const TemplateImportContainer = styled.div``;
 
 const TemplateSection = styled.div`
   ${NimiModalStyles};
+  margin-bottom: 14px;
 `;
 const ImportSection = styled.div`
   ${NimiModalStyles};
 `;
-
+const FormItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+`;
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const location = useLocation();
 
@@ -362,24 +363,24 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 {/* display name input */}
                 <FormGroup>
-                  <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
-
-                  <StyledInputWrapper isSimple>
-                    <Input placeholder="Name" id="displayName" {...register('displayName')} />
-                  </StyledInputWrapper>
-                </FormGroup>
-                {/* description input */}
-                <FormGroup>
-                  <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <StyledInputWrapper isSimple>
-                    <TextArea
-                      onKeyDown={handleKeyDown}
-                      maxLength={300}
-                      placeholder="Description"
-                      id="description"
-                      {...register('description')}
-                    />
-                  </StyledInputWrapper>
+                  <FormItem>
+                    <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
+                    <StyledInputWrapper isSimple>
+                      <Input placeholder="Name" id="displayName" {...register('displayName')} />
+                    </StyledInputWrapper>
+                  </FormItem>
+                  <FormItem>
+                    <Label htmlFor="description">{t('formLabel.description')}</Label>
+                    <StyledInputWrapper isSimple>
+                      <TextArea
+                        onKeyDown={handleKeyDown}
+                        maxLength={300}
+                        placeholder="Description"
+                        id="description"
+                        {...register('description')}
+                      />
+                    </StyledInputWrapper>
+                  </FormItem>
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
@@ -393,7 +394,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
                   <AddresssWrapper>
-                    <AddressesTitle>Addresses</AddressesTitle>
+                    <Label>Addresses</Label>
                     {formWatchPayload.addresses.map(({ blockchain }, index) => {
                       return (
                         <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
@@ -403,31 +404,29 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                     })}
                   </AddresssWrapper>
                 )}
-
+                {/* widgets */}
+                {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
+                  <PoapField
+                    onConfigure={(e) => {
+                      e.stopPropagation();
+                      setIsPOAPModalOpened(true);
+                    }}
+                    onRemove={() =>
+                      setValue(
+                        'widgets',
+                        getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP)
+                      )
+                    }
+                  />
+                )}
                 {/* add fields button */}
-                <FormGroup>
-                  {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
-                    <PoapField
-                      onConfigure={(e) => {
-                        e.stopPropagation();
-                        setIsPOAPModalOpened(true);
-                      }}
-                      onRemove={() =>
-                        setValue(
-                          'widgets',
-                          getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP)
-                        )
-                      }
-                    />
-                  )}
-                  <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
-                    + {t('buttonLabel.addFields')}
-                  </AddFieldsButton>
-                </FormGroup>
+                <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
+                  + {t('buttonLabel.addFields')}
+                </AddFieldsButton>
                 {/* publish button */}
-                <FormGroup>
-                  <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
-                </FormGroup>
+
+                <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
+
                 <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
               </FormWrapper>
             </CardBody>

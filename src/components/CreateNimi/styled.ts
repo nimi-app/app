@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Flex } from 'rebass';
 
 import { CardBody } from '../Card';
-import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
+import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { Button } from '../Button';
 import { DottedButtonBase } from '../Button/styled';
 
@@ -86,7 +86,7 @@ export const StyledFlexList = styled.div`
 `;
 
 export const PageSectionTitle = styled.h1`
-  ${NimiSignatureColor}
+  ${NimiSignatureColor};
   font-size: 36px;
   line-height: 39px;
   margin-bottom: 24px;
@@ -112,6 +112,7 @@ export const SaveAndDeployButton = styled(Button)`
   border-radius: 50px;
   padding: 25px 24px;
   letter-spacing: -0.02em;
+  width: 100%;
 `;
 export const AddFieldsButton = styled(DottedButtonBase)`
   text-transform: uppercase;
@@ -119,6 +120,7 @@ export const AddFieldsButton = styled(DottedButtonBase)`
   letter-spacing: 0.1em;
   border-radius: 12px;
   padding: 22px 16px;
+  width: 100%;
 `;
 export const PreviewMobile = styled.div`
   display: none;
@@ -150,12 +152,11 @@ export const BackButton = styled.button`
 `;
 
 export const AddresssWrapper = styled.div`
-  background-color: #f1f1f1;
   padding: 15px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  background-color: #f0f3fb;
   border-radius: 12px;
 `;
 export const AddressesTitle = styled.div`

@@ -119,7 +119,7 @@ const SharedInputStyles = css<{ inputInvalid?: boolean }>`
 const InputContainer = styled.div<{ marginBottom?: string }>`
   width: 100%;
   position: relative;
-
+  background: #f0f3fb;
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 `;
 
@@ -128,7 +128,7 @@ const TitleInput = styled.input`
   position: relative;
   padding: 8px 30px 8px 20px;
   ${SharedInputStyles}
-  background-color: #f1f1f1;
+  background-color:  #F0F3FB;
 
   &:hover:not(:focus) ~ .pen-component {
     display: flex;

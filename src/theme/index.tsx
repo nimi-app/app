@@ -148,6 +148,11 @@ export const NimiSignatureColor = css`
   background-clip: text;
   text-fill-color: transparent;
 `;
+export const NimiModalStyles = css`
+  background: #f0f3fb;
+  border-radius: 12px;
+  padding: 16px;
+`;
 
 const TextWrapper = styled(Text)<{ color: keyof Colors }>`
   color: ${({ color, theme }) => (theme as any)[color]};

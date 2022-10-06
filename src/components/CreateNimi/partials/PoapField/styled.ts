@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { NimiModalStyles } from '../../../../theme';
 
 export const PoapButton = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ export const PoapWrapper = styled.div`
   padding: 15px 20px 15px 37px;
   border-radius: 12px;
   background-color: #f1f1f1;
-  margin-bottom: 20px;
+  ${NimiModalStyles};
 `;
 
 export const InnerPoapWrapper = styled.div`
