@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { NimiThemeType } from '@nimi.io/card';
+import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 
 import {
   Nimi,
@@ -23,13 +24,15 @@ import {
   PreviewContent,
   PageSectionTitle,
   ProfileImage,
-  ProfileImagePlaceholder,
   AddFieldsButton,
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
   AddresssWrapper,
   AddressesTitle,
+  FileInput,
+  ImportButton,
+  ErrorMessage,
 } from './styled';
 
 import { Label, Input, TextArea, FormGroup } from '../form';
@@ -42,16 +45,17 @@ import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
-import { ENSMetadata } from '../../hooks/useENSMetadata';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { publishNimiViaIPNS } from './api';
+import { publishNimiViaIPNS, uploadImage } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
+import { Button } from '../Button';
+import { supportedImageTypes } from '../../constants';
 import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
@@ -60,6 +64,7 @@ import { TemplatePicker } from '../TemplatePicker/TemplatePicker';
 import styled from 'styled-components';
 import { NimiSignatureColor } from '../../theme';
 import { ImporButton } from '../Button/ImportButton';
+import { generateID } from '../../utils';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -92,7 +97,8 @@ const ImageAndTemplateSection = styled.div`
 
 export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const location = useLocation();
-  const ensMetadata = location.state as ENSMetadata;
+
+  const state = location.state as Nimi;
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -115,28 +121,23 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
+  const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
-
-  const image = ensMetadata?.image
-    ? {
-        type: NimiImageType.URL,
-        url: ensMetadata?.image || '',
-      }
-    : undefined;
 
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
-      displayName: ensName,
-      image,
-      description: '',
+      displayName: state.displayName || ensName,
+      image: state.image?.url ? state.image : undefined,
+      description: state.description || '',
       ensAddress,
       ensName,
+      //TODO: Add id-s to links so that it can auto-populate field
       addresses: [],
-      links: [],
+      links: state.links || [],
       theme: { type: NimiThemeType.DEVCON },
-      widgets: [
+      widgets: state.widgets || [
         {
           type: NimiWidgetType.POAP,
         },
@@ -149,6 +150,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
+
+  const [customImg, setCustomImg] = useState<any>(null);
 
   const formWatchPayload = watch();
 
@@ -257,6 +260,49 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       getValues('links').filter((link) => link.id !== linkId)
     );
 
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files !== null) {
+      const file = event.target.files[0];
+
+      if (file.size > 2000000) {
+        setImgErrorMessage('File too big!');
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+        return;
+      }
+      if (!supportedImageTypes.includes(file.type)) {
+        setImgErrorMessage('File type unsupported!');
+
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+
+        return;
+      }
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setCustomImg([reader.result]);
+      };
+
+      try {
+        const { cidV1 } = await uploadImage(file);
+
+        setValue('image', {
+          type: NimiImageType.URL,
+          url: `https://ipfs.io/ipfs/${cidV1}`,
+        });
+      } catch (error) {
+        console.log('error', error);
+        setImgErrorMessage('Network Error');
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+      }
+    }
+  };
+
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -267,11 +313,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
               <ImageAndTemplateSection>
                 <TopContainer>
                   <Toplabel>Profile Picture</Toplabel>
-                  {formWatchPayload.image ? (
-                    <ProfileImage src={formWatchPayload.image.url} />
-                  ) : (
-                    <ProfileImagePlaceholder />
-                  )}
+                  <ProfileImage
+                    src={
+                      customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini
+                    }
+                  />
                 </TopContainer>
                 <TopContainer>
                   <Toplabel>Template</Toplabel>
@@ -388,7 +434,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 newLinksArray = [
                   ...linksData,
                   {
-                    id: new Date().valueOf().toString(),
+                    id: generateID(),
                     type: link,
                     // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
                     title: '',
