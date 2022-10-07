@@ -4,10 +4,14 @@ import styled from 'styled-components';
 
 import { ModalBase } from '../ModalBase';
 import { TemplateItem } from './TemplateItem';
-import NimiLogo from '../../../../assets/svg/nimi-logo-no-text.svg';
-import NimiOG from '../../../../assets/svg/nimi-og.svg';
-import devconImageLogo from '../../../../assets/svg/devcon-image-logo.svg';
-import DevconLogoText from '../../../../assets/svg/devcon-text.svg';
+
+import nimiOGLogoImage from '../../../../assets/theme/nimi-og-logo-image.svg';
+import nimiOGLogoText from '../../../../assets/theme/nimi-og-logo-text.svg';
+import nimiOGPreview from '../../../../assets/theme/nimi-og-preview.png';
+
+import devconLogoImage from '../../../../assets/theme/devcon-logo-image.svg';
+import devconLogoText from '../../../../assets/theme/devcon-logo-text.svg';
+import devconPreview from '../../../../assets/theme/devcon-preview.png';
 
 export function TemplatePickerModal() {
   const [modalContainer] = useState(() => document.createElement('div'));
@@ -29,8 +33,8 @@ export function TemplatePickerModal() {
       handleCloseModal={() => console.log('CLOSE MODAL')}
     >
       <Container>
-        <TemplateItem themeImageLogo={NimiLogo} themeNameLogo={NimiOG} />
-        <TemplateItem themeImageLogo={devconImageLogo} themeNameLogo={DevconLogoText} />
+        <TemplateItem themeImageLogo={nimiOGLogoImage} themeNameLogo={nimiOGLogoText} themePreview={nimiOGPreview} />
+        <TemplateItem themeImageLogo={devconLogoImage} themeNameLogo={devconLogoText} themePreview={devconPreview} />
       </Container>
     </ModalBase>,
     modalContainer
