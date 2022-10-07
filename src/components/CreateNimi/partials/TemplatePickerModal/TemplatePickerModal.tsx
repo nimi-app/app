@@ -8,10 +8,11 @@ import { Theme } from '../../../../types';
 
 type TemplatePickerModalProps = {
   themes: Theme[];
+  handleThemeSelection: (theme: Theme) => void;
   closeModal: () => void;
 };
 
-export function TemplatePickerModal({ closeModal, themes }: TemplatePickerModalProps) {
+export function TemplatePickerModal({ closeModal, handleThemeSelection, themes }: TemplatePickerModalProps) {
   const [modalContainer] = useState(() => document.createElement('div'));
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export function TemplatePickerModal({ closeModal, themes }: TemplatePickerModalP
     >
       <Container>
         {themes.map((theme) => (
-          <TemplateItem key={theme.type} theme={theme} />
+          <TemplateItem key={theme.type} theme={theme} onClick={() => handleThemeSelection(theme)} />
         ))}
       </Container>
     </ModalBase>,

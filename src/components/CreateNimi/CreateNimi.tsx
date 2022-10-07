@@ -70,6 +70,15 @@ import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
 import { Theme } from '../../types';
 
+const Themes = {
+  NIMI: {
+    type: 'NIMI',
+    logoImage: nimiOGLogoImage,
+    logoText: nimiOGLogoText,
+    preview: nimiOGPreview,
+  },
+};
+
 const themes: Theme[] = [
   {
     type: 'NIMI',
@@ -168,10 +177,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
-  function handleThemeSelection(theme) {
-    console.log(theme);
-  }
-
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
@@ -214,6 +219,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       url: lensProfile?.pictureUrl,
     });
   }, [setValue, lensProfile]);
+
+  function handleThemeSelection({ type }) {
+    setValue('theme', { type });
+    setIsTemplatePickerModalOpened(false);
+  }
 
   /**
    * Handle the form submit via ENS contract interaction
@@ -374,7 +384,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   <TemplateSection>
                     <Toplabel>Template</Toplabel>
                     <TemplatePickerButton
-                      selectedTheme={selectedTheme}
+                      selectedTheme={themes.filter((theme) => theme.type === getValues('theme').type)[0]}
                       onClick={() => setIsTemplatePickerModalOpened(true)}
                     />
                   </TemplateSection>
@@ -483,7 +493,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
         <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
       )}
       {isTemplatePickerModalOpened && (
-        <TemplatePickerModal themes={themes} closeModal={() => setIsTemplatePickerModalOpened(false)} />
+        <TemplatePickerModal
+          themes={themes}
+          handleThemeSelection={handleThemeSelection}
+          closeModal={() => setIsTemplatePickerModalOpened(false)}
+        />
       )}
       {isAddFieldsModalOpen && (
         <AddFieldsModal

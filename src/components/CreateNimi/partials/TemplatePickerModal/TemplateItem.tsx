@@ -3,11 +3,12 @@ import { Theme } from '../../../../types';
 
 type TemplateItemProps = {
   theme: Theme;
+  onClick: () => void;
 };
 
-export function TemplateItem({ theme }: TemplateItemProps) {
+export function TemplateItem({ theme, onClick }: TemplateItemProps) {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <ThemeDataContainer>
         <ThemeData>
           <ThemeImageLogo src={theme.logoImage} />
