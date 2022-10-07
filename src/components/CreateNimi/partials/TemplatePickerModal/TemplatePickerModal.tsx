@@ -28,7 +28,7 @@ const themes = [
   },
 ];
 
-export function TemplatePickerModal() {
+export function TemplatePickerModal({ closeModal }) {
   const [modalContainer] = useState(() => document.createElement('div'));
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function TemplatePickerModal() {
     <ModalBase
       title="Choose a Template"
       subtitle="Here is the selection of template you can choose from. To unlock more templates, collect POAPs and NFTs"
-      handleCloseModal={() => console.log('CLOSE MODAL')}
+      handleCloseModal={closeModal}
     >
       <Container>
         {themes.map((theme) => (
