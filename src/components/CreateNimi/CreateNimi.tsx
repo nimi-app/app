@@ -60,6 +60,7 @@ import { NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
 import { TemplatePickerModal } from './partials/TemplatePickerModal';
+import { TemplatePickerButton } from '../TemplatePickerButton';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -127,7 +128,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
-  const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(true);
+  const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(false);
 
   /**
    * Publish Nimi state
@@ -344,6 +345,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 <TemplateImportContainer>
                   <TemplateSection>
                     <Toplabel>Template</Toplabel>
+                    <TemplatePickerButton />
                   </TemplateSection>
                   <ImportSection>
                     <Toplabel>Import from</Toplabel>
