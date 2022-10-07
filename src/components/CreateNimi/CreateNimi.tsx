@@ -196,7 +196,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       setPublishNimiError(undefined);
       setIsNimiPublished(false);
     });
-    console.log('data', data);
 
     try {
       if (!publicResolverContract) {
@@ -256,7 +255,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       });
     }
   };
-  console.log('formwatch', formWatchPayload);
+
   const onSubmitInvalid = (data) => {
     console.log('SUBMIT INVALID', data);
   };
