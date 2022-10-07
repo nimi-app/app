@@ -23,7 +23,7 @@ export function CreateNimiPage() {
   });
   //check if user has certain poap
   const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
-    account: account,
+    account,
   });
   console.log('avaliableThemes', avaliableThemes);
 
@@ -46,6 +46,7 @@ export function CreateNimiPage() {
         ensName={data.domain.name as string}
         ensLabelName={data.domain.labelName as string}
         provider={provider}
+        availableThemes={avaliableThemes}
       />
     </Container>
   );

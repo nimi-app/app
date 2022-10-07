@@ -70,36 +70,20 @@ import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
 import { Theme } from '../../types';
 
-const Themes = {
-  NIMI: {
-    type: 'NIMI',
-    logoImage: nimiOGLogoImage,
-    logoText: nimiOGLogoText,
-    preview: nimiOGPreview,
-  },
-};
-
-const themes: Theme[] = [
-  {
-    type: 'NIMI',
-    logoImage: nimiOGLogoImage,
-    logoText: nimiOGLogoText,
-    preview: nimiOGPreview,
-  },
-  {
-    type: 'DEVCON',
-    logoImage: devconLogoImage,
-    logoText: devconLogoText,
-    preview: devconPreview,
-  },
-];
-
-export interface CreateNimiProps {
-  ensAddress: string;
-  ensName: string;
-  ensLabelName: string;
-  provider: Web3Provider;
-}
+// const themes: Theme[] = [
+//   {
+//     type: 'NIMI',
+//     logoImage: nimiOGLogoImage,
+//     logoText: nimiOGLogoText,
+//     preview: nimiOGPreview,
+//   },
+//   {
+//     type: 'DEVCON',
+//     logoImage: devconLogoImage,
+//     logoText: devconLogoText,
+//     preview: devconPreview,
+//   },
+// ];
 
 const ProfilePictureContainer = styled.div`
   display: flex;
@@ -146,7 +130,35 @@ const BlockchainAddresses = styled.div`
   gap: 14px;
   flex-direction: column;
 `;
-export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
+
+const themes = {
+  [NimiThemeType.NIMI]: {
+    type: NimiThemeType.NIMI,
+    logoImage: nimiOGLogoImage,
+    logoText: nimiOGLogoText,
+    preview: nimiOGPreview,
+  },
+  [NimiThemeType.DEVCON]: {
+    type: NimiThemeType.DEVCON,
+    logoImage: devconLogoImage,
+    logoText: devconLogoText,
+    preview: devconPreview,
+  },
+};
+
+export interface CreateNimiProps {
+  ensAddress: string;
+  ensName: string;
+  ensLabelName: string;
+  provider: Web3Provider;
+  availableThemes: NimiThemeType[];
+}
+
+export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: CreateNimiProps) {
+  console.log('AVAILABLE THEMES: ', availableThemes);
+
+  availableThemes.map((theme) => console.log(themes[theme]));
+
   const location = useLocation();
 
   const state = location.state as Nimi;
@@ -161,7 +173,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
   const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState(themes[0]);
 
   /**
    * Publish Nimi state
@@ -194,7 +205,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           type: NimiWidgetType.POAP,
         },
       ],
-      theme: { type: NimiThemeType.DEVCON },
+      theme: { type: NimiThemeType.NIMI },
     },
   });
 
@@ -384,7 +395,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   <TemplateSection>
                     <Toplabel>Template</Toplabel>
                     <TemplatePickerButton
-                      selectedTheme={themes.filter((theme) => theme.type === getValues('theme').type)[0]}
+                      selectedTheme={themes[getValues('theme').type]}
                       onClick={() => setIsTemplatePickerModalOpened(true)}
                     />
                   </TemplateSection>
@@ -494,7 +505,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       )}
       {isTemplatePickerModalOpened && (
         <TemplatePickerModal
-          themes={themes}
+          themes={availableThemes.map((availableTheme) => themes[availableTheme])}
           handleThemeSelection={handleThemeSelection}
           closeModal={() => setIsTemplatePickerModalOpened(false)}
         />
