@@ -1,16 +1,12 @@
 import styled from 'styled-components';
 
-import NimiLogo from '../../../../assets/svg/nimi-logo-no-text.svg';
-import NimiOG from '../../../../assets/svg/nimi-og.svg';
-import NimiOGPreview from '../../../../assets/images/nimi-og.png';
-import DevconLogoText from '../../../../assets/svg/devcon-text.png';
-
 type TemplateItemProps = {
   themeImageLogo?: string;
   themeNameLogo?: string;
+  themePreview?: string;
 };
 
-export function TemplateItem({ themeImageLogo, themeNameLogo }: TemplateItemProps) {
+export function TemplateItem({ themeImageLogo, themeNameLogo, themePreview }: TemplateItemProps) {
   return (
     <Container>
       <ThemeDataContainer>
@@ -19,7 +15,7 @@ export function TemplateItem({ themeImageLogo, themeNameLogo }: TemplateItemProp
           <ThemeNameLogo src={themeNameLogo} />
         </ThemeData>
       </ThemeDataContainer>
-      <ThemePreview src={NimiOGPreview} />
+      <ThemePreview src={themePreview} />
     </Container>
   );
 }
@@ -30,6 +26,7 @@ const Container = styled.div`
   position: relative;
   border-radius: 14px;
   box-shadow: 0px 14.4118px 38.4314px -9.45772px rgba(44, 43, 102, 0.14);
+  cursor: pointer;
   margin-bottom: 14px;
 `;
 
