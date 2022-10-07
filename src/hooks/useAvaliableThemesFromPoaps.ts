@@ -26,28 +26,25 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
       const themes: NimiThemeType[] = [];
 
       const promiseArrays = themeToPoapMapping.map((item) => {
-        console.log('primiseItems', item);
         return (
           item.eventId &&
           item.eventId.map((item) => axios.get(`https://api.poap.tech/actions/scan/${account.toLowerCase()}/${item}`))
         );
       });
-      console.log('arrayOfApis', promiseArrays);
+      //   console.log('arrayOfApis', promiseArrays);
       const checkIfUserHasPoaps = promiseArrays.map(async (item) => {
         if (item) return await Promise.allSettled(item);
       });
-      console.log('check', checkIfUserHasPoaps);
-      try {
-        // const api = `https://api.poap.tech/actions/scan/${account}/${evenId}`;
-      } catch (error) {
-        // TODO: HANDLE ERROR
-        console.error(error);
-      } finally {
-        setAvaliableThemes(themes);
-        setLoading(false);
-      }
+      console.log('user', checkIfUserHasPoaps);
+      checkIfUserHasPoaps.forEach(async (item) => {
+        const promose = await item;
+        console.log('MODIFIER', promose);
+      });
+      console.log('iterator');
+      setAvaliableThemes(themes);
+      setLoading(false);
     }
-    fetchPOAPs();
+    if (account) fetchPOAPs();
   }, [account]);
 
   return {
