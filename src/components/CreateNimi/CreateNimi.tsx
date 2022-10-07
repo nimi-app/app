@@ -167,6 +167,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
+  function handleThemeSelection(theme) {
+    console.log(theme);
+  }
+
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
@@ -478,7 +482,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       {isPOAPModalOpened && (
         <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
       )}
-      {isTemplatePickerModalOpened && <TemplatePickerModal closeModal={() => setIsTemplatePickerModalOpened(false)} />}
+      {isTemplatePickerModalOpened && (
+        <TemplatePickerModal themes={themes} closeModal={() => setIsTemplatePickerModalOpened(false)} />
+      )}
       {isAddFieldsModalOpen && (
         <AddFieldsModal
           onClose={() => setIsAddFieldsModalOpen(false)}

@@ -5,30 +5,17 @@ import styled from 'styled-components';
 import { ModalBase } from '../ModalBase';
 import { TemplateItem } from './TemplateItem';
 
-import nimiOGLogoImage from '../../../../assets/theme/nimi-og-logo-image.png';
-import nimiOGLogoText from '../../../../assets/theme/nimi-og-logo-text.svg';
-import nimiOGPreview from '../../../../assets/theme/nimi-og-preview.png';
+type TemplatePickerModalProps = {
+  themes: Array<{
+    type: string;
+    logoImage: string;
+    logoText: string;
+    preview: string;
+  }>;
+  closeModal: () => void;
+};
 
-import devconLogoImage from '../../../../assets/theme/devcon-logo-image.svg';
-import devconLogoText from '../../../../assets/theme/devcon-logo-text.svg';
-import devconPreview from '../../../../assets/theme/devcon-preview.png';
-
-const themes = [
-  {
-    type: 'NIMI',
-    logoImage: nimiOGLogoImage,
-    logoText: nimiOGLogoText,
-    preview: nimiOGPreview,
-  },
-  {
-    type: 'DEVCON',
-    logoImage: devconLogoImage,
-    logoText: devconLogoText,
-    preview: devconPreview,
-  },
-];
-
-export function TemplatePickerModal({ closeModal }) {
+export function TemplatePickerModal({ closeModal, themes }: TemplatePickerModalProps) {
   const [modalContainer] = useState(() => document.createElement('div'));
 
   useEffect(() => {
