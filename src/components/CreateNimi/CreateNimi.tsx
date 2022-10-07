@@ -155,10 +155,6 @@ export interface CreateNimiProps {
 }
 
 export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: CreateNimiProps) {
-  console.log('AVAILABLE THEMES: ', availableThemes);
-
-  availableThemes.map((theme) => console.log(themes[theme]));
-
   const location = useLocation();
 
   const state = location.state as Nimi;

@@ -4,11 +4,12 @@ import { Theme } from '../../../../types';
 type TemplateItemProps = {
   theme: Theme;
   onClick: () => void;
+  noMargin?: boolean;
 };
 
-export function TemplateItem({ theme, onClick }: TemplateItemProps) {
+export function TemplateItem({ theme, onClick, noMargin }: TemplateItemProps) {
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onClick} noMargin={noMargin}>
       <ThemeDataContainer>
         <ThemeData>
           <ThemeImageLogo src={theme.logoImage} />
@@ -20,14 +21,14 @@ export function TemplateItem({ theme, onClick }: TemplateItemProps) {
   );
 }
 
-const Container = styled.div`
+const Container = styled.div<{ noMargin?: boolean }>`
   width: 100%;
   height: 230px;
   position: relative;
   border-radius: 14px;
   box-shadow: 0px 14.4118px 38.4314px -9.45772px rgba(44, 43, 102, 0.14);
   cursor: pointer;
-  margin-bottom: 14px;
+  ${({ noMargin }) => !noMargin && 'margin-bottom: 14px;'}
 `;
 
 const ThemeDataContainer = styled.div`

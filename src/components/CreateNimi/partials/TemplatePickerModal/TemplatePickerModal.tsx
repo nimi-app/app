@@ -32,8 +32,13 @@ export function TemplatePickerModal({ closeModal, handleThemeSelection, themes }
       handleCloseModal={closeModal}
     >
       <Container>
-        {themes.map((theme) => (
-          <TemplateItem key={theme.type} theme={theme} onClick={() => handleThemeSelection(theme)} />
+        {themes.map((theme, index) => (
+          <TemplateItem
+            key={theme.type}
+            theme={theme}
+            onClick={() => handleThemeSelection(theme)}
+            noMargin={index + 1 === themes.length}
+          />
         ))}
       </Container>
     </ModalBase>,
