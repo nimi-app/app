@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import NimiLogo from '../../../../assets/svg/nimi-logo-no-text.svg';
+import NimiOG from '../../../../assets/svg/nimi-og.svg';
 
 export function TemplateItem() {
   return (
@@ -8,6 +9,7 @@ export function TemplateItem() {
       <ThemeDataContainer>
         <ThemeData>
           <Logo src={NimiLogo} />
+          <ThemeName src={NimiOG} />
         </ThemeData>
       </ThemeDataContainer>
       <ThemeLook />
@@ -45,7 +47,12 @@ const Logo = styled.img`
   width: 126px;
   height: 126px;
   border-radius: 50%;
-  margin-top: 29px;
+  margin: 29px 0 12px;
+`;
+
+const ThemeName = styled.img`
+  display: block;
+  margin: 0 auto;
 `;
 
 const ThemeLook = styled.div`
