@@ -103,7 +103,7 @@ const TemplateSection = styled.div`
 const ImportSection = styled.div`
   ${NimiModalStyles};
 `;
-const FormItem = styled.div`
+export const FormItem = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px;

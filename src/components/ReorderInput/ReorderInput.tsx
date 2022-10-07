@@ -97,11 +97,12 @@ const TitleInput = styled.input`
   }
 `;
 
-export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string }>`
+export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string; border?: string }>`
   height: 50px;
   padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
   ${SharedInputStyles};
   background-color: white;
+  ${({ border }) => border && `border:${border}`};
 `;
 
 const ClearButton = styled(XSVG)<{ right?: string }>`
