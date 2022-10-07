@@ -8,7 +8,7 @@ export interface UseAvaliableTheme {
 }
 
 const themeToPoapMapping = [
-  { theme: NimiThemeType.DEVCON, eventId: [55123, 47553] },
+  { theme: NimiThemeType.DEVCON, eventId: [55123, 47557773] },
   { theme: NimiThemeType.NIMI, eventId: [536461111111] },
 ];
 
@@ -23,24 +23,27 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
     async function fetchPOAPs() {
       setLoading(true);
 
-      const themes: NimiThemeType[] = [];
+      //Default theme set here
+      const themes: NimiThemeType[] = [NimiThemeType.NIMI];
 
-      const promiseArrays = themeToPoapMapping.map((item) => {
+      //array of requests for checking if user has poap
+      const poapRequestsForIndividualPoaps = themeToPoapMapping.map((item) => {
         return (
           item.eventId &&
           item.eventId.map((item) => axios.get(`https://api.poap.tech/actions/scan/${account.toLowerCase()}/${item}`))
         );
       });
-      //   console.log('arrayOfApis', promiseArrays);
-      const checkIfUserHasPoaps = promiseArrays.map(async (item) => {
+      //resolve promises
+      const resolvedPoapRequests = poapRequestsForIndividualPoaps.map(async (item) => {
         if (item) return await Promise.allSettled(item);
       });
-      console.log('user', checkIfUserHasPoaps);
-      checkIfUserHasPoaps.forEach(async (item) => {
+      //sorted array of avaliable themes based on requests
+      resolvedPoapRequests.forEach(async (item, index) => {
         const promose = await item;
-        console.log('MODIFIER', promose);
+        const hasTheme = promose && promose.some((item) => item.status === 'fulfilled');
+        if (hasTheme) themes.unshift(themeToPoapMapping[index].theme);
       });
-      console.log('iterator');
+
       setAvaliableThemes(themes);
       setLoading(false);
     }

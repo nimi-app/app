@@ -26,6 +26,7 @@ export function CreateNimiPage() {
     account: account,
   });
   console.log('avaliableThemes', avaliableThemes);
+  console.log('loading', themeLoading);
 
   if (loading || themeLoading) {
     return <Loader />;
