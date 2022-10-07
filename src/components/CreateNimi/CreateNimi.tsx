@@ -33,6 +33,28 @@ import {
 } from './styled';
 
 import { Label, TextArea, FormGroup } from '../form';
+import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
+import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
+import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
+
+import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
+import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
+import devconPreview from '../../assets/theme/devcon-preview.png';
+
+const themes = [
+  {
+    type: 'NIMI',
+    logoImage: nimiOGLogoImage,
+    logoText: nimiOGLogoText,
+    preview: nimiOGPreview,
+  },
+  {
+    type: 'DEVCON',
+    logoImage: devconLogoImage,
+    logoText: devconLogoText,
+    preview: devconPreview,
+  },
+];
 
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
@@ -345,7 +367,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 <TemplateImportContainer>
                   <TemplateSection>
                     <Toplabel>Template</Toplabel>
-                    <TemplatePickerButton />
+                    <TemplatePickerButton
+                      nimiOGLogoImage={nimiOGLogoImage}
+                      nimiOGLogoText={nimiOGLogoText}
+                      onClick={() => setIsTemplatePickerModalOpened(true)}
+                    />
                   </TemplateSection>
                   <ImportSection>
                     <Toplabel>Import from</Toplabel>
@@ -451,7 +477,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       {isPOAPModalOpened && (
         <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
       )}
-      {isTemplatePickerModalOpened && <TemplatePickerModal />}
+      {isTemplatePickerModalOpened && <TemplatePickerModal closeModal={() => setIsTemplatePickerModalOpened(false)} />}
       {isAddFieldsModalOpen && (
         <AddFieldsModal
           onClose={() => setIsAddFieldsModalOpen(false)}
