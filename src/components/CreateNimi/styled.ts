@@ -86,7 +86,7 @@ export const StyledFlexList = styled.div`
 `;
 
 export const PageSectionTitle = styled.h1`
-  ${NimiSignatureColor}
+  ${NimiSignatureColor};
   font-size: 36px;
   line-height: 39px;
   margin-bottom: 24px;
@@ -98,12 +98,12 @@ export const PageSectionTitle = styled.h1`
 export const ProfileImage = styled.img`
   background-position: center, center;
   background-size: cover;
-  align-self: center;
   border: 8px solid #ffffff;
   border-radius: 200px;
-  height: 209.8px;
-  width: 209.8px;
+  height: 186px;
+  width: 186px;
   z-index: 1;
+  align-self: center;
 `;
 
 export const SaveAndDeployButton = styled(Button)`
@@ -112,6 +112,7 @@ export const SaveAndDeployButton = styled(Button)`
   border-radius: 50px;
   padding: 25px 24px;
   letter-spacing: -0.02em;
+  width: 100%;
 `;
 export const AddFieldsButton = styled(DottedButtonBase)`
   text-transform: uppercase;
@@ -119,6 +120,7 @@ export const AddFieldsButton = styled(DottedButtonBase)`
   letter-spacing: 0.1em;
   border-radius: 12px;
   padding: 22px 16px;
+  width: 100%;
 `;
 export const PreviewMobile = styled.div`
   display: none;
@@ -147,22 +149,6 @@ export const BackButton = styled.button`
   @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
     display: flex;
   }
-`;
-
-export const AddresssWrapper = styled.div`
-  background-color: #f1f1f1;
-  padding: 15px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-radius: 12px;
-`;
-export const AddressesTitle = styled.div`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 18px;
-  color: #8c90a0;
 `;
 
 export const StyledDots = styled.div`
@@ -201,8 +187,8 @@ export const ImportButton = styled.label`
   display: flex;
   position: relative;
   margin: 0 auto;
-  margin-top: 24px;
-  background: #e0e6ff;
+  margin: 22px 0;
+  background: #4589ef;
   padding: 10px 24px;
   font-weight: 600;
   font-size: 16px;
@@ -212,7 +198,7 @@ export const ImportButton = styled.label`
   width: fit-content;
   opacity: 0.8;
   border-radius: 30px;
-  color: #0e4194;
+  color: #ffffff;
   cursor: pointer;
   transition-duration: 0.4s;
   -webkit-transition-duration: 0.4s;

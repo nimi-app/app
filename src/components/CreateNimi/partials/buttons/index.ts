@@ -7,17 +7,16 @@ export const ButtonsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 32px;
 `;
 
 export const ImportButtonsWrapper = styled(ButtonsContainer)`
   flex-direction: row;
-  justify-content: center;
+  justify-content: left;
   gap: 16px;
-  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
+  /* @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
     flex-wrap: wrap;
     justify-content: center;
-  }
+  } */
 `;
 
 export const ImportFromTwitterButton = styled(Button)`

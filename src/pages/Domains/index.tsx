@@ -68,7 +68,7 @@ function Domains({ address }: DomainsProps) {
   return (
     <Container>
       <DomainsHeader>Your Identities</DomainsHeader>
-      {!emptyDomainArray.length || !domainArray.length ? (
+      {!emptyDomainArray.length && !domainArray.length ? (
         <BigBanner>
           {t('noEnsFound')}
           <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
@@ -77,11 +77,11 @@ function Domains({ address }: DomainsProps) {
         </BigBanner>
       ) : (
         <StyledDomainsWrapper>
-          {domainArray.length &&
+          {domainArray.length !== 0 &&
             domainArray.map((item) => {
               return item.data && <PopulatedENSCard data={item.data} key={item.id} id={item.id} />;
             })}
-          {emptyDomainArray.length &&
+          {emptyDomainArray.length !== 0 &&
             emptyDomainArray.map(({ id, name, labelName }) => {
               return <BasicENSCard key={id} id={id} name={name || ''} labelName={labelName || ''} />;
             })}

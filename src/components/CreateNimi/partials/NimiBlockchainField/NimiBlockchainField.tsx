@@ -1,9 +1,8 @@
 import { NimiBlockchain, Nimi, blockchainAddresses, NIMI_BLOCKCHAIN_LOGO_URL } from '@nimi.io/card';
 import { useFormContext } from 'react-hook-form';
-import { ChangeEventHandler, useMemo, useState } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 
 import { InputFieldWithIcon } from '../../../Input';
-import { renderSVG } from '../../../../utils';
 import { useTranslation } from 'react-i18next';
 
 export interface NimiBlockchainFieldProps {
@@ -21,11 +20,6 @@ export function NimiBlockchainField({ blockchain, index }: NimiBlockchainFieldPr
   const { setValue: setAddressValue, getValues } = useFormContext<Nimi>();
   const [value, setValue] = useState('');
   const [isValueValid, setIsValueValid] = useState(false);
-  console.log('isValueValid,', isValueValid);
-
-  const logo = useMemo(() => {
-    return renderSVG(NIMI_BLOCKCHAIN_LOGO_URL[blockchain], 20);
-  }, [blockchain]);
 
   //checks if address is valid and submits it to form if its
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -64,13 +58,14 @@ export function NimiBlockchainField({ blockchain, index }: NimiBlockchainFieldPr
 
   return (
     <InputFieldWithIcon
-      logo={logo}
-      isValid={isValueValid}
+      inputLogo={NIMI_BLOCKCHAIN_LOGO_URL[blockchain]}
+      isInvalidInput={isValueValid}
       onChange={onChange}
       placeholder={`${label} address`}
-      onDelete={onDelete}
-      onInputReset={() => setValue('')}
-      value={value}
+      content={value}
+      onClearClick={() => setValue('')}
+      onInputClick={onDelete}
+      // TODO: Add id to blockchainAddress in the card
       id={blockchain + index}
     />
   );

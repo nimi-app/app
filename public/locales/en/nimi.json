@@ -37,6 +37,7 @@
   "formLabel.displayName": "Display Name",
   "formLabel.email": "Email",
   "formLabel.description": "Description",
+  "formLabel.template": "Template",
   "formLabel.instagram": "Instagram",
   "formLabel.twitter": "Twitter",
   "formLabel.facebook": "Facebook",
