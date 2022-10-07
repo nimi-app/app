@@ -47,6 +47,7 @@ const ThemeData = styled.div`
 const ThemeImageLogo = styled.img`
   width: 100%;
   border-radius: 50%;
+  box-shadow: 0px 49.5867px 74.3801px -13.7741px rgba(44, 43, 102, 0.15);
   margin: 29px 0 12px;
 `;
 
