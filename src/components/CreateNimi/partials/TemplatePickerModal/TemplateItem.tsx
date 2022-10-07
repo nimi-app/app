@@ -3,14 +3,20 @@ import styled from 'styled-components';
 import NimiLogo from '../../../../assets/svg/nimi-logo-no-text.svg';
 import NimiOG from '../../../../assets/svg/nimi-og.svg';
 import NimiOGPreview from '../../../../assets/images/nimi-og.png';
+import DevconLogoText from '../../../../assets/svg/devcon-text.png';
 
-export function TemplateItem() {
+type TemplateItemProps = {
+  themeImageLogo?: string;
+  themeNameLogo?: string;
+};
+
+export function TemplateItem({ themeImageLogo, themeNameLogo }: TemplateItemProps) {
   return (
     <Container>
       <ThemeDataContainer>
         <ThemeData>
-          <Logo src={NimiLogo} />
-          <ThemeName src={NimiOG} />
+          <ThemeImageLogo src={themeImageLogo} />
+          <ThemeNameLogo src={themeNameLogo} />
         </ThemeData>
       </ThemeDataContainer>
       <ThemePreview src={NimiOGPreview} />
@@ -30,9 +36,6 @@ const Container = styled.div`
 const ThemeDataContainer = styled.div`
   width: 100%;
   height: 230px;
-  position: absolute;
-  top: 0;
-  left: 0;
   border-radius: 14px;
   border: 5px solid white;
   background-color: #f0f3fb;
@@ -44,14 +47,13 @@ const ThemeData = styled.div`
   margin-left: 122px;
 `;
 
-const Logo = styled.img`
-  width: 126px;
-  height: 126px;
+const ThemeImageLogo = styled.img`
+  width: 100%;
   border-radius: 50%;
   margin: 29px 0 12px;
 `;
 
-const ThemeName = styled.img`
+const ThemeNameLogo = styled.img`
   display: block;
   margin: 0 auto;
 `;
