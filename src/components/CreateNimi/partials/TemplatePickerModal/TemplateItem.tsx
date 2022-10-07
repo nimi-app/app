@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import NimiLogo from '../../../../assets/svg/nimi-logo-no-text.svg';
 import NimiOG from '../../../../assets/svg/nimi-og.svg';
+import NimiOGPreview from '../../../../assets/images/nimi-og.png';
 
 export function TemplateItem() {
   return (
@@ -12,7 +13,7 @@ export function TemplateItem() {
           <ThemeName src={NimiOG} />
         </ThemeData>
       </ThemeDataContainer>
-      <ThemeLook />
+      <ThemePreview src={NimiOGPreview} />
     </Container>
   );
 }
@@ -55,9 +56,10 @@ const ThemeName = styled.img`
   margin: 0 auto;
 `;
 
-const ThemeLook = styled.div`
+const ThemePreview = styled.img`
   width: 212px;
   height: 100%;
+  display: block;
   position: absolute;
   top: 0;
   right: 0;
