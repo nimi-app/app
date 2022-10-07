@@ -1,16 +1,16 @@
 import styled from 'styled-components';
+import { Theme } from '../../types';
 
 type TemplatePickerButtonProps = {
-  themeImage: string;
-  themeName: string;
+  selectedTheme: Theme;
   onClick: () => void;
 };
 
-export function TemplatePickerButton({ themeImage, themeName, onClick }: TemplatePickerButtonProps) {
+export function TemplatePickerButton({ selectedTheme, onClick }: TemplatePickerButtonProps) {
   return (
     <Container onClick={onClick}>
-      <ThemeImage src={themeImage} />
-      <ThemeName src={themeName} />
+      <ThemeImage src={selectedTheme.logoImage} />
+      <ThemeName src={selectedTheme.logoText} />
     </Container>
   );
 }

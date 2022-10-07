@@ -4,14 +4,10 @@ import styled from 'styled-components';
 
 import { ModalBase } from '../ModalBase';
 import { TemplateItem } from './TemplateItem';
+import { Theme } from '../../../../types';
 
 type TemplatePickerModalProps = {
-  themes: Array<{
-    type: string;
-    logoImage: string;
-    logoText: string;
-    preview: string;
-  }>;
+  themes: Theme[];
   closeModal: () => void;
 };
 
@@ -36,12 +32,7 @@ export function TemplatePickerModal({ closeModal, themes }: TemplatePickerModalP
     >
       <Container>
         {themes.map((theme) => (
-          <TemplateItem
-            key={theme.type}
-            themeImageLogo={theme.logoImage}
-            themeNameLogo={theme.logoText}
-            themePreview={theme.preview}
-          />
+          <TemplateItem key={theme.type} theme={theme} />
         ))}
       </Container>
     </ModalBase>,

@@ -41,21 +41,6 @@ import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
 import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
 import devconPreview from '../../assets/theme/devcon-preview.png';
 
-const themes = [
-  {
-    type: 'NIMI',
-    logoImage: nimiOGLogoImage,
-    logoText: nimiOGLogoText,
-    preview: nimiOGPreview,
-  },
-  {
-    type: 'DEVCON',
-    logoImage: devconLogoImage,
-    logoText: devconLogoText,
-    preview: devconPreview,
-  },
-];
-
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
@@ -83,6 +68,22 @@ import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
 import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
+import { Theme } from '../../types';
+
+const themes: Theme[] = [
+  {
+    type: 'NIMI',
+    logoImage: nimiOGLogoImage,
+    logoText: nimiOGLogoText,
+    preview: nimiOGPreview,
+  },
+  {
+    type: 'DEVCON',
+    logoImage: devconLogoImage,
+    logoText: devconLogoText,
+    preview: devconPreview,
+  },
+];
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -373,8 +374,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   <TemplateSection>
                     <Toplabel>Template</Toplabel>
                     <TemplatePickerButton
-                      themeImage={nimiOGLogoImage}
-                      themeName={nimiOGLogoText}
+                      selectedTheme={selectedTheme}
                       onClick={() => setIsTemplatePickerModalOpened(true)}
                     />
                   </TemplateSection>

@@ -1,21 +1,20 @@
 import styled from 'styled-components';
+import { Theme } from '../../../../types';
 
 type TemplateItemProps = {
-  themeImageLogo?: string;
-  themeNameLogo?: string;
-  themePreview?: string;
+  theme: Theme;
 };
 
-export function TemplateItem({ themeImageLogo, themeNameLogo, themePreview }: TemplateItemProps) {
+export function TemplateItem({ theme }: TemplateItemProps) {
   return (
     <Container>
       <ThemeDataContainer>
         <ThemeData>
-          <ThemeImageLogo src={themeImageLogo} />
-          <ThemeNameLogo src={themeNameLogo} />
+          <ThemeImageLogo src={theme.logoImage} />
+          <ThemeNameLogo src={theme.logoText} />
         </ThemeData>
       </ThemeDataContainer>
-      <ThemePreview src={themePreview} />
+      <ThemePreview src={theme.preview} />
     </Container>
   );
 }
