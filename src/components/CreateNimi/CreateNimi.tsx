@@ -151,6 +151,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
   const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(themes[0]);
 
   /**
    * Publish Nimi state
@@ -368,8 +369,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                   <TemplateSection>
                     <Toplabel>Template</Toplabel>
                     <TemplatePickerButton
-                      nimiOGLogoImage={nimiOGLogoImage}
-                      nimiOGLogoText={nimiOGLogoText}
+                      themeImage={nimiOGLogoImage}
+                      themeName={nimiOGLogoText}
                       onClick={() => setIsTemplatePickerModalOpened(true)}
                     />
                   </TemplateSection>

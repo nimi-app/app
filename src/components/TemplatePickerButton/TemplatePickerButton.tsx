@@ -1,19 +1,16 @@
 import styled from 'styled-components';
 
-import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
-import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
-
 type TemplatePickerButtonProps = {
-  nimiOGLogoImage: string;
-  nimiOGLogoText: string;
+  themeImage: string;
+  themeName: string;
   onClick: () => void;
 };
 
-export function TemplatePickerButton({ nimiOGLogoImage, nimiOGLogoText, onClick }: TemplatePickerButtonProps) {
+export function TemplatePickerButton({ themeImage, themeName, onClick }: TemplatePickerButtonProps) {
   return (
     <Container onClick={onClick}>
-      <ThemeImage src={nimiOGLogoImage} />
-      <ThemeName src={nimiOGLogoText} />
+      <ThemeImage src={themeImage} />
+      <ThemeName src={themeName} />
     </Container>
   );
 }
