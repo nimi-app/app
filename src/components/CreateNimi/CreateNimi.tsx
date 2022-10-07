@@ -65,6 +65,7 @@ import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
 import { generateID } from '../../utils';
+import { TemplatePickerModal } from './partials/TemplatePickerModal';
 
 export interface CreateNimiProps {
   ensAddress: string;
@@ -91,6 +92,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
+  const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(true);
 
   /**
    * Publish Nimi state
@@ -123,6 +125,9 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           type: NimiWidgetType.POAP,
         },
       ],
+      theme: {
+        type: 'DEVCON',
+      },
     },
   });
 
@@ -394,6 +399,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       {isPOAPModalOpened && (
         <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
       )}
+      {isTemplatePickerModalOpened && <TemplatePickerModal />}
       {isAddFieldsModalOpen && (
         <AddFieldsModal
           onClose={() => setIsAddFieldsModalOpen(false)}
