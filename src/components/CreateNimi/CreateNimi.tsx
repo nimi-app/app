@@ -132,7 +132,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
   const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
-  console.log('abaliableThemes', availableThemes);
+  console.log('links', state?.links);
 
   // Form state manager
   const useFormContext = useForm<Nimi>({

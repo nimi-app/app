@@ -15,6 +15,7 @@ import {
   Title as ModalTitle,
 } from '../../../Modal';
 import { ContentInput } from '../../../ReorderInput';
+import { generateID } from '../../../../utils';
 
 const ModalHeader = styled(ModalHeaderBase)`
   padding: 82px;
@@ -70,10 +71,16 @@ export function ImportFromLinktreeModal({ onClose }) {
         },
       })
       .then(({ data }) => {
-        console.log('ImportedData', data.data);
-        onClose(data.data);
+        const mappedLinks = data.data.map((item) => {
+          console.log('here', item);
+          const type = item.title.toUpperCase();
+          return { type: type, title: '', content: item.content, id: generateID() };
+        });
+        console.log('ImportedData', mappedLinks);
+        onClose(mappedLinks);
       })
       .catch((error) => {
+        console.log('error', error);
         setError(error.message);
       })
       .then(() => setIsLoading(false));
