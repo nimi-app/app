@@ -33,6 +33,13 @@ import {
 } from './styled';
 
 import { Label, TextArea, FormGroup } from '../form';
+import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
+import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
+import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
+
+import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
+import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
+import devconPreview from '../../assets/theme/devcon-preview.png';
 
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
@@ -55,18 +62,28 @@ import { supportedImageTypes } from '../../constants';
 import { ReorderGroup } from '../ReorderGroup';
 import { ContentInput, ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
-import { TemplatePicker } from '../TemplatePicker/TemplatePicker';
 import styled from 'styled-components';
 import { NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
+import { TemplatePickerModal } from './partials/TemplatePickerModal';
+import { TemplatePickerButton } from '../TemplatePickerButton';
+import { Theme } from '../../types';
 
-export interface CreateNimiProps {
-  ensAddress: string;
-  ensName: string;
-  ensLabelName: string;
-  provider: Web3Provider;
-}
+// const themes: Theme[] = [
+//   {
+//     type: 'NIMI',
+//     logoImage: nimiOGLogoImage,
+//     logoText: nimiOGLogoText,
+//     preview: nimiOGPreview,
+//   },
+//   {
+//     type: 'DEVCON',
+//     logoImage: devconLogoImage,
+//     logoText: devconLogoText,
+//     preview: devconPreview,
+//   },
+// ];
 
 const ProfilePictureContainer = styled.div`
   display: flex;
@@ -113,7 +130,31 @@ const BlockchainAddresses = styled.div`
   gap: 14px;
   flex-direction: column;
 `;
-export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
+
+const themes = {
+  [NimiThemeType.NIMI]: {
+    type: NimiThemeType.NIMI,
+    logoImage: nimiOGLogoImage,
+    logoText: nimiOGLogoText,
+    preview: nimiOGPreview,
+  },
+  [NimiThemeType.DEVCON]: {
+    type: NimiThemeType.DEVCON,
+    logoImage: devconLogoImage,
+    logoText: devconLogoText,
+    preview: devconPreview,
+  },
+};
+
+export interface CreateNimiProps {
+  ensAddress: string;
+  ensName: string;
+  ensLabelName: string;
+  provider: Web3Provider;
+  availableThemes: NimiThemeType[];
+}
+
+export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: CreateNimiProps) {
   const location = useLocation();
 
   const state = location.state as Nimi;
@@ -127,6 +168,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
+  const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(false);
 
   /**
    * Publish Nimi state
@@ -154,12 +196,12 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       //TODO: Add id-s to links so that it can auto-populate field
       addresses: [],
       links: state.links || [],
-      theme: { type: NimiThemeType.DEVCON },
       widgets: state.widgets || [
         {
           type: NimiWidgetType.POAP,
         },
       ],
+      theme: { type: NimiThemeType.NIMI },
     },
   });
 
@@ -184,6 +226,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       url: lensProfile?.pictureUrl,
     });
   }, [setValue, lensProfile]);
+
+  function handleThemeSelection({ type }) {
+    setValue('theme', { type });
+    setIsTemplatePickerModalOpened(false);
+  }
 
   /**
    * Handle the form submit via ENS contract interaction
@@ -343,7 +390,10 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 <TemplateImportContainer>
                   <TemplateSection>
                     <Toplabel>Template</Toplabel>
-                    <TemplatePicker />
+                    <TemplatePickerButton
+                      selectedTheme={themes[getValues('theme').type]}
+                      onClick={() => setIsTemplatePickerModalOpened(true)}
+                    />
                   </TemplateSection>
                   <ImportSection>
                     <Toplabel>Import from</Toplabel>
@@ -448,6 +498,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       </InnerWrapper>
       {isPOAPModalOpened && (
         <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
+      )}
+      {isTemplatePickerModalOpened && (
+        <TemplatePickerModal
+          themes={availableThemes.map((availableTheme) => themes[availableTheme])}
+          handleThemeSelection={handleThemeSelection}
+          closeModal={() => setIsTemplatePickerModalOpened(false)}
+        />
       )}
       {isAddFieldsModalOpen && (
         <AddFieldsModal

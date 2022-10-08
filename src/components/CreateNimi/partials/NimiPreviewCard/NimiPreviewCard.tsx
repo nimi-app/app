@@ -84,7 +84,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 </style>
                 <FixedGlobalStyle />
                 <ThemeProvider>
-                  <NimiCard nimi={previewNimi} isApp={true} />
+                  <NimiCard nimi={previewNimi} isApp={false} />
                 </ThemeProvider>
               </>
             </StyleSheetManager>
