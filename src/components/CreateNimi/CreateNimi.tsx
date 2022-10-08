@@ -38,6 +38,7 @@ import {
   ImportSection,
   FormItem,
   BlockchainAddresses,
+  ErrorMessage,
 } from './styled';
 
 import { Label, TextArea, FormGroup } from '../form';
@@ -276,7 +277,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
       const file = event.target.files[0];
 
       if (file.size > 2000000) {
-        setImgErrorMessage('File too big!');
+        setImgErrorMessage('File too big! Max size: 2mb');
         setTimeout(() => {
           setImgErrorMessage('');
         }, 5000);
@@ -329,6 +330,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
                       customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini
                     }
                   />
+                  {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
                   <ImportButton>
                     <FileInput name="myfile" type="file" onChange={handleUpload} />
                     Change Profile Picture

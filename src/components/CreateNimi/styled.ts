@@ -186,6 +186,7 @@ export const FileInput = styled.input`
 export const ImportButton = styled.label`
   display: flex;
   position: relative;
+  align-self: center;
   margin: 0 auto;
   margin: 22px 0;
   background: #4589ef;
