@@ -19,6 +19,9 @@ export const CardBody = styled.div`
   padding: 42px;
   display: flex;
   flex-direction: column;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    padding:14px;
+  `};
 `;
 
 export const CardTitle = styled.h2`
