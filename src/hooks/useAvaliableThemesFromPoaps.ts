@@ -10,7 +10,7 @@ export interface UseAvaliableTheme {
 //Order here determines precedent for default theme
 const themeToPoapMapping = [
   //TODO: add right event id for Bogota paop
-  { theme: NimiThemeType.DEVCON, eventId: [5364618, 47557773] },
+  { theme: NimiThemeType.DEVCON, eventId: [53834, 47557773] },
   //   { theme: NimiThemeType.NIMI, eventId: [536461111111] },
 ];
 
