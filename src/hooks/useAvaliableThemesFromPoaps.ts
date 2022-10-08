@@ -13,7 +13,7 @@ const themeToPoapMapping = [
 ];
 
 /**
- * Does a lookup for an ENS name to find its avatar details, uses ENS Domains metadata API
+ * Returns array of themes user has avaliable
  */
 export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
   const [avaliableThemes, setAvaliableThemes] = useState<NimiThemeType[]>([]);
@@ -34,13 +34,14 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
         );
       });
       //resolve promises
-      const resolvedPoapRequests = poapRequestsForIndividualPoaps.map(async (item) => {
-        if (item) return await Promise.allSettled(item);
-      });
+      const resolvedPoapRequests = await Promise.all(
+        poapRequestsForIndividualPoaps.map(async (item) => {
+          if (item) return await Promise.allSettled(item);
+        })
+      );
       //sorted array of avaliable themes based on requests
-      resolvedPoapRequests.forEach(async (item, index) => {
-        const promose = await item;
-        const hasTheme = promose && promose.some((item) => item.status === 'fulfilled');
+      resolvedPoapRequests.forEach((item, index) => {
+        const hasTheme = item && item.some((item) => item.status === 'fulfilled');
         if (hasTheme) themes.unshift(themeToPoapMapping[index].theme);
       });
 
