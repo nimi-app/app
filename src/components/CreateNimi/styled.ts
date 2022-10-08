@@ -283,6 +283,8 @@ export const ImageAndTemplateSection = styled.div`
 export const TemplateSection = styled.div`
   ${NimiModalStyles};
   margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
 `;
 export const ImportSection = styled.div`
   ${NimiModalStyles};
