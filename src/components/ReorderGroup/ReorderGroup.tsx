@@ -8,7 +8,7 @@ interface ReorderGroupProps {
 }
 
 export function ReorderGroup({ children, values, onReorder }: ReorderGroupProps) {
-  const style = { width: '100%' };
+  const style = { width: '100%', gap: '14px', display: 'flex', flexDirection: 'column' };
 
   return (
     <Reorder.Group axis="y" values={values} onReorder={onReorder} as="div" style={style}>

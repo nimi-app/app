@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { getAPIBaseURL } from '../../../../modules/api-service';
 import { Button } from '../../../Button';
-import { FormGroup, Input } from '../../../form';
-import { StyledInputWrapper } from '../../../Input';
+
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {
   Modal,
@@ -14,6 +13,7 @@ import {
   CloseButton as ModalCloseButton,
   Title as ModalTitle,
 } from '../../../Modal';
+import { ContentInput } from '../../../ReorderInput';
 
 import { ImportTwitterDataModalProps, TwitterData } from './types';
 
@@ -93,16 +93,16 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
             </LoaderWrapper>
           ) : (
             <>
-              <FormGroup>
-                <StyledInputWrapper isSimple>
-                  <Input
-                    type="text"
-                    value={username}
-                    onChange={onInputChange}
-                    placeholder={t('importFromTwitterModal.inputPlaceholder')}
-                  />
-                </StyledInputWrapper>
-              </FormGroup>
+              <ContentInput
+                inputInvalid={false}
+                border={'2px solid #E6E8EC'}
+                paddingLeft={'20px'}
+                type="text"
+                value={username}
+                onChange={onInputChange}
+                placeholder={t('importFromTwitterModal.inputPlaceholder')}
+              />
+
               <Button onClick={fetchTwitterData}>{t('importFromTwitterModal.buttonLabel')}</Button>
               <div>{error && error.message}</div>
             </>

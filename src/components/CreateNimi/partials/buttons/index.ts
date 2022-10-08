@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { MEDIA_WIDTHS } from '../../../../theme';
 import { Button } from '../../../Button';
 
 export const ButtonsContainer = styled.div`
@@ -12,11 +11,6 @@ export const ButtonsContainer = styled.div`
 export const ImportButtonsWrapper = styled(ButtonsContainer)`
   flex-direction: row;
   justify-content: left;
-  gap: 16px;
-  /* @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
-    flex-wrap: wrap;
-    justify-content: center;
-  } */
 `;
 
 export const ImportFromTwitterButton = styled(Button)`

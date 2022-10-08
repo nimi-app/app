@@ -8,7 +8,7 @@
     "@ensdomains/ui": "^3.4.1",
     "@ethersproject/providers": "^5.7.0",
     "@hookform/resolvers": "^2.8.10",
-    "@nimi.io/card": "github:nimi-app/card#df5d70c",
+    "@nimi.io/card": "github:nimi-app/card#3d65a8a",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",

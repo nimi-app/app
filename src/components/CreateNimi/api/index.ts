@@ -93,3 +93,23 @@ export function publishNimiViaIPNS({
     )
     .then(({ data }) => data.data);
 }
+
+/**
+ *
+ * @param file file that is uploaded by user
+ * @returns A promise with IPFS hash
+ */
+export function uploadImage(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const config = {
+    headers: {
+      'content-type': file.type,
+    },
+  };
+  return axios
+    .post<{
+      data: PublishNimiApiResponse;
+    }>(`${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/assets`, formData, config)
+    .then(({ data }) => data.data);
+}

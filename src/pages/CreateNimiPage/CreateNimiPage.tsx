@@ -1,5 +1,4 @@
-import { namehash as ensNameHash } from '@ethersproject/hash';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useGetDomainFromSubgraphQuery } from '../../generated/graphql/ens';
 import { CreateNimi } from '../../components/CreateNimi';
@@ -7,22 +6,27 @@ import { Loader } from '../../components/Loader';
 import { Container } from '../../components/Container';
 import { useWeb3React } from '@web3-react/core';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
+import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 
 export function CreateNimiPage() {
   const { account, provider, chainId } = useWeb3React();
-  const { ensName } = useParams();
-  const nodeHash = ensNameHash(ensName as string);
+
+  const { state }: any = useLocation();
 
   /**
    * @todo - prevent accessing if the user does not own the domain
    */
   const { data, loading, error } = useGetDomainFromSubgraphQuery({
     variables: {
-      domainId: nodeHash.toLowerCase(),
+      domainId: state.id.toLowerCase(),
     },
   });
+  //check if user has certain poap
+  const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
+    account,
+  });
 
-  if (loading) {
+  if (loading || themeLoading) {
     return <Loader />;
   }
 
@@ -41,6 +45,7 @@ export function CreateNimiPage() {
         ensName={data.domain.name as string}
         ensLabelName={data.domain.labelName as string}
         provider={provider}
+        availableThemes={avaliableThemes}
       />
     </Container>
   );

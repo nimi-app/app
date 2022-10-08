@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import { Flex } from 'rebass';
 
 import { CardBody } from '../Card';
-import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
-import { ReactComponent as PlaceholderMini } from '../../assets/svg/profile-empty.svg';
+import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { Button } from '../Button';
 import { DottedButtonBase } from '../Button/styled';
 
@@ -87,7 +86,7 @@ export const StyledFlexList = styled.div`
 `;
 
 export const PageSectionTitle = styled.h1`
-  ${NimiSignatureColor}
+  ${NimiSignatureColor};
   font-size: 36px;
   line-height: 39px;
   margin-bottom: 24px;
@@ -101,17 +100,19 @@ export const ProfileImage = styled.img`
   background-size: cover;
   border: 8px solid #ffffff;
   border-radius: 200px;
-  height: 119px;
-  width: 119px;
+  height: 186px;
+  width: 186px;
   z-index: 1;
+  align-self: center;
 `;
-export const ProfileImagePlaceholder = styled(PlaceholderMini)``;
+
 export const SaveAndDeployButton = styled(Button)`
   background: linear-gradient(291.35deg, #4368ea -25.85%, #c490dd 73.38%);
   opacity: 0.8;
   border-radius: 50px;
   padding: 25px 24px;
   letter-spacing: -0.02em;
+  width: 100%;
 `;
 export const AddFieldsButton = styled(DottedButtonBase)`
   text-transform: uppercase;
@@ -119,6 +120,7 @@ export const AddFieldsButton = styled(DottedButtonBase)`
   letter-spacing: 0.1em;
   border-radius: 12px;
   padding: 22px 16px;
+  width: 100%;
 `;
 export const PreviewMobile = styled.div`
   display: none;
@@ -149,22 +151,6 @@ export const BackButton = styled.button`
   }
 `;
 
-export const AddresssWrapper = styled.div`
-  background-color: #f1f1f1;
-  padding: 15px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-radius: 12px;
-`;
-export const AddressesTitle = styled.div`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 18px;
-  color: #8c90a0;
-`;
-
 export const StyledDots = styled.div`
   display: flex;
 `;
@@ -193,3 +179,108 @@ export const PoapButton = styled.div`
   gap: 12px;
   cursor: pointer;
 `;
+
+export const FileInput = styled.input`
+  display: none;
+`;
+export const ImportButton = styled.label`
+  display: flex;
+  position: relative;
+  align-self: center;
+  margin: 0 auto;
+  margin: 22px 0;
+  background: #4589ef;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 17px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  width: fit-content;
+  opacity: 0.8;
+  border-radius: 30px;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  -webkit-transition-duration: 0.4s;
+  :hover {
+    transition-duration: 0.1s;
+    background-color: #c9d1f1;
+  }
+  :after {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 4em;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s;
+    box-shadow: 0 0 10px 40px #a78aff;
+  }
+  :active:after {
+    box-shadow: 0 0 0 0 white;
+    position: absolute;
+    border-radius: 4em;
+    left: 0;
+    top: 0;
+    opacity: 1;
+    transition: 0s;
+  }
+  :active {
+    top: 1px;
+  }
+`;
+
+export const ErrorMessage = styled.div`
+  color: red;
+  display: flex;
+  justify-content: center;
+  margin-top: 17px;
+`;
+export const FormItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+`;
+export const BlockchainAddresses = styled.div`
+  display: flex;
+  gap: 14px;
+  flex-direction: column;
+`;
+
+export const ProfilePictureContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: column;
+  flex-grow: 1;
+  ${NimiModalStyles};
+`;
+export const Toplabel = styled.div`
+  display: flex;
+  margin-bottom: 16px;
+  ${NimiSignatureColor};
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 20px;
+  /* identical to box height */
+  letter-spacing: -0.02em;
+`;
+
+export const ImageAndTemplateSection = styled.div`
+  display: flex;
+
+  margin-bottom: 14px;
+  gap: 14px;
+`;
+export const TemplateSection = styled.div`
+  ${NimiModalStyles};
+  margin-bottom: 14px;
+`;
+export const ImportSection = styled.div`
+  ${NimiModalStyles};
+`;
+export const TemplateImportContainer = styled.div``;

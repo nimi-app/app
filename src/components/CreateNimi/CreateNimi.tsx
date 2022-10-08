@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { NimiThemeType } from '@nimi.io/card';
+import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 
 import {
   Nimi,
@@ -23,16 +24,31 @@ import {
   PreviewContent,
   PageSectionTitle,
   ProfileImage,
-  ProfileImagePlaceholder,
   AddFieldsButton,
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
-  AddresssWrapper,
-  AddressesTitle,
+  FileInput,
+  ImportButton,
+  ImageAndTemplateSection,
+  ProfilePictureContainer,
+  TemplateImportContainer,
+  Toplabel,
+  TemplateSection,
+  ImportSection,
+  FormItem,
+  BlockchainAddresses,
+  ErrorMessage,
 } from './styled';
 
-import { Label, Input, TextArea, FormGroup } from '../form';
+import { Label, TextArea, FormGroup } from '../form';
+import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
+import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
+import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
+
+import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
+import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
+import devconPreview from '../../assets/theme/devcon-preview.png';
 
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
@@ -42,24 +58,39 @@ import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper } from '../form/FormGroup';
 import { useLocation } from 'react-router-dom';
-import { ENSMetadata } from '../../hooks/useENSMetadata';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { publishNimiViaIPNS } from './api';
+import { publishNimiViaIPNS, uploadImage } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
-import { StyledInputWrapper } from '../Input';
+import { supportedImageTypes } from '../../constants';
 import { ReorderGroup } from '../ReorderGroup';
-import { ReorderInput } from '../ReorderInput';
+import { ContentInput, ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
-import { TemplatePicker } from '../TemplatePicker/TemplatePicker';
-import styled from 'styled-components';
-import { NimiSignatureColor } from '../../theme';
+
 import { ImporButton } from '../Button/ImportButton';
+import { generateID } from '../../utils';
+import { TemplatePickerModal } from './partials/TemplatePickerModal';
+import { TemplatePickerButton } from '../TemplatePickerButton';
+
+const themes = {
+  [NimiThemeType.NIMI]: {
+    type: NimiThemeType.NIMI,
+    logoImage: nimiOGLogoImage,
+    logoText: nimiOGLogoText,
+    preview: nimiOGPreview,
+  },
+  [NimiThemeType.DEVCON]: {
+    type: NimiThemeType.DEVCON,
+    logoImage: devconLogoImage,
+    logoText: devconLogoText,
+    preview: devconPreview,
+  },
+};
 import { ImportFromLinktreeModal } from './partials/LinktreeModal';
 
 export interface CreateNimiProps {
@@ -67,33 +98,13 @@ export interface CreateNimiProps {
   ensName: string;
   ensLabelName: string;
   provider: Web3Provider;
+  availableThemes: NimiThemeType[];
 }
 
-const TopContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  margin-bottom: 30px;
-`;
-const Toplabel = styled.div`
-  display: flex;
-  margin-bottom: 24px;
-  ${NimiSignatureColor};
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 20px;
-  /* identical to box height */
-
-  letter-spacing: -0.02em;
-`;
-const ImageAndTemplateSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
+export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: CreateNimiProps) {
   const location = useLocation();
-  const ensMetadata = location.state as ENSMetadata;
+
+  const state = location.state as Nimi;
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
@@ -105,6 +116,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isLinktreeOpen, setIsLinktreeOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
+  const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(false);
 
   /**
    * Publish Nimi state
@@ -117,32 +129,29 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
+  const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
-  const image = ensMetadata?.image
-    ? {
-        type: NimiImageType.URL,
-        url: ensMetadata?.image || '',
-      }
-    : undefined;
+  console.log('abaliableThemes', availableThemes);
 
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
-      displayName: ensName,
-      image,
-      description: '',
+      displayName: state.displayName || ensName,
+      image: state.image?.url ? state.image : undefined,
+      description: state.description || '',
       ensAddress,
       ensName,
+      //TODO: Add id-s to links so that it can auto-populate field
       addresses: [],
-      links: [],
-      theme: { type: NimiThemeType.DEVCON },
-      widgets: [
+      links: state.links || [],
+      widgets: state.widgets || [
         {
           type: NimiWidgetType.POAP,
         },
       ],
+      theme: { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
     },
   });
 
@@ -151,6 +160,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   // To keep the same order of links and addresses, compute
   // the list of blockchain addresses and links from Nimi
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
+
+  const [customImg, setCustomImg] = useState<any>(null);
 
   const formWatchPayload = watch();
 
@@ -166,6 +177,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     });
   }, [setValue, lensProfile]);
 
+  function handleThemeSelection({ type }) {
+    setValue('theme', { type });
+    setIsTemplatePickerModalOpened(false);
+  }
+
   /**
    * Handle the form submit via ENS contract interaction
    * @param data a validated Nimi object
@@ -177,7 +193,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       setPublishNimiError(undefined);
       setIsNimiPublished(false);
     });
-    console.log('data', data);
 
     try {
       if (!publicResolverContract) {
@@ -237,7 +252,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       });
     }
   };
-  console.log('formwatch', formWatchPayload);
+
   const onSubmitInvalid = (data) => {
     console.log('SUBMIT INVALID', data);
   };
@@ -259,6 +274,49 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       getValues('links').filter((link) => link.id !== linkId)
     );
 
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files !== null) {
+      const file = event.target.files[0];
+
+      if (file.size > 2000000) {
+        setImgErrorMessage('File too big! Max size: 2mb');
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+        return;
+      }
+      if (!supportedImageTypes.includes(file.type)) {
+        setImgErrorMessage('File type unsupported!');
+
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+
+        return;
+      }
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setCustomImg([reader.result]);
+      };
+
+      try {
+        const { cidV1 } = await uploadImage(file);
+
+        setValue('image', {
+          type: NimiImageType.URL,
+          url: `https://ipfs.io/ipfs/${cidV1}`,
+        });
+      } catch (error) {
+        console.log('error', error);
+        setImgErrorMessage('Network Error');
+        setTimeout(() => {
+          setImgErrorMessage('');
+        }, 5000);
+      }
+    }
+  };
+
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -267,45 +325,57 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <Card>
             <CardBody>
               <ImageAndTemplateSection>
-                <TopContainer>
+                <ProfilePictureContainer>
                   <Toplabel>Profile Picture</Toplabel>
-                  {formWatchPayload.image ? (
-                    <ProfileImage src={formWatchPayload.image.url} />
-                  ) : (
-                    <ProfileImagePlaceholder />
-                  )}
-                </TopContainer>
-                <TopContainer>
-                  <Toplabel>Template</Toplabel>
-                  <TemplatePicker />
-                </TopContainer>
+                  <ProfileImage
+                    src={
+                      customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini
+                    }
+                  />
+                  {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
+                  <ImportButton>
+                    <FileInput name="myfile" type="file" onChange={handleUpload} />
+                    Change Profile Picture
+                  </ImportButton>
+                </ProfilePictureContainer>
+                <TemplateImportContainer>
+                  <TemplateSection>
+                    <Toplabel>Template</Toplabel>
+                    <TemplatePickerButton
+                      selectedTheme={themes[getValues('theme').type]}
+                      onClick={() => setIsTemplatePickerModalOpened(true)}
+                    />
+                  </TemplateSection>
+                  <ImportSection>
+                    <Toplabel>Import from</Toplabel>
+                    <ImportButtonsWrapper>
+                      <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
+                      {!loadingLensProfile && !!lensProfile && (
+                        <ImporButton type="Lens" onClick={handleImportLensProfile} />
+                      )}
+                      <ImporButton type="Linktree" onClick={() => setIsLinktreeOpen(true)} />
+                      <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
+                    </ImportButtonsWrapper>
+                  </ImportSection>
+                </TemplateImportContainer>
               </ImageAndTemplateSection>
-              <TopContainer>
-                <Toplabel>Import from</Toplabel>
-                <ImportButtonsWrapper>
-                  <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
-                  {!loadingLensProfile && !!lensProfile && (
-                    <ImporButton type="Lens" onClick={handleImportLensProfile} />
-                  )}
-
-                  <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
-                  <ImporButton type="Linktree" onClick={() => setIsLinktreeOpen(true)} />
-                </ImportButtonsWrapper>
-              </TopContainer>
 
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 {/* display name input */}
                 <FormGroup>
-                  <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
+                  <FormItem>
+                    <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
+                    <ContentInput
+                      inputInvalid={false}
+                      paddingLeft={'20px'}
+                      placeholder="Name"
+                      id="displayName"
+                      {...register('displayName')}
+                    />
+                  </FormItem>
+                  <FormItem>
+                    <Label htmlFor="description">{t('formLabel.description')}</Label>
 
-                  <StyledInputWrapper isSimple>
-                    <Input placeholder="Name" id="displayName" {...register('displayName')} />
-                  </StyledInputWrapper>
-                </FormGroup>
-                {/* description input */}
-                <FormGroup>
-                  <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <StyledInputWrapper isSimple>
                     <TextArea
                       onKeyDown={handleKeyDown}
                       maxLength={300}
@@ -313,7 +383,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                       id="description"
                       {...register('description')}
                     />
-                  </StyledInputWrapper>
+                  </FormItem>
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
@@ -326,42 +396,46 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 )}
                 {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
-                  <AddresssWrapper>
-                    <AddressesTitle>Addresses</AddressesTitle>
-                    {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                      return (
-                        <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
-                          <NimiBlockchainField index={index} blockchain={blockchain} />
-                        </FormGroup>
-                      );
-                    })}
-                  </AddresssWrapper>
+                  <FormGroup>
+                    <FormItem>
+                      <Label>Addresses</Label>
+                      <BlockchainAddresses>
+                        {formWatchPayload.addresses.map(({ blockchain }, index) => {
+                          return (
+                            <NimiBlockchainField
+                              key={'blockchain-input-' + blockchain.toLowerCase()}
+                              index={index}
+                              blockchain={blockchain}
+                            />
+                          );
+                        })}
+                      </BlockchainAddresses>
+                    </FormItem>
+                  </FormGroup>
                 )}
-
+                {/* widgets */}
+                {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
+                  <PoapField
+                    onConfigure={(e) => {
+                      e.stopPropagation();
+                      setIsPOAPModalOpened(true);
+                    }}
+                    onRemove={() =>
+                      setValue(
+                        'widgets',
+                        getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP)
+                      )
+                    }
+                  />
+                )}
                 {/* add fields button */}
-                <FormGroup>
-                  {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
-                    <PoapField
-                      onConfigure={(e) => {
-                        e.stopPropagation();
-                        setIsPOAPModalOpened(true);
-                      }}
-                      onRemove={() =>
-                        setValue(
-                          'widgets',
-                          getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP)
-                        )
-                      }
-                    />
-                  )}
-                  <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
-                    + {t('buttonLabel.addFields')}
-                  </AddFieldsButton>
-                </FormGroup>
+                <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
+                  + {t('buttonLabel.addFields')}
+                </AddFieldsButton>
                 {/* publish button */}
-                <FormGroup>
-                  <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
-                </FormGroup>
+
+                <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
+
                 <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
               </FormWrapper>
             </CardBody>
@@ -375,6 +449,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       </InnerWrapper>
       {isPOAPModalOpened && (
         <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
+      )}
+      {isTemplatePickerModalOpened && (
+        <TemplatePickerModal
+          themes={availableThemes.map((availableTheme) => themes[availableTheme])}
+          handleThemeSelection={handleThemeSelection}
+          closeModal={() => setIsTemplatePickerModalOpened(false)}
+        />
       )}
       {isAddFieldsModalOpen && (
         <AddFieldsModal
@@ -391,7 +472,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 newLinksArray = [
                   ...linksData,
                   {
-                    id: new Date().valueOf().toString(),
+                    id: generateID(),
                     type: link,
                     // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
                     title: '',
