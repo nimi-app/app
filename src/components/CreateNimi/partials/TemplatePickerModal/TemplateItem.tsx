@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { MEDIA_WIDTHS } from '../../../../theme';
 import { Theme } from '../../../../types';
 
 type TemplateItemProps = {
@@ -43,6 +44,9 @@ const ThemeData = styled.div`
   width: 126px;
   height: 100%;
   margin-left: 122px;
+  @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
+    margin: 0 auto;
+  }
 `;
 
 const ThemeImageLogo = styled.img`
@@ -67,4 +71,7 @@ const ThemePreview = styled.img`
   border-radius: 14px;
   border: 5px solid white;
   box-shadow: 0px 14.4118px 38.4314px -9.45772px rgba(44, 43, 102, 0.14);
+  @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
+    display: none;
+  }
 `;
