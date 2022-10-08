@@ -349,7 +349,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
                       {!loadingLensProfile && !!lensProfile && (
                         <ImporButton type="Lens" onClick={handleImportLensProfile} />
                       )}
-
                       <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
                     </ImportButtonsWrapper>
                   </ImportSection>

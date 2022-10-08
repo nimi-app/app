@@ -260,7 +260,7 @@ export const ProfilePictureContainer = styled.div`
 `;
 export const Toplabel = styled.div`
   display: flex;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   ${NimiSignatureColor};
   font-weight: 600;
   font-size: 18px;
