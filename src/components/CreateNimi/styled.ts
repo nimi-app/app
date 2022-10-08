@@ -104,6 +104,7 @@ export const ProfileImage = styled.img`
   width: 186px;
   z-index: 1;
   align-self: center;
+  margin-bottom: 10px;
 `;
 
 export const SaveAndDeployButton = styled(Button)`
@@ -188,7 +189,7 @@ export const ImportButton = styled.label`
   position: relative;
   align-self: center;
   margin: 0 auto;
-  margin: 22px 0;
+  margin-bottom: 22px;
   background: #4589ef;
   padding: 10px 24px;
   font-weight: 600;
@@ -238,7 +239,7 @@ export const ErrorMessage = styled.div`
   color: red;
   display: flex;
   justify-content: center;
-  margin-top: 17px;
+  margin-bottom: 10px;
 `;
 export const FormItem = styled.div`
   display: flex;
