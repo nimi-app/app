@@ -276,6 +276,9 @@ export const ImageAndTemplateSection = styled.div`
 
   margin-bottom: 14px;
   gap: 14px;
+  @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
+    flex-direction: column;
+  }
 `;
 export const TemplateSection = styled.div`
   ${NimiModalStyles};
