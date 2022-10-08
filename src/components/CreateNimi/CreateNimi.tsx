@@ -544,7 +544,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
       {isLinktreeOpen && (
         <ImportFromLinktreeModal
           onClose={(linktreeLinks) => {
-            setValue('links', [...linktreeLinks, ...links]);
+            if (linktreeLinks) setValue('links', [...linktreeLinks, ...links]);
             setIsLinktreeOpen(false);
           }}
         />
