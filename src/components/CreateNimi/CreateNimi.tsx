@@ -30,6 +30,14 @@ import {
   BackButton,
   FileInput,
   ImportButton,
+  ImageAndTemplateSection,
+  ProfilePictureContainer,
+  TemplateImportContainer,
+  Toplabel,
+  TemplateSection,
+  ImportSection,
+  FormItem,
+  BlockchainAddresses,
 } from './styled';
 
 import { Label, TextArea, FormGroup } from '../form';
@@ -62,74 +70,11 @@ import { supportedImageTypes } from '../../constants';
 import { ReorderGroup } from '../ReorderGroup';
 import { ContentInput, ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
-import styled from 'styled-components';
-import { NimiModalStyles, NimiSignatureColor } from '../../theme';
+
 import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
 import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
-import { Theme } from '../../types';
-
-// const themes: Theme[] = [
-//   {
-//     type: 'NIMI',
-//     logoImage: nimiOGLogoImage,
-//     logoText: nimiOGLogoText,
-//     preview: nimiOGPreview,
-//   },
-//   {
-//     type: 'DEVCON',
-//     logoImage: devconLogoImage,
-//     logoText: devconLogoText,
-//     preview: devconPreview,
-//   },
-// ];
-
-const ProfilePictureContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  flex-direction: column;
-  flex-grow: 1;
-  ${NimiModalStyles};
-`;
-const Toplabel = styled.div`
-  display: flex;
-  margin-bottom: 24px;
-  ${NimiSignatureColor};
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 20px;
-  /* identical to box height */
-
-  letter-spacing: -0.02em;
-`;
-const ImageAndTemplateSection = styled.div`
-  display: flex;
-
-  margin-bottom: 14px;
-  gap: 14px;
-`;
-
-const TemplateImportContainer = styled.div``;
-
-const TemplateSection = styled.div`
-  ${NimiModalStyles};
-  margin-bottom: 14px;
-`;
-const ImportSection = styled.div`
-  ${NimiModalStyles};
-`;
-export const FormItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 15px;
-`;
-const BlockchainAddresses = styled.div`
-  display: flex;
-  gap: 14px;
-  flex-direction: column;
-`;
 
 const themes = {
   [NimiThemeType.NIMI]: {
@@ -184,6 +129,8 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
   const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
+  console.log('abaliableThemes', availableThemes);
+
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
@@ -201,7 +148,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
           type: NimiWidgetType.POAP,
         },
       ],
-      theme: { type: NimiThemeType.NIMI },
+      theme: { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
     },
   });
 

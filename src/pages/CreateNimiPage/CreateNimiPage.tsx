@@ -25,7 +25,6 @@ export function CreateNimiPage() {
   const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
     account,
   });
-  console.log('avaliableThemes', avaliableThemes);
 
   if (loading || themeLoading) {
     return <Loader />;

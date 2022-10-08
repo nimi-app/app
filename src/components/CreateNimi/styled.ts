@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Flex } from 'rebass';
 
 import { CardBody } from '../Card';
-import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
+import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { Button } from '../Button';
 import { DottedButtonBase } from '../Button/styled';
 
@@ -239,3 +239,47 @@ export const ErrorMessage = styled.div`
   justify-content: center;
   margin-top: 17px;
 `;
+export const FormItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+`;
+export const BlockchainAddresses = styled.div`
+  display: flex;
+  gap: 14px;
+  flex-direction: column;
+`;
+
+export const ProfilePictureContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: column;
+  flex-grow: 1;
+  ${NimiModalStyles};
+`;
+export const Toplabel = styled.div`
+  display: flex;
+  margin-bottom: 24px;
+  ${NimiSignatureColor};
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 20px;
+  /* identical to box height */
+  letter-spacing: -0.02em;
+`;
+
+export const ImageAndTemplateSection = styled.div`
+  display: flex;
+
+  margin-bottom: 14px;
+  gap: 14px;
+`;
+export const TemplateSection = styled.div`
+  ${NimiModalStyles};
+  margin-bottom: 14px;
+`;
+export const ImportSection = styled.div`
+  ${NimiModalStyles};
+`;
+export const TemplateImportContainer = styled.div``;
