@@ -20,6 +20,10 @@ const Button = styled.button`
     margin-left: -13px;
   }
 `;
+const StyledImg = styled.img`
+  width: 20px;
+  height: 20px;
+`;
 
 interface ImportButtonProps {
   onClick: any;
@@ -36,7 +40,7 @@ const Logos = {
 export function ImporButton({ onClick, type, disabled = false }: ImportButtonProps) {
   return (
     <Button disabled={disabled} onClick={onClick}>
-      <img src={Logos[type]} />
+      <StyledImg src={Logos[type]} />
     </Button>
   );
 }
