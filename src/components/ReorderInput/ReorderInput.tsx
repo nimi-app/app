@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { ReorderItem } from '../ReorderItem';
 import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
-import { InputButton } from '../InputButton';
 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
 import { ReactComponent as PenSVG } from '../../assets/svg/pen.svg';
 
-import { renderSVG } from '../../utils';
+import { SharedInputStyles } from '../../theme';
+import { InputFieldWithIcon } from '../Input';
 
 type ReorderInputProps = {
   key?: string;
@@ -21,7 +21,6 @@ type ReorderInputProps = {
 // I can easily update this if necessary.
 
 export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
-  const [inputTouched, setInputTouched] = useState(false);
   const [isInvalidInput, setInvalidInput] = useState(false);
   const { type, title, content } = value;
 
@@ -61,65 +60,24 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
           }
         />
       </InputContainer>
-      <InputContainer>
-        <Logo logo={renderSVG(nimiLinkDetailsExtended[type].logo, 15)} />
-        <ContentInput
-          inputInvalid={inputTouched && isInvalidInput}
-          value={content}
-          onChange={onChange}
-          spellCheck={false}
-          onBlur={setInputTouched.bind(null, true)}
-        />
-        {content && (
-          <ClearButton className="clear-button" right="57px" onClick={() => updateLink(value.id!, 'content', '')} />
-        )}
-        <InputButton onClick={() => removeLink(value.id!)} />
-      </InputContainer>
+      <InputFieldWithIcon
+        inputLogo={nimiLinkDetailsExtended[type].logo}
+        isInvalidInput={isInvalidInput}
+        content={content}
+        onChange={onChange}
+        onClearClick={() => updateLink(value.id!, 'content', '')}
+        onInputClick={() => removeLink(value.id!)}
+        placeholder={''}
+        id={value.id || ''}
+      />
     </ReorderItem>
   );
 }
 
-const SharedInputStyles = css<{ inputInvalid?: boolean }>`
-  width: 100%;
-  line-height: 22px;
-  font-size: 16px;
-  font-weight: 400;
-  color: #8c90a0;
-  border-radius: 20px;
-  border: none;
-  outline: none;
-  transition: all 0.1s linear;
-
-  &:focus {
-    background-color: white;
-    font-size: 18px;
-    font-weight: 500;
-    box-shadow: 0px 5px 14px rgba(188, 180, 180, 0.2);
-
-    & + .clear-button {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    color: #5274ff;
-    border: double 2px transparent;
-    background-image: linear-gradient(white, white), linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-  }
-
-  ${({ inputInvalid }) =>
-    inputInvalid &&
-    `
-      border: 2px solid #EB5757;
-      color: #EB5757;
-    `}
-`;
-
 const InputContainer = styled.div<{ marginBottom?: string }>`
   width: 100%;
   position: relative;
-
+  background: #f0f3fb;
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 `;
 
@@ -128,7 +86,7 @@ const TitleInput = styled.input`
   position: relative;
   padding: 8px 30px 8px 20px;
   ${SharedInputStyles}
-  background-color: #f1f1f1;
+  background-color:  #F0F3FB;
 
   &:hover:not(:focus) ~ .pen-component {
     display: flex;
@@ -139,11 +97,12 @@ const TitleInput = styled.input`
   }
 `;
 
-const ContentInput = styled.input<{ inputInvalid: boolean }>`
+export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string; border?: string }>`
   height: 50px;
-  padding: 8px 80px 8px 40px;
-  ${SharedInputStyles}
+  padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
+  ${SharedInputStyles};
   background-color: white;
+  ${({ border }) => border && `border:${border}`};
 `;
 
 const ClearButton = styled(XSVG)<{ right?: string }>`
@@ -189,13 +148,3 @@ const Pen = styled(PenSVG)`
   display: inline-block;
   cursor: pointer;
 `;
-
-const LogoContainer = styled.div`
-  display: flex;
-  position: absolute;
-  top: 50%;
-  left: 18px;
-  transform: translate(0, -50%);
-`;
-
-const Logo = ({ logo }) => <LogoContainer>{logo}</LogoContainer>;

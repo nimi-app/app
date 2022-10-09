@@ -39,7 +39,7 @@ const Backdrop = styled.div`
 `;
 
 const Modal = styled(motion.div)`
-  width: 620px;
+  max-width: 620px;
   padding: 32px;
   border-radius: 24px;
   background-color: white;

@@ -17,8 +17,7 @@ export function ReorderItem<T extends unknown>({ value, children }: ReorderItemP
     position: 'relative',
     padding: '15px 15px 15px 39px',
     borderRadius: '12px',
-    backgroundColor: '#F1F1F1',
-    marginBottom: '20px',
+    backgroundColor: '#F0F3FB',
     cursor: 'pointer',
   };
 

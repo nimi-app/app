@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="15" height="15" viewBox="0 0 256 256" xml:space="preserve">
+
+<defs>
+</defs>
+<g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+	<path d="M 81.736 23.718 L 44.994 2.456 L 8.264 23.73 v 42.477 l 36.8 21.25 l 36.672 -21.262 V 23.718 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+	<radialGradient id="SVGID_4" gradientUnits="userSpaceOnUse" cx="44.9101" cy="46.8595" r="43.9732" fx="44.9101" fy="46.8595">
+<stop offset="0%" style="stop-color:rgb(63,201,168);stop-opacity: 1"/>
+<stop offset="100%" style="stop-color:rgb(28,162,196);stop-opacity: 1"/>
+</radialGradient>
+<path d="M 24.473 45.997 c -1.734 -5.59 -5.732 -18.507 -5.732 -18.816 L 14.629 29.5 v 32.99 l 4.113 2.363 V 41.947 l 7.219 27.062 l 3.5 2.013 V 20.094 l -4.944 2.713 L 24.473 45.997 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: url(#SVGID_4); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+	<radialGradient id="SVGID_5" gradientUnits="userSpaceOnUse" cx="44.9101" cy="46.8595" r="43.9733" fx="44.9101" fy="46.8595">
+<stop offset="0%" style="stop-color:rgb(63,201,168);stop-opacity: 1"/>
+<stop offset="100%" style="stop-color:rgb(28,162,196);stop-opacity: 1"/>
+</radialGradient>
+<polygon points="45.01,15.85 56.67,22.63 59.34,18.48 45.01,10.07 33.66,16.86 33.66,73.21 38.3,76.27 38.3,47.83 55.58,47.83 55.58,42.1 38.3,42.1 38.3,19.66 " style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: url(#SVGID_5); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/>
+	<radialGradient id="SVGID_6" gradientUnits="userSpaceOnUse" cx="44.91" cy="46.8595" r="43.9731" fx="44.91" fy="46.8595">
+<stop offset="0%" style="stop-color:rgb(63,201,168);stop-opacity: 1"/>
+<stop offset="100%" style="stop-color:rgb(28,162,196);stop-opacity: 1"/>
+</radialGradient>
+<polygon points="59.08,23.94 65.25,27.97 65.25,69.23 70.37,66.38 70.37,30.77 76.71,35.1 76.71,29.68 61.62,20.14 " style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: url(#SVGID_6); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/>
+	<radialGradient id="SVGID_7" gradientUnits="userSpaceOnUse" cx="44.9101" cy="46.8595" r="43.9733" fx="44.9101" fy="46.8595">
+<stop offset="0%" style="stop-color:rgb(63,201,168);stop-opacity: 1"/>
+<stop offset="100%" style="stop-color:rgb(28,162,196);stop-opacity: 1"/>
+</radialGradient>
+<path d="M 44.994 0 L 5.969 22.631 v 44.847 L 45.06 90 l 38.97 -22.533 V 22.62 L 44.994 0 z M 10.604 64.853 V 25.081 L 44.994 5.163 L 79.396 25.07 v 39.772 L 45.06 84.75 L 10.604 64.853 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: url(#SVGID_7); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+</g>
+</svg>

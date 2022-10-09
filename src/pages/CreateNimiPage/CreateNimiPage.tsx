@@ -6,12 +6,12 @@ import { Loader } from '../../components/Loader';
 import { Container } from '../../components/Container';
 import { useWeb3React } from '@web3-react/core';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
+import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 
 export function CreateNimiPage() {
   const { account, provider, chainId } = useWeb3React();
 
   const { state }: any = useLocation();
-  console.log('<AIASADfKAJSDKAS', state);
 
   /**
    * @todo - prevent accessing if the user does not own the domain
@@ -21,8 +21,12 @@ export function CreateNimiPage() {
       domainId: state.id.toLowerCase(),
     },
   });
+  //check if user has certain poap
+  const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
+    account,
+  });
 
-  if (loading) {
+  if (loading || themeLoading) {
     return <Loader />;
   }
 
@@ -41,6 +45,7 @@ export function CreateNimiPage() {
         ensName={data.domain.name as string}
         ensLabelName={data.domain.labelName as string}
         provider={provider}
+        availableThemes={avaliableThemes}
       />
     </Container>
   );

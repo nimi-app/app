@@ -46,7 +46,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
 
   useEffect(() => {
     // Filter invalid links
-    (async () => {
+    const filterFunction = async () => {
       const filteredNimi = filterEmptyFields(nimi);
 
       const filteredLinks = await removeInvalidLinks(filteredNimi.links);
@@ -60,7 +60,8 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
         .catch((error) => {
           console.error(error);
         });
-    })();
+    };
+    filterFunction();
   }, [nimi]);
 
   if (!previewNimi) {
@@ -83,7 +84,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 </style>
                 <FixedGlobalStyle />
                 <ThemeProvider>
-                  <NimiCard nimi={previewNimi} isPreview={true} />
+                  <NimiCard nimi={previewNimi} isApp={false} />
                 </ThemeProvider>
               </>
             </StyleSheetManager>

@@ -4,6 +4,7 @@ import { unstable_batchedUpdates } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
+import { NimiThemeType } from '@nimi.io/card';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 
 import {
@@ -27,22 +28,30 @@ import {
   SaveAndDeployButton,
   PreviewMobile,
   BackButton,
-  AddresssWrapper,
-  AddressesTitle,
   FileInput,
   ImportButton,
+  ImageAndTemplateSection,
+  ProfilePictureContainer,
+  TemplateImportContainer,
+  Toplabel,
+  TemplateSection,
+  ImportSection,
+  FormItem,
+  BlockchainAddresses,
   ErrorMessage,
 } from './styled';
 
-import { Label, Input, TextArea, FormGroup } from '../form';
+import { Label, TextArea, FormGroup } from '../form';
+import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
+import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
+import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
+
+import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
+import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
+import devconPreview from '../../assets/theme/devcon-preview.png';
 
 // Partials
-import {
-  ButtonsContainer,
-  ImportButtonsWrapper,
-  ImportFromLensProtocolButton,
-  ImportFromTwitterButton,
-} from './partials/buttons';
+import { ImportButtonsWrapper } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
@@ -58,26 +67,40 @@ import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
 import { NFTSelectorModal } from './partials/NFTSelectorModal';
-import { Button } from '../Button';
 import { supportedImageTypes } from '../../constants';
-import { StyledInputWrapper } from '../Input';
 import { ReorderGroup } from '../ReorderGroup';
-import { ReorderInput } from '../ReorderInput';
+import { ContentInput, ReorderInput } from '../ReorderInput';
 import { PoapField } from './partials/PoapField';
+
+import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
+import { TemplatePickerModal } from './partials/TemplatePickerModal';
+import { TemplatePickerButton } from '../TemplatePickerButton';
+
+const themes = {
+  [NimiThemeType.NIMI]: {
+    type: NimiThemeType.NIMI,
+    logoImage: nimiOGLogoImage,
+    logoText: nimiOGLogoText,
+    preview: nimiOGPreview,
+  },
+  [NimiThemeType.DEVCON]: {
+    type: NimiThemeType.DEVCON,
+    logoImage: devconLogoImage,
+    logoText: devconLogoText,
+    preview: devconPreview,
+  },
+};
 
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
   ensLabelName: string;
   provider: Web3Provider;
+  availableThemes: NimiThemeType[];
 }
 
-export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
-  /**
-   * @todo replace this API
-   */
-
+export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: CreateNimiProps) {
   const location = useLocation();
 
   const state = location.state as Nimi;
@@ -91,6 +114,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
+  const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(false);
 
   /**
    * Publish Nimi state
@@ -105,6 +129,8 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
+
+  console.log('abaliableThemes', availableThemes);
 
   // Form state manager
   const useFormContext = useForm<Nimi>({
@@ -123,6 +149,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           type: NimiWidgetType.POAP,
         },
       ],
+      theme: { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
     },
   });
 
@@ -148,6 +175,11 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
     });
   }, [setValue, lensProfile]);
 
+  function handleThemeSelection({ type }) {
+    setValue('theme', { type });
+    setIsTemplatePickerModalOpened(false);
+  }
+
   /**
    * Handle the form submit via ENS contract interaction
    * @param data a validated Nimi object
@@ -159,7 +191,6 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       setPublishNimiError(undefined);
       setIsNimiPublished(false);
     });
-    console.log('data', data);
 
     try {
       if (!publicResolverContract) {
@@ -219,7 +250,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       });
     }
   };
-  console.log('formwatch', formWatchPayload);
+
   const onSubmitInvalid = (data) => {
     console.log('SUBMIT INVALID', data);
   };
@@ -246,7 +277,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       const file = event.target.files[0];
 
       if (file.size > 2000000) {
-        setImgErrorMessage('File too big!');
+        setImgErrorMessage('File too big! Max size: 2mb');
         setTimeout(() => {
           setImgErrorMessage('');
         }, 5000);
@@ -291,40 +322,57 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              <ProfileImage
-                src={customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini}
-              />
-              <ButtonsContainer>
-                <Button onClick={() => setIsNFTSelectorModalOpen(true)}>Select an NFT</Button>
-              </ButtonsContainer>{' '}
-              {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
-              <ImportButton>
-                <FileInput name="myfile" type="file" onChange={handleUpload} />
-                Upload Profile Picture
-              </ImportButton>
-              <ImportButtonsWrapper>
-                <ImportFromTwitterButton onClick={() => setIsImportFromTwitterModalOpen(true)}>
-                  {t('buttonLabel.importFromTwitter')}
-                </ImportFromTwitterButton>
-                {!loadingLensProfile && !!lensProfile && (
-                  <ImportFromLensProtocolButton onClick={handleImportLensProfile}>
-                    {t('buttonLabel.importFromLensProtocol')}
-                  </ImportFromLensProtocolButton>
-                )}
-              </ImportButtonsWrapper>
+              <ImageAndTemplateSection>
+                <ProfilePictureContainer>
+                  <Toplabel>Profile Picture</Toplabel>
+                  <ProfileImage
+                    src={
+                      customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini
+                    }
+                  />
+                  {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
+                  <ImportButton>
+                    <FileInput name="myfile" type="file" onChange={handleUpload} />
+                    Change Profile Picture
+                  </ImportButton>
+                </ProfilePictureContainer>
+                <TemplateImportContainer>
+                  <TemplateSection>
+                    <Toplabel>Template</Toplabel>
+                    <TemplatePickerButton
+                      selectedTheme={themes[getValues('theme').type]}
+                      onClick={() => setIsTemplatePickerModalOpened(true)}
+                    />
+                  </TemplateSection>
+                  <ImportSection>
+                    <Toplabel>Import from</Toplabel>
+                    <ImportButtonsWrapper>
+                      <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
+                      {!loadingLensProfile && !!lensProfile && (
+                        <ImporButton type="Lens" onClick={handleImportLensProfile} />
+                      )}
+                      <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
+                    </ImportButtonsWrapper>
+                  </ImportSection>
+                </TemplateImportContainer>
+              </ImageAndTemplateSection>
+
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 {/* display name input */}
                 <FormGroup>
-                  <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
+                  <FormItem>
+                    <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
+                    <ContentInput
+                      inputInvalid={false}
+                      paddingLeft={'20px'}
+                      placeholder="Name"
+                      id="displayName"
+                      {...register('displayName')}
+                    />
+                  </FormItem>
+                  <FormItem>
+                    <Label htmlFor="description">{t('formLabel.description')}</Label>
 
-                  <StyledInputWrapper isSimple>
-                    <Input placeholder="Name" id="displayName" {...register('displayName')} />
-                  </StyledInputWrapper>
-                </FormGroup>
-                {/* description input */}
-                <FormGroup>
-                  <Label htmlFor="description">{t('formLabel.description')}</Label>
-                  <StyledInputWrapper isSimple>
                     <TextArea
                       onKeyDown={handleKeyDown}
                       maxLength={300}
@@ -332,7 +380,7 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                       id="description"
                       {...register('description')}
                     />
-                  </StyledInputWrapper>
+                  </FormItem>
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
@@ -345,41 +393,46 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
                 )}
                 {/* addresses */}
                 {formWatchPayload.addresses.length > 0 && (
-                  <AddresssWrapper>
-                    <AddressesTitle>Addresses</AddressesTitle>
-                    {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                      return (
-                        <FormGroup key={'blockchain-input-' + blockchain.toLowerCase()}>
-                          <NimiBlockchainField index={index} blockchain={blockchain} />
-                        </FormGroup>
-                      );
-                    })}
-                  </AddresssWrapper>
+                  <FormGroup>
+                    <FormItem>
+                      <Label>Addresses</Label>
+                      <BlockchainAddresses>
+                        {formWatchPayload.addresses.map(({ blockchain }, index) => {
+                          return (
+                            <NimiBlockchainField
+                              key={'blockchain-input-' + blockchain.toLowerCase()}
+                              index={index}
+                              blockchain={blockchain}
+                            />
+                          );
+                        })}
+                      </BlockchainAddresses>
+                    </FormItem>
+                  </FormGroup>
+                )}
+                {/* widgets */}
+                {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
+                  <PoapField
+                    onConfigure={(e) => {
+                      e.stopPropagation();
+                      setIsPOAPModalOpened(true);
+                    }}
+                    onRemove={() =>
+                      setValue(
+                        'widgets',
+                        getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP)
+                      )
+                    }
+                  />
                 )}
                 {/* add fields button */}
-                <FormGroup>
-                  {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
-                    <PoapField
-                      onConfigure={(e) => {
-                        e.stopPropagation();
-                        setIsPOAPModalOpened(true);
-                      }}
-                      onRemove={() =>
-                        setValue(
-                          'widgets',
-                          getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP)
-                        )
-                      }
-                    />
-                  )}
-                  <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
-                    + {t('buttonLabel.addFields')}
-                  </AddFieldsButton>
-                </FormGroup>
+                <AddFieldsButton type="button" onClick={() => setIsAddFieldsModalOpen(true)}>
+                  + {t('buttonLabel.addFields')}
+                </AddFieldsButton>
                 {/* publish button */}
-                <FormGroup>
-                  <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
-                </FormGroup>
+
+                <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
+
                 <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
               </FormWrapper>
             </CardBody>
@@ -393,6 +446,13 @@ export function CreateNimi({ ensAddress, ensName, provider }: CreateNimiProps) {
       </InnerWrapper>
       {isPOAPModalOpened && (
         <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setIsPOAPModalOpened(false)} />
+      )}
+      {isTemplatePickerModalOpened && (
+        <TemplatePickerModal
+          themes={availableThemes.map((availableTheme) => themes[availableTheme])}
+          handleThemeSelection={handleThemeSelection}
+          closeModal={() => setIsTemplatePickerModalOpened(false)}
+        />
       )}
       {isAddFieldsModalOpen && (
         <AddFieldsModal
