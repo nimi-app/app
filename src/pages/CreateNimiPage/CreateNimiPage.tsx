@@ -1,4 +1,5 @@
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { namehash as ensNameHash } from '@ethersproject/hash';
 
 import { useGetDomainFromSubgraphQuery } from '../../generated/graphql/ens';
 import { CreateNimi } from '../../components/CreateNimi';
@@ -12,18 +13,17 @@ import { useEnsGeneratedData } from '../../hooks/useEnsGeneratedData';
 export function CreateNimiPage() {
   const { account, provider, chainId } = useWeb3React();
 
-  const { state }: any = useLocation();
-  console.log('state,state', state);
+  const { ensName } = useParams();
 
-  const search = useLocation();
-  console.log('search', search);
+  const nodeHash = ensNameHash(ensName as string);
+  console.log('search', ensName);
 
   /**
    * @todo - prevent accessing if the user does not own the domain
    */
   const { data, loading, error } = useGetDomainFromSubgraphQuery({
     variables: {
-      domainId: state.id.toLowerCase(),
+      domainId: nodeHash.toLowerCase(),
     },
   });
   //check if user has certain poap
@@ -32,11 +32,11 @@ export function CreateNimiPage() {
   });
   //populate with ens data
   const { generatedData, loading: loadingEnsData } = useEnsGeneratedData({
-    ensName: 'binah.eth',
+    ensName: ensName,
   });
   console.log('generatedDta', generatedData);
 
-  if (loading || themeLoading || loadingEnsData) {
+  if (themeLoading || loadingEnsData || loading) {
     return <Loader />;
   }
 
@@ -52,10 +52,10 @@ export function CreateNimiPage() {
     <Container>
       <CreateNimi
         ensAddress={account as string}
-        ensName={data.domain.name as string}
-        ensLabelName={data.domain.labelName as string}
+        ensName={ensName as string}
         provider={provider}
         availableThemes={avaliableThemes}
+        ensData={generatedData}
       />
     </Container>
   );

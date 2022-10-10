@@ -95,12 +95,12 @@ const themes = {
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
-  ensLabelName: string;
   provider: Web3Provider;
   availableThemes: NimiThemeType[];
+  ensData?: Nimi;
 }
 
-export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: CreateNimiProps) {
+export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ensData }: CreateNimiProps) {
   const location = useLocation();
 
   const state = location.state as Nimi;
@@ -136,20 +136,21 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
-      displayName: state.displayName || ensName,
-      image: state.image?.url ? state.image : undefined,
-      description: state.description || '',
+      displayName: state.displayName || ensData?.displayName || ensName,
+      image: state.image?.url ? state.image : ensData?.image ? ensData?.image : undefined,
+      description: state.description || ensData?.description || '',
       ensAddress,
       ensName,
       //TODO: Add id-s to links so that it can auto-populate field
-      addresses: [],
-      links: state.links || [],
-      widgets: state.widgets || [
-        {
-          type: NimiWidgetType.POAP,
-        },
-      ],
-      theme: { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
+      addresses: ensData?.addresses || [],
+      links: state.links || ensData?.links || [],
+      widgets: state.widgets ||
+        ensData?.widgets || [
+          {
+            type: NimiWidgetType.POAP,
+          },
+        ],
+      theme: state.theme || { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
     },
   });
 

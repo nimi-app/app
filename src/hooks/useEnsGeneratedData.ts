@@ -16,12 +16,16 @@ export function useEnsGeneratedData({ ensName }): UseEnsGeneratedData {
 
   useEffect(() => {
     async function fetchEnsData() {
-      setLoading(true);
-
-      const data = await axios.get(`${process.env.REACT_APP_NIMI_API_BASE_URL}/nimi/generated?ens=${ensName}`);
-      console.log('data', data);
-
-      setLoading(false);
+      try {
+        setLoading(true);
+        const { data } = await axios.get(`https://api-dev.nimi.io/v1.4/nimi/generate?ensName=${ensName}`);
+        console.log('data', data);
+        setGeneratedData(data.data.nimi);
+      } catch (e) {
+        console.log('generated api error', e);
+      } finally {
+        setLoading(false);
+      }
     }
     if (ensName) fetchEnsData();
   }, [ensName]);
