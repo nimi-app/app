@@ -16,7 +16,6 @@ export const StyledENSNameCardWrapper = styled(Card)`
 
 export const ENSNameCardImage = styled.img`
   background-position: center center;
-  overflow: hidden;
   background-size: cover;
   border-radius: 200px;
   height: 83px;
@@ -39,11 +38,13 @@ export const StyledDomainName = styled.div`
   ${NimiSignatureColor};
   font-size: 24px;
   overflow: hidden;
-  overflow-wrap: anywhere;
   line-height: 26px;
   white-space: wrap;
   margin-left: 16px;
   text-align: start;
   text-overflow: ellipsis;
   line-height: 100%;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
 `;
