@@ -26,7 +26,7 @@ export function useEnsGeneratedData({ ensName }): UseEnsGeneratedData {
             const generatedId = generateID(index.toString());
             return { ...item, id: generatedId };
           });
-        console.log(ensDataWithId);
+
         setGeneratedData(ensDataWithId);
       } catch (e) {
         console.log('generated api error', e);

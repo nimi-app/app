@@ -16,7 +16,6 @@ export function CreateNimiPage() {
   const { ensName } = useParams();
 
   const nodeHash = ensNameHash(ensName as string);
-  console.log('search', ensName);
 
   /**
    * @todo - prevent accessing if the user does not own the domain
@@ -34,7 +33,6 @@ export function CreateNimiPage() {
   const { generatedData, loading: loadingEnsData } = useEnsGeneratedData({
     ensName: ensName,
   });
-  console.log('generatedDta', generatedData);
 
   if (themeLoading || loadingEnsData || loading) {
     return <Loader />;
