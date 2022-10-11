@@ -50,6 +50,10 @@ import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
 import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
 import devconPreview from '../../assets/theme/devcon-preview.png';
 
+import raaveLogoImage from '../../assets/theme/raave-logo-image.png';
+import raaveLogoText from '../../assets/theme/raave-logo-text.svg';
+// import raavePreview from '../../assets/theme/raave-preview.png';
+
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
@@ -88,6 +92,12 @@ const themes = {
     type: NimiThemeType.DEVCON,
     logoImage: devconLogoImage,
     logoText: devconLogoText,
+    preview: devconPreview,
+  },
+  [NimiThemeType.RAAVE]: {
+    type: NimiThemeType.RAAVE,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
     preview: devconPreview,
   },
 };
@@ -371,7 +381,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ens
                   </FormItem>
                   <FormItem>
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
-
                     <TextArea
                       onKeyDown={handleKeyDown}
                       maxLength={300}
