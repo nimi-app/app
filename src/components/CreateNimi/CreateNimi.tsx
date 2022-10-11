@@ -100,6 +100,18 @@ const themes = {
     logoText: raaveLogoText,
     preview: devconPreview,
   },
+  [NimiThemeType.DAIVINITY]: {
+    type: NimiThemeType.RAAVE,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
+    preview: devconPreview,
+  },
+  [NimiThemeType.INFINITE]: {
+    type: NimiThemeType.RAAVE,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
+    preview: devconPreview,
+  },
 };
 
 export interface CreateNimiProps {

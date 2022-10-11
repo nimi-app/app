@@ -28,7 +28,7 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
       setLoading(true);
 
       //Default theme set here
-      const themes: NimiThemeType[] = [NimiThemeType.NIMI];
+      const themes: NimiThemeType[] = [NimiThemeType.NIMI, NimiThemeType.DAIVINITY, NimiThemeType.INFINITE];
 
       //array of requests for checking if user has poap
       const poapRequestsForIndividualPoaps = themeToPoapMapping.map((item) => {
