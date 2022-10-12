@@ -9,11 +9,9 @@ export interface UseAvaliableTheme {
 
 //Order here determines precedent for default theme
 const themeToPoapMapping = [
-  //TODO: add right event id for Bogota paop
   { theme: NimiThemeType.DEVCON, eventId: [60695, 73449] },
-  { theme: NimiThemeType.RAAVE, eventId: [60695, 73449] },
-
-  //   { theme: NimiThemeType.NIMI, eventId: [536461111111] },
+  { theme: NimiThemeType.RAAVE, eventId: [60695, 63182] },
+  { theme: NimiThemeType.DAIVINITY, eventId: [60695] },
 ];
 
 /**
@@ -28,7 +26,7 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
       setLoading(true);
 
       //Default theme set here
-      const themes: NimiThemeType[] = [NimiThemeType.NIMI, NimiThemeType.DAIVINITY, NimiThemeType.INFINITE];
+      const themes: NimiThemeType[] = [NimiThemeType.NIMI, NimiThemeType.INFINITE];
 
       //array of requests for checking if user has poap
       const poapRequestsForIndividualPoaps = themeToPoapMapping.map((item) => {

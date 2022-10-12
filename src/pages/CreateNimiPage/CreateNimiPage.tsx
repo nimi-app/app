@@ -45,6 +45,7 @@ export function CreateNimiPage() {
   if (!provider || !SUPPORTED_CHAIN_IDS.includes(chainId as number)) {
     return <div>Wrong network</div>;
   }
+  console.log('avaliable thems', avaliableThemes);
 
   return (
     <Container>

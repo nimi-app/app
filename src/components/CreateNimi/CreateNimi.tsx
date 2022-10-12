@@ -42,6 +42,7 @@ import {
 } from './styled';
 
 import { Label, TextArea, FormGroup } from '../form';
+
 import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
 import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
 import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
@@ -53,6 +54,10 @@ import devconPreview from '../../assets/theme/devcon-preview.png';
 import raaveLogoImage from '../../assets/theme/raave-logo-image.png';
 import raaveLogoText from '../../assets/theme/raave-logo-text.svg';
 // import raavePreview from '../../assets/theme/raave-preview.png';
+
+import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
+import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
+import daivinityPreview from '../../assets/theme/daivinity-preview.png';
 
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
@@ -102,9 +107,9 @@ const themes = {
   },
   [NimiThemeType.DAIVINITY]: {
     type: NimiThemeType.RAAVE,
-    logoImage: raaveLogoImage,
-    logoText: raaveLogoText,
-    preview: devconPreview,
+    logoImage: daivinityLogoImage,
+    logoText: daivinityLogoText,
+    preview: daivinityPreview,
   },
   [NimiThemeType.INFINITE]: {
     type: NimiThemeType.RAAVE,
