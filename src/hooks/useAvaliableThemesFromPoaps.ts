@@ -42,7 +42,6 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
         })
       );
       //sorted array of avaliable themes based on requests
-      console.log('resolvedPoaps', resolvedPoapRequests);
       resolvedPoapRequests.forEach((item, index) => {
         const hasTheme = item && item.some((item) => item.status === 'fulfilled');
         if (hasTheme) themes.unshift(themeToPoapMapping[index].theme);

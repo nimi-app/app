@@ -106,7 +106,7 @@ const themes = {
     preview: raavePreview,
   },
   [NimiThemeType.DAIVINITY]: {
-    type: NimiThemeType.RAAVE,
+    type: NimiThemeType.DAIVINITY,
     logoImage: daivinityLogoImage,
     logoText: daivinityLogoText,
     preview: daivinityPreview,
