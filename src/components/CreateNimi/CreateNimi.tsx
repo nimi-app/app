@@ -53,7 +53,7 @@ import devconPreview from '../../assets/theme/devcon-preview.png';
 
 import raaveLogoImage from '../../assets/theme/raave-logo-image.png';
 import raaveLogoText from '../../assets/theme/raave-logo-text.svg';
-// import raavePreview from '../../assets/theme/raave-preview.png';
+import raavePreview from '../../assets/theme/raave-preview.png';
 
 import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
 import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
@@ -103,7 +103,7 @@ const themes = {
     type: NimiThemeType.RAAVE,
     logoImage: raaveLogoImage,
     logoText: raaveLogoText,
-    preview: devconPreview,
+    preview: raavePreview,
   },
   [NimiThemeType.DAIVINITY]: {
     type: NimiThemeType.RAAVE,
@@ -111,12 +111,12 @@ const themes = {
     logoText: daivinityLogoText,
     preview: daivinityPreview,
   },
-  [NimiThemeType.INFINITE]: {
-    type: NimiThemeType.RAAVE,
-    logoImage: raaveLogoImage,
-    logoText: raaveLogoText,
-    preview: devconPreview,
-  },
+  // [NimiThemeType.INFINITE]: {
+  //   type: NimiThemeType.RAAVE,
+  //   logoImage: raaveLogoImage,
+  //   logoText: raaveLogoText,
+  //   preview: devconPreview,
+  // },
 };
 
 export interface CreateNimiProps {
