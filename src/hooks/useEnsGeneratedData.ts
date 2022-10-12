@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Nimi } from '@nimi.io/card';
 import axios from 'axios';
 import { generateID } from '../utils';
+import { getAPIBaseURL } from '../modules/api-service';
 
 export interface UseEnsGeneratedData {
   generatedData?: Nimi;
@@ -19,7 +20,7 @@ export function useEnsGeneratedData({ ensName }): UseEnsGeneratedData {
     async function fetchEnsData() {
       try {
         setLoading(true);
-        const { data } = await axios.get(`https://api-dev.nimi.io/v1.4/nimi/generate?ensName=${ensName}`);
+        const { data } = await axios.get(`${getAPIBaseURL()}/nimi/generate?ensName=${ensName}`);
         const ensDataWithId = data.data.nimi as Nimi;
         if (ensDataWithId.links)
           ensDataWithId.links = ensDataWithId.links.map((item, index) => {
