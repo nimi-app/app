@@ -27,7 +27,6 @@ const Container = styled.div<{ noMargin?: boolean }>`
   height: 230px;
   position: relative;
   border-radius: 14px;
-  box-shadow: 0px 14.4118px 38.4314px -9.45772px rgba(44, 43, 102, 0.14);
   cursor: pointer;
   ${({ noMargin }) => !noMargin && 'margin-bottom: 14px;'}
 `;
@@ -70,7 +69,7 @@ const ThemePreview = styled.img`
   right: 0;
   border-radius: 14px;
   border: 5px solid white;
-  box-shadow: 0px 14.4118px 38.4314px -9.45772px rgba(44, 43, 102, 0.14);
+
   @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
     display: none;
   }

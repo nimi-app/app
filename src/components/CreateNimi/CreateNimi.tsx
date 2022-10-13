@@ -42,6 +42,7 @@ import {
 } from './styled';
 
 import { Label, TextArea, FormGroup } from '../form';
+
 import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
 import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
 import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
@@ -49,6 +50,14 @@ import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
 import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
 import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
 import devconPreview from '../../assets/theme/devcon-preview.png';
+
+import raaveLogoImage from '../../assets/theme/raave-logo-image.png';
+import raaveLogoText from '../../assets/theme/raave-logo-text.svg';
+import raavePreview from '../../assets/theme/raave-preview.png';
+
+import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
+import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
+import daivinityPreview from '../../assets/theme/daivinity-preview.png';
 
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
@@ -90,6 +99,24 @@ const themes = {
     logoText: devconLogoText,
     preview: devconPreview,
   },
+  [NimiThemeType.RAAVE]: {
+    type: NimiThemeType.RAAVE,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
+    preview: raavePreview,
+  },
+  [NimiThemeType.DAIVINITY]: {
+    type: NimiThemeType.DAIVINITY,
+    logoImage: daivinityLogoImage,
+    logoText: daivinityLogoText,
+    preview: daivinityPreview,
+  },
+  // [NimiThemeType.INFINITE]: {
+  //   type: NimiThemeType.RAAVE,
+  //   logoImage: raaveLogoImage,
+  //   logoText: raaveLogoText,
+  //   preview: devconPreview,
+  // },
 };
 
 export interface CreateNimiProps {
@@ -371,7 +398,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ens
                   </FormItem>
                   <FormItem>
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
-
                     <TextArea
                       onKeyDown={handleKeyDown}
                       maxLength={300}
