@@ -95,7 +95,6 @@ const themes = {
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
-  ensLabelName: string;
   provider: Web3Provider;
   availableThemes: NimiThemeType[];
 }
