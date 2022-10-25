@@ -20,17 +20,31 @@ export const GET_SUBDOMAINS_SUBGRAPH = gql`
 `;
 
 export const GET_DOMAINS_SUBGRAPH = gql`
-  query getDomains($address: ID!, $first: Int, $skip: Int, $orderBy: Domain_orderBy) {
-    account(id: $address) {
-      domains(first: $first, skip: $skip, orderBy: $orderBy) {
+  query getDomainsOwnedOrControlledBy(
+    $addressID: ID!
+    $addressString: String!
+    $first: Int
+    $skip: Int
+    $orderBy: Domain_orderBy
+  ) {
+    account(id: $addressID) {
+      domainsOwned: domains(first: $first, skip: $skip, orderBy: $orderBy) {
         id
         labelName
         labelhash
         name
-        isMigrated
         parent {
           name
         }
+      }
+    }
+    domainsControlled: domains(first: $first, skip: $skip, orderBy: $orderBy, where: { owner: $addressString }) {
+      id
+      labelName
+      labelhash
+      name
+      owner {
+        id
       }
     }
   }
