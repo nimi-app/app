@@ -26,6 +26,8 @@ export function useGetENSDomainsByAddress(address: string): UserENSDomains {
       // GrahpQL cannot cast ID to String, hence why we need addressID and addressString
       addressID: address.toLowerCase(),
       addressString: address.toLowerCase(),
+      skip: 0,
+      first: 1000,
     },
   });
 
