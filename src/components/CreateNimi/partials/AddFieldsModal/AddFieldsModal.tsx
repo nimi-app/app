@@ -117,7 +117,8 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           <StyledFlexList>
             {Object.values(NimiBlockchain)
               .filter((item) => item !== NimiBlockchain.SOLANA)
-              .map((blockchain) => {
+              .map((blockchai) => {
+                const blockchain = blockchai as string;
                 const inputId = `modal-checkbox-${blockchain}`;
                 const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
                 const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];

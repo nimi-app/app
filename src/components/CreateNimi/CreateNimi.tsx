@@ -42,6 +42,7 @@ import {
 } from './styled';
 
 import { Label, TextArea, FormGroup } from '../form';
+
 import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
 import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
 import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
@@ -49,6 +50,14 @@ import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
 import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
 import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
 import devconPreview from '../../assets/theme/devcon-preview.png';
+
+import raaveLogoImage from '../../assets/theme/raave-logo-image.png';
+import raaveLogoText from '../../assets/theme/raave-logo-text.svg';
+import raavePreview from '../../assets/theme/raave-preview.png';
+
+import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
+import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
+import daivinityPreview from '../../assets/theme/daivinity-preview.png';
 
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
@@ -90,6 +99,24 @@ const themes = {
     logoText: devconLogoText,
     preview: devconPreview,
   },
+  [NimiThemeType.RAAVE]: {
+    type: NimiThemeType.RAAVE,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
+    preview: raavePreview,
+  },
+  [NimiThemeType.DAIVINITY]: {
+    type: NimiThemeType.DAIVINITY,
+    logoImage: daivinityLogoImage,
+    logoText: daivinityLogoText,
+    preview: daivinityPreview,
+  },
+  // [NimiThemeType.INFINITE]: {
+  //   type: NimiThemeType.RAAVE,
+  //   logoImage: raaveLogoImage,
+  //   logoText: raaveLogoText,
+  //   preview: devconPreview,
+  // },
 };
 
 export interface CreateNimiProps {
@@ -97,9 +124,10 @@ export interface CreateNimiProps {
   ensName: string;
   provider: Web3Provider;
   availableThemes: NimiThemeType[];
+  ensData?: Nimi;
 }
 
-export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: CreateNimiProps) {
+export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ensData }: CreateNimiProps) {
   const location = useLocation();
 
   const state = location.state as Nimi;
@@ -129,26 +157,25 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
   const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
-  console.log('abaliableThemes', availableThemes);
-
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
-      displayName: state.displayName || ensName,
-      image: state.image?.url ? state.image : undefined,
-      description: state.description || '',
+      displayName: state.displayName || ensData?.displayName || ensName,
+      image: state.image?.url ? state.image : ensData?.image ? ensData?.image : undefined,
+      description: state.description || ensData?.description || '',
       ensAddress,
       ensName,
       //TODO: Add id-s to links so that it can auto-populate field
-      addresses: [],
-      links: state.links || [],
-      widgets: state.widgets || [
-        {
-          type: NimiWidgetType.POAP,
-        },
-      ],
-      theme: { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
+      addresses: ensData?.addresses || [],
+      links: state.links || ensData?.links || [],
+      widgets: state.widgets ||
+        ensData?.widgets || [
+          {
+            type: NimiWidgetType.POAP,
+          },
+        ],
+      theme: state.theme || { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
     },
   });
 
@@ -371,7 +398,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
                   </FormItem>
                   <FormItem>
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
-
                     <TextArea
                       onKeyDown={handleKeyDown}
                       maxLength={300}
