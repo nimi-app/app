@@ -148,10 +148,10 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           <SectionTitle>{t('addFieldsModal.nfts')}</SectionTitle>
           <StyledGridList>
             {nimiWidgetTypes.map((widget) => {
-              // Hide nfty
-              if (widget === NimiWidgetType.NFTY_UNIVERSAL_DM) {
-                return null;
-              }
+              // // Hide nfty
+              // if (widget === NimiWidgetType.NFTY_UNIVERSAL_DM) {
+              //   return null;
+              // }
 
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
@@ -171,12 +171,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
               };
 
               return (
-                <ButtonGroup
-                  disabled={checked || widget === NimiWidgetType.NFTY_UNIVERSAL_DM}
-                  key={inputId}
-                  id={inputId}
-                  onClick={inputOnChange}
-                >
+                <ButtonGroup disabled={checked} key={inputId} id={inputId} onClick={inputOnChange}>
                   {widget === NimiWidgetType.POAP && <StyledPoapLogo />}
                   {t(i18nKey)}
                 </ButtonGroup>
