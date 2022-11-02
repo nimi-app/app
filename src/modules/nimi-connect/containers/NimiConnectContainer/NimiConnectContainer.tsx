@@ -3,7 +3,6 @@ import { useState, useCallback } from 'react';
 import Select from 'react-select';
 import * as QRCode from 'qrcode';
 
-import { useGetDomainsQuery } from '../../../../generated/graphql/ens';
 import { Container } from '../../../../components/Container';
 import { Loader } from '../../../../components/Loader';
 import { Button } from '../../../../components/Button';
@@ -13,6 +12,7 @@ import { Card as CardBase, CardBody, CardTitle } from '../../../../components/Ca
 import styled from 'styled-components';
 import { FormGroup as FormGroupBase } from '../../../../components/form';
 import { unstable_batchedUpdates } from 'react-dom';
+import { useGetENSDomainsByAddress } from '../../../../hooks/useGetENSDomainsByAddress';
 
 const Card = styled(CardBase)`
   min-height: 300px;
@@ -51,12 +51,8 @@ export function NimiConnectContainer({ address }: NimiConnectContainerProps) {
   const [tokenQRDataURI, setTokenQRDataURI] = useState('');
   const [nimiToken, setNimiToken] = useState<CreateNimiConnectSessionResponse>();
   const [ensName, setEnsName] = useState<string>();
-  const { data, loading } = useGetDomainsQuery({
-    variables: {
-      address: address.toLowerCase(),
-    },
-  });
-  const ensNames = data?.account?.domains || [];
+  const { data, loading } = useGetENSDomainsByAddress(address);
+  const ensNames = data;
 
   const getNimiToken = useCallback(async () => {
     if (!account || !provider) {
@@ -100,10 +96,12 @@ export function NimiConnectContainer({ address }: NimiConnectContainerProps) {
     return <Loader />;
   }
 
-  if (ensNames.length === 0) {
-    <Container>
-      <h1>You have no domains</h1>
-    </Container>;
+  if (!ensNames || ensNames?.length === 0) {
+    return (
+      <Container>
+        <h1>You have no domains</h1>
+      </Container>
+    );
   }
 
   return (
