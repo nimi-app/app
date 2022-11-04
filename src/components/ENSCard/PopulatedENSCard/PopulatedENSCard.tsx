@@ -1,10 +1,9 @@
-import { FC } from 'react';
-import PurpleCircle from '../../../assets/svg/purpleCircle.svg';
-// import { Link, useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-
-import { StyledENSNameCardWrapper, ENSNameCardImage, StyledDomainName } from '../styleds';
 import { Nimi } from '@nimi.io/card';
+import Link from 'next/link';
+import { FC } from 'react';
+
+import PurpleCircle from '../../../assets/svg/purpleCircle.svg';
+import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
 
 export interface ENSNameCardProps {
   data: Nimi;
@@ -21,7 +20,7 @@ export function PopulatedENSCard({ data, id }: ENSNameCardProps) {
   data['id'] = id;
 
   return (
-    <Link to={`/domains/${data.ensName}`} state={data}>
+    <Link href={`/domains/${data.ensName}`} state={data}>
       <StyledENSNameCardWrapper>
         <ENSNameCardImage alt={data.ensAddress} src={data.image ? data.image.url : PurpleCircle} />
         <DomainName name={data.ensName} />

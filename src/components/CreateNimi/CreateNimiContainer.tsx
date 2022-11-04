@@ -1,12 +1,14 @@
+import { Web3Provider } from '@ethersproject/providers';
+
+import { Nimi } from '@nimi.io/card';
+import { useWeb3React } from '@web3-react/core';
+import { useEffect, useState } from 'react';
+
+import { Container } from '../../components/Container';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
-import { Container } from '../../components/Container';
-import { useWeb3React } from '@web3-react/core';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
-import { useEffect, useState } from 'react';
-import { Web3Provider } from '@ethersproject/providers';
 import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
-import { Nimi } from '@nimi.io/card';
 
 type CreateNimiContainerProps = {
   ensName: string;

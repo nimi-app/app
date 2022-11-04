@@ -1,5 +1,6 @@
 import { initializeConnector } from '@web3-react/core';
 import { WalletConnect } from '@web3-react/walletconnect';
+
 import { ENV_SUPPORTED_CHAIN_IDS, URLS } from '../constants';
 
 export const [walletConnect, hooks, store] = initializeConnector<WalletConnect>(

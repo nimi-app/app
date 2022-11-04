@@ -1,7 +1,8 @@
 import { getAddress, isAddress } from '@ethersproject/address';
-import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
-import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
+import { Contract } from '@ethersproject/contracts';
+import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from '@ethersproject/providers';
+
 import { FC, SVGProps } from 'react';
 
 export * from './explorer';

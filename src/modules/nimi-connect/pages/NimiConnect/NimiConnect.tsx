@@ -1,8 +1,8 @@
-import { ChainIdNotAllowedError } from '@web3-react/store';
 import { useWeb3React } from '@web3-react/core';
+import { ChainIdNotAllowedError } from '@web3-react/store';
 
-import { Container } from '../../../../components/Container';
 import { Button } from '../../../../components/Button';
+import { Container } from '../../../../components/Container';
 import { useWalletSwitcherPopoverToggle } from '../../../../state/application/hooks';
 import { NimiConnectContainer } from '../../containers/NimiConnectContainer';
 

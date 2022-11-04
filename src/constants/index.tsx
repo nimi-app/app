@@ -1,7 +1,5 @@
-import type { AddEthereumChainParameter } from '@web3-react/types';
-export const NetworkContextName = 'NETWORK';
-
 import { NimiLinkType } from '@nimi.io/card';
+import type { AddEthereumChainParameter } from '@web3-react/types';
 
 export interface NetworkDetails {
   chainId: string;

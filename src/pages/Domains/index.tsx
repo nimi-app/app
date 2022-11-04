@@ -1,16 +1,15 @@
 import { useWeb3React } from '@web3-react/core';
-import { Navigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 import { Flex } from 'rebass';
+import styled from 'styled-components';
 
-import { Container } from '../../components/Container';
-import { Loader } from '../../components/Loader';
-
-import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
-import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
+import { Container } from '../../components/Container';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
+import { Loader } from '../../components/Loader';
+import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
+import { NimiSignatureColor } from '../../theme';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -55,7 +54,7 @@ interface DomainsProps {
   address: string;
 }
 
-function Domains({ address }: DomainsProps) {
+export function DomainsContainer({ address }: DomainsProps) {
   const { data: domainList, loading } = useGetENSDomainsByAddress(address);
 
   const { t } = useTranslation('nimi');
@@ -89,13 +88,15 @@ function Domains({ address }: DomainsProps) {
 /**
  * A logic wrapper around Domains components
  */
-export function DomainsHome() {
+export default function DomainsPage() {
   const { account, isActive } = useWeb3React();
+  const router = useRouter();
 
   if (account && isActive) {
-    return <Domains address={account} />;
+    return <DomainsContainer address={account} />;
   }
 
-  // Redirect to home page if no wallet is connected
-  return <Navigate to="/" />;
+  // Redirect to home page if no account is connected
+  router.push('/');
+  return null;
 }

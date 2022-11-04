@@ -1,8 +1,8 @@
 import { useWeb3React } from '@web3-react/core';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-
 import { CID } from 'multiformats/cid';
+import { useEffect, useState } from 'react';
+
 import { ChainId } from '../constants';
 
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';

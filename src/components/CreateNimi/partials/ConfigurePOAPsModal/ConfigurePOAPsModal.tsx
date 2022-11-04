@@ -1,16 +1,13 @@
-import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { NimiWidgetType, POAPToken } from '@nimi.io/card';
 import axios from 'axios';
 import { AnimatePresence } from 'framer-motion/dist/framer-motion';
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useFormContext } from 'react-hook-form';
 
 import { ModalBase } from '../ModalBase';
-import { NimiWidgetType } from '@nimi.io/card';
-
-import { BodyNavigation, PreloaderPOAPs, NoPOAPs, RecentPOAPs, CustomizePOAPs } from './components';
-import { POAPToken } from '@nimi.io/card';
-
+import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
-import { useFormContext } from 'react-hook-form';
 
 type ConfigurePOAPsModalProps = {
   ensAddress: string;

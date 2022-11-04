@@ -1,7 +1,8 @@
-import Frame, { FrameContextConsumer } from 'react-frame-component';
-import { filterEmptyFields, Nimi, NimiCard, validateNimi, nimiLinkValidator } from '@nimi.io/card';
+import { filterEmptyFields, Nimi, NimiCard, nimiLinkValidator, validateNimi } from '@nimi.io/card';
 import { useEffect, useState } from 'react';
+import Frame, { FrameContextConsumer } from 'react-frame-component';
 import styled, { StyleSheetManager } from 'styled-components';
+
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
 import { Card as CardBase } from '../../../Card';
 

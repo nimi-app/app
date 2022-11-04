@@ -1,13 +1,13 @@
-import { Link } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'framer-motion/dist/framer-motion';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 
+import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
+import { fetchNimiDataByENSName } from '../../../modules/api-service';
+import purpleCircleURL from '../../assets/svg/purpleCircle.svg';
 import { PopulatedENSCard } from '../PopulatedENSCard';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
-import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
-import { useENSMetadata } from '../../../hooks/useENSMetadata';
-import { fetchNimiDataByENSName } from '../../../modules/api-service';
 
 type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[] ? ElementType : never;
 
@@ -42,7 +42,7 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   }
 
   return (
-    <Link ref={ref} to={`/domains/${domain.name}`}>
+    <Link ref={ref} href={`/domains/${domain.name}`}>
       <StyledENSNameCardWrapper>
         <ENSNameCardImage
           alt={'ENS Name image'}

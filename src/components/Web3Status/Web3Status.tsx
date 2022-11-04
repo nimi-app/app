@@ -1,14 +1,13 @@
-import { ChainIdNotAllowedError } from '@web3-react/store';
 import { useWeb3React } from '@web3-react/core';
+import { ChainIdNotAllowedError } from '@web3-react/store';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { useMemo } from 'react';
 
-import { shortenAddress } from '../../utils';
-
-import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
-import { useENSAvatar } from '../../hooks/useENSAvatar';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
+import { useENSAvatar } from '../../hooks/useENSAvatar';
+import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
+import { shortenAddress } from '../../utils';
 import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
 

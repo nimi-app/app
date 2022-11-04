@@ -1,14 +1,14 @@
-import { createContext, FC, PropsWithChildren, useContext } from 'react';
-import type { Connector, Web3ReactStore } from '@web3-react/types';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
-import { WalletConnect } from '@web3-react/walletconnect';
 import { Web3ReactHooks } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
 import { Network } from '@web3-react/network';
+import type { Connector, Web3ReactStore } from '@web3-react/types';
+import { WalletConnect } from '@web3-react/walletconnect';
+import { createContext, FC, PropsWithChildren, useContext } from 'react';
 
 import { coinbaseWallet, hooks as coinbaseWalletHooks, store as coinbaseWalletStore } from './coinbaseWallet';
-import { hooks as walletConnectHooks, walletConnect, store as walletConnectStore } from './walletConnect';
-import { hooks as metaMaskHooks, metaMask, store as metaMaskStore } from './metaMask';
+import { metaMask, hooks as metaMaskHooks, store as metaMaskStore } from './metaMask';
+import { walletConnect, hooks as walletConnectHooks, store as walletConnectStore } from './walletConnect';
 
 /**
  * Returns the name of the connector, otherwise 'Unknown' if not registered.

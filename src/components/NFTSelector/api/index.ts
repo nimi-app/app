@@ -1,4 +1,4 @@
-import { OpenSeaAPI, Network } from 'opensea-js';
+import { Network, OpenSeaAPI } from 'opensea-js';
 
 export interface FetchOpenSeaAssetsParams {
   address: string;

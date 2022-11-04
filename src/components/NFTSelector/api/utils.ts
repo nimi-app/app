@@ -1,4 +1,5 @@
 import { OpenSeaAsset } from 'opensea-js/lib/types';
+
 import { NFTAsset } from '../NFTSelector.types';
 
 /**

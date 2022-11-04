@@ -1,15 +1,13 @@
 import React from 'react';
+import { Text, TextProps } from 'rebass';
 import styled, {
-  ThemeProvider as StyledComponentsThemeProvider,
   createGlobalStyle,
   css,
   DefaultTheme,
+  ThemeProvider as StyledComponentsThemeProvider,
 } from 'styled-components';
 
-import { Text, TextProps } from 'rebass';
 import { Colors } from './styled';
-
-export * from './components';
 
 export const MEDIA_WIDTHS = {
   upToExtraSmall: 500,

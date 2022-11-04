@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
-import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { setConnectorInfo } from './actions';
 

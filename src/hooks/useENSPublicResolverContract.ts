@@ -1,5 +1,5 @@
 import { PUBLIC_RESOLVER_ADDRESSES } from '../constants';
-import { EnsPublicResolver__factory, EnsPublicResolver } from '../generated/contracts';
+import { EnsPublicResolver, EnsPublicResolver__factory } from '../generated/contracts';
 import { getProviderOrSigner } from '../utils';
 import { useActiveWeb3React } from './useWeb3';
 

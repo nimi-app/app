@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import { NimiThemeType } from '@nimi.io/card';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export interface UseAvaliableTheme {
   avaliableThemes: NimiThemeType[];

@@ -1,26 +1,28 @@
 import { useWeb3React } from '@web3-react/core';
+import { useRouter } from 'next/dist/client/router';
 import { Trans, useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
+import NimiLogoText from '../assets/svg/nimi-logo-text.svg';
 // SVGs
-import { Button } from '../../components/Button';
-import { Container } from '../../components/Container';
-import { Footer } from '../../components/Footer';
-import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
+import { Button } from '../components/Button';
+import { Container } from '../components/Container';
+import { Footer } from '../components/Footer';
+import { useWalletSwitcherPopoverToggle } from '../state/application/hooks';
 // Styled components
-import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
+import { Content, Header, HeaderEyebrow, HeroLead, HeroText, PageWrapper } from './index.styled';
 
-export function Landing() {
+export default function IndexPage() {
   const { t } = useTranslation(['common', 'landing']);
 
+  console.log('t', t);
+
   const { isActive, account } = useWeb3React();
-  const navigate = useNavigate();
+  const router = useRouter();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
 
   const onCTAClick = () => {
     if (isActive && account) {
-      navigate('/domains');
+      router.push('/domains');
     } else {
       openWalletSwitcherPopover();
     }

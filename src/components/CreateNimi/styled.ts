@@ -1,10 +1,10 @@
-import styled from 'styled-components';
 import { Flex } from 'rebass';
+import styled from 'styled-components';
 
-import { CardBody } from '../Card';
 import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { Button } from '../Button';
 import { DottedButtonBase } from '../Button/styled';
+import { CardBody } from '../Card';
 
 /**
  * Defines the layout

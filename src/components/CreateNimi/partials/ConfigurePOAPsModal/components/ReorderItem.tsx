@@ -1,9 +1,9 @@
-import styled from 'styled-components';
 import { Reorder, useDragControls } from 'framer-motion/dist/framer-motion';
-
-import { StaticPOAP, POAPPlaceholder } from './POAPs';
-import { ReactComponent as DotsIcon } from '../../../../../assets/svg/dots.svg';
 import { useState } from 'react';
+import styled from 'styled-components';
+
+import { ReactComponent as DotsIcon } from '../../../../../assets/svg/dots.svg';
+import { POAPPlaceholder, StaticPOAP } from './POAPs';
 
 export const ReorderItem = ({
   value,

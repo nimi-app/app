@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
+import { Theme } from '../../../../types';
 import { ModalBase } from '../ModalBase';
 import { TemplateItem } from './TemplateItem';
-import { Theme } from '../../../../types';
 
 type TemplatePickerModalProps = {
   themes: Theme[];

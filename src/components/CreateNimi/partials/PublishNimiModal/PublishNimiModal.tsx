@@ -1,17 +1,18 @@
 import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts';
+
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { getEtherscanExplorerLink } from '../../../../utils/explorer';
+import { Button } from '../../../Button';
+import { Loader } from '../../../Loader';
 import {
   Modal,
-  Header as ModalHeaderBase,
   Content as ModalContentBase,
-  Title as ModalTitle,
   Footer as ModalFooterBase,
+  Header as ModalHeaderBase,
+  Title as ModalTitle,
 } from '../../../Modal';
-import { Loader } from '../../../Loader';
-import { Button } from '../../../Button';
-import { getEtherscanExplorerLink } from '../../../../utils/explorer';
 
 const LoaderWrapper = styled.div`
   margin-bottom: 32px;

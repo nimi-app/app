@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Nimi } from '@nimi.io/card';
 import axios from 'axios';
-import { generateID } from '../utils';
+import { useEffect, useState } from 'react';
+
 import { getAPIBaseURL } from '../modules/api-service';
+import { generateID } from '../utils';
 
 export interface UseEnsGeneratedData {
   generatedData?: Nimi;

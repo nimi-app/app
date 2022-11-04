@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { getAPIBaseURL } from '../../api-service';
 
 export interface GetNimiConnectAppJWTParams {

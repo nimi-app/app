@@ -1,4 +1,5 @@
 import { Contract } from '@ethersproject/contracts';
+
 import { useMemo } from 'react';
 
 import { getContract } from '../utils';
