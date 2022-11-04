@@ -2,6 +2,7 @@
   "name": "nimi-app",
   "version": "0.2.1-beta",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@apollo/client": "^3.5.10",
     "@ensdomains/eth-ens-namehash": "^2.0.15",

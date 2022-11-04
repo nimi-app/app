@@ -9,9 +9,8 @@ import { Loader } from '../../components/Loader';
 
 import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
-import { useDomainsData } from '../../hooks/useDomainsData';
-import { BasicENSCard } from '../../components/ENSCard/BasicENSCard';
-import { PopulatedENSCard } from '../../components/ENSCard/PopulatedENSCard';
+import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
+import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -57,7 +56,7 @@ interface DomainsProps {
 }
 
 function Domains({ address }: DomainsProps) {
-  const { emptyDomainArray, domainArray, loading } = useDomainsData(address);
+  const { data: domainList, loading } = useGetENSDomainsByAddress(address);
 
   const { t } = useTranslation('nimi');
 
@@ -68,7 +67,7 @@ function Domains({ address }: DomainsProps) {
   return (
     <Container>
       <DomainsHeader>Your Identities</DomainsHeader>
-      {!emptyDomainArray.length && !domainArray.length ? (
+      {domainList?.length === 0 ? (
         <BigBanner>
           {t('noEnsFound')}
           <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
@@ -77,14 +76,9 @@ function Domains({ address }: DomainsProps) {
         </BigBanner>
       ) : (
         <StyledDomainsWrapper>
-          {domainArray.length !== 0 &&
-            domainArray.map((item) => {
-              return item.data && <PopulatedENSCard data={item.data} key={item.id} id={item.id} />;
-            })}
-          {emptyDomainArray.length !== 0 &&
-            emptyDomainArray.map(({ id, name, labelName }) => {
-              return <BasicENSCard key={id} id={id} name={name || ''} labelName={labelName || ''} />;
-            })}
+          {domainList?.map((domain) => (
+            <ENSCardContainer key={domain.name} domain={domain} />
+          ))}
           <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
         </StyledDomainsWrapper>
       )}
