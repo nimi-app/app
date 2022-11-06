@@ -42,7 +42,7 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   }
 
   return (
-    <Link ref={ref} to={`/domains/${name}`}>
+    <Link ref={ref} to={`/domains/${domain.name}`}>
       <StyledENSNameCardWrapper>
         <ENSNameCardImage
           alt={'ENS Name image'}
