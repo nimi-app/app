@@ -1,60 +1,20 @@
 import { useParams } from 'react-router-dom';
-import { namehash as ensNameHash } from '@ethersproject/hash';
-
-import { useGetDomainFromSubgraphQuery } from '../../generated/graphql/ens';
-import { CreateNimi } from '../../components/CreateNimi';
-import { Loader } from '../../components/Loader';
-import { Container } from '../../components/Container';
 import { useWeb3React } from '@web3-react/core';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
-import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
-import { useEnsGeneratedData } from '../../hooks/useEnsGeneratedData';
+import { CreateNimiContainer } from '../../components/CreateNimi/CreateNimiContainer';
 
 export function CreateNimiPage() {
-  const { account, provider, chainId } = useWeb3React();
+  const { provider, chainId } = useWeb3React();
 
   const { ensName } = useParams();
 
-  const nodeHash = ensNameHash(ensName as string);
-
-  /**
-   * @todo - prevent accessing if the user does not own the domain
-   */
-  const { data, loading, error } = useGetDomainFromSubgraphQuery({
-    variables: {
-      domainId: nodeHash.toLowerCase(),
-    },
-  });
-  //check if user has certain poap
-  const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
-    account,
-  });
-  //populate with ens data
-  const { generatedData, loading: loadingEnsData } = useEnsGeneratedData({
-    ensName: ensName,
-  });
-
-  if (themeLoading || loadingEnsData || loading) {
-    return <Loader />;
+  if (!provider) {
+    return <div>Connect wallet</div>;
   }
 
-  if (error || !data || !data.domain) {
-    return <div>{error?.message}</div>;
-  }
-
-  if (!provider || !SUPPORTED_CHAIN_IDS.includes(chainId as number)) {
+  if (!SUPPORTED_CHAIN_IDS.includes(chainId as number)) {
     return <div>Wrong network</div>;
   }
 
-  return (
-    <Container>
-      <CreateNimi
-        ensAddress={account as string}
-        ensName={ensName as string}
-        provider={provider}
-        availableThemes={avaliableThemes}
-        ensData={generatedData}
-      />
-    </Container>
-  );
+  return <CreateNimiContainer ensName={ensName as string} />;
 }

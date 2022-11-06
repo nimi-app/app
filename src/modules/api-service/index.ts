@@ -46,3 +46,16 @@ export function fetchNimiDataByENSName(name: string) {
     }>(`${process.env.REACT_APP_NIMI_API_BASE_URL}/nimi/by?ens=${name}`)
     .then(({ data }) => data.data[0]);
 }
+
+/**
+ *
+ */
+export async function fetchGeneratedNimi(ensName: string) {
+  const { data } = await axios.get<{
+    data: {
+      nimi: Nimi;
+    };
+  }>(`${getAPIBaseURL()}/nimi/generate?ensName=${ensName}`);
+
+  return data.data.nimi;
+}

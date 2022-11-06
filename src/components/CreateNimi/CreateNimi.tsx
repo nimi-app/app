@@ -66,7 +66,6 @@ import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper } from '../form/FormGroup';
-import { useLocation } from 'react-router-dom';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
@@ -122,16 +121,21 @@ const themes = {
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
+  /**
+   * Web3 provider
+   */
   provider: Web3Provider;
+  /**
+   * Available themes for the user to choose from
+   */
   availableThemes: NimiThemeType[];
-  ensData?: Nimi;
+  /**
+   * The initial Nimi to edit
+   */
+  initialNimi?: Nimi;
 }
 
-export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ensData }: CreateNimiProps) {
-  const location = useLocation();
-
-  const state = location.state as Nimi;
-
+export function CreateNimi({ ensAddress, ensName, provider, availableThemes, initialNimi }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
 
@@ -161,21 +165,10 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ens
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
-      displayName: state.displayName || ensData?.displayName || ensName,
-      image: state.image?.url ? state.image : ensData?.image ? ensData?.image : undefined,
-      description: state.description || ensData?.description || '',
-      ensAddress,
-      ensName,
-      //TODO: Add id-s to links so that it can auto-populate field
-      addresses: ensData?.addresses || [],
-      links: state.links || ensData?.links || [],
-      widgets: state.widgets ||
-        ensData?.widgets || [
-          {
-            type: NimiWidgetType.POAP,
-          },
-        ],
-      theme: state.theme || { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
+      ...initialNimi,
+      theme: {
+        type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
+      },
     },
   });
 
