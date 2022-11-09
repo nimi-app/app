@@ -29,7 +29,7 @@ export function useGetENSDomainsByAddress(address: string, searchString?: string
       searchString: searchString,
       addressString: address.toLowerCase(),
       skip: 0,
-      first: 9,
+      first: 999,
     },
   });
 
