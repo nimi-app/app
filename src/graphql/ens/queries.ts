@@ -23,12 +23,18 @@ export const GET_DOMAINS_SUBGRAPH = gql`
   query getDomainsOwnedOrControlledBy(
     $addressID: ID!
     $addressString: String!
+    $searchString: String
     $first: Int
     $skip: Int
     $orderBy: Domain_orderBy
   ) {
     account(id: $addressID) {
-      domainsOwned: domains(first: $first, skip: $skip, orderBy: $orderBy) {
+      domainsOwned: domains(
+        first: $first
+        skip: $skip
+        orderBy: $orderBy
+        where: { name_contains_nocase: $searchString }
+      ) {
         id
         labelName
         labelhash
@@ -38,7 +44,12 @@ export const GET_DOMAINS_SUBGRAPH = gql`
         }
       }
     }
-    domainsControlled: domains(first: $first, skip: $skip, orderBy: $orderBy, where: { owner: $addressString }) {
+    domainsControlled: domains(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      where: { name_contains_nocase: $searchString, owner: $addressString }
+    ) {
       id
       labelName
       labelhash

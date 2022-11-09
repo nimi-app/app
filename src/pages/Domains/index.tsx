@@ -1,4 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
+import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -11,6 +12,7 @@ import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
+import { ContentInput } from '../../components/Input';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -23,6 +25,8 @@ const DomainsHeader = styled.div`
   font-size: 36px;
   line-height: 39px;
   margin-bottom: 36px;
+  width: fit-content;
+  display: flex;
 `;
 const AddDomain = styled(DottedButtonBase)`
   width: 308px;
@@ -50,37 +54,70 @@ const BuyDomainLink = styled.p`
   margin-top: 17px;
   cursor: pointer;
 `;
+const TopSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+const StyledInput = styled(ContentInput)`
+  max-width: 200px;
+  padding-right: 10px;
+`;
+const LoaderWrapper = styled.div`
+  width: 100%;
+  padding: 80px 0;
+  justify-content: center;
+  display: flex;
+`;
 
 interface DomainsProps {
   address: string;
 }
 
 function Domains({ address }: DomainsProps) {
-  const { data: domainList, loading } = useGetENSDomainsByAddress(address);
+  const [searchText, setSearchText] = useState('');
+  const { data: domainList, loading } = useGetENSDomainsByAddress(address, searchText);
 
   const { t } = useTranslation('nimi');
 
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
     <Container>
-      <DomainsHeader>Your Identities</DomainsHeader>
-      {domainList?.length === 0 ? (
-        <BigBanner>
-          {t('noEnsFound')}
-          <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-            {t('buyDomain')}
-          </BuyDomainLink>
-        </BigBanner>
+      <TopSection>
+        <DomainsHeader>Your Identities</DomainsHeader>
+
+        <StyledInput
+          placeholder="Search Domains"
+          paddingLeft={'15px'}
+          inputInvalid={false}
+          value={searchText}
+          onChange={({ target }) => setSearchText(target.value)}
+        />
+      </TopSection>
+
+      {loading ? (
+        <LoaderWrapper>
+          <Loader />
+        </LoaderWrapper>
       ) : (
-        <StyledDomainsWrapper>
-          {domainList?.map((domain) => (
-            <ENSCardContainer key={domain.name} domain={domain} />
-          ))}
-          <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
-        </StyledDomainsWrapper>
+        <>
+          {domainList?.length === 0 ? (
+            <BigBanner>
+              {t('noEnsFound')}
+              <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                {t('buyDomain')}
+              </BuyDomainLink>
+            </BigBanner>
+          ) : (
+            <StyledDomainsWrapper>
+              {domainList?.map((domain) => (
+                <ENSCardContainer key={domain.name} domain={domain} />
+              ))}
+              <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                Buy an ENS
+              </AddDomain>
+            </StyledDomainsWrapper>
+          )}
+        </>
       )}
     </Container>
   );

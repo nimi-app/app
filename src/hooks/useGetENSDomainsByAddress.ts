@@ -16,18 +16,20 @@ export interface UserENSDomains {
  * @param address
  * @returns {UserENSDomains} data and loading state
  */
-export function useGetENSDomainsByAddress(address: string): UserENSDomains {
+export function useGetENSDomainsByAddress(address: string, searchString?: string): UserENSDomains {
   const [domainList, setDomainList] = useState<GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined>(
     undefined
   );
+  console.log('string', searchString);
 
   const query = useGetDomainsOwnedOrControlledByQuery({
     variables: {
       // GrahpQL cannot cast ID to String, hence why we need addressID and addressString
       addressID: address.toLowerCase(),
+      searchString: searchString,
       addressString: address.toLowerCase(),
       skip: 0,
-      first: 1000,
+      first: 9,
     },
   });
 
