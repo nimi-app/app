@@ -20,7 +20,6 @@ export function useGetENSDomainsByAddress(address: string, searchString?: string
   const [domainList, setDomainList] = useState<GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined>(
     undefined
   );
-  console.log('string', searchString);
 
   const query = useGetDomainsOwnedOrControlledByQuery({
     variables: {

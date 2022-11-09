@@ -64,10 +64,10 @@ const StyledInput = styled(ContentInput)`
   padding-right: 10px;
 `;
 const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   width: 100%;
   padding: 80px 0;
-  justify-content: center;
-  display: flex;
 `;
 
 interface DomainsProps {
