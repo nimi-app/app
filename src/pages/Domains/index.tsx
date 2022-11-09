@@ -17,7 +17,7 @@ import { ContentInput } from '../../components/Input';
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
   gap: 18px;
-  justify-content: start;
+  justify-content: center;
 `;
 const DomainsHeader = styled.div`
   ${NimiSignatureColor};
