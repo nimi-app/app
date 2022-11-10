@@ -81,17 +81,11 @@ export const MULTICALL2_ADDRESS: Record<number, string> = {
 
 export enum ChainId {
   MAINNET = 1,
-  RINKEBY = 4,
   GOERLI = 5,
-  XDAI = 100,
-  POLYGON = 137,
-  ARBITRUM_ONE = 42161,
-  ARBITRUM_RINKEBY = 421611,
 }
 
 export const PUBLIC_RESOLVER_ADDRESSES = {
   [ChainId.MAINNET]: '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41',
-  [ChainId.RINKEBY]: '0xf6305c19e814d2a75429Fd637d01F7ee0E77d615',
   [ChainId.GOERLI]: '0x4b1488b7a6b320d2d721406204abc3eeaa9ad329',
 };
 
@@ -99,8 +93,7 @@ export function getChainLabel(chainId: ChainId): string {
   return (
     {
       [ChainId.MAINNET]: 'Ethereum',
-      [ChainId.RINKEBY]: 'Rinkeby',
-      [ChainId.POLYGON]: 'Polygon',
+      [ChainId.GOERLI]: 'Görli',
     }[chainId] || ''
   );
 }
@@ -154,13 +147,6 @@ export const CHAINS: Record<number, BasicChainInformation | ExtendedChainInforma
     ].filter((url) => url !== undefined) as string[],
     nativeCurrency: ETH,
     name: 'Ethereum',
-  },
-  [ChainId.RINKEBY]: {
-    urls: [process.env.infuraKey ? `https://rinkeby.infura.io/v3/${process.env.infuraKey}` : undefined].filter(
-      (url) => url !== undefined
-    ) as string[],
-    nativeCurrency: ETH,
-    name: 'Rinkeby',
   },
   [ChainId.GOERLI]: {
     urls: [process.env.infuraKey ? `https://goerli.infura.io/v3/${process.env.infuraKey}` : undefined].filter(
