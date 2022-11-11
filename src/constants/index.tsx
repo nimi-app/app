@@ -2,6 +2,7 @@ import type { AddEthereumChainParameter } from '@web3-react/types';
 export const NetworkContextName = 'NETWORK';
 
 import { NimiLinkType } from '@nimi.io/card';
+import { CSSProperties } from 'styled-components';
 
 export interface NetworkDetails {
   chainId: string;
@@ -27,7 +28,7 @@ export enum Fields {
 export interface FieldType {
   name: string;
   dataType: string;
-  styleOverride?: React.CSSProperties;
+  styleOverride?: CSSProperties;
   placeholder: string;
   logo?: string;
 }
@@ -178,6 +179,7 @@ export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINS).map((key) => Number(key))
 /**
  * List of chain IDs that are supported in the current environment: production or development.
  */
-export const ENV_SUPPORTED_CHAIN_IDS = process.env.NODE_ENV === 'production' ? [ChainId.MAINNET] : SUPPORTED_CHAIN_IDS;
+export const ENV_SUPPORTED_CHAIN_IDS =
+  process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : SUPPORTED_CHAIN_IDS;
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];
