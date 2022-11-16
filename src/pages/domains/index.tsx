@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
+import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
 
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
@@ -12,7 +13,7 @@ import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
-import { ContentInput } from '../../components/Input';
+import { InputFieldWithIcon } from '../../components/Input';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -59,9 +60,10 @@ const TopSection = styled.div`
   flex-direction: row;
   justify-content: space-between;
 `;
-const StyledInput = styled(ContentInput)`
-  max-width: 200px;
-  padding-right: 10px;
+const StyledInput = styled(InputFieldWithIcon)`
+  max-width: 200px !important;
+  display: flex !important;
+  align-items: flex-start;
 `;
 const LoaderWrapper = styled.div`
   display: flex;
@@ -86,11 +88,14 @@ function Domains({ address }: DomainsProps) {
         <DomainsHeader>Your Identities</DomainsHeader>
 
         <StyledInput
-          placeholder="Search Domains"
-          paddingLeft={'15px'}
-          inputInvalid={false}
-          value={searchText}
+          id="domain-seach"
+          isSimple={true}
+          inputLogo={SearchIcon}
+          placeholder="Search"
+          content={searchText}
           onChange={({ target }) => setSearchText(target.value)}
+          style={{ maxWidth: '200px', background: 'none' }}
+          isInvalidInput={false}
         />
       </TopSection>
 
