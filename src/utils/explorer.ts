@@ -1,6 +1,5 @@
 const ETHERSCAN_PREFIXES: Record<number, string> = {
   1: '',
-  4: 'rinkeby.',
   5: 'goerli.',
 };
 

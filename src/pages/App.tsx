@@ -10,7 +10,7 @@ import { Header } from '../components/Header';
 
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
-import { DomainsHome } from './Domains';
+import { DomainsHome } from './domains';
 import { Footer } from '../components/Footer';
 import { WalletModal } from '../components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
