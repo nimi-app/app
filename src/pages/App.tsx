@@ -7,6 +7,7 @@ import { useTheme } from 'styled-components';
 import { defaultEnsClient, ensClients } from '../apollo/client';
 import { useActiveWeb3React } from '../hooks/useWeb3';
 import { Header } from '../components/Header';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
@@ -39,6 +40,8 @@ export function App() {
   const { chainId } = useActiveWeb3React();
   const theme = useTheme();
 
+  const queryClient = new QueryClient();
+
   useEffect(() => {
     // Load Fathom if it's set in .env
     if (process.env.REACT_APP_FATHOM_SITE_ID) {
@@ -48,15 +51,17 @@ export function App() {
 
   return (
     <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
-      <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
-        <WalletModal />
-        <Routes>
-          <Route element={<NimiConnectAppWrapper />} path="/connect" />
-          <Route element={<DomainsAppWrapper />} path="domains/*" />
-          <Route element={<Landing />} path="/" />
-          <Route element={<NotFound />} path="*" />
-        </Routes>
-      </ApolloProvider>
+      <QueryClientProvider client={queryClient}>
+        <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
+          <WalletModal />
+          <Routes>
+            <Route element={<NimiConnectAppWrapper />} path="/connect" />
+            <Route element={<DomainsAppWrapper />} path="domains/*" />
+            <Route element={<Landing />} path="/" />
+            <Route element={<NotFound />} path="*" />
+          </Routes>
+        </ApolloProvider>
+      </QueryClientProvider>
     </SkeletonTheme>
   );
 }

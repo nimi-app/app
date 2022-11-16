@@ -1,10 +1,57 @@
 import { useEffect, useState } from 'react';
-import { GetDomainsOwnedOrControlledByQuery, useGetDomainsOwnedOrControlledByQuery } from '../generated/graphql/ens';
+import { GetDomainsOwnedOrControlledByQuery } from '../generated/graphql/ens';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 export interface UserENSDomains {
   data: GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined;
   loading: boolean;
 }
+const ensQuery = `query getDomainsOwnedOrControlledBy(
+  $addressID: ID!
+  $addressString: String!
+  $searchString: String
+  $first: Int
+  $skip: Int
+  $orderBy: Domain_orderBy
+) {
+  account(id: $addressID) {
+    domainsOwned: domains(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      where: { name_contains_nocase: $searchString }
+    ) {
+      id
+      labelName
+      labelhash
+      name
+      parent {
+        name
+      }
+    }
+  }
+  domainsControlled: domains(
+    first: $first
+    skip: $skip
+    orderBy: $orderBy
+    where: { name_contains_nocase: $searchString, owner: $addressString }
+  ) {
+    id
+    labelName
+    labelhash
+    name
+    owner {
+      id
+    }
+  }
+}`;
+
+const ensEndpoints = {
+  1: 'https://api.thegraph.com/subgraphs/name/ensdomains/ens',
+  3: 'https://api.thegraph.com/subgraphs/name/ensdomains/ensropsten',
+  5: 'https://api.thegraph.com/subgraphs/name/ensdomains/ensgoerli',
+};
 
 /**
  * Fetches all **valid** ENS domains owned or controlled by the given address.
@@ -21,24 +68,35 @@ export function useGetENSDomainsByAddress(address: string, searchString?: string
     undefined
   );
 
-  const query = useGetDomainsOwnedOrControlledByQuery({
-    variables: {
-      // GrahpQL cannot cast ID to String, hence why we need addressID and addressString
-      addressID: address.toLowerCase(),
-      searchString: searchString,
-      addressString: address.toLowerCase(),
-      skip: 0,
-      first: 999,
-    },
+  const fetchDomains = (searchString) =>
+    axios.post(ensEndpoints[1], {
+      query: ensQuery,
+      variables: {
+        // GrahpQL cannot cast ID to String, hence why we need addressID and addressString
+        addressID: address.toLowerCase(),
+        searchString: searchString,
+        addressString: address.toLowerCase(),
+        skip: 0,
+        first: 999,
+      },
+    });
+  const { isLoading, data, isSuccess, isFetching, isError, isPreviousData } = useQuery({
+    queryKey: ['domains', searchString],
+    queryFn: () => fetchDomains(searchString),
+    keepPreviousData: true,
   });
+  console.log('isLoading', isLoading);
+  console.log('datar', data);
+  console.log('isPrev', isPreviousData);
 
   useEffect(() => {
-    if (!query.data) {
+    if (!data || isError) {
       return;
     }
 
-    const domainsOwned = query.data?.account?.domainsOwned ?? [];
-    const domainsControlled = query.data?.domainsControlled ?? [];
+    const queryData = data.data.data;
+    const domainsOwned = queryData?.account?.domainsOwned ?? [];
+    const domainsControlled = queryData?.domainsControlled ?? [];
     // We need to merge the two arrays and remove duplicates
     const allUserDomains = [...domainsOwned, ...domainsControlled];
 
@@ -82,10 +140,10 @@ export function useGetENSDomainsByAddress(address: string, searchString?: string
     }, [] as GetDomainsOwnedOrControlledByQuery['domainsControlled']);
 
     setDomainList(uniqueDomains);
-  }, [query.loading, query.data]);
+  }, [isLoading, data, isSuccess, isFetching]);
 
   return {
     data: domainList,
-    loading: query.loading,
+    loading: isLoading,
   };
 }
