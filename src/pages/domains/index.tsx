@@ -18,7 +18,7 @@ import { InputFieldWithIcon } from '../../components/Input';
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
   gap: 18px;
-  justify-content: center;
+  justify-content: start;
 `;
 const DomainsHeader = styled.div`
   ${NimiSignatureColor};
