@@ -70,7 +70,7 @@ import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { publishNimiViaIPNS, uploadImage } from './api';
+import { publishNimi, publishNimiViaIPNS, uploadImage } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
@@ -220,19 +220,30 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
       const signature = await provider.getSigner().signMessage(JSON.stringify(data));
 
-      const { cidV1, ipns } = await publishNimiViaIPNS({
-        nimi: data,
-        signature,
-        controller: publishNimiAbortController.current,
-      });
+      let contentHash: string | undefined;
+      let cid: string | undefined;
 
-      if (!cidV1) {
-        throw new Error('No CID returned from publishNimiViaIPNS');
+      // In development, use IPFS
+      if (process.env.REACT_APP_ENV === 'production') {
+        const { cidV1, ipns } = await publishNimiViaIPNS({
+          nimi: data,
+          signature,
+          controller: publishNimiAbortController.current,
+        });
+
+        if (!cidV1) {
+          throw new Error('No CID returned from publishNimiViaIPNS');
+        }
+
+        cid = cidV1;
+        contentHash = `ipns://${ipns}`;
+      } else {
+        cid = (await publishNimi(data, publishNimiAbortController.current)).cid;
+        contentHash = `ipns://${cid}`;
       }
 
       // Get current content hash from ENS contract
       const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
-      const contentHash = `ipns://${ipns}`;
       const newContentHashEncoded = encodeContenthash(contentHash).encoded as unknown as string;
 
       // User already uses the Nimi IPNS
@@ -245,7 +256,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
       }
 
       // Set the content
-      setPublishNimiResponseIpfsHash(ipns);
+      setPublishNimiResponseIpfsHash(cid);
       const setContentHashTransaction = await setENSNameContentHash({
         contract: publicResolverContract,
         name: data.ensName,

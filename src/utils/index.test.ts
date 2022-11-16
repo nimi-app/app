@@ -14,9 +14,6 @@ describe('utils', () => {
     it('unrecognized chain id defaults to mainnet', () => {
       expect(getEtherscanExplorerLink(2, 'abc', 'address')).toEqual('https://etherscan.io/address/abc');
     });
-    it('enum', () => {
-      expect(getEtherscanExplorerLink(4, 'abc', 'address')).toEqual('https://rinkeby.etherscan.io/address/abc');
-    });
   });
 
   describe('#shortenAddress', () => {
