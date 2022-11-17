@@ -1,3 +1,4 @@
+import { Pagination } from '../../components/Pagination/';
 import { useWeb3React } from '@web3-react/core';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -78,7 +79,8 @@ interface DomainsProps {
 
 function Domains({ address }: DomainsProps) {
   const [searchText, setSearchText] = useState('');
-  const { data: domainList, loading } = useGetENSDomainsByAddress(address, searchText);
+  const [page, setPage] = useState(0);
+  const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(address, page, searchText);
 
   const { t } = useTranslation('nimi');
 
@@ -124,6 +126,7 @@ function Domains({ address }: DomainsProps) {
           )}
         </>
       )}
+      <Pagination page={page} setPage={setPage} hasNextPage={hasNextPage} />
     </Container>
   );
 }

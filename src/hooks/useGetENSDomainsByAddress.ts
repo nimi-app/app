@@ -6,6 +6,7 @@ import axios from 'axios';
 export interface UserENSDomains {
   data: GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined;
   loading: boolean;
+  hasNextPage: boolean;
 }
 const ensQuery = `query getDomainsOwnedOrControlledBy(
   $addressID: ID!
@@ -53,6 +54,8 @@ const ensEndpoints = {
   5: 'https://api.thegraph.com/subgraphs/name/ensdomains/ensgoerli',
 };
 
+const numberOfItemsPerPage = 8;
+
 /**
  * Fetches all **valid** ENS domains owned or controlled by the given address.
  *
@@ -63,12 +66,12 @@ const ensEndpoints = {
  * @param address
  * @returns {UserENSDomains} data and loading state
  */
-export function useGetENSDomainsByAddress(address: string, searchString?: string): UserENSDomains {
+export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
   const [domainList, setDomainList] = useState<GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined>(
     undefined
   );
 
-  const fetchDomains = (searchString) =>
+  const fetchDomains = (searchString?: string) =>
     axios.post(ensEndpoints[1], {
       query: ensQuery,
       variables: {
@@ -76,12 +79,12 @@ export function useGetENSDomainsByAddress(address: string, searchString?: string
         addressID: address.toLowerCase(),
         searchString: searchString,
         addressString: address.toLowerCase(),
-        skip: 0,
-        first: 999,
+        skip: page * numberOfItemsPerPage,
+        first: numberOfItemsPerPage,
       },
     });
   const { isLoading, data, isSuccess, isFetching, isError, isPreviousData } = useQuery({
-    queryKey: ['domains', searchString],
+    queryKey: ['domains', searchString, page],
     queryFn: () => fetchDomains(searchString),
     keepPreviousData: true,
   });
@@ -95,6 +98,7 @@ export function useGetENSDomainsByAddress(address: string, searchString?: string
     }
 
     const queryData = data.data.data;
+    console.log('queryData', queryData);
     const domainsOwned = queryData?.account?.domainsOwned ?? [];
     const domainsControlled = queryData?.domainsControlled ?? [];
     // We need to merge the two arrays and remove duplicates
@@ -145,5 +149,6 @@ export function useGetENSDomainsByAddress(address: string, searchString?: string
   return {
     data: domainList,
     loading: isLoading,
+    hasNextPage: isPreviousData,
   };
 }
