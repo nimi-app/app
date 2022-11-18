@@ -17,19 +17,24 @@ interface PublishNimiResponse {
   cid: string;
 }
 
+interface PublishNimiParams {
+  nimi: Nimi;
+  chainId: number;
+  controller?: AbortController;
+}
 /**
  *
  * @param payload the payload from the form
  * @param controller Abort controller
  * @returns A promise with IPFS hash
  */
-export function publishNimi(payload: Nimi, controller?: AbortController): Promise<PublishNimiResponse> {
+export function publishNimi({ controller, ...data }: PublishNimiParams): Promise<PublishNimiResponse> {
   const url = new URL('/nimi/publish', getAPIBaseURL());
 
   return axios
     .post<{
       data: PublishNimiApiResponse | PublishNimiApiResponseDeprecated;
-    }>(url.toString(), payload, {
+    }>(url.toString(), data, {
       signal: controller ? controller.signal : undefined,
     })
     .then(({ data }) => {
@@ -48,6 +53,10 @@ export function publishNimi(payload: Nimi, controller?: AbortController): Promis
 }
 
 interface PublishNimiViaIPNSParams {
+  /**
+   * Chain Id
+   */
+  chainId: number;
   /**
    * Nimi
    */
@@ -74,23 +83,16 @@ interface PublishNimiViaIPNSResponse {
  * @returns A promise with IPFS hash
  */
 export function publishNimiViaIPNS({
-  nimi,
-  signature,
   controller,
+
+  ...data
 }: PublishNimiViaIPNSParams): Promise<PublishNimiViaIPNSResponse> {
   return axios
     .post<{
       data: PublishNimiViaIPNSResponse;
-    }>(
-      `${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/publish/ipns`,
-      {
-        nimi,
-        signature,
-      },
-      {
-        signal: controller ? controller.signal : undefined,
-      }
-    )
+    }>(`${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/publish/ipns`, data, {
+      signal: controller ? controller.signal : undefined,
+    })
     .then(({ data }) => data.data);
 }
 
