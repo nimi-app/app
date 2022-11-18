@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Reorder, useDragControls } from 'framer-motion/dist/framer-motion';
+import { Reorder, useDragControls } from 'framer-motion';
 
 import { StaticPOAP, POAPPlaceholder } from './POAPs';
 import { ReactComponent as DotsIcon } from '../../../../../assets/svg/dots.svg';
