@@ -90,7 +90,7 @@ export function publishNimiViaIPNS({
   return axios
     .post<{
       data: PublishNimiViaIPNSResponse;
-    }>(`${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/publish/ipns`, data, {
+    }>(`${getAPIBaseURL()}/nimi/publish/ipns`, data, {
       signal: controller ? controller.signal : undefined,
     })
     .then(({ data }) => data.data);
@@ -112,6 +112,6 @@ export function uploadImage(file: File) {
   return axios
     .post<{
       data: PublishNimiApiResponse;
-    }>(`${process.env.REACT_APP_NIMI_API_BASE_URL_V1_4}/nimi/assets`, formData, config)
+    }>(`${getAPIBaseURL()}/nimi/assets`, formData, config)
     .then(({ data }) => data.data);
 }
