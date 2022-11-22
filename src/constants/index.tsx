@@ -139,7 +139,7 @@ export function getAddChainParameters(chainId: number): AddEthereumChainParamete
 /**
  * List of chains and their information.
  */
-export const CHAINS: Record<number, BasicChainInformation | ExtendedChainInformation> = {
+export const CHAINS: Record<ChainId, BasicChainInformation | ExtendedChainInformation> = {
   [ChainId.MAINNET]: {
     urls: [
       process.env.infuraKey ? `https://mainnet.infura.io/v3/${process.env.infuraKey}` : undefined,

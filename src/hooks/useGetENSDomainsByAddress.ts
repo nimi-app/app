@@ -1,58 +1,17 @@
 import { useEffect, useState } from 'react';
-import { GetDomainsOwnedOrControlledByQuery } from '../generated/graphql/ens';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
+import { useActiveWeb3React } from './useWeb3';
+import { ENSendpoint } from '../api/GraphQl/constants';
+import {
+  GetDomainsOwnedOrControlledByQuery,
+  useGetDomainsOwnedOrControlledByQuery,
+} from '../api/GraphQl/schemas/generated/ens';
 
 export interface UserENSDomains {
   data: GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined;
   loading: boolean;
   hasNextPage: boolean;
 }
-const ensQuery = `query getDomainsOwnedOrControlledBy(
-  $addressID: ID!
-  $addressString: String!
-  $searchString: String
-  $first: Int
-  $skip: Int
-  $orderBy: Domain_orderBy
-) {
-  account(id: $addressID) {
-    domainsOwned: domains(
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      where: { name_contains_nocase: $searchString }
-    ) {
-      id
-      labelName
-      labelhash
-      name
-      parent {
-        name
-      }
-    }
-  }
-  domainsControlled: domains(
-    first: $first
-    skip: $skip
-    orderBy: $orderBy
-    where: { name_contains_nocase: $searchString, owner: $addressString }
-  ) {
-    id
-    labelName
-    labelhash
-    name
-    owner {
-      id
-    }
-  }
-}`;
-
-const ensEndpoints = {
-  1: 'https://api.thegraph.com/subgraphs/name/ensdomains/ens',
-  3: 'https://api.thegraph.com/subgraphs/name/ensdomains/ensropsten',
-  5: 'https://api.thegraph.com/subgraphs/name/ensdomains/ensgoerli',
-};
 
 const numberOfItemsPerPage = 8;
 
@@ -67,40 +26,35 @@ const numberOfItemsPerPage = 8;
  * @returns {UserENSDomains} data and loading state
  */
 export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
+  const { chainId } = useActiveWeb3React();
+  const [hasNextPage, setHasNextPage] = useState(false);
   const [domainList, setDomainList] = useState<GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined>(
     undefined
   );
 
-  const fetchDomains = (searchString?: string) =>
-    axios.post(ensEndpoints[1], {
-      query: ensQuery,
-      variables: {
-        // GrahpQL cannot cast ID to String, hence why we need addressID and addressString
-        addressID: address.toLowerCase(),
-        searchString: searchString,
-        addressString: address.toLowerCase(),
-        skip: page * numberOfItemsPerPage,
-        first: numberOfItemsPerPage,
-      },
-    });
-  const { isLoading, data, isSuccess, isFetching, isError, isPreviousData } = useQuery({
-    queryKey: ['domains', searchString, page],
-    queryFn: () => fetchDomains(searchString),
-    keepPreviousData: true,
-  });
-  console.log('isLoading', isLoading);
-  console.log('datar', data);
-  console.log('isPrev', isPreviousData);
+  const { isLoading, data, isError, isSuccess, isFetching } = useGetDomainsOwnedOrControlledByQuery<
+    GetDomainsOwnedOrControlledByQuery,
+    Error
+  >(
+    { endpoint: ENSendpoint[chainId || 1] },
+    {
+      addressID: address.toLowerCase(),
+      searchString: searchString,
+      addressString: address.toLowerCase(),
+      skip: page * numberOfItemsPerPage,
+      first: numberOfItemsPerPage * 2,
+    },
+    { keepPreviousData: true }
+  );
 
   useEffect(() => {
     if (!data || isError) {
       return;
     }
 
-    const queryData = data.data.data;
-    console.log('queryData', queryData);
-    const domainsOwned = queryData?.account?.domainsOwned ?? [];
-    const domainsControlled = queryData?.domainsControlled ?? [];
+    const domainsOwned = data?.account?.domainsOwned ?? [];
+    const domainsControlled = data?.domainsControlled ?? [];
+
     // We need to merge the two arrays and remove duplicates
     const allUserDomains = [...domainsOwned, ...domainsControlled];
 
@@ -143,12 +97,19 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
       return acc;
     }, [] as GetDomainsOwnedOrControlledByQuery['domainsControlled']);
 
-    setDomainList(uniqueDomains);
+    setHasNextPage(uniqueDomains.length > numberOfItemsPerPage);
+
+    setDomainList(uniqueDomains.slice(0, numberOfItemsPerPage));
   }, [isLoading, data, isSuccess, isFetching]);
+
+  console.log('HASNEXT', hasNextPage);
+  console.log('ifFetching', isFetching);
+  console.log('isLoading', isLoading);
+  console.log('passed');
 
   return {
     data: domainList,
-    loading: isLoading,
-    hasNextPage: isPreviousData,
+    loading: isLoading || isFetching,
+    hasNextPage: hasNextPage || isFetching,
   };
 }

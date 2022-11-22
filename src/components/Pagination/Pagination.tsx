@@ -6,20 +6,24 @@ interface PaginationProps {
   page: number;
   setPage: any;
   hasNextPage: boolean;
+  loading: boolean;
 }
 
-export function Pagination({ page, setPage, hasNextPage }: PaginationProps) {
+export function Pagination({ page, setPage, hasNextPage, loading }: PaginationProps) {
   console.log('page', page);
+  console.log('hasNextPage', hasNextPage);
   return (
     <PaginationWrapper>
-      <button disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>
+      <ArrowButton disabled={page === 0} onClick={() => setPage((prev) => prev - 1)}>
         <ArrowBack />
-      </button>
+      </ArrowButton>
 
       <PageNumber hide={page === 0}>{page}</PageNumber>
-      <PageNumber>{page + 1}</PageNumber>
-      <PageNumber hide={!hasNextPage}>{page + 2}</PageNumber>
-      <ArrowNext onClick={() => setPage((prev) => prev + 1)} />
+      <PageNumber isCurrentPage={true}>{page + 1}</PageNumber>
+      <PageNumber hide={!hasNextPage || loading}>{page + 2}</PageNumber>
+      <ArrowButton disabled={!hasNextPage || loading}>
+        <ArrowNext onClick={() => setPage((prev) => prev + 1)} />
+      </ArrowButton>
     </PaginationWrapper>
   );
 }
@@ -28,26 +32,26 @@ const PaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 15px;
+  margin-top: 36px;
 `;
 
-const ArrowBack = styled(Arrow)<{ disabled?: boolean }>`
+const ArrowButton = styled.button`
+  border: none;
+  background: none;
+  ${({ disabled }) => (disabled ? 'pointer-events:none' : 'cursor:pointer')};
+`;
+const ArrowBack = styled(Arrow)`
   transform: scaleX(-1);
-  /* pointer-events: none;
-  path {
-    pointer-events: auto;
-  }
-
-  cursor: pointer; */
 `;
 
 const ArrowNext = styled(Arrow)<{ disabled?: boolean }>`
-  cursor: pointer;
-  pointer-events: none;
-  path {
-    pointer-events: auto;
-  }
+  ${({ disabled }) => (disabled ? 'pointer-events:none' : 'cursor:pointer')};
 `;
 
-const PageNumber = styled.div<{ hide?: boolean }>`
+const PageNumber = styled.div<{ hide?: boolean; isCurrentPage?: boolean }>`
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  color: ${({ isCurrentPage }) => (isCurrentPage ? '#7A7696' : '#CCC7C7')};
   ${({ hide }) => hide && 'display:none'}
 `;

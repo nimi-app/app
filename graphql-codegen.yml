@@ -1,15 +1,15 @@
 generates:
-  ./src/generated/graphql/ens.ts:
-    schema: "https://api.thegraph.com/subgraphs/name/ensdomains/ens"
-    documents: 'src/graphql/ens/queries.ts'
+  ./src/api/GraphQl/schemas/generated/ens.ts:
+    schema: 'https://api.thegraph.com/subgraphs/name/ensdomains/ens'
+    documents: 'src/api/GraphQl/schemas/ens.ts'
     plugins:
       - typescript
       - typescript-operations
-      - typescript-react-apollo
-  ./src/generated/graphql/lens.ts:
-    schema: "https://api.lens.dev"
-    documents: 'src/graphql/lens/queries.ts'
+      - typescript-react-query
+  ./src/api/GraphQl/schemas/generated/lens.tsx:
+    schema: 'https://api.lens.dev'
+    documents: 'src/api/GraphQl/schemas/lens.ts'
     plugins:
       - typescript
       - typescript-operations
-      - typescript-react-apollo
+      - typescript-react-query

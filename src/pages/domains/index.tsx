@@ -126,7 +126,7 @@ function Domains({ address }: DomainsProps) {
           )}
         </>
       )}
-      <Pagination page={page} setPage={setPage} hasNextPage={hasNextPage} />
+      <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
     </Container>
   );
 }
