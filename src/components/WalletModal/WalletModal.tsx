@@ -138,7 +138,7 @@ export function WalletModal() {
     return (
       <Modal>
         <Header>
-          <h2>{t('error.wrongNetwork')}</h2>
+          <h2>{t('connecting')}</h2>
         </Header>
         <Content>
           <LoaderWrapper>
