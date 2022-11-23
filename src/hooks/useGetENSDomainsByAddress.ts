@@ -100,7 +100,7 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
     setHasNextPage(uniqueDomains.length > numberOfItemsPerPage);
 
     setDomainList(uniqueDomains.slice(0, numberOfItemsPerPage));
-  }, [isLoading, data, isSuccess, isFetching]);
+  }, [isLoading, data, isSuccess, isFetching, isError]);
 
   console.log('HASNEXT', hasNextPage);
   console.log('ifFetching', isFetching);
