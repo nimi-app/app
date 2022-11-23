@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@apollo/client": "^3.5.10",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ensdomains/ui": "^3.4.1",
     "@ethersproject/providers": "^5.7.0",

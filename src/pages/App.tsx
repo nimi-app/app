@@ -1,11 +1,8 @@
-import { ApolloProvider } from '@apollo/client';
 import { useEffect } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 
-import { defaultEnsClient, ensClients } from '../apollo/client';
-import { useActiveWeb3React } from '../hooks/useWeb3';
 import { Header } from '../components/Header';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -37,7 +34,7 @@ const NimiConnectAppWrapper = () => (
 
 export function App() {
   // const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
-  const { chainId } = useActiveWeb3React();
+
   const theme = useTheme();
 
   const queryClient = new QueryClient();
@@ -52,15 +49,13 @@ export function App() {
   return (
     <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
       <QueryClientProvider client={queryClient}>
-        <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
-          <WalletModal />
-          <Routes>
-            <Route element={<NimiConnectAppWrapper />} path="/connect" />
-            <Route element={<DomainsAppWrapper />} path="domains/*" />
-            <Route element={<Landing />} path="/" />
-            <Route element={<NotFound />} path="*" />
-          </Routes>
-        </ApolloProvider>
+        <WalletModal />
+        <Routes>
+          <Route element={<NimiConnectAppWrapper />} path="/connect" />
+          <Route element={<DomainsAppWrapper />} path="domains/*" />
+          <Route element={<Landing />} path="/" />
+          <Route element={<NotFound />} path="*" />
+        </Routes>
       </QueryClientProvider>
     </SkeletonTheme>
   );

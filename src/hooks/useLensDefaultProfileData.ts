@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useActiveWeb3React } from './useWeb3';
-import { useGetDefaultLensProfileQuery } from '../generated/graphql/lens';
-import { useLensSubgraphClient } from './useLensSubgraph';
+import { useGetDefaultLensProfileQuery } from '../api/GraphQl/schemas/generated/lens';
+import { LENSendpoint } from '../api/GraphQl/constants';
 
 export interface LensDefaultProfileData {
   name: string;
@@ -10,14 +10,14 @@ export interface LensDefaultProfileData {
 }
 
 export function useLensDefaultProfileData(): { loading: boolean; defaultProfileData: LensDefaultProfileData | null } {
-  const { account } = useActiveWeb3React();
-  const lensSubgraph = useLensSubgraphClient();
-  const { data, loading } = useGetDefaultLensProfileQuery({
-    client: lensSubgraph,
-    variables: {
+  const { account, chainId } = useActiveWeb3React();
+
+  const { data, isLoading } = useGetDefaultLensProfileQuery(
+    { endpoint: LENSendpoint[chainId || 1] },
+    {
       account,
-    },
-  });
+    }
+  );
 
   const [defaultProfileData, setDefaultProfileData] = useState<LensDefaultProfileData | null>(null);
 
@@ -37,5 +37,5 @@ export function useLensDefaultProfileData(): { loading: boolean; defaultProfileD
     );
   }, [data, account]);
 
-  return { loading, defaultProfileData };
+  return { loading: isLoading, defaultProfileData };
 }
