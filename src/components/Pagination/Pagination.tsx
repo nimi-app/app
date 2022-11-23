@@ -18,9 +18,13 @@ export function Pagination({ page, setPage, hasNextPage, loading }: PaginationPr
         <ArrowBack />
       </ArrowButton>
 
-      <PageNumber hide={page === 0}>{page}</PageNumber>
+      <PageNumber onClick={() => setPage((prev) => prev - 1)} hide={page === 0}>
+        {page}
+      </PageNumber>
       <PageNumber isCurrentPage={true}>{page + 1}</PageNumber>
-      <PageNumber hide={!hasNextPage || loading}>{page + 2}</PageNumber>
+      <PageNumber onClick={() => setPage((prev) => prev + 1)} hide={!hasNextPage || loading}>
+        {page + 2}
+      </PageNumber>
       <ArrowButton disabled={!hasNextPage || loading}>
         <ArrowNext onClick={() => setPage((prev) => prev + 1)} />
       </ArrowButton>
@@ -31,13 +35,13 @@ export function Pagination({ page, setPage, hasNextPage, loading }: PaginationPr
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
   margin-top: 36px;
 `;
 
 const ArrowButton = styled.button`
   border: none;
   background: none;
+  padding: 0 10px;
   ${({ disabled }) => (disabled ? 'pointer-events:none' : 'cursor:pointer')};
 `;
 const ArrowBack = styled(Arrow)`
@@ -52,6 +56,8 @@ const PageNumber = styled.div<{ hide?: boolean; isCurrentPage?: boolean }>`
   font-weight: 700;
   font-size: 18px;
   line-height: 24px;
+  padding: 0 10px;
+  cursor: pointer;
   color: ${({ isCurrentPage }) => (isCurrentPage ? '#7A7696' : '#CCC7C7')};
   ${({ hide }) => hide && 'display:none'}
 `;
