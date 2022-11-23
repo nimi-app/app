@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useActiveWeb3React } from './useWeb3';
-import { ENSendpoint } from '../api/GraphQl/constants';
+import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import {
   GetDomainsOwnedOrControlledByQuery,
   useGetDomainsOwnedOrControlledByQuery,
@@ -36,7 +36,7 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
     GetDomainsOwnedOrControlledByQuery,
     Error
   >(
-    { endpoint: ENSendpoint[chainId || 1] },
+    GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.ENS),
     {
       addressID: address.toLowerCase(),
       searchString: searchString,

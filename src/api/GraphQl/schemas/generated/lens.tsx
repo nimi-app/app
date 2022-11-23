@@ -1,28 +1,15 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+// @ts-nocheck
+import { GraphQLClient } from 'graphql-request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
+import { useQuery, useInfiniteQuery, UseQueryOptions, UseInfiniteQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(endpoint: string, requestInit: RequestInit, query: string, variables?: TVariables) {
-  return async (): Promise<TData> => {
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      ...requestInit,
-      body: JSON.stringify({ query, variables }),
-    });
-
-    const json = await res.json();
-
-    if (json.errors) {
-      const { message } = json.errors[0];
-
-      throw new Error(message);
-    }
-
-    return json.data;
-  }
+function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
+  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -3824,12 +3811,38 @@ export const useGetDefaultLensProfileQuery = <
       TData = GetDefaultLensProfileQuery,
       TError = unknown
     >(
-      dataSource: { endpoint: string, fetchParams?: RequestInit },
+      client: GraphQLClient,
       variables: GetDefaultLensProfileQueryVariables,
-      options?: UseQueryOptions<GetDefaultLensProfileQuery, TError, TData>
+      options?: UseQueryOptions<GetDefaultLensProfileQuery, TError, TData>,
+      headers?: RequestInit['headers']
     ) =>
     useQuery<GetDefaultLensProfileQuery, TError, TData>(
       ['getDefaultLensProfile', variables],
-      fetcher<GetDefaultLensProfileQuery, GetDefaultLensProfileQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, GetDefaultLensProfileDocument, variables),
+      fetcher<GetDefaultLensProfileQuery, GetDefaultLensProfileQueryVariables>(client, GetDefaultLensProfileDocument, variables, headers),
       options
     );
+
+useGetDefaultLensProfileQuery.getKey = (variables: GetDefaultLensProfileQueryVariables) => ['getDefaultLensProfile', variables];
+;
+
+export const useInfiniteGetDefaultLensProfileQuery = <
+      TData = GetDefaultLensProfileQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof GetDefaultLensProfileQueryVariables,
+      client: GraphQLClient,
+      variables: GetDefaultLensProfileQueryVariables,
+      options?: UseInfiniteQueryOptions<GetDefaultLensProfileQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useInfiniteQuery<GetDefaultLensProfileQuery, TError, TData>(
+      ['getDefaultLensProfile.infinite', variables],
+      (metaData) => fetcher<GetDefaultLensProfileQuery, GetDefaultLensProfileQueryVariables>(client, GetDefaultLensProfileDocument, {...variables, ...(metaData.pageParam ? {[pageParamKey]: metaData.pageParam} : {})}, headers)(),
+      options
+    );
+
+
+useInfiniteGetDefaultLensProfileQuery.getKey = (variables: GetDefaultLensProfileQueryVariables) => ['getDefaultLensProfile.infinite', variables];
+;
+
+useGetDefaultLensProfileQuery.fetcher = (client: GraphQLClient, variables: GetDefaultLensProfileQueryVariables, headers?: RequestInit['headers']) => fetcher<GetDefaultLensProfileQuery, GetDefaultLensProfileQueryVariables>(client, GetDefaultLensProfileDocument, variables, headers);

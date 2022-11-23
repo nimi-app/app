@@ -99,12 +99,12 @@
     ]
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "2.6.2",
-    "@graphql-codegen/introspection": "2.1.1",
-    "@graphql-codegen/typescript": "2.4.11",
-    "@graphql-codegen/typescript-operations": "^2.4.0",
+    "@graphql-codegen/add": "^3.2.1",
+    "@graphql-codegen/cli": "2.13.12",
+    "@graphql-codegen/client-preset": "^1.1.5",
+    "@graphql-codegen/typescript": "2.8.2",
+    "@graphql-codegen/typescript-operations": "^2.5.7",
     "@graphql-codegen/typescript-react-query": "4.0.5",
-    "@graphql-codegen/typescript-rtk-query": "^2.2.12",
     "@typechain/ethers-v5": "^10.0.0",
     "@types/qrcode": "^1.4.2",
     "@types/react-select": "^5.0.1",

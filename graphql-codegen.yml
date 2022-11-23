@@ -1,15 +1,31 @@
 generates:
   ./src/api/GraphQl/schemas/generated/ens.ts:
     schema: 'https://api.thegraph.com/subgraphs/name/ensdomains/ens'
-    documents: 'src/api/GraphQl/schemas/ens.ts'
+    documents: 'src/api/GraphQl/schemas/ens.graphql'
     plugins:
+      - add
       - typescript
       - typescript-operations
       - typescript-react-query
+    config:
+      content:
+        - // @ts-nocheck
+      fetcher: 'graphql-request'
+      addInfiniteQuery: true
+      exposeQueryKeys: true
+      exposeFetcher: true
   ./src/api/GraphQl/schemas/generated/lens.tsx:
     schema: 'https://api.lens.dev'
-    documents: 'src/api/GraphQl/schemas/lens.ts'
+    documents: 'src/api/GraphQl/schemas/lens.graphql'
     plugins:
+      - add
       - typescript
       - typescript-operations
       - typescript-react-query
+    config:
+      content:
+        - // @ts-nocheck
+      fetcher: 'graphql-request'
+      addInfiniteQuery: true
+      exposeQueryKeys: true
+      exposeFetcher: true
