@@ -26,6 +26,5 @@ generates:
       content:
         - // @ts-nocheck
       fetcher: 'graphql-request'
-      addInfiniteQuery: true
       exposeQueryKeys: true
       exposeFetcher: true
