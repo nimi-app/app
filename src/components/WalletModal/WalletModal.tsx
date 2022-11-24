@@ -1,11 +1,10 @@
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
-import { ChainIdNotAllowedError } from '@web3-react/store';
 import { WalletConnect } from '@web3-react/walletconnect';
 import { MetaMask } from '@web3-react/metamask';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'react-i18next';
 import { Connector } from '@web3-react/types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '../Button';
@@ -28,20 +27,14 @@ const LoaderWrapper = styled(LoaderWrapperBase)`
 export function WalletModal() {
   const { t } = useTranslation();
 
-  const { connector, isActive, account, error } = useWeb3React();
+  const { connector, isActive, account, chainId } = useWeb3React();
   const isModalOpen = useModalOpen(ApplicationModal.WALLET_SWITCHER);
   const connectors = useWeb3Connectors();
   const closeModal = useCloseModals();
   const navigate = useNavigate();
   // Internal state
   const [isActivatingAConnector, setIsActivatingAConnector] = useState(false);
-  const [pendingError, setPendingError] = useState<Error | undefined>();
-  const isWrongNetwork = pendingError instanceof ChainIdNotAllowedError;
-
-  // Track connector errors
-  useEffect(() => {
-    setPendingError(error);
-  }, [error]);
+  const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
 
   /**
    * Activate a connector
@@ -60,7 +53,6 @@ export function WalletModal() {
     setTimeout(() => {
       // Reset internal state and close the modal
       setIsActivatingAConnector(false);
-      setPendingError(undefined);
       closeModal();
     }, 500);
 
@@ -94,7 +86,7 @@ export function WalletModal() {
           <p>{shortenAddress(account)}</p>
         </Content>
         <Footer>
-          <Button onClick={() => connector.deactivate()}>{t('disconnect')}</Button>
+          <Button onClick={() => connector.deactivate?.()}>{t('disconnect')}</Button>
           <Button onClick={closeModal}>{t('close')}</Button>
         </Footer>
       </Modal>
@@ -112,7 +104,7 @@ export function WalletModal() {
     return (
       <Modal>
         <Header>
-          <h2>{t('error.wrongNetwork')}</h2>
+          <h2>{t('error.unsupportedNetwork')}</h2>
         </Header>
         <Content>
           <p>
