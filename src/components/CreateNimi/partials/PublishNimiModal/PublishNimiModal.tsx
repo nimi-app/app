@@ -59,6 +59,7 @@ export interface PublishNimiModalProps {
  */
 export function PublishNimiModal({
   cancel,
+  ipfsHash,
   isPublishing,
   ensName,
   publishError,
@@ -81,6 +82,14 @@ export function PublishNimiModal({
               !
             </Trans>
           </p>
+          {process.env.REACT_APP_ENV !== 'production' && ipfsHash && (
+            <p>
+              You can also view it on the IPFS gateway
+              <a target="_blank" rel="noreferrer" href={`https://ipfs.io/ipfs/${ipfsHash}`}>
+                {ensName}
+              </a>
+            </p>
+          )}
           <p>{t('publishNimiModal.successParagraph2', { ns: 'nimi' })}</p>
           <p>{t('publishNimiModal.successParagraph3', { ns: 'nimi' })}</p>
         </>
