@@ -7,6 +7,7 @@
   "goToDomains": "Go to Domains",
   "connecting": "Connecting",
   "error.wrongNetwork": "Wrong Network",
+  "error.unsupportedNetwork": "Unsupported Network",
   "switchNetwork": "Switch Network",
   "error": "Error",
   "tryAgain": "Try Again",
