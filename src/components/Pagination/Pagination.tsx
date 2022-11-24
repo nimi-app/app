@@ -5,7 +5,7 @@ import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
 interface PaginationProps {
   page: number;
   setPage: any;
-  hasNextPage: boolean;
+  hasNextPage?: boolean;
   loading: boolean;
 }
 

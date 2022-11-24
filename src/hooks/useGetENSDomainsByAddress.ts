@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { useActiveWeb3React } from './useWeb3';
 import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
@@ -7,10 +7,17 @@ import {
   useGetDomainsOwnedOrControlledByQuery,
 } from '../api/GraphQl/schemas/generated/ens';
 
+export type DataModified = {
+  id: string;
+  labelName: string;
+  labelHash: string;
+  name: string;
+  parent: { name: string };
+};
 export interface UserENSDomains {
-  data: GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined;
+  data: DataModified[] | undefined;
   loading: boolean;
-  hasNextPage: boolean;
+  hasNextPage?: boolean;
 }
 
 const numberOfItemsPerPage = 8;
@@ -27,31 +34,9 @@ const numberOfItemsPerPage = 8;
  */
 export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
   const { chainId } = useActiveWeb3React();
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [domainList, setDomainList] = useState<GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined>(
-    undefined
-  );
 
-  const { isLoading, data, isError, isSuccess, isFetching } = useGetDomainsOwnedOrControlledByQuery<
-    GetDomainsOwnedOrControlledByQuery,
-    Error
-  >(
-    GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.ENS),
-    {
-      addressID: address.toLowerCase(),
-      searchString: searchString,
-      addressString: address.toLowerCase(),
-      skip: page * numberOfItemsPerPage,
-      first: numberOfItemsPerPage * 2,
-    },
-    { keepPreviousData: true }
-  );
-
-  useEffect(() => {
-    if (!data || isError) {
-      return;
-    }
-
+  function domainOrdering(data) {
+    console.log('herejshdfjhsdjfhsd', data);
     const domainsOwned = data?.account?.domainsOwned ?? [];
     const domainsControlled = data?.domainsControlled ?? [];
 
@@ -97,19 +82,29 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
       return acc;
     }, [] as GetDomainsOwnedOrControlledByQuery['domainsControlled']);
 
-    setHasNextPage(uniqueDomains.length > numberOfItemsPerPage);
+    return uniqueDomains;
+  }
 
-    setDomainList(uniqueDomains.slice(0, numberOfItemsPerPage));
-  }, [isLoading, data, isSuccess, isFetching, isError]);
-
-  console.log('HASNEXT', hasNextPage);
-  console.log('ifFetching', isFetching);
-  console.log('isLoading', isLoading);
-  console.log('passed');
+  const { isLoading, data, isError, isSuccess, isFetching } = useGetDomainsOwnedOrControlledByQuery(
+    GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.ENS),
+    {
+      addressID: address.toLowerCase(),
+      searchString: searchString,
+      addressString: address.toLowerCase(),
+      skip: page * numberOfItemsPerPage,
+      first: numberOfItemsPerPage + 1,
+    },
+    { keepPreviousData: true, select: domainOrdering }
+  );
+  const waitedForData: DataModified[] = useMemo(() => {
+    if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isSuccess, isError, isFetching]);
 
   return {
-    data: domainList,
+    data: waitedForData && waitedForData.slice(0, numberOfItemsPerPage),
     loading: isLoading || isFetching,
-    hasNextPage: hasNextPage || isFetching,
+    hasNextPage: waitedForData && waitedForData.length > numberOfItemsPerPage && (!isLoading || !isFetching),
   };
 }
