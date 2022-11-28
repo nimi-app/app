@@ -65,7 +65,7 @@ export function useDomainsData(address: string) {
           setDomainArray(domainArray);
           setEmptyDomainArray(emptyDomainArray);
         } catch (e) {
-          console.log('error', e);
+          console.error('error', e);
         } finally {
           setMainLoader(false);
         }

@@ -16,34 +16,6 @@ import {
 } from '../../../Modal';
 import { ContentInput } from '../../../ReorderInput';
 import { generateID, guessLinkTypeBasedOnUrl } from '../../../../utils';
-import { nimiLinkDetailsExtended } from '@nimi.io/card';
-
-const ModalHeader = styled(ModalHeaderBase)`
-  padding: 82px;
-  padding-bottom: 0;
-  justify-content: center;
-  text-align: center;
-`;
-
-const ModalContent = styled(ModalContentBase)`
-  padding: 82px;
-  padding-top: 32px;
-`;
-
-const ModalContentInnerWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 33px;
-`;
-
-const HeaderImageWrapper = styled.div`
-  margin-bottom: 32px;
-`;
-const LinktreeLogo = styled(Linktree)`
-  width: 60px;
-  height: 40px;
-`;
 
 export function ImportFromLinktreeModal({ onClose }) {
   const { t } = useTranslation('nimi');
@@ -57,14 +29,12 @@ export function ImportFromLinktreeModal({ onClose }) {
     const valueWithProtocol = isValueMissingProtocol ? `https://${targetValue}` : targetValue;
     setLinktreeUrl(valueWithProtocol);
   };
-  console.log('nimi details', nimiLinkDetailsExtended);
 
   const fetchLinktreeData = () => {
     setIsLoading(true);
     setError(undefined);
 
     const url = `${getAPIBaseURL()}/nimi/import`;
-    console.log('url', url);
 
     axios
       .get<{ data }>(url, {
@@ -77,11 +47,10 @@ export function ImportFromLinktreeModal({ onClose }) {
           const guessLinkType = guessLinkTypeBasedOnUrl(content);
           return { type: guessLinkType, title, content, id: generateID() };
         });
-        console.log('ImportedData', mappedLinks);
         onClose(mappedLinks);
       })
       .catch((error) => {
-        console.log('error', error);
+        console.error('error', error);
         setError(error.message);
       })
       .then(() => setIsLoading(false));
@@ -123,3 +92,30 @@ export function ImportFromLinktreeModal({ onClose }) {
     </Modal>
   );
 }
+
+const ModalHeader = styled(ModalHeaderBase)`
+  padding: 82px;
+  padding-bottom: 0;
+  justify-content: center;
+  text-align: center;
+`;
+
+const ModalContent = styled(ModalContentBase)`
+  padding: 82px;
+  padding-top: 32px;
+`;
+
+const ModalContentInnerWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 33px;
+`;
+
+const HeaderImageWrapper = styled.div`
+  margin-bottom: 32px;
+`;
+const LinktreeLogo = styled(Linktree)`
+  width: 60px;
+  height: 40px;
+`;
