@@ -12,6 +12,7 @@ import {
 } from '../../../Modal';
 import { StyledFlexList, StyledGridList } from '../../styled';
 import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
+import { ReactComponent as NftyChatLogo } from '../../../../assets/svg/nftychat-logo.svg';
 
 import { LinksSection } from './LinksSection';
 import { ButtonGroup } from '../../../form/Button';
@@ -40,6 +41,11 @@ const SectionTitle = styled.h2`
 `;
 
 const StyledPoapLogo = styled(PoapLogo)`
+  width: 20px;
+  height: 20px;
+`;
+
+const StyledNftyLogo = styled(NftyChatLogo)`
   width: 20px;
   height: 20px;
 `;
@@ -173,6 +179,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
               return (
                 <ButtonGroup disabled={checked} key={inputId} id={inputId} onClick={inputOnChange}>
                   {widget === NimiWidgetType.POAP && <StyledPoapLogo />}
+                  {widget === NimiWidgetType.NFTY_UNIVERSAL_DM && <StyledNftyLogo />}
                   {t(i18nKey)}
                 </ButtonGroup>
               );

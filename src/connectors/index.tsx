@@ -4,7 +4,6 @@ import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import { WalletConnect } from '@web3-react/walletconnect';
 import { Web3ReactHooks } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
-import { Network } from '@web3-react/network';
 
 import { coinbaseWallet, hooks as coinbaseWalletHooks, store as coinbaseWalletStore } from './coinbaseWallet';
 import { hooks as walletConnectHooks, walletConnect, store as walletConnectStore } from './walletConnect';
@@ -19,7 +18,6 @@ export function getName(connector: Connector) {
   if (connector instanceof MetaMask) return 'MetaMask';
   if (connector instanceof WalletConnect) return 'WalletConnect';
   if (connector instanceof CoinbaseWallet) return 'Coinbase Wallet';
-  if (connector instanceof Network) return 'Network';
   return 'Unknown';
 }
 

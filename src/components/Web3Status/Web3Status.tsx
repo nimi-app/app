@@ -1,4 +1,3 @@
-import { ChainIdNotAllowedError } from '@web3-react/store';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -8,7 +7,7 @@ import { shortenAddress } from '../../utils';
 
 import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
 import { useENSAvatar } from '../../hooks/useENSAvatar';
-import { SUPPORTED_CHAIN_IDS } from '../../constants';
+import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
 
@@ -42,15 +41,14 @@ const StyledTextContent = styled.span`
 
 export function Web3Status() {
   const { t } = useTranslation();
-  const { isActive, isActivating, account, error, chainId, ENSName } = useWeb3React();
+  const { isActive, isActivating, account, ENSName, chainId } = useWeb3React();
   const { avatar } = useENSAvatar();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
-
-  const isWrongNetwork = error instanceof ChainIdNotAllowedError || SUPPORTED_CHAIN_IDS.includes(chainId as number);
+  const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
 
   const statusContent = useMemo(() => {
-    if (error && isWrongNetwork) {
-      return t('error.wrongNetwork');
+    if (isWrongNetwork) {
+      return t('error.unsupportedNetwork');
     }
 
     if (isActivating) {
@@ -66,10 +64,10 @@ export function Web3Status() {
     }
 
     return t('connect');
-  }, [isActivating, isActive, account, error, isWrongNetwork, ENSName, t]);
+  }, [isActivating, isActive, account, ENSName, isWrongNetwork, t]);
 
   return (
-    <StyledWrapper isError={error !== undefined} onClick={openWalletSwitcherPopover}>
+    <StyledWrapper isError={isWrongNetwork} onClick={openWalletSwitcherPopover}>
       <Web3Avatar url={avatar} alt={ENSName || account} />
       <StyledInnerWrapper>
         <StyledTextContent>{statusContent}</StyledTextContent>
