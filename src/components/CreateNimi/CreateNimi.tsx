@@ -568,6 +568,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
           publishError={publishNimiError}
           setContentHashTransaction={setContentHashTransaction}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
+          setContentHashTransactionChainId={provider.network.chainId}
           cancel={() => {
             setIsPublishNimiModalOpen(false);
             publishNimiAbortController?.current?.abort();
