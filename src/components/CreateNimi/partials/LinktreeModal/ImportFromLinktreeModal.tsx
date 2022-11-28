@@ -15,7 +15,8 @@ import {
   Title as ModalTitle,
 } from '../../../Modal';
 import { ContentInput } from '../../../ReorderInput';
-import { generateID } from '../../../../utils';
+import { generateID, guessLinkTypeBasedOnUrl } from '../../../../utils';
+import { nimiLinkDetailsExtended } from '@nimi.io/card';
 
 const ModalHeader = styled(ModalHeaderBase)`
   padding: 82px;
@@ -56,6 +57,7 @@ export function ImportFromLinktreeModal({ onClose }) {
     const valueWithProtocol = isValueMissingProtocol ? `https://${targetValue}` : targetValue;
     setLinktreeUrl(valueWithProtocol);
   };
+  console.log('nimi details', nimiLinkDetailsExtended);
 
   const fetchLinktreeData = () => {
     setIsLoading(true);
@@ -71,10 +73,9 @@ export function ImportFromLinktreeModal({ onClose }) {
         },
       })
       .then(({ data }) => {
-        const mappedLinks = data.data.map((item) => {
-          console.log('here', item);
-          const type = item.title.toUpperCase();
-          return { type: type, title: '', content: item.content, id: generateID() };
+        const mappedLinks = data.data.map(({ content, title }) => {
+          const guessLinkType = guessLinkTypeBasedOnUrl(content);
+          return { type: guessLinkType, title, content, id: generateID() };
         });
         console.log('ImportedData', mappedLinks);
         onClose(mappedLinks);
