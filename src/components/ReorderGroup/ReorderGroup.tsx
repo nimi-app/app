@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Reorder } from 'framer-motion/dist/framer-motion';
+import { Reorder } from 'framer-motion';
 
 interface ReorderGroupProps {
   children: ReactNode;
@@ -11,7 +11,7 @@ export function ReorderGroup({ children, values, onReorder }: ReorderGroupProps)
   const style = { width: '100%', gap: '14px', display: 'flex', flexDirection: 'column' };
 
   return (
-    <Reorder.Group axis="y" values={values} onReorder={onReorder} as="div" style={style}>
+    <Reorder.Group axis="y" values={values} onReorder={onReorder} as="div" style={style as any}>
       {children}
     </Reorder.Group>
   );

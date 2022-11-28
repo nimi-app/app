@@ -22,6 +22,7 @@ const Container = styled.button`
   border: 5px solid #fff;
   background-color: #f0f3fb;
   cursor: pointer;
+  align-self: center;
 `;
 
 const ThemeImage = styled.img`

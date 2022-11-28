@@ -48,4 +48,6 @@ export function TemplatePickerModal({ closeModal, handleThemeSelection, themes }
 
 const Container = styled.div`
   width: 100%;
+  max-height: 470px;
+  overflow-y: scroll;
 `;

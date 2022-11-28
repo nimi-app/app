@@ -50,6 +50,14 @@ import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
 import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
 import devconPreview from '../../assets/theme/devcon-preview.png';
 
+import raaveLogoImage from '../../assets/theme/raave-logo-image.png';
+import raaveLogoText from '../../assets/theme/raave-logo-text.svg';
+import raavePreview from '../../assets/theme/raave-preview.png';
+
+import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
+import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
+import daivinityPreview from '../../assets/theme/daivinity-preview.png';
+
 // Partials
 import { ImportButtonsWrapper } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
@@ -57,12 +65,11 @@ import { AddFieldsModal } from './partials/AddFieldsModal';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
 import { FormWrapper } from '../form/FormGroup';
-import { useLocation } from 'react-router-dom';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { PublishNimiModal } from './partials/PublishNimiModal';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { publishNimiViaIPNS, uploadImage } from './api';
+import { publishNimi, publishNimiViaIPNS, uploadImage } from './api';
 import { Web3Provider } from '@ethersproject/providers';
 import { namehash as ensNameHash, encodeContenthash } from '@ensdomains/ui';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
@@ -76,6 +83,7 @@ import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
 import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
+import { ImportFromLinktreeModal } from './partials/LinktreeModal';
 
 const themes = {
   [NimiThemeType.NIMI]: {
@@ -90,22 +98,44 @@ const themes = {
     logoText: devconLogoText,
     preview: devconPreview,
   },
+  [NimiThemeType.RAAVE]: {
+    type: NimiThemeType.RAAVE,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
+    preview: raavePreview,
+  },
+  [NimiThemeType.DAIVINITY]: {
+    type: NimiThemeType.DAIVINITY,
+    logoImage: daivinityLogoImage,
+    logoText: daivinityLogoText,
+    preview: daivinityPreview,
+  },
+  // [NimiThemeType.INFINITE]: {
+  //   type: NimiThemeType.RAAVE,
+  //   logoImage: raaveLogoImage,
+  //   logoText: raaveLogoText,
+  //   preview: devconPreview,
+  // },
 };
-import { ImportFromLinktreeModal } from './partials/LinktreeModal';
 
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
-  ensLabelName: string;
+  /**
+   * Web3 provider
+   */
   provider: Web3Provider;
+  /**
+   * Available themes for the user to choose from
+   */
   availableThemes: NimiThemeType[];
+  /**
+   * The initial Nimi to edit
+   */
+  initialNimi?: Nimi;
 }
 
-export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: CreateNimiProps) {
-  const location = useLocation();
-
-  const state = location.state as Nimi;
-
+export function CreateNimi({ ensAddress, ensName, provider, availableThemes, initialNimi }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
 
@@ -136,20 +166,10 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
-      displayName: state.displayName || ensName,
-      image: state.image?.url ? state.image : undefined,
-      description: state.description || '',
-      ensAddress,
-      ensName,
-      //TODO: Add id-s to links so that it can auto-populate field
-      addresses: [],
-      links: state.links || [],
-      widgets: state.widgets || [
-        {
-          type: NimiWidgetType.POAP,
-        },
-      ],
-      theme: { type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI },
+      ...initialNimi,
+      theme: {
+        type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
+      },
     },
   });
 
@@ -184,7 +204,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
    * Handle the form submit via ENS contract interaction
    * @param data a validated Nimi object
    */
-  const onSubmitValid = async (data: Nimi) => {
+  const onSubmitValid = async (nimi: Nimi) => {
     unstable_batchedUpdates(() => {
       setIsPublishNimiModalOpen(true);
       setIsPublishingNimi(true);
@@ -199,21 +219,39 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
 
       publishNimiAbortController.current = new AbortController();
 
-      const signature = await provider.getSigner().signMessage(JSON.stringify(data));
+      const signature = await provider.getSigner().signMessage(JSON.stringify(nimi));
 
-      const { cidV1, ipns } = await publishNimiViaIPNS({
-        nimi: data,
-        signature,
-        controller: publishNimiAbortController.current,
-      });
+      let contentHash: string | undefined;
+      let cid: string | undefined;
 
-      if (!cidV1) {
-        throw new Error('No CID returned from publishNimiViaIPNS');
+      // In development, use IPFS
+      if (process.env.REACT_APP_ENV === 'production') {
+        const { cidV1, ipns } = await publishNimiViaIPNS({
+          nimi,
+          signature,
+          chainId: 1, // always mainnet
+          controller: publishNimiAbortController.current,
+        });
+
+        if (!cidV1) {
+          throw new Error('No CID returned from publishNimiViaIPNS');
+        }
+
+        cid = cidV1;
+        contentHash = `ipns://${ipns}`;
+      } else {
+        cid = (
+          await publishNimi({
+            nimi,
+            chainId: provider.network.chainId,
+            controller: publishNimiAbortController.current,
+          })
+        ).cid;
+        contentHash = `ipns://${cid}`;
       }
 
       // Get current content hash from ENS contract
       const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
-      const contentHash = `ipns://${ipns}`;
       const newContentHashEncoded = encodeContenthash(contentHash).encoded as unknown as string;
 
       // User already uses the Nimi IPNS
@@ -226,10 +264,10 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
       }
 
       // Set the content
-      setPublishNimiResponseIpfsHash(ipns);
+      setPublishNimiResponseIpfsHash(cid);
       const setContentHashTransaction = await setENSNameContentHash({
         contract: publicResolverContract,
-        name: data.ensName,
+        name: nimi.ensName,
         contentHash,
       });
 
@@ -373,7 +411,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
                   </FormItem>
                   <FormItem>
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
-
                     <TextArea
                       onKeyDown={handleKeyDown}
                       maxLength={300}
@@ -385,7 +422,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
-                {links.length !== 0 && (
+                {links?.length !== 0 && (
                   <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                     {links.map((link) => (
                       <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
@@ -533,6 +570,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes }: C
           publishError={publishNimiError}
           setContentHashTransaction={setContentHashTransaction}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
+          setContentHashTransactionChainId={provider.network.chainId}
           cancel={() => {
             setIsPublishNimiModalOpen(false);
             publishNimiAbortController?.current?.abort();

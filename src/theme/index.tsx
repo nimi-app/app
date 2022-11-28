@@ -264,7 +264,9 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Archivo', sans-serif;
 }
 
-
+p {
+  overflow-wrap: break-word;
+}
 
 /** Full-width and height */
 body, html, #root {

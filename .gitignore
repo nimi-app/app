@@ -30,3 +30,4 @@ yalc.lock
 
 # Disable yarn
 yarn.lock
+.vercel

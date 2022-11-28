@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
-import { AnimatePresence } from 'framer-motion/dist/framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
 import { ModalBase } from '../ModalBase';
 import { NimiWidgetType } from '@nimi.io/card';

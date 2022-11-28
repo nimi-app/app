@@ -41,12 +41,11 @@ export function isCID(hash: string) {
 // Map chainId to network name for fetch request
 const supportedENSNetworks: Record<number, string> = {
   [ChainId.MAINNET]: 'mainnet',
-  [ChainId.RINKEBY]: 'rinkeby',
   [ChainId.GOERLI]: 'goerli',
 };
 
 // List of chains where ENS is deployed
-const supportedENSChainIds = [ChainId.MAINNET, ChainId.RINKEBY, ChainId.GOERLI];
+const supportedENSChainIds = [ChainId.MAINNET, ChainId.GOERLI];
 
 /**
  * Does a lookup for an ENS name to find its avatar details, uses ENS Domains metadata API
@@ -58,7 +57,7 @@ export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
   const { chainId, ENSName } = useWeb3React();
 
   useEffect(() => {
-    // ENS supports Mainnet and Rinkeby
+    // ENS supports Mainnet and Goerli
     if (!chainId || !supportedENSChainIds.includes(chainId) || !ENSName) {
       setLoading(false);
       return;

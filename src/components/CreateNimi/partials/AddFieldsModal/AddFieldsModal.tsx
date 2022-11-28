@@ -12,6 +12,7 @@ import {
 } from '../../../Modal';
 import { StyledFlexList, StyledGridList } from '../../styled';
 import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
+import { ReactComponent as NftyChatLogo } from '../../../../assets/svg/nftychat-logo.svg';
 
 import { LinksSection } from './LinksSection';
 import { ButtonGroup } from '../../../form/Button';
@@ -40,6 +41,11 @@ const SectionTitle = styled.h2`
 `;
 
 const StyledPoapLogo = styled(PoapLogo)`
+  width: 20px;
+  height: 20px;
+`;
+
+const StyledNftyLogo = styled(NftyChatLogo)`
   width: 20px;
   height: 20px;
 `;
@@ -117,7 +123,8 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           <StyledFlexList>
             {Object.values(NimiBlockchain)
               .filter((item) => item !== NimiBlockchain.SOLANA)
-              .map((blockchain) => {
+              .map((blockchai) => {
+                const blockchain = blockchai as string;
                 const inputId = `modal-checkbox-${blockchain}`;
                 const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
                 const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];
@@ -147,10 +154,10 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           <SectionTitle>{t('addFieldsModal.nfts')}</SectionTitle>
           <StyledGridList>
             {nimiWidgetTypes.map((widget) => {
-              // Hide nfty
-              if (widget === NimiWidgetType.NFTY_UNIVERSAL_DM) {
-                return null;
-              }
+              // // Hide nfty
+              // if (widget === NimiWidgetType.NFTY_UNIVERSAL_DM) {
+              //   return null;
+              // }
 
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
@@ -170,13 +177,9 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
               };
 
               return (
-                <ButtonGroup
-                  disabled={checked || widget === NimiWidgetType.NFTY_UNIVERSAL_DM}
-                  key={inputId}
-                  id={inputId}
-                  onClick={inputOnChange}
-                >
+                <ButtonGroup disabled={checked} key={inputId} id={inputId} onClick={inputOnChange}>
                   {widget === NimiWidgetType.POAP && <StyledPoapLogo />}
+                  {widget === NimiWidgetType.NFTY_UNIVERSAL_DM && <StyledNftyLogo />}
                   {t(i18nKey)}
                 </ButtonGroup>
               );

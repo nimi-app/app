@@ -104,6 +104,7 @@ export const ProfileImage = styled.img`
   width: 186px;
   z-index: 1;
   align-self: center;
+  margin-bottom: 10px;
 `;
 
 export const SaveAndDeployButton = styled(Button)`
@@ -188,7 +189,7 @@ export const ImportButton = styled.label`
   position: relative;
   align-self: center;
   margin: 0 auto;
-  margin: 22px 0;
+  margin-bottom: 22px;
   background: #4589ef;
   padding: 10px 24px;
   font-weight: 600;
@@ -238,7 +239,7 @@ export const ErrorMessage = styled.div`
   color: red;
   display: flex;
   justify-content: center;
-  margin-top: 17px;
+  margin-bottom: 10px;
 `;
 export const FormItem = styled.div`
   display: flex;
@@ -275,10 +276,15 @@ export const ImageAndTemplateSection = styled.div`
 
   margin-bottom: 14px;
   gap: 14px;
+  @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
+    flex-direction: column;
+  }
 `;
 export const TemplateSection = styled.div`
   ${NimiModalStyles};
   margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
 `;
 export const ImportSection = styled.div`
   ${NimiModalStyles};
