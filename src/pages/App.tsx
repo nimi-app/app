@@ -15,7 +15,7 @@ import { CreateNimiPage } from './CreateNimiPage';
 import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
 import { AppWrapper } from '../modules/app-wrapper';
-import { DomainsHome } from './domains';
+import { DomainsHome } from './Domains';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>

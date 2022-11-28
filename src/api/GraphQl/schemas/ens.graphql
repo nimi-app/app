@@ -1,4 +1,4 @@
-query GET_SUBDOMAINS_SUBGRAPH($domainId: ID!) {
+query getDomainsByNamehash($domainId: ID!) {
   domain(id: $domainId) {
     id
     labelName

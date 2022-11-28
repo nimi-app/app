@@ -80,10 +80,9 @@ interface DomainsProps {
 function Domains({ address }: DomainsProps) {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
+
   const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(address, page, searchText);
-  console.log('domainList', domainList);
-  console.log('laidng', loading);
-  console.log('hasNextPage', hasNextPage);
+
   const { t } = useTranslation('nimi');
 
   return (
