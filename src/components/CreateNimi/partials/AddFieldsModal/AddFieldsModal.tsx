@@ -1,6 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { NimiBlockchain, NimiWidgetType, NimiLinkType, NIMI_BLOCKCHAIN_LOGO_URL } from '@nimi.io/card';
+import {
+  NimiBlockchain,
+  NimiWidgetType,
+  NimiLinkType,
+  NIMI_BLOCKCHAIN_LOGO_URL,
+  nimiLinkDetailsExtended,
+} from '@nimi.io/card';
 
 import {
   Modal,
@@ -115,7 +121,52 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
       </ModalHeader>
       <ModalContent>
         <LinksSection title={'profile'} sectionLinks={ProfileSectionLinks} onChange={onLinksChange} />
-        <LinksSection title={'contacts'} sectionLinks={ContactsSectionLinks} onChange={onLinksChange} />
+        <SectionWrapper>
+          <SectionTitle>{t('addFieldsModal.contacts')}</SectionTitle>
+          <StyledFlexList>
+            {ContactsSectionLinks.map((link) => {
+              const inputId = `modal-checkbox-${link}`;
+              const i18nKey = `formLabel.${link.toLowerCase()}`;
+              const logo = nimiLinkDetailsExtended[link].logo && nimiLinkDetailsExtended[link].logo;
+
+              return (
+                <ButtonGroup key={inputId} id={inputId} onClick={() => onLinksChange(link)}>
+                  {renderSVG(logo)}
+                  {t(i18nKey)}
+                </ButtonGroup>
+              );
+            })}
+            {nimiWidgetTypes.map((widget) => {
+              // Hide POAP
+              if (widget === NimiWidgetType.POAP) {
+                return null;
+              }
+              const inputId = `modal-checkbox-${widget}`;
+              const i18nKey = `formWidgetLabel.${widget}`;
+              const checked = getValues('widgets').some(({ type }) => type === widget);
+
+              const inputOnChange = () => {
+                // Compute the new state and then batch it previous state for onChange have newest state
+                const newState = widget as NimiWidgetType;
+
+                // emit the change event
+                onChange?.({
+                  widget: newState,
+                });
+                onSubmit?.({
+                  widget: newState,
+                });
+              };
+
+              return (
+                <ButtonGroup disabled={checked} key={inputId} id={inputId} onClick={inputOnChange}>
+                  {widget === NimiWidgetType.NFTY_UNIVERSAL_DM && <StyledNftyLogo />}
+                  {t(i18nKey)}
+                </ButtonGroup>
+              );
+            })}
+          </StyledFlexList>
+        </SectionWrapper>
         <LinksSection title={'socials'} sectionLinks={SocialsSectionLinks} onChange={onLinksChange} />
         <LinksSection title={'portfolio'} sectionLinks={PortfolioSectionLinks} onChange={onLinksChange} />
         <SectionWrapper>
@@ -154,10 +205,10 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           <SectionTitle>{t('addFieldsModal.nfts')}</SectionTitle>
           <StyledGridList>
             {nimiWidgetTypes.map((widget) => {
-              // // Hide nfty
-              // if (widget === NimiWidgetType.NFTY_UNIVERSAL_DM) {
-              //   return null;
-              // }
+              // Hide nfty
+              if (widget === NimiWidgetType.NFTY_UNIVERSAL_DM) {
+                return null;
+              }
 
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
