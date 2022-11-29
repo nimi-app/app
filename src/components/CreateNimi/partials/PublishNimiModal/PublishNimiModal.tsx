@@ -51,6 +51,7 @@ export interface PublishNimiModalProps {
   publishError: Error | undefined;
   setContentHashTransaction: ContractTransaction | undefined;
   setContentHashTransactionReceipt: ContractReceipt | undefined;
+  setContentHashTransactionChainId: number;
 }
 
 /**
@@ -65,6 +66,7 @@ export function PublishNimiModal({
   publishError,
   setContentHashTransaction,
   setContentHashTransactionReceipt,
+  setContentHashTransactionChainId,
   isPublished,
 }: PublishNimiModalProps) {
   const { t } = useTranslation(['common', 'nimi']);
@@ -108,7 +110,7 @@ export function PublishNimiModal({
                 target="_blank"
                 rel="noreferrer"
                 href={getEtherscanExplorerLink(
-                  setContentHashTransaction.chainId,
+                  setContentHashTransactionChainId,
                   setContentHashTransaction.hash,
                   'transaction'
                 )}

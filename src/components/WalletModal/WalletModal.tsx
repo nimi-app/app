@@ -34,7 +34,7 @@ export function WalletModal() {
   const navigate = useNavigate();
   // Internal state
   const [isActivatingAConnector, setIsActivatingAConnector] = useState(false);
-  const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
+  const isWrongNetwork = chainId && !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
 
   /**
    * Activate a connector
