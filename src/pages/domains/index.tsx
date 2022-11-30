@@ -11,6 +11,10 @@ import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
+import { getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { chain, configureChains, createClient } from 'wagmi';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -86,14 +90,28 @@ function Domains({ address }: DomainsProps) {
   );
 }
 
+const { chains, provider } = configureChains(
+  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID as string }), publicProvider()]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: 'Nimi',
+  chains,
+});
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors,
+  provider,
+});
+
 /**
  * A logic wrapper around Domains components
  */
 export function DomainsHome() {
-  const { account, isActive } = useWeb3React();
-
-  if (account && isActive) {
-    return <Domains address={account} />;
+  if (wagmiClient.status === 'connected') {
+    return <Domains address={wagmiClient.data?.account as string} />;
   }
 
   // Redirect to home page if no wallet is connected
