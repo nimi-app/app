@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
-import { useInView } from 'framer-motion/dist/framer-motion';
+import { useInView } from 'framer-motion';
 
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
 import { PopulatedENSCard } from '../PopulatedENSCard';

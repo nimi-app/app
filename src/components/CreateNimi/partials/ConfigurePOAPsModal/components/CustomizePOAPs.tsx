@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Reorder } from 'framer-motion/dist/framer-motion';
+import { Reorder } from 'framer-motion';
 
 import { AnimatedSection } from './AnimatedSection';
 import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';

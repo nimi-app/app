@@ -203,7 +203,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
    * Handle the form submit via ENS contract interaction
    * @param data a validated Nimi object
    */
-  const onSubmitValid = async (data: Nimi) => {
+  const onSubmitValid = async (nimi: Nimi) => {
     unstable_batchedUpdates(() => {
       setIsPublishNimiModalOpen(true);
       setIsPublishingNimi(true);
@@ -218,7 +218,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
       publishNimiAbortController.current = new AbortController();
 
-      const signature = await provider.getSigner().signMessage(JSON.stringify(data));
+      const signature = await provider.getSigner().signMessage(JSON.stringify(nimi));
 
       let contentHash: string | undefined;
       let cid: string | undefined;
@@ -226,8 +226,9 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
       // In development, use IPFS
       if (process.env.REACT_APP_ENV === 'production') {
         const { cidV1, ipns } = await publishNimiViaIPNS({
-          nimi: data,
+          nimi,
           signature,
+          chainId: 1, // always mainnet
           controller: publishNimiAbortController.current,
         });
 
@@ -238,7 +239,13 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
         cid = cidV1;
         contentHash = `ipns://${ipns}`;
       } else {
-        cid = (await publishNimi(data, publishNimiAbortController.current)).cid;
+        cid = (
+          await publishNimi({
+            nimi,
+            chainId: provider.network.chainId,
+            controller: publishNimiAbortController.current,
+          })
+        ).cid;
         contentHash = `ipns://${cid}`;
       }
 
@@ -259,7 +266,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
       setPublishNimiResponseIpfsHash(cid);
       const setContentHashTransaction = await setENSNameContentHash({
         contract: publicResolverContract,
-        name: data.ensName,
+        name: nimi.ensName,
         contentHash,
       });
 
@@ -413,7 +420,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
-                {links.length !== 0 && (
+                {links?.length !== 0 && (
                   <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                     {links.map((link) => (
                       <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
@@ -561,6 +568,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
           publishError={publishNimiError}
           setContentHashTransaction={setContentHashTransaction}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
+          setContentHashTransactionChainId={provider.network.chainId}
           cancel={() => {
             setIsPublishNimiModalOpen(false);
             publishNimiAbortController?.current?.abort();

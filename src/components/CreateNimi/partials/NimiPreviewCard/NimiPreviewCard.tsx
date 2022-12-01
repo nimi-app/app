@@ -53,8 +53,6 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
 
       validateNimi({ ...filteredNimi, links: filteredLinks })
         .then((validatedNimi) => {
-          if (process.env.NODE_ENV !== 'production') {
-          }
           setPreviewNimi(validatedNimi as Nimi);
         })
         .catch((error) => {

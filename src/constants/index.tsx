@@ -154,7 +154,7 @@ export const CHAINS: Record<ChainId, BasicChainInformation | ExtendedChainInform
       (url) => url !== undefined
     ) as string[],
     nativeCurrency: ETH,
-    name: 'Göerli',
+    name: 'Görli',
   },
 };
 
