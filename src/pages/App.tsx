@@ -34,7 +34,6 @@ const NimiConnectAppWrapper = () => (
 );
 
 export function App() {
-  // const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
   const { chainId } = useActiveWeb3React();
   const theme = useTheme();
 
