@@ -1,46 +1,24 @@
-import { useWeb3React } from '@web3-react/core';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
 import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
-// SVGs
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
-import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
-// Styled components
 import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
-import { ConnectButton, getDefaultWallets, useConnectModal } from '@rainbow-me/rainbowkit';
-import '@rainbow-me/rainbowkit/styles.css';
-
+import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
-
-const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID as string }), publicProvider()]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: 'Nimi',
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
+import { useRainbow } from '../../hooks/useRainbow';
+import '@rainbow-me/rainbowkit/styles.css';
+import { WagmiConfig } from 'wagmi';
 
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
+  const rainbow = useRainbow();
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+    <WagmiConfig client={rainbow}>
+      <RainbowKitProvider chains={rainbow.chains as Chain[]}>
         <PageWrapper>
           <Header>
             <NimiLogoText height="60px" />
@@ -81,13 +59,6 @@ export function Landing() {
                             <Button onClick={openConnectModal}>
                               <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
                             </Button>
-                          );
-                        }
-                        if (chain.unsupported) {
-                          return (
-                            <button onClick={openChainModal} type="button">
-                              Wrong network
-                            </button>
                           );
                         }
                         navigate('/domains');

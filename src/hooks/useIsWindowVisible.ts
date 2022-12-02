@@ -14,10 +14,8 @@ export function useIsWindowVisible(): boolean {
   const listener = useCallback(() => {
     setFocused(isWindowVisible());
   }, [setFocused]);
-
   useEffect(() => {
     if (!VISIBILITY_STATE_SUPPORTED) return undefined;
-
     document.addEventListener('visibilitychange', listener);
     return () => {
       document.removeEventListener('visibilitychange', listener);

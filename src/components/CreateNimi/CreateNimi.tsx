@@ -6,6 +6,7 @@ import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { NimiThemeType } from '@nimi.io/card';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
+import { useSignMessage } from 'wagmi';
 
 import {
   Nimi,
@@ -84,6 +85,8 @@ import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
 import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
+import { useRainbow } from '../../hooks/useRainbow';
+import { useSigner, useNetwork } from 'wagmi';
 
 const themes = {
   [NimiThemeType.NIMI]: {
@@ -138,6 +141,10 @@ export interface CreateNimiProps {
 export function CreateNimi({ ensAddress, ensName, provider, availableThemes, initialNimi }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
+  const rainbow = useRainbow();
+  const { chain } = useNetwork();
+  const chainId = chain?.id;
+  const { signMessageAsync } = useSignMessage();
 
   // TODO: UPDATE MODAL STATE HANLING
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
@@ -218,7 +225,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
       publishNimiAbortController.current = new AbortController();
 
-      const signature = await provider.getSigner().signMessage(JSON.stringify(nimi));
+      const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
 
       let contentHash: string | undefined;
       let cid: string | undefined;
@@ -568,7 +575,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
           publishError={publishNimiError}
           setContentHashTransaction={setContentHashTransaction}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
-          setContentHashTransactionChainId={provider.network.chainId}
+          setContentHashTransactionChainId={chainId as number}
           cancel={() => {
             setIsPublishNimiModalOpen(false);
             publishNimiAbortController?.current?.abort();

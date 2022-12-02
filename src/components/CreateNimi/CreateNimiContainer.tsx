@@ -1,19 +1,25 @@
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
 import { Container } from '../../components/Container';
-import { useWeb3React } from '@web3-react/core';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 import { useEffect, useState } from 'react';
 import { Web3Provider } from '@ethersproject/providers';
 import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
 import { Nimi } from '@nimi.io/card';
+import { useRainbow } from '../../hooks/useRainbow';
+import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { WagmiConfig, useEnsName } from 'wagmi';
 
 type CreateNimiContainerProps = {
   ensName: string;
 };
 
 export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
-  const { account, provider } = useWeb3React();
+  const rainbow = useRainbow();
+  const chains = rainbow.chains as Chain[];
+  const account = rainbow.data?.account;
+  const provider = rainbow.getProvider();
   const [initialNimi, setInitialNimi] = useState<Nimi>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -53,14 +59,18 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   }
 
   return (
-    <Container>
-      <CreateNimi
-        ensAddress={account as string}
-        ensName={ensName as string}
-        provider={provider as Web3Provider}
-        availableThemes={avaliableThemes}
-        initialNimi={initialNimi}
-      />
-    </Container>
+    <WagmiConfig client={rainbow}>
+      <RainbowKitProvider chains={chains}>
+        <Container>
+          <CreateNimi
+            ensAddress={account as string}
+            ensName={ensName as string}
+            provider={provider as any}
+            availableThemes={avaliableThemes}
+            initialNimi={initialNimi}
+          />
+        </Container>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }

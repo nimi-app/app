@@ -1,25 +1,29 @@
-import { useWeb3React } from '@web3-react/core';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
-
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
-
 import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
-import { getDefaultWallets } from '@rainbow-me/rainbowkit';
-import { chain, configureChains, createClient } from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
+import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { WagmiConfig } from 'wagmi';
+import { SUPPORTED_CHAIN_IDS } from '../../constants';
+import { useRainbow } from '../../hooks/useRainbow';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
   gap: 18px;
   justify-content: start;
+`;
+const ErrorContainer = styled.div`
+  ${NimiSignatureColor};
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 39px;
+  margin-bottom: 36px;
 `;
 const DomainsHeader = styled.div`
   ${NimiSignatureColor};
@@ -55,13 +59,22 @@ const BuyDomainLink = styled.p`
   cursor: pointer;
 `;
 
+const NormalText = styled.p`
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  margin-top: 17px;
+  cursor: pointer;
+`;
+
 interface DomainsProps {
   address: string;
 }
 
 function Domains({ address }: DomainsProps) {
+  const rainbow = useRainbow();
+  const chains = rainbow.chains as Chain[];
   const { data: domainList, loading } = useGetENSDomainsByAddress(address);
-
   const { t } = useTranslation('nimi');
 
   if (loading) {
@@ -69,51 +82,72 @@ function Domains({ address }: DomainsProps) {
   }
 
   return (
-    <Container>
-      <DomainsHeader>Your Identities</DomainsHeader>
-      {domainList?.length === 0 ? (
-        <BigBanner>
-          {t('noEnsFound')}
-          <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-            {t('buyDomain')}
-          </BuyDomainLink>
-        </BigBanner>
-      ) : (
-        <StyledDomainsWrapper>
-          {domainList?.map((domain) => (
-            <ENSCardContainer key={domain.name} domain={domain} />
-          ))}
-          <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
-        </StyledDomainsWrapper>
-      )}
-    </Container>
+    <WagmiConfig client={rainbow}>
+      <RainbowKitProvider chains={chains}>
+        <Container>
+          <DomainsHeader>Your Identities</DomainsHeader>
+          {domainList?.length === 0 ? (
+            <BigBanner>
+              {t('noEnsFound')}
+              <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                {t('buyDomain')}
+              </BuyDomainLink>
+            </BigBanner>
+          ) : (
+            <StyledDomainsWrapper>
+              {domainList?.map((domain) => (
+                <ENSCardContainer key={domain.name} domain={domain} />
+              ))}
+              <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                Buy an ENS
+              </AddDomain>
+            </StyledDomainsWrapper>
+          )}
+        </Container>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
-
-const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID as string }), publicProvider()]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: 'Nimi',
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
 
 /**
  * A logic wrapper around Domains components
  */
 export function DomainsHome() {
-  if (wagmiClient.status === 'connected') {
-    return <Domains address={wagmiClient.data?.account as string} />;
-  }
+  const rainbow = useRainbow();
+  const address = rainbow.data?.account;
+  const isConnected = rainbow.status === 'connected';
+  const chainId = rainbow.data?.chain?.id;
+  const chains = rainbow.chains as Chain[];
+  const { t } = useTranslation(['common', 'landing']);
+  const navigate = useNavigate();
 
-  // Redirect to home page if no wallet is connected
-  return <Navigate to="/" />;
+  if (isConnected !== true) {
+    navigate('/');
+    return (
+      <WagmiConfig client={rainbow}>
+        <RainbowKitProvider chains={chains}>
+          <Container />
+        </RainbowKitProvider>
+      </WagmiConfig>
+    );
+  }
+  if (SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
+    return (
+      <WagmiConfig client={rainbow}>
+        <RainbowKitProvider chains={chains}>
+          <Container>
+            <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+            <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+          </Container>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    );
+  }
+  return (
+    <WagmiConfig client={rainbow}>
+      <RainbowKitProvider chains={chains}>
+        <Domains address={address as string} />
+      </RainbowKitProvider>
+    </WagmiConfig>
+  );
 }

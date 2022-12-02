@@ -1,5 +1,6 @@
 import type { AddEthereumChainParameter } from '@web3-react/types';
 export const NetworkContextName = 'NETWORK';
+import { chain } from 'wagmi';
 
 import { NimiLinkType } from '@nimi.io/card';
 import { CSSProperties } from 'styled-components';
@@ -174,12 +175,28 @@ export const URLS: { [chainId: number]: string[] } = Object.keys(CHAINS).reduce<
 /**
  * List of chain IDs.
  */
-export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINS).map((key) => Number(key));
+export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINS).map((key) => {
+  return Number(key);
+});
 
+export const SUPPORT_CHAINS_RAINBOW_KIT = Object.keys(CHAINS)
+  .map((key) => {
+    const chainId = Number(key);
+    const chains = Object.keys(chain);
+    for (const c of chains) {
+      if (chain[c].id === chainId) {
+        return chain[c];
+      }
+    }
+    return undefined;
+  })
+  .filter((c) => c !== undefined);
 /**
  * List of chain IDs that are supported in the current environment: production or development.
  */
 export const ENV_SUPPORTED_CHAIN_IDS =
   process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : SUPPORTED_CHAIN_IDS;
+
+export const ALCHEMY_ID = 'EY3WaGaUwnSMBGBXwVzUiAssjPL_zQeM';
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];

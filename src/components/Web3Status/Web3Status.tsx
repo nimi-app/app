@@ -6,13 +6,11 @@ import { useENSAvatar } from '../../hooks/useENSAvatar';
 import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
-import { ConnectButton, getDefaultWallets } from '@rainbow-me/rainbowkit';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
+import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
-import { useConnectModal, useAccountModal, useChainModal } from '@rainbow-me/rainbowkit';
-import { Button } from '../Button';
+import { WagmiConfig, useEnsName } from 'wagmi';
+import { useRainbow } from '../../hooks/useRainbow';
+import { useAccount } from 'wagmi';
 
 export interface WrapperProps {
   isError: boolean;
@@ -42,36 +40,26 @@ const StyledTextContent = styled.span`
   white-space: nowrap;
 `;
 
-const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID as string }), publicProvider()]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: 'Nimi',
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
-
 export function Web3Status() {
   const { t } = useTranslation();
+  const rainbow = useRainbow();
   const { avatar } = useENSAvatar();
-  const [ensName, setEnsName] = useState('');
-  const account = wagmiClient.data?.account as string;
-  const isActivating = (wagmiClient.status as string) === 'connecting';
-  const isActive = (wagmiClient.status as string) === 'connected';
-  const chainId = wagmiClient.data?.chain?.id as number;
+  const { address } = useAccount();
+  const account = address;
+  const chainId = rainbow.data?.chain?.id;
+  const chains = rainbow.chains as Chain[];
+  const isConnected = rainbow.status === 'connected';
+  const isActivating = rainbow.status === 'connecting';
+  const isActive = isConnected === true;
   const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
 
-  if (account !== undefined && account !== null) {
-    wagmiClient
+  const [ensName, setEnsName] = useState('');
+  const [ensNameQueryInitiated, setEnsNameQuery] = useState(false);
+  if (address !== undefined && address !== null && ensName === '' && ensNameQueryInitiated === false) {
+    setEnsNameQuery(true);
+    rainbow
       .getProvider()
-      .lookupAddress(account.toLowerCase())
+      .lookupAddress(address.toLowerCase())
       .then((r) => {
         if (r !== null) {
           setEnsName(r);
@@ -94,9 +82,8 @@ export function Web3Status() {
     }
     return t('connect');
   }, [isActivating, isActive, account, ensName, isWrongNetwork, t]);
-
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig client={rainbow}>
       <RainbowKitProvider chains={chains}>
         <ConnectButton.Custom>
           {({ account, chain, openChainModal, openAccountModal, openConnectModal, authenticationStatus, mounted }) => {

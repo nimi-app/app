@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useActiveWeb3React } from './useWeb3';
 import { useGetDefaultLensProfileQuery } from '../generated/graphql/lens';
 import { useLensSubgraphClient } from './useLensSubgraph';
+import { useRainbow } from './useRainbow';
 
 export interface LensDefaultProfileData {
   name: string;
@@ -10,7 +10,8 @@ export interface LensDefaultProfileData {
 }
 
 export function useLensDefaultProfileData(): { loading: boolean; defaultProfileData: LensDefaultProfileData | null } {
-  const { account } = useActiveWeb3React();
+  const rainbow = useRainbow();
+  const account = rainbow.data?.account;
   const lensSubgraph = useLensSubgraphClient();
   const { data, loading } = useGetDefaultLensProfileQuery({
     client: lensSubgraph,
