@@ -32,3 +32,6 @@ yalc.lock
 # Disable yarn
 yarn.lock
 .vercel
+
+# ENV
+src/.env
