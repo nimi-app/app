@@ -1,0 +1,16 @@
+query getDefaultLensProfile($account: EthereumAddress!) {
+  defaultProfile(request: { ethereumAddress: $account }) {
+    name
+    bio
+    picture {
+      ... on NftImage {
+        uri
+      }
+      ... on MediaSet {
+        original {
+          url
+        }
+      }
+    }
+  }
+}
