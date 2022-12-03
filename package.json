@@ -9,7 +9,7 @@
     "@ensdomains/ui": "^3.4.1",
     "@ethersproject/providers": "^5.7.0",
     "@hookform/resolvers": "^2.8.10",
-    "@nimi.io/card": "git+https://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:x-oauth-basic@github.com/nimi-app/card.git",
+    "@nimi.io/card": "git+https://%GITHUB_ACCESS_TOKEN%:x-oauth-basic@github.com/nimi-app/card.git",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
