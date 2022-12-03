@@ -25,6 +25,7 @@ yarn-error.log*
 
 # generated stuff
 src/generated/
+src/api/GraphQl/schemas/generated/
 .yalc
 yalc.lock
 

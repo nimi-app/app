@@ -1,10 +1,26 @@
-import { useEffect, useState } from 'react';
-import { GetDomainsOwnedOrControlledByQuery, useGetDomainsOwnedOrControlledByQuery } from '../generated/graphql/ens';
+import { useMemo } from 'react';
 
+import { useActiveWeb3React } from './useWeb3';
+import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
+import {
+  GetDomainsOwnedOrControlledByQuery,
+  useGetDomainsOwnedOrControlledByQuery,
+} from '../api/GraphQl/schemas/generated/ens';
+
+export type DataModified = {
+  id: string;
+  labelName: string;
+  labelHash: string;
+  name: string;
+  parent: { name: string };
+};
 export interface UserENSDomains {
-  data: GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined;
+  data: DataModified[] | undefined;
   loading: boolean;
+  hasNextPage?: boolean;
 }
+
+const numberOfItemsPerPage = 8;
 
 /**
  * Fetches all **valid** ENS domains owned or controlled by the given address.
@@ -16,28 +32,14 @@ export interface UserENSDomains {
  * @param address
  * @returns {UserENSDomains} data and loading state
  */
-export function useGetENSDomainsByAddress(address: string): UserENSDomains {
-  const [domainList, setDomainList] = useState<GetDomainsOwnedOrControlledByQuery['domainsControlled'] | undefined>(
-    undefined
-  );
+export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
+  const { chainId } = useActiveWeb3React();
 
-  const query = useGetDomainsOwnedOrControlledByQuery({
-    variables: {
-      // GrahpQL cannot cast ID to String, hence why we need addressID and addressString
-      addressID: address.toLowerCase(),
-      addressString: address.toLowerCase(),
-      skip: 0,
-      first: 1000,
-    },
-  });
+  function domainOrdering(data) {
+    console.log('herejshdfjhsdjfhsd', data);
+    const domainsOwned = data?.account?.domainsOwned ?? [];
+    const domainsControlled = data?.domainsControlled ?? [];
 
-  useEffect(() => {
-    if (!query.data) {
-      return;
-    }
-
-    const domainsOwned = query.data?.account?.domainsOwned ?? [];
-    const domainsControlled = query.data?.domainsControlled ?? [];
     // We need to merge the two arrays and remove duplicates
     const allUserDomains = [...domainsOwned, ...domainsControlled];
 
@@ -80,11 +82,29 @@ export function useGetENSDomainsByAddress(address: string): UserENSDomains {
       return acc;
     }, [] as GetDomainsOwnedOrControlledByQuery['domainsControlled']);
 
-    setDomainList(uniqueDomains);
-  }, [query.loading, query.data]);
+    return uniqueDomains;
+  }
+
+  const { isLoading, data, isError, isSuccess, isFetching } = useGetDomainsOwnedOrControlledByQuery(
+    GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.ENS),
+    {
+      addressID: address.toLowerCase(),
+      searchString: searchString,
+      addressString: address.toLowerCase(),
+      skip: page * numberOfItemsPerPage,
+      first: numberOfItemsPerPage + 1,
+    },
+    { keepPreviousData: true, select: domainOrdering }
+  );
+  const waitedForData: DataModified[] = useMemo(() => {
+    if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isSuccess, isError, isFetching]);
 
   return {
-    data: domainList,
-    loading: query.loading,
+    data: waitedForData && waitedForData.slice(0, numberOfItemsPerPage),
+    loading: isLoading || isFetching,
+    hasNextPage: waitedForData && waitedForData.length > numberOfItemsPerPage && (!isLoading || !isFetching),
   };
 }
