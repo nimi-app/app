@@ -3,13 +3,10 @@ import { Loader } from '../../components/Loader';
 import { Container } from '../../components/Container';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 import { useEffect, useState } from 'react';
-import { Web3Provider } from '@ethersproject/providers';
 import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
 import { Nimi } from '@nimi.io/card';
 import { useRainbow } from '../../hooks/useRainbow';
-import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { WagmiConfig, useEnsName } from 'wagmi';
+import { Chain } from '@rainbow-me/rainbowkit';
 
 type CreateNimiContainerProps = {
   ensName: string;
