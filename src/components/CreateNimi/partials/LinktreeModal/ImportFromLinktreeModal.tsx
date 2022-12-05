@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ChangeEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { getAPIBaseURL } from '../../../../modules/api-service';
@@ -19,16 +19,9 @@ import { generateID, guessLinkTypeBasedOnUrl } from '../../../../utils';
 
 export function ImportFromLinktreeModal({ onClose }) {
   const { t } = useTranslation('nimi');
-  const [linktreeUrl, setLinktreeUrl] = useState('');
+  const [linktreeUsername, setLinktreeUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error>();
-
-  const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const targetValue = event.target.value;
-    const isValueMissingProtocol = !targetValue.startsWith('http://') && !targetValue.startsWith('https://');
-    const valueWithProtocol = isValueMissingProtocol ? `https://${targetValue}` : targetValue;
-    setLinktreeUrl(valueWithProtocol);
-  };
 
   const fetchLinktreeData = () => {
     setIsLoading(true);
@@ -39,7 +32,7 @@ export function ImportFromLinktreeModal({ onClose }) {
     axios
       .get<{ data }>(url, {
         params: {
-          url: linktreeUrl,
+          url: `https://linktr.ee/${linktreeUsername}`,
         },
       })
       .then(({ data }) => {
@@ -78,8 +71,8 @@ export function ImportFromLinktreeModal({ onClose }) {
                 border={'2px solid #E6E8EC'}
                 paddingLeft={'20px'}
                 type="text"
-                value={linktreeUrl}
-                onChange={onInputChange}
+                value={linktreeUsername}
+                onChange={(e) => setLinktreeUsername(e.target.value)}
                 placeholder={t('importFromLinktreeModal.inputPlaceholder')}
               />
 
