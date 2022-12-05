@@ -1,6 +1,6 @@
 import type { AddEthereumChainParameter } from '@web3-react/types';
 export const NetworkContextName = 'NETWORK';
-import { chain, chains } from 'wagmi';
+import { chain } from 'wagmi';
 
 import { NimiLinkType } from '@nimi.io/card';
 import { CSSProperties } from 'styled-components';
@@ -194,18 +194,16 @@ export const SUPPORTED_CHAINS_WAGMI = [
   chain.foundry,
 ];
 
-export const SUPPORT_CHAINS_RAINBOW_KIT = Object.keys(CHAINS).map((key) => {
-  const nimiChains = chains
-    .map((c) => {
-      for (const sc of SUPPORTED_CHAINS_WAGMI) {
-        if (nimiChains[c].id === sc.id) {
-          return sc;
-        }
-        return undefined;
+export const SUPPORT_CHAINS_RAINBOW_KIT = Object.keys(CHAINS)
+  .map((key) => {
+    for (const sc of SUPPORTED_CHAINS_WAGMI) {
+      if (CHAINS[key].id === sc.id) {
+        return sc;
       }
-    })
-    .filter((c) => c !== undefined);
-});
+      return undefined;
+    }
+  })
+  .filter((c) => c !== undefined);
 /**
  * List of chain IDs that are supported in the current environment: production or development.
  */
