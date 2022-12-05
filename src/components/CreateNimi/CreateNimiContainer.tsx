@@ -59,18 +59,14 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   }
 
   return (
-    <WagmiConfig client={rainbow}>
-      <RainbowKitProvider chains={chains}>
-        <Container>
-          <CreateNimi
-            ensAddress={account as string}
-            ensName={ensName as string}
-            provider={provider as any}
-            availableThemes={avaliableThemes}
-            initialNimi={initialNimi}
-          />
-        </Container>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <Container>
+      <CreateNimi
+        ensAddress={account as string}
+        ensName={ensName as string}
+        provider={provider as any}
+        availableThemes={avaliableThemes}
+        initialNimi={initialNimi}
+      />
+    </Container>
   );
 }

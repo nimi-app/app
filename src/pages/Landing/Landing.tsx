@@ -17,61 +17,57 @@ export function Landing() {
   const rainbow = useRainbow();
 
   return (
-    <WagmiConfig client={rainbow}>
-      <RainbowKitProvider chains={rainbow.chains as Chain[]}>
-        <PageWrapper>
-          <Header>
-            <NimiLogoText height="60px" />
-          </Header>
-          <Content>
-            <Container>
-              <HeaderEyebrow>{t('hero.eyebrowText', { ns: 'landing' })}</HeaderEyebrow>
-              <HeroText>
-                <HeroLead>
-                  <Trans ns="lading" key="hero.lead">
-                    Your{' '}
-                    <i>
-                      <strong>Web3</strong>
-                    </i>{' '}
-                    Identity.
-                  </Trans>
-                </HeroLead>
-              </HeroText>
-              <ConnectButton.Custom>
-                {({ account, chain, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
-                  const ready = mounted && authenticationStatus !== 'loading';
-                  const connected =
-                    ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
-                  return (
-                    <div
-                      {...(!ready && {
-                        'aria-hidden': true,
-                        style: {
-                          opacity: 0,
-                          pointerEvents: 'none',
-                          userSelect: 'none',
-                        },
-                      })}
-                    >
-                      {(() => {
-                        if (!connected) {
-                          return (
-                            <Button onClick={openConnectModal}>
-                              <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
-                            </Button>
-                          );
-                        }
-                        navigate('/domains');
-                      })()}
-                    </div>
-                  );
-                }}
-              </ConnectButton.Custom>
-            </Container>
-          </Content>
-          <Footer />
-        </PageWrapper>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <PageWrapper>
+      <Header>
+        <NimiLogoText height="60px" />
+      </Header>
+      <Content>
+        <Container>
+          <HeaderEyebrow>{t('hero.eyebrowText', { ns: 'landing' })}</HeaderEyebrow>
+          <HeroText>
+            <HeroLead>
+              <Trans ns="lading" key="hero.lead">
+                Your{' '}
+                <i>
+                  <strong>Web3</strong>
+                </i>{' '}
+                Identity.
+              </Trans>
+            </HeroLead>
+          </HeroText>
+          <ConnectButton.Custom>
+            {({ account, chain, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
+              const ready = mounted && authenticationStatus !== 'loading';
+              const connected =
+                ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
+              return (
+                <div
+                  {...(!ready && {
+                    'aria-hidden': true,
+                    style: {
+                      opacity: 0,
+                      pointerEvents: 'none',
+                      userSelect: 'none',
+                    },
+                  })}
+                >
+                  {(() => {
+                    if (!connected) {
+                      return (
+                        <Button onClick={openConnectModal}>
+                          <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
+                        </Button>
+                      );
+                    }
+                    navigate('/domains');
+                  })()}
+                </div>
+              );
+            }}
+          </ConnectButton.Custom>
+        </Container>
+      </Content>
+      <Footer />
+    </PageWrapper>
   );
 }

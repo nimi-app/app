@@ -105,53 +105,49 @@ function Domains({ address }: DomainsProps) {
   const { t } = useTranslation('nimi');
 
   return (
-    <WagmiConfig client={rainbow}>
-      <RainbowKitProvider chains={chains}>
-        <Container>
-          <TopSection>
-            <DomainsHeader>Your Identities</DomainsHeader>
+    <Container>
+      <TopSection>
+        <DomainsHeader>Your Identities</DomainsHeader>
 
-            <StyledInput
-              id="domain-seach"
-              isSimple={true}
-              inputLogo={SearchIcon}
-              placeholder="Search"
-              content={searchText}
-              onChange={({ target }) => setSearchText(target.value)}
-              style={{ maxWidth: '200px', background: 'none' }}
-              isInvalidInput={false}
-            />
-          </TopSection>
+        <StyledInput
+          id="domain-seach"
+          isSimple={true}
+          inputLogo={SearchIcon}
+          placeholder="Search"
+          content={searchText}
+          onChange={({ target }) => setSearchText(target.value)}
+          style={{ maxWidth: '200px', background: 'none' }}
+          isInvalidInput={false}
+        />
+      </TopSection>
 
-          {loading ? (
-            <LoaderWrapper>
-              <Loader />
-            </LoaderWrapper>
+      {loading ? (
+        <LoaderWrapper>
+          <Loader />
+        </LoaderWrapper>
+      ) : (
+        <>
+          {domainList?.length === 0 ? (
+            <BigBanner>
+              {t('noEnsFound')}
+              <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                {t('buyDomain')}
+              </BuyDomainLink>
+            </BigBanner>
           ) : (
-            <>
-              {domainList?.length === 0 ? (
-                <BigBanner>
-                  {t('noEnsFound')}
-                  <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-                    {t('buyDomain')}
-                  </BuyDomainLink>
-                </BigBanner>
-              ) : (
-                <StyledDomainsWrapper>
-                  {domainList?.map((domain) => (
-                    <ENSCardContainer key={domain.name} domain={domain} />
-                  ))}
-                  <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-                    Buy an ENS
-                  </AddDomain>
-                </StyledDomainsWrapper>
-              )}
-            </>
+            <StyledDomainsWrapper>
+              {domainList?.map((domain) => (
+                <ENSCardContainer key={domain.name} domain={domain} />
+              ))}
+              <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                Buy an ENS
+              </AddDomain>
+            </StyledDomainsWrapper>
           )}
-          <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
-        </Container>
-      </RainbowKitProvider>
-    </WagmiConfig>
+        </>
+      )}
+      <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
+    </Container>
   );
 }
 
@@ -169,31 +165,15 @@ export function DomainsHome() {
 
   if (isConnected !== true) {
     navigate('/');
-    return (
-      <WagmiConfig client={rainbow}>
-        <RainbowKitProvider chains={chains}>
-          <Container />
-        </RainbowKitProvider>
-      </WagmiConfig>
-    );
+    return <Container />;
   }
   if (SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
     return (
-      <WagmiConfig client={rainbow}>
-        <RainbowKitProvider chains={chains}>
-          <Container>
-            <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
-            <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
-          </Container>
-        </RainbowKitProvider>
-      </WagmiConfig>
+      <Container>
+        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+      </Container>
     );
   }
-  return (
-    <WagmiConfig client={rainbow}>
-      <RainbowKitProvider chains={chains}>
-        <Domains address={address as string} />
-      </RainbowKitProvider>
-    </WagmiConfig>
-  );
+  return <Domains address={address as string} />;
 }

@@ -38,24 +38,14 @@ export function CreateNimiPage() {
 
   if (isConnected !== true) {
     navigate('/');
-    return (
-      <WagmiConfig client={rainbow}>
-        <RainbowKitProvider chains={chains}>
-          <Container />
-        </RainbowKitProvider>
-      </WagmiConfig>
-    );
+    return <Container />;
   }
   if (SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
     return (
-      <WagmiConfig client={rainbow}>
-        <RainbowKitProvider chains={chains}>
-          <Container>
-            <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
-            <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
-          </Container>
-        </RainbowKitProvider>
-      </WagmiConfig>
+      <Container>
+        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+      </Container>
     );
   }
   return <CreateNimiContainer ensName={ensName as string} />;

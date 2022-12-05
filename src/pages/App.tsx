@@ -16,6 +16,11 @@ import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
 import { AppWrapper } from '../modules/app-wrapper';
 import { DomainsHome } from './domains';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
+import { WagmiConfig } from 'wagmi';
+import { useRainbow } from '../hooks/useRainbow';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>
@@ -36,6 +41,7 @@ export function App() {
   // const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
 
   const theme = useTheme();
+  const rainbow = useRainbow();
 
   const queryClient = new QueryClient();
 
@@ -47,16 +53,20 @@ export function App() {
   }, []);
 
   return (
-    <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
-      <QueryClientProvider client={queryClient}>
-        <WalletModal />
-        <Routes>
-          <Route element={<NimiConnectAppWrapper />} path="/connect" />
-          <Route element={<DomainsAppWrapper />} path="domains/*" />
-          <Route element={<Landing />} path="/" />
-          <Route element={<NotFound />} path="*" />
-        </Routes>
-      </QueryClientProvider>
-    </SkeletonTheme>
+    <WagmiConfig client={rainbow}>
+      <RainbowKitProvider chains={rainbow.chains as Chain[]}>
+        <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
+          <QueryClientProvider client={queryClient}>
+            <WalletModal />
+            <Routes>
+              <Route element={<NimiConnectAppWrapper />} path="/connect" />
+              <Route element={<DomainsAppWrapper />} path="domains/*" />
+              <Route element={<Landing />} path="/" />
+              <Route element={<NotFound />} path="*" />
+            </Routes>
+          </QueryClientProvider>
+        </SkeletonTheme>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }

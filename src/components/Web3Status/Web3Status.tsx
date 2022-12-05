@@ -83,59 +83,55 @@ export function Web3Status() {
     return t('connect');
   }, [isActivating, isActive, account, ensName, isWrongNetwork, t]);
   return (
-    <WagmiConfig client={rainbow}>
-      <RainbowKitProvider chains={chains}>
-        <ConnectButton.Custom>
-          {({ account, chain, openChainModal, openAccountModal, openConnectModal, authenticationStatus, mounted }) => {
-            const ready = mounted && authenticationStatus !== 'loading';
-            const connected =
-              ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
-            return (
-              <div
-                {...(!ready && {
-                  'aria-hidden': true,
-                  style: {
-                    opacity: 0,
-                    pointerEvents: 'none',
-                    userSelect: 'none',
-                  },
-                })}
-              >
-                {(() => {
-                  if (!connected) {
-                    return (
-                      <StyledWrapper isError={false} onClick={openConnectModal}>
-                        <Web3Avatar />
-                        <StyledInnerWrapper>
-                          <StyledTextContent>{statusContent}</StyledTextContent>
-                        </StyledInnerWrapper>
-                      </StyledWrapper>
-                    );
-                  }
-                  if (isWrongNetwork || chain.unsupported) {
-                    return (
-                      <StyledWrapper isError={chain.unsupported || isWrongNetwork} onClick={openChainModal}>
-                        <Web3Avatar url={avatar} alt={(ensName as string) || (account as any)} />
-                        <StyledInnerWrapper>
-                          <StyledTextContent>{statusContent}</StyledTextContent>
-                        </StyledInnerWrapper>
-                      </StyledWrapper>
-                    );
-                  }
-                  return (
-                    <StyledWrapper isError={false} onClick={openAccountModal}>
-                      <Web3Avatar url={avatar} alt={(ensName as string) || (account as any)} />
-                      <StyledInnerWrapper>
-                        <StyledTextContent>{statusContent}</StyledTextContent>
-                      </StyledInnerWrapper>
-                    </StyledWrapper>
-                  );
-                })()}
-              </div>
-            );
-          }}
-        </ConnectButton.Custom>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <ConnectButton.Custom>
+      {({ account, chain, openChainModal, openAccountModal, openConnectModal, authenticationStatus, mounted }) => {
+        const ready = mounted && authenticationStatus !== 'loading';
+        const connected =
+          ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
+        return (
+          <div
+            {...(!ready && {
+              'aria-hidden': true,
+              style: {
+                opacity: 0,
+                pointerEvents: 'none',
+                userSelect: 'none',
+              },
+            })}
+          >
+            {(() => {
+              if (!connected) {
+                return (
+                  <StyledWrapper isError={false} onClick={openConnectModal}>
+                    <Web3Avatar />
+                    <StyledInnerWrapper>
+                      <StyledTextContent>{statusContent}</StyledTextContent>
+                    </StyledInnerWrapper>
+                  </StyledWrapper>
+                );
+              }
+              if (isWrongNetwork || chain.unsupported) {
+                return (
+                  <StyledWrapper isError={chain.unsupported || isWrongNetwork} onClick={openChainModal}>
+                    <Web3Avatar url={avatar} alt={(ensName as string) || (account as any)} />
+                    <StyledInnerWrapper>
+                      <StyledTextContent>{statusContent}</StyledTextContent>
+                    </StyledInnerWrapper>
+                  </StyledWrapper>
+                );
+              }
+              return (
+                <StyledWrapper isError={false} onClick={openAccountModal}>
+                  <Web3Avatar url={avatar} alt={(ensName as string) || (account as any)} />
+                  <StyledInnerWrapper>
+                    <StyledTextContent>{statusContent}</StyledTextContent>
+                  </StyledInnerWrapper>
+                </StyledWrapper>
+              );
+            })()}
+          </div>
+        );
+      }}
+    </ConnectButton.Custom>
   );
 }
