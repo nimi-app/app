@@ -1,22 +1,21 @@
-import { ApolloProvider } from '@apollo/client';
 import { useEffect } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 
-import { defaultEnsClient, ensClients } from '../apollo/client';
-import { useActiveWeb3React } from '../hooks/useWeb3';
 import { Header } from '../components/Header';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { NotFound } from './NotFound';
 import { Landing } from './Landing';
-import { DomainsHome } from './domains';
+
 import { Footer } from '../components/Footer';
 import { WalletModal } from '../components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
 import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
 import { AppWrapper } from '../modules/app-wrapper';
+import { DomainsHome } from './domains';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>
@@ -34,8 +33,11 @@ const NimiConnectAppWrapper = () => (
 );
 
 export function App() {
-  const { chainId } = useActiveWeb3React();
+  // const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
+
   const theme = useTheme();
+
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     // Load Fathom if it's set in .env
@@ -46,7 +48,7 @@ export function App() {
 
   return (
     <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
-      <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
+      <QueryClientProvider client={queryClient}>
         <WalletModal />
         <Routes>
           <Route element={<NimiConnectAppWrapper />} path="/connect" />
@@ -54,7 +56,7 @@ export function App() {
           <Route element={<Landing />} path="/" />
           <Route element={<NotFound />} path="*" />
         </Routes>
-      </ApolloProvider>
+      </QueryClientProvider>
     </SkeletonTheme>
   );
 }
