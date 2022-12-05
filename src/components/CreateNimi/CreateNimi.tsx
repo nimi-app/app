@@ -305,6 +305,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   };
 
   const updateLink = (linkId: string, key: string, value: string) => {
+    const linksRetrieved = getValues('links') || [];
     const updatedLinks = getValues('links').map((link) => (link.id === linkId ? { ...link, [key]: value } : link));
 
     setValue('links', updatedLinks);
@@ -427,7 +428,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
-                {links?.length !== 0 && (
+                {links?.length !== 0 && links !== undefined && (
                   <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                     {links.map((link) => (
                       <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
