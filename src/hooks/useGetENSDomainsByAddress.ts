@@ -98,7 +98,7 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
   );
   const waitedForData: DataModified[] = useMemo(() => {
     if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
-    return undefined;
+    return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isSuccess, isError, isFetching]);
 

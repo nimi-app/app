@@ -189,7 +189,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
   const formWatchPayload = watch();
 
-  const links = useMemo(() => formWatchPayload.links, [formWatchPayload]);
+  const links = useMemo(() => (formWatchPayload === undefined ? [] : formWatchPayload.links), [formWatchPayload]);
 
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;
