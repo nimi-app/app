@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useGetDefaultLensProfileQuery } from '../generated/graphql/lens';
-import { useLensSubgraphClient } from './useLensSubgraph';
+import { useNetwork } from 'wagmi';
 import { useRainbow } from './useRainbow';
-
+import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
+import { useGetDefaultLensProfileQuery } from '../api/GraphQl/schemas/generated/lens';
 export interface LensDefaultProfileData {
   name: string;
   description: string;
@@ -12,12 +12,10 @@ export interface LensDefaultProfileData {
 export function useLensDefaultProfileData(): { loading: boolean; defaultProfileData: LensDefaultProfileData | null } {
   const rainbow = useRainbow();
   const account = rainbow.data?.account;
-  const lensSubgraph = useLensSubgraphClient();
-  const { data, loading } = useGetDefaultLensProfileQuery({
-    client: lensSubgraph,
-    variables: {
-      account,
-    },
+  const { chain } = useNetwork();
+  const chainId = chain?.id;
+  const { data, isLoading } = useGetDefaultLensProfileQuery(GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.LENS), {
+    account,
   });
 
   const [defaultProfileData, setDefaultProfileData] = useState<LensDefaultProfileData | null>(null);
@@ -38,5 +36,5 @@ export function useLensDefaultProfileData(): { loading: boolean; defaultProfileD
     );
   }, [data, account]);
 
-  return { loading, defaultProfileData };
+  return { loading: isLoading, defaultProfileData };
 }

@@ -25,9 +25,14 @@ yarn-error.log*
 
 # generated stuff
 src/generated/
+src/api/GraphQl/schemas/generated/
 .yalc
 yalc.lock
 
 # Disable yarn
 yarn.lock
 .vercel
+
+# ENV
+src/.env
+.env

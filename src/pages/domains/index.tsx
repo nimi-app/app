@@ -1,7 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import { Pagination } from '../../components/Pagination/';
+import { useWeb3React } from '@web3-react/core';
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
+import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
+
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
 import { NimiSignatureColor } from '../../theme';
@@ -12,6 +18,7 @@ import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiConfig } from 'wagmi';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
 import { useRainbow } from '../../hooks/useRainbow';
+import { InputFieldWithIcon } from '../../components/Input';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
@@ -31,6 +38,8 @@ const DomainsHeader = styled.div`
   font-size: 36px;
   line-height: 39px;
   margin-bottom: 36px;
+  width: fit-content;
+  display: flex;
 `;
 const AddDomain = styled(DottedButtonBase)`
   width: 308px;
@@ -58,6 +67,22 @@ const BuyDomainLink = styled.p`
   margin-top: 17px;
   cursor: pointer;
 `;
+const TopSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+const StyledInput = styled(InputFieldWithIcon)`
+  max-width: 200px !important;
+  display: flex !important;
+  align-items: flex-start;
+`;
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 80px 0;
+`;
 
 const NormalText = styled.p`
   font-weight: 700;
@@ -74,35 +99,56 @@ interface DomainsProps {
 function Domains({ address }: DomainsProps) {
   const rainbow = useRainbow();
   const chains = rainbow.chains as Chain[];
-  const { data: domainList, loading } = useGetENSDomainsByAddress(address);
+  const [searchText, setSearchText] = useState('');
+  const [page, setPage] = useState(0);
+  const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(address, page, searchText);
   const { t } = useTranslation('nimi');
-
-  if (loading) {
-    return <Loader />;
-  }
 
   return (
     <WagmiConfig client={rainbow}>
       <RainbowKitProvider chains={chains}>
         <Container>
-          <DomainsHeader>Your Identities</DomainsHeader>
-          {domainList?.length === 0 ? (
-            <BigBanner>
-              {t('noEnsFound')}
-              <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-                {t('buyDomain')}
-              </BuyDomainLink>
-            </BigBanner>
+          <TopSection>
+            <DomainsHeader>Your Identities</DomainsHeader>
+
+            <StyledInput
+              id="domain-seach"
+              isSimple={true}
+              inputLogo={SearchIcon}
+              placeholder="Search"
+              content={searchText}
+              onChange={({ target }) => setSearchText(target.value)}
+              style={{ maxWidth: '200px', background: 'none' }}
+              isInvalidInput={false}
+            />
+          </TopSection>
+
+          {loading ? (
+            <LoaderWrapper>
+              <Loader />
+            </LoaderWrapper>
           ) : (
-            <StyledDomainsWrapper>
-              {domainList?.map((domain) => (
-                <ENSCardContainer key={domain.name} domain={domain} />
-              ))}
-              <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-                Buy an ENS
-              </AddDomain>
-            </StyledDomainsWrapper>
+            <>
+              {domainList?.length === 0 ? (
+                <BigBanner>
+                  {t('noEnsFound')}
+                  <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                    {t('buyDomain')}
+                  </BuyDomainLink>
+                </BigBanner>
+              ) : (
+                <StyledDomainsWrapper>
+                  {domainList?.map((domain) => (
+                    <ENSCardContainer key={domain.name} domain={domain} />
+                  ))}
+                  <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                    Buy an ENS
+                  </AddDomain>
+                </StyledDomainsWrapper>
+              )}
+            </>
           )}
+          <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
         </Container>
       </RainbowKitProvider>
     </WagmiConfig>
