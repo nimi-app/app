@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-
-import { useActiveWeb3React } from './useWeb3';
+import { useNetwork } from 'wagmi';
 import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import {
   GetDomainsOwnedOrControlledByQuery,
@@ -33,7 +32,8 @@ const numberOfItemsPerPage = 8;
  * @returns {UserENSDomains} data and loading state
  */
 export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
-  const { chainId } = useActiveWeb3React();
+  const { chain } = useNetwork();
+  const chainId = chain?.id;
 
   function domainOrdering(data) {
     console.log('herejshdfjhsdjfhsd', data);
