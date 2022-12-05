@@ -8,7 +8,7 @@ import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
 import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { WagmiConfig, useEnsName } from 'wagmi';
+import { WagmiConfig, useEnsName, useNetwork } from 'wagmi';
 import { useRainbow } from '../../hooks/useRainbow';
 import { useAccount } from 'wagmi';
 
@@ -45,9 +45,9 @@ export function Web3Status() {
   const rainbow = useRainbow();
   const { avatar } = useENSAvatar();
   const { address } = useAccount();
+  const { chain, chains } = useNetwork();
   const account = address;
-  const chainId = rainbow.data?.chain?.id;
-  const chains = rainbow.chains as Chain[];
+  const chainId = chain?.id;
   const isConnected = rainbow.status === 'connected';
   const isActivating = rainbow.status === 'connecting';
   const isActive = isConnected === true;
