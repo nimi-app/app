@@ -43,7 +43,6 @@ import {
 } from './styled';
 
 import { Label, TextArea, FormGroup } from '../form';
-
 import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
 import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
 import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
@@ -87,6 +86,7 @@ import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
 import { useRainbow } from '../../hooks/useRainbow';
 import { useSigner, useNetwork } from 'wagmi';
+import { ImportFromLinktreeModal } from './partials/LinktreeModal';
 
 const themes = {
   [NimiThemeType.NIMI]: {
@@ -151,6 +151,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
   const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
   const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
+  const [isLinktreeOpen, setIsLinktreeOpen] = useState(false);
   const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
   const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(false);
 
@@ -396,6 +397,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
                       {!loadingLensProfile && !!lensProfile && (
                         <ImporButton type="Lens" onClick={handleImportLensProfile} />
                       )}
+                      <ImporButton type="Linktree" onClick={() => setIsLinktreeOpen(true)} />
                       <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
                     </ImportButtonsWrapper>
                   </ImportSection>
@@ -583,6 +585,15 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
           }}
         />
       )}
+      {isLinktreeOpen && (
+        <ImportFromLinktreeModal
+          onClose={(linktreeLinks) => {
+            if (linktreeLinks) setValue('links', [...linktreeLinks, ...links]);
+            setIsLinktreeOpen(false);
+          }}
+        />
+      )}
+
       {isNFTSelectorModalOpen && (
         <NFTSelectorModal
           address={ensAddress}
