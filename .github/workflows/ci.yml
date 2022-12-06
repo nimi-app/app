@@ -14,13 +14,16 @@ jobs:
     strategy:
       matrix:
         node_version: [16]
-
+        
     steps:
 
       - uses: actions/checkout@v2
+        with:
+          token: ${{secrets.ACCESS_TOKEN}}
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
+          token: ${{secrets.ACCESS_TOKEN}}
       - name: 'Create env file'
         run: |
           echo "${{ secrets.ENV }}" > .env
@@ -34,4 +37,5 @@ jobs:
         run: npm run test
       - name: Build
         run: npm run build
+        
 
