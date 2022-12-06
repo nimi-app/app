@@ -101,9 +101,9 @@ export function generateID(randomString?: string): string {
 }
 
 /**
- * Returns svg in correct format so it can be displated
- * @param logo Logo returned from Nimi-Card
- * @returns
+ * Returns Nimi link type based on url provided
+ * @param url string url that should be evaluated
+ * @returns NimiLinkType
  */
 export function guessLinkTypeBasedOnUrl(url: string): string {
   //loops through prepend urls and check if some of them contain url from linkree
