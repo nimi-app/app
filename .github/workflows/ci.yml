@@ -7,8 +7,6 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
-env:
-    GITHUB_ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
 jobs:
   CI:
     name: Build
@@ -26,6 +24,8 @@ jobs:
         with:
           node-version: '16'
       - name: Install
+        env:
+          GITHUB_ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
         run: npm ci --legacy-peer-deps
       - name: Lint
         run: npm run lint
@@ -34,4 +34,6 @@ jobs:
       - name: Test
         run: npm run test
       - name: Build
+        env:
+          GITHUB_ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
         run: npm run build
