@@ -26,6 +26,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_GITHUB_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          directory: "./"
           file_name: .env
       - name: Install
         run: npm ci --legacy-peer-deps
