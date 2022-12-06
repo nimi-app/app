@@ -3,6 +3,7 @@ import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
 import { FC, SVGProps } from 'react';
+import { nimiLinkDetailsExtended, NimiLinkType } from '@nimi.io/card';
 
 export * from './explorer';
 
@@ -97,4 +98,18 @@ export function renderSVG(logo?: FC<SVGProps<SVGSVGElement>>, size = 20): JSX.El
  */
 export function generateID(randomString?: string): string {
   return 'id' + new Date().getTime() + randomString;
+}
+
+/**
+ * Returns Nimi link type based on url provided
+ * @param url string url that should be evaluated
+ * @returns NimiLinkType
+ */
+export function guessLinkTypeBasedOnUrl(url: string): string {
+  //loops through prepend urls and check if some of them contain url from linkree
+  const linkSearch = Object.entries(nimiLinkDetailsExtended).find(
+    (item) => item[1].prepend && url.includes(item[1].prepend.substring(8))
+  );
+
+  return linkSearch ? linkSearch[0] : NimiLinkType.URL;
 }

@@ -5,15 +5,16 @@ export type NimiApiVersion = 'v1.4' | 'v1';
 
 /**
  * Returns the base URL for the Nimi API.
- * @param {NimiApiVersion} version - The version of the Nimi API to use. Defaults to the latest version.
  * @returns {string} The base URL for the Nimi API.
  */
 export function getAPIBaseURL() {
   if (!process.env.REACT_APP_NIMI_API_BASE_URL) {
     throw new Error('REACT_APP_NIMI_API_BASE_URL is not set.');
+  } else if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    return process.env.REACT_APP_NIMI_API_DEV_BASE_URL;
+  } else {
+    return process.env.REACT_APP_NIMI_API_BASE_URL as string;
   }
-
-  return process.env.REACT_APP_NIMI_API_BASE_URL as string;
 }
 
 export interface RepopulateData {
