@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: '16'
       - name: Install
-        run: npm ci --legacy-peer-deps
+        run: npm install
       - name: Lint
         run: npm run lint
       - name: Check types
