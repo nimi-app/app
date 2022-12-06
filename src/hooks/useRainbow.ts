@@ -4,7 +4,6 @@ import { getDefaultWallets } from '@rainbow-me/rainbowkit';
 import { ALCHEMY_ID, SUPPORT_CHAINS_RAINBOW_KIT } from '../constants';
 import { publicProvider } from 'wagmi/providers/public';
 
-console.log(SUPPORT_CHAINS_RAINBOW_KIT, [chain.mainnet, chain.goerli]);
 const { chains, provider } = configureChains(SUPPORT_CHAINS_RAINBOW_KIT, [
   alchemyProvider({ apiKey: ALCHEMY_ID as string }),
   publicProvider(),

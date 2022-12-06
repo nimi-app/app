@@ -6,9 +6,8 @@ import { useENSAvatar } from '../../hooks/useENSAvatar';
 import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
-import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { WagmiConfig, useEnsName, useNetwork } from 'wagmi';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useNetwork } from 'wagmi';
 import { useRainbow } from '../../hooks/useRainbow';
 import { useAccount } from 'wagmi';
 

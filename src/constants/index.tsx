@@ -197,7 +197,6 @@ export const SUPPORTED_CHAINS_WAGMI = [
 
 export const SUPPORT_CHAINS_RAINBOW_KIT = SUPPORTED_CHAIN_IDS.map((key) => {
   for (const sc of SUPPORTED_CHAINS_WAGMI) {
-    console.log(key === sc.id);
     if (key === sc.id) {
       return sc;
     }
