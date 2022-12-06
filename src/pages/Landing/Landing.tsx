@@ -5,16 +5,12 @@ import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
 import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
-import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { useRainbow } from '../../hooks/useRainbow';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
-import { WagmiConfig } from 'wagmi';
 
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
-  const rainbow = useRainbow();
 
   return (
     <PageWrapper>

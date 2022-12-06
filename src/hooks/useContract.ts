@@ -2,7 +2,7 @@ import { Contract } from '@ethersproject/contracts';
 import { useMemo } from 'react';
 
 import { getContract } from '../utils';
-import { useRainbow } from './useRainbow';
+import { useAccount, useProvider, useRainbow } from './useRainbow';
 /**
  *
  * @param address The address of the contract to use
@@ -15,9 +15,8 @@ export function useContract<T = Contract>(
   ABI: any,
   withSignerIfPossible = true
 ): T | null {
-  const rainbow = useRainbow();
-  const provider = rainbow.getProvider();
-  const account = rainbow.data?.account;
+  const provider = useProvider();
+  const account = useAccount();
 
   return useMemo(() => {
     if (!address || !ABI || !provider) return null;

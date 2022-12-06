@@ -14,10 +14,9 @@ import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
-import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { WagmiConfig } from 'wagmi';
+import { Chain } from '@rainbow-me/rainbowkit';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
-import { useRainbow } from '../../hooks/useRainbow';
+import { useChainId, useRainbow, useRainbowChains } from '../../hooks/useRainbow';
 import { InputFieldWithIcon } from '../../components/Input';
 
 const StyledDomainsWrapper = styled(Flex)`
@@ -97,8 +96,6 @@ interface DomainsProps {
 }
 
 function Domains({ address }: DomainsProps) {
-  const rainbow = useRainbow();
-  const chains = rainbow.chains as Chain[];
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
   const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(address, page, searchText);
@@ -156,10 +153,9 @@ function Domains({ address }: DomainsProps) {
  */
 export function DomainsHome() {
   const rainbow = useRainbow();
+  const chainId = useChainId();
   const address = rainbow.data?.account;
   const isConnected = rainbow.status === 'connected';
-  const chainId = rainbow.data?.chain?.id;
-  const chains = rainbow.chains as Chain[];
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
 

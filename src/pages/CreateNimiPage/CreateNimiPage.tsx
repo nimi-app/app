@@ -9,7 +9,7 @@ import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiConfig } from 'wagmi';
 import { Container } from '@nimi.io/card';
 import { NimiSignatureColor } from '../../theme';
-import { useRainbow } from '../../hooks/useRainbow';
+import { rainbowChains, useChainId, useRainbow, useRainbowChains } from '../../hooks/useRainbow';
 
 const ErrorContainer = styled.div`
   ${NimiSignatureColor};
@@ -32,8 +32,8 @@ export function CreateNimiPage() {
   const navigate = useNavigate();
   const rainbow = useRainbow();
   const isConnected = rainbow.status === 'connected';
-  const chainId = rainbow.data?.chain?.id;
-  const chains = rainbow.chains as Chain[];
+  const chainId = useChainId();
+  const chains = useRainbowChains();
   const { ensName } = useParams();
 
   if (isConnected !== true) {

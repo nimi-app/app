@@ -5,6 +5,7 @@ import {
   GetDomainsOwnedOrControlledByQuery,
   useGetDomainsOwnedOrControlledByQuery,
 } from '../api/GraphQl/schemas/generated/ens';
+import { useChainId } from './useRainbow';
 
 export type DataModified = {
   id: string;
@@ -32,8 +33,7 @@ const numberOfItemsPerPage = 8;
  * @returns {UserENSDomains} data and loading state
  */
 export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
-  const { chain } = useNetwork();
-  const chainId = chain?.id;
+  const chainId = useChainId();
 
   function domainOrdering(data) {
     console.log('herejshdfjhsdjfhsd', data);

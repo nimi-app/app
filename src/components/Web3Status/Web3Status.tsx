@@ -8,8 +8,7 @@ import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useNetwork } from 'wagmi';
-import { useRainbow } from '../../hooks/useRainbow';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId, useRainbow } from '../../hooks/useRainbow';
 
 export interface WrapperProps {
   isError: boolean;
@@ -43,10 +42,8 @@ export function Web3Status() {
   const { t } = useTranslation();
   const rainbow = useRainbow();
   const { avatar } = useENSAvatar();
-  const { address } = useAccount();
-  const { chain, chains } = useNetwork();
-  const account = address;
-  const chainId = chain?.id;
+  const chainId = useChainId();
+  const account = useAccount();
   const isConnected = rainbow.status === 'connected';
   const isActivating = rainbow.status === 'connecting';
   const isActive = isConnected === true;
@@ -54,11 +51,11 @@ export function Web3Status() {
 
   const [ensName, setEnsName] = useState('');
   const [ensNameQueryInitiated, setEnsNameQuery] = useState(false);
-  if (address !== undefined && address !== null && ensName === '' && ensNameQueryInitiated === false) {
+  if (account !== undefined && account !== null && ensName === '' && ensNameQueryInitiated === false) {
     setEnsNameQuery(true);
     rainbow
       .getProvider()
-      .lookupAddress(address.toLowerCase())
+      .lookupAddress(account.toLowerCase())
       .then((r) => {
         if (r !== null) {
           setEnsName(r);

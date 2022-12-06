@@ -5,7 +5,7 @@ import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromP
 import { useEffect, useState } from 'react';
 import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
 import { Nimi } from '@nimi.io/card';
-import { useRainbow } from '../../hooks/useRainbow';
+import { rainbowChains, useAccount, useProvider, useRainbow } from '../../hooks/useRainbow';
 import { Chain } from '@rainbow-me/rainbowkit';
 
 type CreateNimiContainerProps = {
@@ -13,10 +13,8 @@ type CreateNimiContainerProps = {
 };
 
 export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
-  const rainbow = useRainbow();
-  const chains = rainbow.chains as Chain[];
-  const account = rainbow.data?.account;
-  const provider = rainbow.getProvider();
+  const account = useAccount();
+  const provider = useProvider();
   const [initialNimi, setInitialNimi] = useState<Nimi>();
   const [isLoading, setIsLoading] = useState(true);
 

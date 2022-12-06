@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNetwork } from 'wagmi';
-import { useRainbow } from './useRainbow';
+import { useAccount, useChainId, useRainbow } from './useRainbow';
 import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import { useGetDefaultLensProfileQuery } from '../api/GraphQl/schemas/generated/lens';
 export interface LensDefaultProfileData {
@@ -10,10 +10,8 @@ export interface LensDefaultProfileData {
 }
 
 export function useLensDefaultProfileData(): { loading: boolean; defaultProfileData: LensDefaultProfileData | null } {
-  const rainbow = useRainbow();
-  const account = rainbow.data?.account;
-  const { chain } = useNetwork();
-  const chainId = chain?.id;
+  const account = useAccount();
+  const chainId = useChainId();
   const { data, isLoading } = useGetDefaultLensProfileQuery(GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.LENS), {
     account,
   });

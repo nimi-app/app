@@ -24,4 +24,21 @@ export function useRainbow() {
   return wagmiClient;
 }
 
+export function useChainId() {
+  return wagmiClient.data?.chain?.id;
+}
+
+export function useAccount() {
+  return wagmiClient.data?.account;
+}
+
+export function useProvider() {
+  return wagmiClient.getProvider();
+}
+
+export function useRainbowChains() {
+  const chains = wagmiClient.chains;
+  return chains;
+}
+
 export const rainbowChains = chains;

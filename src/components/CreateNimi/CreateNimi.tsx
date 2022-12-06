@@ -84,7 +84,7 @@ import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
 import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
-import { useRainbow } from '../../hooks/useRainbow';
+import { useChainId, useRainbow } from '../../hooks/useRainbow';
 import { useSigner, useNetwork } from 'wagmi';
 import { ImportFromLinktreeModal } from './partials/LinktreeModal';
 
@@ -141,9 +141,7 @@ export interface CreateNimiProps {
 export function CreateNimi({ ensAddress, ensName, provider, availableThemes, initialNimi }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
-  const rainbow = useRainbow();
-  const { chain } = useNetwork();
-  const chainId = chain?.id;
+  const chainId = useChainId();
   const { signMessageAsync } = useSignMessage();
 
   // TODO: UPDATE MODAL STATE HANLING

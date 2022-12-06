@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 import { ChainId } from '../constants';
-import { useRainbow } from './useRainbow';
+import { useAccount, useChainId, useRainbow } from './useRainbow';
 
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
 
@@ -52,8 +52,8 @@ const supportedENSChainIds = [ChainId.MAINNET, ChainId.GOERLI];
  */
 export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
   const rainbow = useRainbow();
-  const chainId = rainbow.data?.chain?.id;
-  const address = rainbow.data?.account;
+  const chainId = useChainId();
+  const address = useAccount();
   const [ensData, setData] = useState<ENSMetadata>();
   const [loading, setLoading] = useState<boolean>(true);
   const [ensName, setEnsName] = useState('');

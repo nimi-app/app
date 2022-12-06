@@ -1,7 +1,7 @@
 import { PUBLIC_RESOLVER_ADDRESSES, SUPPORT_CHAINS_RAINBOW_KIT } from '../constants';
 import { EnsPublicResolver__factory, EnsPublicResolver } from '../generated/contracts';
 import { getProviderOrSigner } from '../utils';
-import { useRainbow } from './useRainbow';
+import { useChainId, useRainbow } from './useRainbow';
 import { useNetwork, useProvider, useSigner } from 'wagmi';
 import { Signer } from '@wagmi/core';
 
@@ -11,13 +11,11 @@ import { Signer } from '@wagmi/core';
  * @returns The ENS Public Resolver contract instance
  */
 export function useENSPublicResolverContract(withSignerIfPossible = true): EnsPublicResolver | null {
-  const rainbow = useRainbow();
-  // const provider = useProvider();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { data: signer, isError, isLoading } = useSigner();
 
-  if (chain?.id && PUBLIC_RESOLVER_ADDRESSES[chain?.id] !== undefined) {
-    return EnsPublicResolver__factory.connect(PUBLIC_RESOLVER_ADDRESSES[chain?.id], signer as Signer);
+  if (chainId && PUBLIC_RESOLVER_ADDRESSES[chainId] !== undefined) {
+    return EnsPublicResolver__factory.connect(PUBLIC_RESOLVER_ADDRESSES[chainId], signer as Signer);
   }
 
   return null;
