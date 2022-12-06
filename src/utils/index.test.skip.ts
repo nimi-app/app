@@ -1,4 +1,4 @@
-import { getEtherscanExplorerLink, shortenAddress } from './';
+import { getEtherscanExplorerLink, shortenAddress } from '.';
 
 describe('utils', () => {
   describe('#getEtherscanExplorerLink', () => {
