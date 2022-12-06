@@ -24,9 +24,9 @@ jobs:
         with:
           node-version: '16'
       - name: Install
+        run: npm ci --legacy-peer-deps
         env:
           GITHUB_ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
-        run: npm ci --legacy-peer-deps
       - name: Lint
         run: npm run lint
       - name: Check types
@@ -34,6 +34,6 @@ jobs:
       - name: Test
         run: npm run test
       - name: Build
+        run: npm run build
         env:
           GITHUB_ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
-        run: npm run build
