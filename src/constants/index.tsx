@@ -177,7 +177,7 @@ export const URLS: { [chainId: number]: string[] } = Object.keys(CHAINS).reduce<
  * List of chain IDs.
  */
 export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINS).map((key) => {
-  return Number(key);
+  return key;
 });
 
 export const SUPPORTED_CHAINS_WAGMI = [
@@ -197,7 +197,7 @@ export const SUPPORTED_CHAINS_WAGMI = [
 
 export const SUPPORT_CHAINS_RAINBOW_KIT = SUPPORTED_CHAIN_IDS.map((key) => {
   for (const sc of SUPPORTED_CHAINS_WAGMI) {
-    if (key === sc.id) {
+    if (parseInt(key) === sc.id) {
       return sc;
     }
     return undefined;
