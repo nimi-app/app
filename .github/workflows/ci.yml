@@ -22,10 +22,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - uses: SpicyPizza/create-envfile@v1
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v1
         with:
           envkey_GITHUB_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        file_name: .env
+          file_name: .env
       - name: Install
         run: npm ci --legacy-peer-deps
       - name: Lint
