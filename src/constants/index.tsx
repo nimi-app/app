@@ -209,6 +209,6 @@ export const SUPPORT_CHAINS_RAINBOW_KIT = SUPPORTED_CHAIN_IDS.map((key) => {
 export const ENV_SUPPORTED_CHAIN_IDS =
   process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : SUPPORTED_CHAIN_IDS;
 
-export const ALCHEMY_ID = 'EY3WaGaUwnSMBGBXwVzUiAssjPL_zQeM';
+export const ALCHEMY_ID = process.env.ALCHEMY_ID;
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];
