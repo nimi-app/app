@@ -68,7 +68,6 @@ export function Web3Status() {
   }
 
   const statusContent = useMemo(() => {
-    console.log('A');
     if (isWrongNetwork) {
       return t('error.unsupportedNetwork');
     }

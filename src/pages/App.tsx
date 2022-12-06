@@ -20,7 +20,7 @@ import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { WagmiConfig } from 'wagmi';
-import { useRainbow } from '../hooks/useRainbow';
+import { rainbowChains, useRainbow } from '../hooks/useRainbow';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>
@@ -42,6 +42,7 @@ export function App() {
 
   const theme = useTheme();
   const rainbow = useRainbow();
+  const chains = rainbowChains;
 
   const queryClient = new QueryClient();
 
@@ -54,7 +55,7 @@ export function App() {
 
   return (
     <WagmiConfig client={rainbow}>
-      <RainbowKitProvider chains={rainbow.chains as Chain[]}>
+      <RainbowKitProvider chains={chains as Chain[]}>
         <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
           <QueryClientProvider client={queryClient}>
             <WalletModal />

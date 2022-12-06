@@ -97,7 +97,6 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
     { keepPreviousData: true, select: domainOrdering }
   );
   const waitedForData: DataModified[] = useMemo(() => {
-    console.log('B');
     if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
