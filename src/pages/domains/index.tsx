@@ -149,7 +149,7 @@ function Domains({ address }: DomainsProps) {
  * A logic wrapper around Domains components
  */
 export function DomainsHome() {
-  const { client, chainId, account, isConnected } = useRainbow();
+  const { chainId, account, isConnected } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
   if (isConnected !== true) {

@@ -92,7 +92,7 @@ export function NimiConnectContainer({ address }: NimiConnectContainerProps) {
         setIsFetchingToken(false);
       });
     }
-  }, [provider, account, ensName, fetchTokenError]);
+  }, [provider, account, ensName, fetchTokenError, signMessageAsync]);
 
   if (loading) {
     return <Loader />;

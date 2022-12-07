@@ -39,7 +39,7 @@ const StyledTextContent = styled.span`
 
 export function Web3Status() {
   const { t } = useTranslation();
-  const { client, chainId, provider, isConnected, isActivating, account } = useRainbow();
+  const { chainId, provider, isConnected, isActivating, account } = useRainbow();
   const { avatar } = useENSAvatar();
   const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
 

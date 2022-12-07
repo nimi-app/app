@@ -303,7 +303,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   };
 
   const updateLink = (linkId: string, key: string, value: string) => {
-    const linksRetrieved = getValues('links') || [];
     const updatedLinks = getValues('links').map((link) => (link.id === linkId ? { ...link, [key]: value } : link));
 
     setValue('links', updatedLinks);

@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
 import { Nimi } from '@nimi.io/card';
 import { useRainbow } from '../../hooks/useRainbow';
-import { Chain } from '@rainbow-me/rainbowkit';
 
 type CreateNimiContainerProps = {
   ensName: string;

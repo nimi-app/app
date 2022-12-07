@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'framer-motion';
-
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
 import { PopulatedENSCard } from '../PopulatedENSCard';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
@@ -40,7 +39,7 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
           setQueryOnGoing(false);
         });
     }
-  }, [isInView, domain.name, domainData]);
+  }, [queryOnGoing, isInView, domain.name, domainData]);
 
   if (domainData !== null && domainData !== undefined) {
     return <PopulatedENSCard data={domainData.nimi} key={domain.id} id={domain.id} />;

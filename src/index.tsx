@@ -1,12 +1,9 @@
 import './i18n';
 
-import { Web3ReactProvider } from '@web3-react/core';
 import { StrictMode } from 'react';
-
 import { createRoot } from 'react-dom/client';
 import { Provider as ReduxStoreProvider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
-
 import { App } from './pages/App';
 import { store } from './state';
 import { FixedGlobalStyle, ThemedGlobalStyle, ThemeProvider } from './theme';
