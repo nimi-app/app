@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'framer-motion';
-
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
 import { PopulatedENSCard } from '../PopulatedENSCard';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
@@ -20,9 +19,13 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   const ref = useRef(null);
   const isInView = useInView(ref);
   const [domainData, setDomainData] = useState<Awaited<ReturnType<typeof fetchNimiDataByENSName>> | null>();
-
+  const [queryOnGoing, setQueryOnGoing] = useState(false);
   // When element is in view, fetch the data
   useEffect(() => {
+    if (queryOnGoing === true) {
+      return;
+    }
+    setQueryOnGoing(true);
     // fetch only if not already fetched
     if (isInView && domain?.name && domainData === undefined) {
       fetchNimiDataByENSName(domain.name)
@@ -33,9 +36,10 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
         .catch((error) => {
           console.log('ENSCardContainer: useEffect', error);
           setDomainData(null);
+          setQueryOnGoing(false);
         });
     }
-  }, [isInView, domain.name, domainData]);
+  }, [queryOnGoing, isInView, domain.name, domainData]);
 
   if (domainData !== null && domainData !== undefined) {
     return <PopulatedENSCard data={domainData.nimi} key={domain.id} id={domain.id} />;

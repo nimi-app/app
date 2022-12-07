@@ -1,19 +1,18 @@
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
 import { Container } from '../../components/Container';
-import { useWeb3React } from '@web3-react/core';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 import { useEffect, useState } from 'react';
-import { Web3Provider } from '@ethersproject/providers';
 import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
 import { Nimi } from '@nimi.io/card';
+import { useRainbow } from '../../hooks/useRainbow';
 
 type CreateNimiContainerProps = {
   ensName: string;
 };
 
 export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
-  const { account, provider } = useWeb3React();
+  const { account, provider } = useRainbow();
   const [initialNimi, setInitialNimi] = useState<Nimi>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -57,7 +56,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
       <CreateNimi
         ensAddress={account as string}
         ensName={ensName as string}
-        provider={provider as Web3Provider}
+        provider={provider as any}
         availableThemes={avaliableThemes}
         initialNimi={initialNimi}
       />

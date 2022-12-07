@@ -1,7 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import { Pagination } from '../../components/Pagination/';
-import { useWeb3React } from '@web3-react/core';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
@@ -9,17 +8,25 @@ import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
 
 import { Container } from '../../components/Container';
 import { Loader } from '../../components/Loader';
-
 import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
+import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
+import { useRainbow } from '../../hooks/useRainbow';
 import { InputFieldWithIcon } from '../../components/Input';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;
   gap: 18px;
   justify-content: start;
+`;
+const ErrorContainer = styled.div`
+  ${NimiSignatureColor};
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 39px;
+  margin-bottom: 36px;
 `;
 const DomainsHeader = styled.div`
   ${NimiSignatureColor};
@@ -73,6 +80,14 @@ const LoaderWrapper = styled.div`
   padding: 80px 0;
 `;
 
+const NormalText = styled.p`
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  margin-top: 17px;
+  cursor: pointer;
+`;
+
 interface DomainsProps {
   address: string;
 }
@@ -80,9 +95,7 @@ interface DomainsProps {
 function Domains({ address }: DomainsProps) {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
-
   const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(address, page, searchText);
-
   const { t } = useTranslation('nimi');
 
   return (
@@ -136,12 +149,20 @@ function Domains({ address }: DomainsProps) {
  * A logic wrapper around Domains components
  */
 export function DomainsHome() {
-  const { account, isActive } = useWeb3React();
-
-  if (account && isActive) {
-    return <Domains address={account} />;
+  const { chainId, account, isConnected } = useRainbow();
+  const { t } = useTranslation(['common', 'landing']);
+  const navigate = useNavigate();
+  if (isConnected !== true) {
+    navigate('/');
+    return <Container />;
   }
-
-  // Redirect to home page if no wallet is connected
-  return <Navigate to="/" />;
+  if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
+    return (
+      <Container>
+        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+      </Container>
+    );
+  }
+  return <Domains address={account as string} />;
 }

@@ -10,12 +10,16 @@ import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 
 import { Footer } from '../components/Footer';
-import { WalletModal } from '../components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
 import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
 import { AppWrapper } from '../modules/app-wrapper';
 import { DomainsHome } from './domains';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { Chain } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
+import { WagmiConfig } from 'wagmi';
+import { useRainbow } from '../hooks/useRainbow';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>
@@ -33,11 +37,13 @@ const NimiConnectAppWrapper = () => (
 );
 
 export function App() {
-  // const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
-
   const theme = useTheme();
-
+  const { client, chains } = useRainbow();
   const queryClient = new QueryClient();
+
+  console.log({
+    chains,
+  });
 
   useEffect(() => {
     // Load Fathom if it's set in .env
@@ -47,16 +53,19 @@ export function App() {
   }, []);
 
   return (
-    <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
-      <QueryClientProvider client={queryClient}>
-        <WalletModal />
-        <Routes>
-          <Route element={<NimiConnectAppWrapper />} path="/connect" />
-          <Route element={<DomainsAppWrapper />} path="domains/*" />
-          <Route element={<Landing />} path="/" />
-          <Route element={<NotFound />} path="*" />
-        </Routes>
-      </QueryClientProvider>
-    </SkeletonTheme>
+    <WagmiConfig client={client}>
+      <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
+        <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
+          <QueryClientProvider client={queryClient}>
+            <Routes>
+              <Route element={<NimiConnectAppWrapper />} path="/connect" />
+              <Route element={<DomainsAppWrapper />} path="domains/*" />
+              <Route element={<Landing />} path="/" />
+              <Route element={<NotFound />} path="*" />
+            </Routes>
+          </QueryClientProvider>
+        </SkeletonTheme>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }

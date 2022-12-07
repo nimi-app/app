@@ -1,9 +1,7 @@
 import { Contract } from '@ethersproject/contracts';
 import { useMemo } from 'react';
-
 import { getContract } from '../utils';
-import { useActiveWeb3React } from './useWeb3';
-
+import { useRainbow } from './useRainbow';
 /**
  *
  * @param address The address of the contract to use
@@ -16,12 +14,12 @@ export function useContract<T = Contract>(
   ABI: any,
   withSignerIfPossible = true
 ): T | null {
-  const { provider, account } = useActiveWeb3React();
+  const { provider, account } = useRainbow();
 
   return useMemo(() => {
     if (!address || !ABI || !provider) return null;
     try {
-      return getContract<T>(address, ABI, provider, withSignerIfPossible && account ? account : undefined);
+      return getContract<T>(address, ABI, provider as any, withSignerIfPossible && account ? account : undefined);
     } catch (error) {
       console.error('Failed to get contract', error);
       return null;

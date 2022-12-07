@@ -1,20 +1,46 @@
 import { useParams } from 'react-router-dom';
-import { useWeb3React } from '@web3-react/core';
-import { SUPPORTED_CHAIN_IDS } from '../../constants';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { CreateNimiContainer } from '../../components/CreateNimi/CreateNimiContainer';
-import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
-import { Button } from '../../components/Button';
 import { useTranslation } from 'react-i18next';
+import { Container } from '@nimi.io/card';
+import { NimiSignatureColor } from '../../theme';
+import { useRainbow } from '../../hooks/useRainbow';
+
+const ErrorContainer = styled.div`
+  ${NimiSignatureColor};
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 39px;
+  margin-bottom: 36px;
+`;
+
+const NormalText = styled.p`
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  margin-top: 17px;
+  cursor: pointer;
+`;
 
 export function CreateNimiPage() {
   const { t } = useTranslation();
-  const { provider, chainId } = useWeb3React();
-  const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
+  const navigate = useNavigate();
+  const { chainId, isConnected } = useRainbow();
   const { ensName } = useParams();
-
-  if (!provider || !chainId || !SUPPORTED_CHAIN_IDS.includes(chainId)) {
-    return <Button onClick={openWalletSwitcherPopover}>{t('connectWallet')}</Button>;
+  if (isConnected !== true) {
+    navigate('/');
+    return <Container />;
   }
 
+  if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
+    return (
+      <Container>
+        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+      </Container>
+    );
+  }
   return <CreateNimiContainer ensName={ensName as string} />;
 }

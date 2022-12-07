@@ -83,6 +83,8 @@ import { ImporButton } from '../Button/ImportButton';
 import { generateID } from '../../utils';
 import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
+import { useRainbow } from '../../hooks/useRainbow';
+import { useSignMessage } from 'wagmi';
 import { ImportFromLinktreeModal } from './partials/LinktreeModal';
 
 const themes = {
@@ -138,6 +140,8 @@ export interface CreateNimiProps {
 export function CreateNimi({ ensAddress, ensName, provider, availableThemes, initialNimi }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
+  const { chainId } = useRainbow();
+  const { signMessageAsync } = useSignMessage();
 
   // TODO: UPDATE MODAL STATE HANLING
   const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
@@ -183,7 +187,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
   const formWatchPayload = watch();
 
-  const links = useMemo(() => formWatchPayload.links, [formWatchPayload]);
+  const links = useMemo(() => (formWatchPayload === undefined ? [] : formWatchPayload.links), [formWatchPayload]);
 
   const handleImportLensProfile = useCallback(() => {
     if (!lensProfile) return;
@@ -219,7 +223,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
       publishNimiAbortController.current = new AbortController();
 
-      const signature = await provider.getSigner().signMessage(JSON.stringify(nimi));
+      const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
 
       let contentHash: string | undefined;
       let cid: string | undefined;
@@ -422,7 +426,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
-                {links?.length !== 0 && (
+                {links?.length !== 0 && links !== undefined && (
                   <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                     {links.map((link) => (
                       <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
@@ -570,7 +574,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
           publishError={publishNimiError}
           setContentHashTransaction={setContentHashTransaction}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
-          setContentHashTransactionChainId={provider.network.chainId}
+          setContentHashTransactionChainId={chainId as number}
           cancel={() => {
             setIsPublishNimiModalOpen(false);
             publishNimiAbortController?.current?.abort();

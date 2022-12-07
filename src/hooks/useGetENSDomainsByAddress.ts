@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
-
-import { useActiveWeb3React } from './useWeb3';
 import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import {
   GetDomainsOwnedOrControlledByQuery,
   useGetDomainsOwnedOrControlledByQuery,
 } from '../api/GraphQl/schemas/generated/ens';
+import { useRainbow } from './useRainbow';
 
 export type DataModified = {
   id: string;
@@ -33,7 +32,7 @@ const numberOfItemsPerPage = 8;
  * @returns {UserENSDomains} data and loading state
  */
 export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
-  const { chainId } = useActiveWeb3React();
+  const { chainId } = useRainbow();
 
   function domainOrdering(data) {
     console.log('herejshdfjhsdjfhsd', data);
@@ -98,7 +97,7 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
   );
   const waitedForData: DataModified[] = useMemo(() => {
     if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
-    return undefined;
+    return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isSuccess, isError, isFetching]);
 
