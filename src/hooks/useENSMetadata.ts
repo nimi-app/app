@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 import { ChainId } from '../constants';
-import { useAccount, useChainId, useRainbow } from './useRainbow';
+import { useRainbow } from './useRainbow';
 
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
 
@@ -51,24 +51,22 @@ const supportedENSChainIds = [ChainId.MAINNET, ChainId.GOERLI];
  * docs: https://metadata.ens.domains/docs#/paths/~1%7BnetworkName%7D~1avatar~1%7Bname%7D~1meta/get
  */
 export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
-  const rainbow = useRainbow();
-  const chainId = useChainId();
-  const address = useAccount();
+  const { client, chainId, account } = useRainbow();
   const [ensData, setData] = useState<ENSMetadata>();
   const [loading, setLoading] = useState<boolean>(true);
   const [ensName, setEnsName] = useState('');
   const [ensNameQueryInitiated, setEnsNameQuery] = useState(false);
   if (
     customENSLookup === undefined &&
-    address !== undefined &&
-    address !== null &&
+    account !== undefined &&
+    account !== null &&
     ensName === '' &&
     ensNameQueryInitiated === false
   ) {
     setEnsNameQuery(true);
-    rainbow
+    client
       .getProvider()
-      .lookupAddress(address.toLowerCase())
+      .lookupAddress(account.toLowerCase())
       .then((r) => {
         if (r !== null) {
           setEnsName(r);

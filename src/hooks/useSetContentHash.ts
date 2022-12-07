@@ -4,7 +4,6 @@ import nameHash from '@ensdomains/eth-ens-namehash';
 import { ContractTransaction } from 'ethers';
 import { EnsPublicResolver } from '../generated/contracts';
 import { encodeContenthash } from '@ensdomains/ui';
-import { useSendTransaction } from 'wagmi';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);

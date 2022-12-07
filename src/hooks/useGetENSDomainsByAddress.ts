@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
-import { useNetwork } from 'wagmi';
 import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import {
   GetDomainsOwnedOrControlledByQuery,
   useGetDomainsOwnedOrControlledByQuery,
 } from '../api/GraphQl/schemas/generated/ens';
-import { useChainId } from './useRainbow';
+import { useRainbow } from './useRainbow';
 
 export type DataModified = {
   id: string;
@@ -33,7 +32,7 @@ const numberOfItemsPerPage = 8;
  * @returns {UserENSDomains} data and loading state
  */
 export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
-  const chainId = useChainId();
+  const { chainId } = useRainbow();
 
   function domainOrdering(data) {
     console.log('herejshdfjhsdjfhsd', data);

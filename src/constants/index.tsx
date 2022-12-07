@@ -180,7 +180,10 @@ export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINS).map((key) => {
   return Number(key);
 });
 
-export const SUPPORTED_CHAINS_WAGMI = [
+/**
+ * LIST OF ALL CHAINS THAT CAN BE SUPPORTED BY WAGMI
+ */
+export const SUPPORTABLE_WAGMI_CHAINS = [
   chain.mainnet,
   chain.goerli,
   chain.sepolia,
@@ -195,20 +198,22 @@ export const SUPPORTED_CHAINS_WAGMI = [
   chain.foundry,
 ];
 
+/**
+ * PARSE THROUGH AND PICK THE CHAINS FROM SUPPORTABLE_WAGMI_CHAINS BASED ON THE LIST FROM CHAINS
+ */
 export const SUPPORT_CHAINS_RAINBOW_KIT = SUPPORTED_CHAIN_IDS.map((key) => {
-  for (const sc of SUPPORTED_CHAINS_WAGMI) {
+  for (const sc of SUPPORTABLE_WAGMI_CHAINS) {
     if (key === sc.id) {
       return sc;
     }
     return undefined;
   }
 }).filter((c) => c !== undefined) as Chain[];
+
 /**
  * List of chain IDs that are supported in the current environment: production or development.
  */
 export const ENV_SUPPORTED_CHAIN_IDS =
   process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : SUPPORTED_CHAIN_IDS;
-
-export const ALCHEMY_ID = process.env.ALCHEMY_ID;
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];

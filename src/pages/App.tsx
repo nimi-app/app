@@ -17,10 +17,10 @@ import { loadFathom } from '../utils';
 import { AppWrapper } from '../modules/app-wrapper';
 import { DomainsHome } from './domains';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { Chain, ConnectButton } from '@rainbow-me/rainbowkit';
+import { Chain } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { WagmiConfig } from 'wagmi';
-import { rainbowChains, useRainbow } from '../hooks/useRainbow';
+import { useRainbow } from '../hooks/useRainbow';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>
@@ -38,12 +38,8 @@ const NimiConnectAppWrapper = () => (
 );
 
 export function App() {
-  // const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
-
   const theme = useTheme();
-  const rainbow = useRainbow();
-  const chains = rainbowChains;
-
+  const { client, chains } = useRainbow();
   const queryClient = new QueryClient();
 
   useEffect(() => {
@@ -54,8 +50,8 @@ export function App() {
   }, []);
 
   return (
-    <WagmiConfig client={rainbow}>
-      <RainbowKitProvider chains={chains as Chain[]}>
+    <WagmiConfig client={client}>
+      <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
         <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
           <QueryClientProvider client={queryClient}>
             <WalletModal />

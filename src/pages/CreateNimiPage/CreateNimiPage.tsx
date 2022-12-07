@@ -4,12 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
 import { CreateNimiContainer } from '../../components/CreateNimi/CreateNimiContainer';
 import { useTranslation } from 'react-i18next';
-import { Chain } from '@rainbow-me/rainbowkit';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { WagmiConfig } from 'wagmi';
 import { Container } from '@nimi.io/card';
 import { NimiSignatureColor } from '../../theme';
-import { rainbowChains, useChainId, useRainbow, useRainbowChains } from '../../hooks/useRainbow';
+import { useRainbow } from '../../hooks/useRainbow';
 
 const ErrorContainer = styled.div`
   ${NimiSignatureColor};
@@ -30,12 +27,8 @@ const NormalText = styled.p`
 export function CreateNimiPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const rainbow = useRainbow();
-  const isConnected = rainbow.status === 'connected';
-  const chainId = useChainId();
-  const chains = useRainbowChains();
+  const { chainId, isConnected } = useRainbow();
   const { ensName } = useParams();
-
   if (isConnected !== true) {
     navigate('/');
     return <Container />;

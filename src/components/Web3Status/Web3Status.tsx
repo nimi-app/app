@@ -7,8 +7,7 @@ import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useNetwork } from 'wagmi';
-import { useAccount, useChainId, useRainbow } from '../../hooks/useRainbow';
+import { useRainbow } from '../../hooks/useRainbow';
 
 export interface WrapperProps {
   isError: boolean;
@@ -40,12 +39,8 @@ const StyledTextContent = styled.span`
 
 export function Web3Status() {
   const { t } = useTranslation();
-  const rainbow = useRainbow();
+  const { client, chainId, provider, isConnected, isActivating, account } = useRainbow();
   const { avatar } = useENSAvatar();
-  const chainId = useChainId();
-  const account = useAccount();
-  const isConnected = rainbow.status === 'connected';
-  const isActivating = rainbow.status === 'connecting';
   const isActive = isConnected === true;
   const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
 
@@ -53,14 +48,11 @@ export function Web3Status() {
   const [ensNameQueryInitiated, setEnsNameQuery] = useState(false);
   if (account !== undefined && account !== null && ensName === '' && ensNameQueryInitiated === false) {
     setEnsNameQuery(true);
-    rainbow
-      .getProvider()
-      .lookupAddress(account.toLowerCase())
-      .then((r) => {
-        if (r !== null) {
-          setEnsName(r);
-        }
-      });
+    provider.lookupAddress(account.toLowerCase()).then((r) => {
+      if (r !== null) {
+        setEnsName(r);
+      }
+    });
   }
 
   const statusContent = useMemo(() => {

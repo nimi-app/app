@@ -1,11 +1,11 @@
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { configureChains, chain, createClient } from 'wagmi';
+import { configureChains, createClient, useProvider, useNetwork, useAccount } from 'wagmi';
 import { getDefaultWallets } from '@rainbow-me/rainbowkit';
-import { ALCHEMY_ID, SUPPORT_CHAINS_RAINBOW_KIT } from '../constants';
+import { SUPPORT_CHAINS_RAINBOW_KIT } from '../constants';
 import { publicProvider } from 'wagmi/providers/public';
 
 const { chains, provider } = configureChains(SUPPORT_CHAINS_RAINBOW_KIT, [
-  alchemyProvider({ apiKey: ALCHEMY_ID as string }),
+  alchemyProvider({ apiKey: process.env.ALCHEMY_ID as string }),
   publicProvider(),
 ]);
 
@@ -21,24 +21,17 @@ const wagmiClient = createClient({
 });
 
 export function useRainbow() {
-  return wagmiClient;
+  const client = wagmiClient;
+  const { chain, chains } = useNetwork();
+  const { address } = useAccount();
+  const provider = useProvider();
+  return {
+    client,
+    chainId: chain?.id,
+    chains,
+    account: address,
+    provider,
+    isConnected: client.status === 'connected',
+    isActivating: client.status === 'connecting',
+  };
 }
-
-export function useChainId() {
-  return wagmiClient.data?.chain?.id;
-}
-
-export function useAccount() {
-  return wagmiClient.data?.account;
-}
-
-export function useProvider() {
-  return wagmiClient.getProvider();
-}
-
-export function useRainbowChains() {
-  const chains = wagmiClient.chains;
-  return chains;
-}
-
-export const rainbowChains = chains;

@@ -14,9 +14,8 @@ import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
-import { Chain } from '@rainbow-me/rainbowkit';
 import { SUPPORTED_CHAIN_IDS } from '../../constants';
-import { useChainId, useRainbow, useRainbowChains } from '../../hooks/useRainbow';
+import { useRainbow } from '../../hooks/useRainbow';
 import { InputFieldWithIcon } from '../../components/Input';
 
 const StyledDomainsWrapper = styled(Flex)`
@@ -152,13 +151,9 @@ function Domains({ address }: DomainsProps) {
  * A logic wrapper around Domains components
  */
 export function DomainsHome() {
-  const rainbow = useRainbow();
-  const chainId = useChainId();
-  const address = rainbow.data?.account;
-  const isConnected = rainbow.status === 'connected';
+  const { client, chainId, account, isConnected } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
-
   if (isConnected !== true) {
     navigate('/');
     return <Container />;
@@ -171,5 +166,5 @@ export function DomainsHome() {
       </Container>
     );
   }
-  return <Domains address={address as string} />;
+  return <Domains address={account as string} />;
 }

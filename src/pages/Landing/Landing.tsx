@@ -32,7 +32,7 @@ export function Landing() {
             </HeroLead>
           </HeroText>
           <ConnectButton.Custom>
-            {({ account, chain, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
+            {({ account, chain, openConnectModal, authenticationStatus, mounted }) => {
               const ready = mounted && authenticationStatus !== 'loading';
               const connected =
                 ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
