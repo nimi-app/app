@@ -101,43 +101,21 @@ export function getChainLabel(chainId: ChainId): string {
 }
 
 /**
- * List of chain IDs.
+ * List of chain IDs that are supported in the current environment: production or development.
  */
-export const SUPPORTED_CHAIN_IDS = [ChainId.MAINNET, ChainId.GOERLI];
-/**
- * LIST OF ALL CHAINS THAT CAN BE SUPPORTED BY WAGMI
- */
-export const SUPPORTABLE_WAGMI_CHAINS = [
-  chain.mainnet,
-  chain.goerli,
-  chain.sepolia,
-  chain.optimism,
-  chain.optimismGoerli,
-  chain.polygon,
-  chain.polygonMumbai,
-  chain.arbitrum,
-  chain.arbitrumGoerli,
-  chain.localhost,
-  chain.hardhat,
-  chain.foundry,
-];
+export const ENV_SUPPORTED_CHAIN_IDS =
+  process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : [ChainId.MAINNET, ChainId.GOERLI];
 
 /**
- * PARSE THROUGH AND PICK THE CHAINS FROM SUPPORTABLE_WAGMI_CHAINS BASED ON THE LIST FROM CHAINS
+ * Parse through and pick the chains from SUPPORTABLE_WAGMI_CHAINS based on the list from ENV_SUPPORTED_CHAIN_IDS;
  */
-export const SUPPORT_CHAINS_RAINBOW_KIT = SUPPORTED_CHAIN_IDS.map((key) => {
-  for (const sc of SUPPORTABLE_WAGMI_CHAINS) {
-    if (key === sc.id) {
-      return sc;
+export const SUPPORT_CHAINS_RAINBOW_KIT = ENV_SUPPORTED_CHAIN_IDS.map((key) => {
+  for (const sc of Object.keys(chain)) {
+    if (key === chain[sc].id) {
+      return chain[sc];
     }
     return undefined;
   }
 }).filter((c) => c !== undefined) as Chain[];
-
-/**
- * List of chain IDs that are supported in the current environment: production or development.
- */
-export const ENV_SUPPORTED_CHAIN_IDS =
-  process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : SUPPORTED_CHAIN_IDS;
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];

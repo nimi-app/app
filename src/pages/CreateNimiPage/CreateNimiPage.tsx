@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { SUPPORTED_CHAIN_IDS } from '../../constants';
+import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { CreateNimiContainer } from '../../components/CreateNimi/CreateNimiContainer';
 import { useTranslation } from 'react-i18next';
 import { Container } from '@nimi.io/card';
@@ -34,7 +34,7 @@ export function CreateNimiPage() {
     return <Container />;
   }
 
-  if (SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
+  if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
     return (
       <Container>
         <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>

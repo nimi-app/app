@@ -12,7 +12,7 @@ import { NimiSignatureColor } from '../../theme';
 import { DottedButtonBase } from '../../components/Button/styled';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
-import { SUPPORTED_CHAIN_IDS } from '../../constants';
+import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { useRainbow } from '../../hooks/useRainbow';
 import { InputFieldWithIcon } from '../../components/Input';
 
@@ -156,7 +156,7 @@ export function DomainsHome() {
     navigate('/');
     return <Container />;
   }
-  if (SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
+  if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
     return (
       <Container>
         <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
