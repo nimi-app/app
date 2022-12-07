@@ -33,6 +33,7 @@ export function CreateNimiPage() {
     navigate('/');
     return <Container />;
   }
+
   if (SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
     return (
       <Container>
