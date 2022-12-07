@@ -3,6 +3,7 @@ import { configureChains, createClient, useProvider, useNetwork, useAccount } fr
 import { getDefaultWallets } from '@rainbow-me/rainbowkit';
 import { SUPPORT_CHAINS_RAINBOW_KIT } from '../constants';
 import { publicProvider } from 'wagmi/providers/public';
+import { useSignMessage } from 'wagmi';
 
 const { chains, provider } = configureChains(SUPPORT_CHAINS_RAINBOW_KIT, [
   alchemyProvider({ apiKey: process.env.ALCHEMY_ID as string }),

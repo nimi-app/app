@@ -10,7 +10,6 @@ import { NotFound } from './NotFound';
 import { Landing } from './Landing';
 
 import { Footer } from '../components/Footer';
-import { WalletModal } from '../components/WalletModal';
 import { CreateNimiPage } from './CreateNimiPage';
 import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
@@ -54,7 +53,6 @@ export function App() {
       <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
         <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
           <QueryClientProvider client={queryClient}>
-            <WalletModal />
             <Routes>
               <Route element={<NimiConnectAppWrapper />} path="/connect" />
               <Route element={<DomainsAppWrapper />} path="domains/*" />

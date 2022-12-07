@@ -6,7 +6,6 @@ import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { NimiThemeType } from '@nimi.io/card';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
-import { useSignMessage } from 'wagmi';
 
 import {
   Nimi,
@@ -85,7 +84,7 @@ import { generateID } from '../../utils';
 import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import { TemplatePickerButton } from '../TemplatePickerButton';
 import { useRainbow } from '../../hooks/useRainbow';
-import { useSigner, useNetwork } from 'wagmi';
+import { useSignMessage } from 'wagmi';
 import { ImportFromLinktreeModal } from './partials/LinktreeModal';
 
 const themes = {

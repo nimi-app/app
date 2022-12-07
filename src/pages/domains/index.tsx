@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Pagination } from '../../components/Pagination/';
-import { useWeb3React } from '@web3-react/core';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Flex } from 'rebass';

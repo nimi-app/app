@@ -41,7 +41,6 @@ export function Web3Status() {
   const { t } = useTranslation();
   const { client, chainId, provider, isConnected, isActivating, account } = useRainbow();
   const { avatar } = useENSAvatar();
-  const isActive = isConnected === true;
   const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
 
   const [ensName, setEnsName] = useState('');
@@ -62,14 +61,14 @@ export function Web3Status() {
     if (isActivating) {
       return t('connecting');
     }
-    if (isActive && account) {
+    if (isConnected && account) {
       if (ensName.length > 0) {
         return ensName;
       }
       return shortenAddress(account, 2, 4);
     }
     return t('connect');
-  }, [isActivating, isActive, account, ensName, isWrongNetwork, t]);
+  }, [isActivating, isConnected, account, ensName, isWrongNetwork, t]);
   return (
     <ConnectButton.Custom>
       {({ account, chain, openChainModal, openAccountModal, openConnectModal, authenticationStatus, mounted }) => {
