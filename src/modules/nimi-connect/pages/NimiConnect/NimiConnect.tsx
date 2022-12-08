@@ -1,21 +1,20 @@
-import { useWeb3React } from '@web3-react/core';
-
-import { Container } from '../../../../components/Container';
 import { Button } from '../../../../components/Button';
+import { Container } from '../../../../components/Container';
+import { ENV_SUPPORTED_CHAIN_IDS } from '../../../../constants';
+import { useRainbow } from '../../../../hooks/useRainbow';
 import { useWalletSwitcherPopoverToggle } from '../../../../state/application/hooks';
 import { NimiConnectContainer } from '../../containers/NimiConnectContainer';
-import { ENV_SUPPORTED_CHAIN_IDS } from '../../../../constants';
 
 /**
  * An experimental page for NimiConnect
  */
 export function NimiConnect() {
-  const { isActive, account, chainId } = useWeb3React();
+  const { isConnected, account, chainId } = useRainbow();
   const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
   const onCTAClick = () => openWalletSwitcherPopover();
   const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
 
-  if (!account || !isActive) {
+  if (!account || !isConnected) {
     return (
       <Container>
         <Button onClick={onCTAClick}>

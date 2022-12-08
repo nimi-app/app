@@ -1,8 +1,6 @@
-import type { AddEthereumChainParameter } from '@web3-react/types';
-export const NetworkContextName = 'NETWORK';
-
 import { NimiLinkType } from '@nimi.io/card';
 import { CSSProperties } from 'styled-components';
+import { chain } from 'wagmi';
 
 export interface NetworkDetails {
   chainId: string;
@@ -99,87 +97,16 @@ export function getChainLabel(chainId: ChainId): string {
   );
 }
 
-const ETH: AddEthereumChainParameter['nativeCurrency'] = {
-  name: 'Ether',
-  symbol: 'ETH',
-  decimals: 18,
-};
-
-interface BasicChainInformation {
-  urls: string[];
-  name: string;
-}
-
-interface ExtendedChainInformation extends BasicChainInformation {
-  nativeCurrency: AddEthereumChainParameter['nativeCurrency'];
-  blockExplorerUrls: AddEthereumChainParameter['blockExplorerUrls'];
-}
-
-function isExtendedChainInformation(
-  chainInformation: BasicChainInformation | ExtendedChainInformation
-): chainInformation is ExtendedChainInformation {
-  return !!(chainInformation as ExtendedChainInformation).nativeCurrency;
-}
-
-export function getAddChainParameters(chainId: number): AddEthereumChainParameter | number {
-  const chainInformation = CHAINS[chainId];
-  if (isExtendedChainInformation(chainInformation)) {
-    return {
-      chainId,
-      chainName: chainInformation.name,
-      nativeCurrency: chainInformation.nativeCurrency,
-      rpcUrls: chainInformation.urls,
-      blockExplorerUrls: chainInformation.blockExplorerUrls,
-    };
-  } else {
-    return chainId;
-  }
-}
-
-/**
- * List of chains and their information.
- */
-export const CHAINS: Record<number, BasicChainInformation | ExtendedChainInformation> = {
-  [ChainId.MAINNET]: {
-    urls: [
-      process.env.infuraKey ? `https://mainnet.infura.io/v3/${process.env.infuraKey}` : undefined,
-      process.env.alchemyKey ? `https://eth-mainnet.alchemyapi.io/v2/${process.env.alchemyKey}` : undefined,
-      'https://cloudflare-eth.com',
-    ].filter((url) => url !== undefined) as string[],
-    nativeCurrency: ETH,
-    name: 'Ethereum',
-  },
-  [ChainId.GOERLI]: {
-    urls: [process.env.infuraKey ? `https://goerli.infura.io/v3/${process.env.infuraKey}` : undefined].filter(
-      (url) => url !== undefined
-    ) as string[],
-    nativeCurrency: ETH,
-    name: 'Görli',
-  },
-};
-
-export const URLS: { [chainId: number]: string[] } = Object.keys(CHAINS).reduce<{ [chainId: number]: string[] }>(
-  (accumulator, chainId) => {
-    const validURLs: string[] = CHAINS[Number(chainId)].urls;
-
-    if (validURLs.length) {
-      accumulator[Number(chainId)] = validURLs;
-    }
-
-    return accumulator;
-  },
-  {}
-);
-
-/**
- * List of chain IDs.
- */
-export const SUPPORTED_CHAIN_IDS = Object.keys(CHAINS).map((key) => Number(key));
-
 /**
  * List of chain IDs that are supported in the current environment: production or development.
  */
 export const ENV_SUPPORTED_CHAIN_IDS =
-  process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : SUPPORTED_CHAIN_IDS;
+  process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : [ChainId.MAINNET, ChainId.GOERLI];
+
+/**
+ * Parse through and pick the chains from SUPPORTABLE_WAGMI_CHAINS based on the list from ENV_SUPPORTED_CHAIN_IDS;
+ */
+export const SUPPORT_CHAINS_RAINBOW_KIT =
+  process.env.REACT_APP_ENV === 'production' ? [chain.mainnet] : [chain.mainnet, chain.goerli];
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];

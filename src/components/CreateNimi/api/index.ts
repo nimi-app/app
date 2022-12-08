@@ -1,5 +1,6 @@
-import axios from 'axios';
 import { Nimi } from '@nimi.io/card';
+import axios from 'axios';
+
 import { getAPIBaseURL } from '../../../modules/api-service';
 
 interface PublishNimiApiResponseDeprecated {

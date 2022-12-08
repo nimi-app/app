@@ -1,13 +1,7 @@
-import { useWeb3React } from '@web3-react/core';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { useMemo } from 'react';
 
-import { shortenAddress } from '../../utils';
-
-import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
-import { useENSAvatar } from '../../hooks/useENSAvatar';
-import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
 
@@ -41,37 +35,59 @@ const StyledTextContent = styled.span`
 
 export function Web3Status() {
   const { t } = useTranslation();
-  const { isActive, isActivating, account, ENSName, chainId } = useWeb3React();
-  const { avatar } = useENSAvatar();
-  const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
-  const isWrongNetwork = !chainId || !ENV_SUPPORTED_CHAIN_IDS.includes(chainId);
-
-  const statusContent = useMemo(() => {
-    if (isWrongNetwork) {
-      return t('error.unsupportedNetwork');
-    }
-
-    if (isActivating) {
-      return t('connecting');
-    }
-
-    if (isActive && account) {
-      if (ENSName) {
-        return ENSName;
-      }
-
-      return shortenAddress(account, 2, 4);
-    }
-
-    return t('connect');
-  }, [isActivating, isActive, account, ENSName, isWrongNetwork, t]);
 
   return (
-    <StyledWrapper isError={isWrongNetwork} onClick={openWalletSwitcherPopover}>
-      <Web3Avatar url={avatar} alt={ENSName || account} />
-      <StyledInnerWrapper>
-        <StyledTextContent>{statusContent}</StyledTextContent>
-      </StyledInnerWrapper>
-    </StyledWrapper>
+    <ConnectButton.Custom>
+      {({ account, chain, openChainModal, openAccountModal, openConnectModal, authenticationStatus, mounted }) => {
+        const ready = mounted && authenticationStatus !== 'loading';
+        const connected =
+          ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
+        return (
+          <div
+            {...(!ready && {
+              'aria-hidden': true,
+              style: {
+                opacity: 0,
+                pointerEvents: 'none',
+                userSelect: 'none',
+              },
+            })}
+          >
+            {(() => {
+              if (!connected) {
+                return (
+                  <StyledWrapper isError={false} onClick={openConnectModal}>
+                    <Web3Avatar />
+                    <StyledInnerWrapper>
+                      <StyledTextContent>{t('connect')}</StyledTextContent>
+                    </StyledInnerWrapper>
+                  </StyledWrapper>
+                );
+              }
+
+              if (chain.unsupported) {
+                return (
+                  <StyledWrapper isError={chain.unsupported} onClick={openChainModal}>
+                    <Web3Avatar url={account.ensAvatar} alt={account.displayName} />
+
+                    <StyledInnerWrapper>
+                      <StyledTextContent>{t('error.unsupportedNetwork')}</StyledTextContent>
+                    </StyledInnerWrapper>
+                  </StyledWrapper>
+                );
+              }
+              return (
+                <StyledWrapper isError={false} onClick={openAccountModal}>
+                  <Web3Avatar url={account.ensAvatar} alt={account.displayName} />
+                  <StyledInnerWrapper>
+                    <StyledTextContent>{account.displayName}</StyledTextContent>
+                  </StyledInnerWrapper>
+                </StyledWrapper>
+              );
+            })()}
+          </div>
+        );
+      }}
+    </ConnectButton.Custom>
   );
 }

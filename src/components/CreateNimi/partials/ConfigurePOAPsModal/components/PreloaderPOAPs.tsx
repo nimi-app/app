@@ -1,5 +1,5 @@
-import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { PreloaderPOAP } from './POAPs';
+import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 
 export const PreloaderPOAPs = () => (
   <PresentedPOAPsContainer>

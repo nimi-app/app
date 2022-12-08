@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+
 import { ApplicationState } from './reducer';
 
 export enum ApplicationModal {

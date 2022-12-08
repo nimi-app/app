@@ -18,6 +18,8 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
     "plugin:prettier/recommended"
   ],
   "rules": {
@@ -27,6 +29,16 @@
     "@typescript-eslint/no-explicit-any": "off",
     "react/react-in-jsx-scope": "off", // React 17+
     "react/prop-types": "off",
+    "import/no-unresolved": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
     "@typescript-eslint/member-delimiter-style": [
       "error",
       {
@@ -38,6 +50,38 @@
           "delimiter": "semi", // 'semi' or 'comma'
           "requireLast": false
         }
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": ["internal", ["builtin", "external"], ["parent", "sibling"]],
+        "pathGroups": [
+          {
+            "pattern": "@swapr/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "@ethersproject/**",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "caseInsensitive": true,
+          "order": "asc"
+        }
+      }
+    ],
+    "sort-imports": [
+      "error",
+      {
+        "allowSeparatedGroups": true,
+        "ignoreCase": true,
+        "ignoreDeclarationSort": true,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
       }
     ]
   }

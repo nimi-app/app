@@ -1,11 +1,13 @@
 import styled from 'styled-components';
+
 import { ExternalLink, NimiSignatureColor } from '../../theme';
 import { Card } from '../Card';
 
 export const StyledENSNameCardWrapper = styled(Card)`
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   padding-top: 42px;
+  padding-left: 22px;
   flex-direction: row;
   padding-bottom: 42px;
   width: 308px;

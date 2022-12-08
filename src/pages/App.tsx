@@ -1,22 +1,23 @@
-import { ApolloProvider } from '@apollo/client';
+import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from 'styled-components';
+import { WagmiConfig } from 'wagmi';
 
-import { defaultEnsClient, ensClients } from '../apollo/client';
-import { useActiveWeb3React } from '../hooks/useWeb3';
-import { Header } from '../components/Header';
-
-import { NotFound } from './NotFound';
-import { Landing } from './Landing';
-import { DomainsHome } from './domains';
 import { Footer } from '../components/Footer';
-import { WalletModal } from '../components/WalletModal';
-import { CreateNimiPage } from './CreateNimiPage';
+import { Header } from '../components/Header';
+import { useRainbow } from '../hooks/useRainbow';
+import { AppWrapper } from '../modules/app-wrapper';
 import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
-import { AppWrapper } from '../modules/app-wrapper';
+import { CreateNimiPage } from './CreateNimiPage';
+import { DomainsHome } from './domains';
+import { Landing } from './Landing';
+import { NotFound } from './NotFound';
+
+import '@rainbow-me/rainbowkit/styles.css';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>
@@ -33,10 +34,15 @@ const NimiConnectAppWrapper = () => (
   </AppWrapper>
 );
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { refetchOnWindowFocus: false },
+  },
+});
+
 export function App() {
-  // const [isConnectingEagerly, setIsConnectingEagerly] = useState(true);
-  const { chainId } = useActiveWeb3React();
   const theme = useTheme();
+  const { client, chains } = useRainbow();
 
   useEffect(() => {
     // Load Fathom if it's set in .env
@@ -46,16 +52,19 @@ export function App() {
   }, []);
 
   return (
-    <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
-      <ApolloProvider client={ensClients[chainId as number] || defaultEnsClient}>
-        <WalletModal />
-        <Routes>
-          <Route element={<NimiConnectAppWrapper />} path="/connect" />
-          <Route element={<DomainsAppWrapper />} path="domains/*" />
-          <Route element={<Landing />} path="/" />
-          <Route element={<NotFound />} path="*" />
-        </Routes>
-      </ApolloProvider>
-    </SkeletonTheme>
+    <WagmiConfig client={client}>
+      <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
+        <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
+          <QueryClientProvider client={queryClient}>
+            <Routes>
+              <Route element={<NimiConnectAppWrapper />} path="/connect" />
+              <Route element={<DomainsAppWrapper />} path="domains/*" />
+              <Route element={<Landing />} path="/" />
+              <Route element={<NotFound />} path="*" />
+            </Routes>
+          </QueryClientProvider>
+        </SkeletonTheme>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }

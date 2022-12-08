@@ -1,7 +1,9 @@
 import styled from 'styled-components';
-import Twitter from '../../assets/svg/twitter-logo.svg';
+
 import Lens from '../../assets/svg/lens-logo.svg';
+import Linktree from '../../assets/svg/linktree.svg';
 import Nft from '../../assets/svg/nft-logo.svg';
+import Twitter from '../../assets/svg/twitter-logo.svg';
 
 const Button = styled.button`
   display: flex;
@@ -35,6 +37,7 @@ const Logos = {
   Twitter: Twitter,
   Lens: Lens,
   Nft: Nft,
+  Linktree: Linktree,
 };
 
 export function ImporButton({ onClick, type, disabled = false }: ImportButtonProps) {

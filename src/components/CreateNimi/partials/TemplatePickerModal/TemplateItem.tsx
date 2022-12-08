@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { MEDIA_WIDTHS } from '../../../../theme';
 import { Theme } from '../../../../types';
 
@@ -69,7 +70,6 @@ const ThemePreview = styled.img`
   right: 0;
   border-radius: 14px;
   border: 5px solid white;
-
   @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
     display: none;
   }

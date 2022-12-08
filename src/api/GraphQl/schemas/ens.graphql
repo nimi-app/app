@@ -1,0 +1,69 @@
+query getDomainsByNamehash($domainId: ID!) {
+  domain(id: $domainId) {
+    id
+    labelName
+    subdomains {
+      id
+      labelName
+      labelhash
+      isMigrated
+      name
+      owner {
+        id
+      }
+    }
+  }
+}
+
+query getDomainsOwnedOrControlledBy(
+  $addressID: ID!
+  $addressString: String!
+  $searchString: String
+  $first: Int
+  $skip: Int
+  $orderBy: Domain_orderBy
+  $chainId: Int
+) {
+  account(id: $addressID) {
+    domainsOwned: domains(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      where: { name_contains_nocase: $searchString }
+    ) {
+      id
+      labelName
+      labelhash
+      name
+      parent {
+        name
+      }
+    }
+  }
+  domainsControlled: domains(
+    first: $first
+    skip: $skip
+    orderBy: $orderBy
+    where: { name_contains_nocase: $searchString, owner: $addressString }
+  ) {
+    id
+    labelName
+    labelhash
+    name
+    owner {
+      id
+    }
+  }
+}
+
+query getDomainFromSubgraph($domainId: ID!) {
+  domain(id: $domainId) {
+    id
+    name
+    labelName
+    labelhash
+    owner {
+      id
+    }
+  }
+}

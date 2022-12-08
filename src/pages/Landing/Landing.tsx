@@ -1,30 +1,17 @@
-import { useWeb3React } from '@web3-react/core';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
-// SVGs
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
-import { useWalletSwitcherPopoverToggle } from '../../state/application/hooks';
-// Styled components
-import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
+import { Content, Header, HeaderEyebrow, HeroLead, HeroText, PageWrapper } from './styled';
+import '@rainbow-me/rainbowkit/styles.css';
 
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
-
-  const { isActive, account } = useWeb3React();
   const navigate = useNavigate();
-  const openWalletSwitcherPopover = useWalletSwitcherPopoverToggle();
-
-  const onCTAClick = () => {
-    if (isActive && account) {
-      navigate('/domains');
-    } else {
-      openWalletSwitcherPopover();
-    }
-  };
 
   return (
     <PageWrapper>
@@ -45,9 +32,36 @@ export function Landing() {
               </Trans>
             </HeroLead>
           </HeroText>
-          <Button onClick={onCTAClick}>
-            <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
-          </Button>
+          <ConnectButton.Custom>
+            {({ account, chain, openConnectModal, authenticationStatus, mounted }) => {
+              const ready = mounted && authenticationStatus !== 'loading';
+              const connected =
+                ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
+              return (
+                <div
+                  {...(!ready && {
+                    'aria-hidden': true,
+                    style: {
+                      opacity: 0,
+                      pointerEvents: 'none',
+                      userSelect: 'none',
+                    },
+                  })}
+                >
+                  {(() => {
+                    if (!connected) {
+                      return (
+                        <Button onClick={openConnectModal}>
+                          <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
+                        </Button>
+                      );
+                    }
+                    navigate('/domains');
+                  })()}
+                </div>
+              );
+            }}
+          </ConnectButton.Custom>
         </Container>
       </Content>
       <Footer />

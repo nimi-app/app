@@ -1,7 +1,9 @@
-import Frame, { FrameContextConsumer } from 'react-frame-component';
-import { filterEmptyFields, Nimi, NimiCard, validateNimi, nimiLinkValidator } from '@nimi.io/card';
+import { filterEmptyFields, Nimi, NimiCard, nimiLinkValidator, validateNimi } from '@nimi.io/card';
+import createDebugger from 'debug';
 import { useEffect, useState } from 'react';
+import Frame, { FrameContextConsumer } from 'react-frame-component';
 import styled, { StyleSheetManager } from 'styled-components';
+
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
 import { Card as CardBase } from '../../../Card';
 
@@ -20,6 +22,8 @@ const PreviewFrame = styled(Frame)`
   border: 0;
 `;
 
+const debug = createDebugger('components:NimiPreviewCard');
+
 export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   const [previewNimi, setPreviewNimi] = useState<Nimi>();
 
@@ -35,7 +39,9 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
             return isLinkValid;
           })
           .catch((error) => {
-            console.log('error', error);
+            debug({
+              error,
+            });
             return false;
           })
       )

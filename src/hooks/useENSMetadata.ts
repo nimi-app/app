@@ -1,9 +1,9 @@
-import { useWeb3React } from '@web3-react/core';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-
 import { CID } from 'multiformats/cid';
+import { useEffect, useState } from 'react';
+
 import { ChainId } from '../constants';
+import { useRainbow } from './useRainbow';
 
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
 
@@ -52,46 +52,63 @@ const supportedENSChainIds = [ChainId.MAINNET, ChainId.GOERLI];
  * docs: https://metadata.ens.domains/docs#/paths/~1%7BnetworkName%7D~1avatar~1%7Bname%7D~1meta/get
  */
 export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
-  const [data, setData] = useState<ENSMetadata>();
+  const { client, chainId, account } = useRainbow();
+  const [ensData, setData] = useState<ENSMetadata>();
   const [loading, setLoading] = useState<boolean>(true);
-  const { chainId, ENSName } = useWeb3React();
+  const [ensName, setEnsName] = useState('');
+  const [ensNameQueryInitiated, setEnsNameQuery] = useState(false);
+  if (
+    customENSLookup === undefined &&
+    account !== undefined &&
+    account !== null &&
+    ensName === '' &&
+    ensNameQueryInitiated === false
+  ) {
+    setEnsNameQuery(true);
+    client
+      .getProvider()
+      .lookupAddress(account.toLowerCase())
+      .then((r) => {
+        if (r !== null) {
+          setEnsName(r);
+        }
+      });
+  }
 
   useEffect(() => {
     // ENS supports Mainnet and Goerli
-    if (!chainId || !supportedENSChainIds.includes(chainId) || !ENSName) {
+    if (!chainId || !supportedENSChainIds.includes(chainId) || !ensName) {
       setLoading(false);
       return;
     }
-
     const networkName = supportedENSNetworks[chainId];
-
     axios
       .get<ENSMetadata>(
-        `https://metadata.ens.domains/${networkName}/avatar/${customENSLookup ? customENSLookup : ENSName}/meta`
+        `https://metadata.ens.domains/${networkName}/avatar/${customENSLookup ? customENSLookup : ensName}/meta`
       )
-      .then(({ data }) => {
-        if ('image' in data && data.image) {
-          if (data.image.startsWith('ipfs://ipfs/')) {
-            data.image = data.image.replace('ipfs://ipfs/', IPFS_GATEWAY);
-          } else if (data.image.startsWith('ipfs://')) {
-            data.image = data.image.replace('ipfs://', IPFS_GATEWAY);
-          } else if (data.image.startsWith('ipfs/')) {
-            data.image = data.image.replace('ipfs/', IPFS_GATEWAY);
-          } else if (isCID(data.image)) {
-            data.image = `${IPFS_GATEWAY}${data.image}`;
+      .then(({ data: ensData }) => {
+        if ('image' in ensData && ensData.image) {
+          if (ensData.image.startsWith('ipfs://ipfs/')) {
+            ensData.image = ensData.image.replace('ipfs://ipfs/', IPFS_GATEWAY);
+          } else if (ensData.image.startsWith('ipfs://')) {
+            ensData.image = ensData.image.replace('ipfs://', IPFS_GATEWAY);
+          } else if (ensData.image.startsWith('ipfs/')) {
+            ensData.image = ensData.image.replace('ipfs/', IPFS_GATEWAY);
+          } else if (isCID(ensData.image)) {
+            ensData.image = `${IPFS_GATEWAY}${ensData.image}`;
           }
         }
-        setData(data);
+        setData(ensData);
         setLoading(false);
       })
       .catch((e) => {
         setLoading(false);
         console.error('useENSMetadata error: ', e);
       });
-  }, [chainId, ENSName, customENSLookup]);
+  }, [chainId, ensName, customENSLookup]);
 
   return {
     loading,
-    data,
+    data: ensData,
   };
 }

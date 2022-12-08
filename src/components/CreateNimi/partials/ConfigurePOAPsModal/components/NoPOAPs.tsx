@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { NoPOAP } from './POAPs';
+import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 
 export const NoPOAPs = () => (
   <PresentedPOAPsContainer>

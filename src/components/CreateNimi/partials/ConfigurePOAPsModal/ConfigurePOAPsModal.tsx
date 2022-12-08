@@ -1,16 +1,13 @@
+import { NimiWidgetType, POAPToken } from '@nimi.io/card';
+import { AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import axios from 'axios';
-import { AnimatePresence } from 'framer-motion';
-
-import { ModalBase } from '../ModalBase';
-import { NimiWidgetType } from '@nimi.io/card';
-
-import { BodyNavigation, PreloaderPOAPs, NoPOAPs, RecentPOAPs, CustomizePOAPs } from './components';
-import { POAPToken } from '@nimi.io/card';
-
-import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 import { useFormContext } from 'react-hook-form';
+
+import { getPOAPAPIClient } from '../../../../modules/poap-services';
+import { ModalBase } from '../ModalBase';
+import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
+import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 
 type ConfigurePOAPsModalProps = {
   ensAddress: string;
@@ -44,7 +41,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
       let tokens: POAPToken[] = [];
 
       try {
-        const { data: tokensData } = await axios.get(`https://api.poap.tech/actions/scan/${ensAddress}`);
+        const { data: tokensData } = await getPOAPAPIClient().get(`/actions/scan/${ensAddress}`);
 
         tokens = tokensData;
       } catch (error) {
@@ -99,11 +96,11 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
         page={page}
         openRecentPage={openRecentPage}
         openCustomPage={openCustomPage}
-        noPOAPs={items.length === 0}
+        noPOAPs={items?.length === 0}
       />
       {(() => {
         if (fetchingItems) return <PreloaderPOAPs />;
-        if (items.length === 0) return <NoPOAPs />;
+        if (items?.length === 0) return <NoPOAPs />;
         return (
           <AnimatePresence mode="wait">
             {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}

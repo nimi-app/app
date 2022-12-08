@@ -1,29 +1,28 @@
+import {
+  NIMI_BLOCKCHAIN_LOGO_URL,
+  NimiBlockchain,
+  nimiLinkDetailsExtended,
+  NimiLinkType,
+  NimiWidgetType,
+} from '@nimi.io/card';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import {
-  NimiBlockchain,
-  NimiWidgetType,
-  NimiLinkType,
-  NIMI_BLOCKCHAIN_LOGO_URL,
-  nimiLinkDetailsExtended,
-} from '@nimi.io/card';
 
+import { ReactComponent as NftyChatLogo } from '../../../../assets/svg/nftychat-logo.svg';
+import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
+import { renderSVG } from '../../../../utils';
+import { ButtonGroup } from '../../../form/Button';
 import {
   Modal,
-  Header as ModalHeaderBase,
-  Content as ModalContentBase,
   CloseButton as ModalCloseButton,
-  Title as ModalTitle,
+  Content as ModalContentBase,
+  Header as ModalHeaderBase,
   ModalSubTitle,
+  Title as ModalTitle,
 } from '../../../Modal';
 import { StyledFlexList, StyledGridList } from '../../styled';
-import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
-import { ReactComponent as NftyChatLogo } from '../../../../assets/svg/nftychat-logo.svg';
-
 import { LinksSection } from './LinksSection';
-import { ButtonGroup } from '../../../form/Button';
-import { renderSVG } from '../../../../utils';
-import { useFormContext } from 'react-hook-form';
 
 const ModalHeader = styled(ModalHeaderBase)`
   padding: 82px 82px 0 82px;

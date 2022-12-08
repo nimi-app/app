@@ -1,19 +1,22 @@
 import { FC, SVGProps, useState } from 'react';
-import { InputButton } from '../../InputButton';
 import styled from 'styled-components';
-import { SharedInputStyles } from '../../../theme';
+
 import { ReactComponent as XSVG } from '../../../assets/svg/cross.svg';
+import { SharedInputStyles } from '../../../theme';
 import { renderSVG } from '../../../utils';
+import { InputButton } from '../../InputButton';
 
 export interface InputFieldWithIcon {
   inputLogo?: FC<SVGProps<SVGSVGElement>>;
   placeholder: string;
   content: string;
-  onClearClick: any;
-  onInputClick: any;
+  onClearClick?: any;
+  onInputClick?: any;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isInvalidInput: boolean;
   id: string;
+  isSimple?: boolean;
+  style?: any;
 }
 
 /**
@@ -27,10 +30,12 @@ export function InputFieldWithIcon({
   onClearClick,
   onInputClick,
   id,
+  isSimple,
+  style,
 }: InputFieldWithIcon) {
   const [inputTouched, setInputTouched] = useState(false);
   return (
-    <InputContainer id={id}>
+    <InputContainer style={style} id={id}>
       <Logo logo={renderSVG(inputLogo, 15)} />
       <ContentInput
         inputInvalid={inputTouched && isInvalidInput}
@@ -39,8 +44,12 @@ export function InputFieldWithIcon({
         spellCheck={false}
         onBlur={setInputTouched.bind(null, true)}
       />
-      {content && <ClearButton className="clear-button" right="57px" onClick={onClearClick} />}
-      <InputButton onClick={onInputClick} />
+      {!isSimple && (
+        <>
+          {content && <ClearButton className="clear-button" right="57px" onClick={onClearClick} />}
+          <InputButton onClick={onInputClick} />
+        </>
+      )}
     </InputContainer>
   );
 }
@@ -49,6 +58,7 @@ const InputContainer = styled.div<{ marginBottom?: string }>`
   width: 100%;
   position: relative;
   background: #f0f3fb;
+  height: 50px;
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 `;
 export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string }>`

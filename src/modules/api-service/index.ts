@@ -5,12 +5,19 @@ export type NimiApiVersion = 'v1.4' | 'v1';
 
 /**
  * Returns the base URL for the Nimi API.
- * @param {NimiApiVersion} version - The version of the Nimi API to use. Defaults to the latest version.
  * @returns {string} The base URL for the Nimi API.
  */
 export function getAPIBaseURL() {
+  // If the REACT_APP_NIMI_API_BASE_URL is not set, throw an error.
   if (!process.env.REACT_APP_NIMI_API_BASE_URL) {
     throw new Error('REACT_APP_NIMI_API_BASE_URL is not set.');
+  }
+
+  if (
+    process.env.REACT_APP_NIMI_API_DEV_BASE_URL &&
+    (process.env.NODE_ENV === 'development' || process.env.REACT_APP_ENV === 'development')
+  ) {
+    return process.env.REACT_APP_NIMI_API_DEV_BASE_URL;
   }
 
   return process.env.REACT_APP_NIMI_API_BASE_URL as string;
@@ -43,7 +50,7 @@ export function fetchNimiDataByENSName(name: string) {
   return axios
     .get<{
       data: INimiByENSName[];
-    }>(`${process.env.REACT_APP_NIMI_API_BASE_URL}/nimi/by?ens=${name}`)
+    }>(`${getAPIBaseURL()}/nimi/by?ens=${name}`)
     .then(({ data }) => data.data[0]);
 }
 

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { NimiModalStyles } from '../../../theme';
 
 export const FormWrapper = styled.form`

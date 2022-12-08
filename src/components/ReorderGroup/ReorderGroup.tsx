@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
 import { Reorder } from 'framer-motion';
+import { ReactNode } from 'react';
 
 interface ReorderGroupProps {
   children: ReactNode;

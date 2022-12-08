@@ -1,11 +1,11 @@
 // Styled components
-import { TwitterLogo, FooterMain, FooterContent, FooterNav, FooterWrapper } from './styled';
 
 // SVGs
 
 import { ReactComponent as GitHubLogo } from '../../assets/svg/github-logo.svg';
 import { ExternalLink } from '../../theme';
 import { Container } from '../Container';
+import { FooterContent, FooterMain, FooterNav, FooterWrapper, TwitterLogo } from './styled';
 
 export function Footer() {
   return (
