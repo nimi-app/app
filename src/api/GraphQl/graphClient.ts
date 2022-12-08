@@ -21,6 +21,7 @@ export enum GRAPH_ENDPOINT {
 }
 
 export function GraphQlClientDynamic(chainId = 1, endpoint: GRAPH_ENDPOINT): GraphQLClient {
+  console.log('graphClient', chainId);
   let caluclatedEndpoint: string;
   switch (endpoint) {
     case GRAPH_ENDPOINT.ENS:
