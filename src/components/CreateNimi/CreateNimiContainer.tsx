@@ -7,9 +7,13 @@ import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-se
 import { Nimi } from '@nimi.io/card';
 import { useRainbow } from '../../hooks/useRainbow';
 
+import createDebugger from 'debug';
+
 type CreateNimiContainerProps = {
   ensName: string;
 };
+
+const debug = createDebugger('CreateNimiContainer');
 
 export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { account, provider } = useRainbow();
@@ -27,7 +31,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
     const fetchInitialNimi = async () => {
       try {
         const nimiData = await fetchNimiDataByENSName(ensName);
-        console.log(nimiData);
+        debug({ nimiData });
         if (nimiData) {
           setInitialNimi(nimiData.nimi);
           return;
@@ -38,7 +42,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
           setInitialNimi(initialGeneratedNimi);
         }
       } catch (error) {
-        console.log(error);
+        debug({ error });
       } finally {
         setIsLoading(false);
       }
