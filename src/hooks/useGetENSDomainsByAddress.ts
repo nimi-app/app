@@ -35,7 +35,6 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
   const { chainId } = useRainbow();
 
   function domainOrdering(data) {
-    console.log('herejshdfjhsdjfhsd', data);
     const domainsOwned = data?.account?.domainsOwned ?? [];
     const domainsControlled = data?.domainsControlled ?? [];
 
@@ -92,6 +91,7 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
       addressString: address.toLowerCase(),
       skip: page * numberOfItemsPerPage,
       first: numberOfItemsPerPage + 1,
+      chainId,
     },
     { keepPreviousData: true, select: domainOrdering }
   );
