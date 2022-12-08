@@ -36,10 +36,15 @@ const NimiConnectAppWrapper = () => (
   </AppWrapper>
 );
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { refetchOnWindowFocus: false },
+  },
+});
+
 export function App() {
   const theme = useTheme();
   const { client, chains } = useRainbow();
-  const queryClient = new QueryClient();
 
   console.log({
     chains,
