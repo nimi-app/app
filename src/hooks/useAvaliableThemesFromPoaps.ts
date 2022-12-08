@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NimiThemeType } from '@nimi.io/card';
-import axios from 'axios';
+import { getPOAPAPIClient } from '../modules/poap-services';
 
 export interface UseAvaliableTheme {
   avaliableThemes: NimiThemeType[];
@@ -28,24 +28,19 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
       //Default theme set here
       const themes: NimiThemeType[] = [NimiThemeType.NIMI];
 
-      //array of requests for checking if user has poap
-      const poapRequestsForIndividualPoaps = themeToPoapMapping.map((item) => {
-        return (
-          item.eventId &&
-          item.eventId.map((item) => axios.get(`https://api.poap.tech/actions/scan/${account.toLowerCase()}/${item}`))
-        );
+      // Get all the POAPs for the given account.
+      const userPOAPList = (await getPOAPAPIClient().get(`/actions/scan/${account.toLowerCase()}`)).data;
+
+      console.log({
+        userPOAPList,
       });
-      //resolve promises
-      const resolvedPoapRequests = await Promise.all(
-        poapRequestsForIndividualPoaps.map(async (item) => {
-          if (item) return await Promise.allSettled(item);
-        })
-      );
-      //sorted array of avaliable themes based on requests
-      resolvedPoapRequests.forEach((item, index) => {
-        const hasTheme = item && item.some((item) => item.status === 'fulfilled');
-        if (hasTheme) themes.unshift(themeToPoapMapping[index].theme);
-      });
+
+      for (const theme of themeToPoapMapping) {
+        const hasTheme = userPOAPList.some((poap) => theme.eventId.includes(poap.event.id));
+        if (hasTheme) {
+          themes.unshift(theme.theme);
+        }
+      }
 
       setAvaliableThemes(themes);
       setLoading(false);

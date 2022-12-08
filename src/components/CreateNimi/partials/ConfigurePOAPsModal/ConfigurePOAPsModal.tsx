@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import axios from 'axios';
 import { AnimatePresence } from 'framer-motion';
 
 import { ModalBase } from '../ModalBase';
@@ -11,6 +10,7 @@ import { POAPToken } from '@nimi.io/card';
 
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 import { useFormContext } from 'react-hook-form';
+import { getPOAPAPIClient } from '../../../../modules/poap-services';
 
 type ConfigurePOAPsModalProps = {
   ensAddress: string;
@@ -44,7 +44,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
       let tokens: POAPToken[] = [];
 
       try {
-        const { data: tokensData } = await axios.get(`https://api.poap.tech/actions/scan/${ensAddress}`);
+        const { data: tokensData } = await getPOAPAPIClient().get(`/actions/scan/${ensAddress}`);
 
         tokens = tokensData;
       } catch (error) {
