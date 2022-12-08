@@ -96,11 +96,11 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
         page={page}
         openRecentPage={openRecentPage}
         openCustomPage={openCustomPage}
-        noPOAPs={items.length === 0}
+        noPOAPs={items?.length === 0}
       />
       {(() => {
         if (fetchingItems) return <PreloaderPOAPs />;
-        if (items.length === 0) return <NoPOAPs />;
+        if (items?.length === 0) return <NoPOAPs />;
         return (
           <AnimatePresence mode="wait">
             {page === 'recent' && <RecentPOAPs key="recent-poaps" items={items} />}

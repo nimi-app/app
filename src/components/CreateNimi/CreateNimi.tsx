@@ -164,6 +164,13 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
+  debug({
+    initialNimi,
+    theme: {
+      type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
+    },
+  });
+
   // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
