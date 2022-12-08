@@ -6,7 +6,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { Provider } from '@ethersproject/providers';
 
 const { chains, provider } = configureChains(SUPPORT_CHAINS_RAINBOW_KIT, [
-  alchemyProvider({ apiKey: process.env.ALCHEMY_ID as string }),
+  alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_API_KEY as string }),
   publicProvider(),
 ]);
 
@@ -34,15 +34,16 @@ interface RainbowHookTypes {
 export function useRainbow(): RainbowHookTypes {
   const client = wagmiClient;
   const { chain, chains } = useNetwork();
-  const { address } = useAccount();
+  const { address, isConnected, isConnecting } = useAccount();
   const provider = useProvider();
+
   return {
     client,
     chainId: chain?.id,
     chains,
     account: address,
     provider,
-    isConnected: client.status === 'connected',
-    isActivating: client.status === 'connecting',
+    isConnected,
+    isActivating: isConnecting,
   };
 }
