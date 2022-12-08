@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useRainbow } from './useRainbow';
-import { GraphQlClientDynamic, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
+
+import { GRAPH_ENDPOINT, GraphQlClientDynamic } from '../api/GraphQl/graphClient';
 import { useGetDefaultLensProfileQuery } from '../api/GraphQl/schemas/generated/lens';
+import { useRainbow } from './useRainbow';
 export interface LensDefaultProfileData {
   name: string;
   description: string;

@@ -1,15 +1,13 @@
+import { POAPToken } from '@nimi.io/card';
+import { Reorder } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Reorder } from 'framer-motion';
-
-import { AnimatedSection } from './AnimatedSection';
-import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
-import { StaticPOAP } from './POAPs';
-import { ReorderItem } from './ReorderItem';
 
 import { ReactComponent as TrashCanSVG } from '../../../../../assets/svg/trash-can.svg';
-
-import { POAPToken } from '@nimi.io/card';
+import { AnimatedSection } from './AnimatedSection';
+import { StaticPOAP } from './POAPs';
+import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
+import { ReorderItem } from './ReorderItem';
 
 export const CustomizePOAPs = ({
   items,

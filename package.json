@@ -105,6 +105,7 @@
     "@types/styled-components": "^5.1.25",
     "dotenv": "^16.0.3",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.6.2",
     "react-app-rewired": "^2.2.1",

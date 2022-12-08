@@ -1,11 +1,12 @@
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+
 import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
-import { Content, Header, HeroLead, HeroText, PageWrapper, HeaderEyebrow } from './styled';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Content, Header, HeaderEyebrow, HeroLead, HeroText, PageWrapper } from './styled';
 import '@rainbow-me/rainbowkit/styles.css';
 
 export function Landing() {

@@ -1,6 +1,6 @@
 import { AnimatedSection } from './AnimatedSection';
-import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { StaticPOAP } from './POAPs';
+import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 
 export const RecentPOAPs = ({ items }) => (
   <AnimatedSection>

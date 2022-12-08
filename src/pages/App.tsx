@@ -1,25 +1,23 @@
+import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from 'styled-components';
-
-import { Header } from '../components/Header';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-import { NotFound } from './NotFound';
-import { Landing } from './Landing';
+import { WagmiConfig } from 'wagmi';
 
 import { Footer } from '../components/Footer';
-import { CreateNimiPage } from './CreateNimiPage';
+import { Header } from '../components/Header';
+import { useRainbow } from '../hooks/useRainbow';
+import { AppWrapper } from '../modules/app-wrapper';
 import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
-import { AppWrapper } from '../modules/app-wrapper';
+import { CreateNimiPage } from './CreateNimiPage';
 import { DomainsHome } from './domains';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { Chain } from '@rainbow-me/rainbowkit';
+import { Landing } from './Landing';
+import { NotFound } from './NotFound';
+
 import '@rainbow-me/rainbowkit/styles.css';
-import { WagmiConfig } from 'wagmi';
-import { useRainbow } from '../hooks/useRainbow';
 
 const DomainsAppWrapper = () => (
   <AppWrapper header={<Header />} footer={<Footer />}>

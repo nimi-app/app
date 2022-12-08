@@ -1,14 +1,14 @@
-import { PropsWithChildren } from 'react';
-import {} from 'styled-components/macro';
-import ReactModal from 'react-modal';
 import { Property } from 'csstype';
+import { PropsWithChildren } from 'react';
+import ReactModal from 'react-modal';
+
 // Import the the Modal components
 import {
+  StyledCloseModalButton,
   StyledModalBackdrop,
   StyledModalDialog,
   StyledModalInnerWrapper,
   StyledModalOutterWrapper,
-  StyledCloseModalButton,
 } from './styled';
 // Export the three main modal elements
 export {

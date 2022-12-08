@@ -1,6 +1,6 @@
-import { ReactNode, MouseEvent } from 'react';
-import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { MouseEvent, ReactNode } from 'react';
+import styled from 'styled-components';
 
 import { ReactComponent as CloseIcon } from '../../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../../theme';

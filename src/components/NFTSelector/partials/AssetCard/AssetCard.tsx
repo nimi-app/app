@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { NFTAsset } from '../../NFTSelector.types';
 
 export interface AssetCardProps {

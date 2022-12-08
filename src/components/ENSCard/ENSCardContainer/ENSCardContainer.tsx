@@ -1,13 +1,14 @@
-import { Link } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import createDebugger from 'debug';
 import { useInView } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
+import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
+import { fetchNimiDataByENSName } from '../../../modules/api-service';
 import { PopulatedENSCard } from '../PopulatedENSCard';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
-import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
-import createDebugger from 'debug';
-import { useENSMetadata } from '../../../hooks/useENSMetadata';
-import { fetchNimiDataByENSName } from '../../../modules/api-service';
 
 type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[] ? ElementType : never;
 

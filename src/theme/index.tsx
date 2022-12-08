@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  ThemeProvider as StyledComponentsThemeProvider,
   createGlobalStyle,
   css,
   DefaultTheme,
+  ThemeProvider as StyledComponentsThemeProvider,
 } from 'styled-components';
 
 import { Colors } from './styled';

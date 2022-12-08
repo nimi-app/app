@@ -1,8 +1,8 @@
-import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { setConnectorInfo } from './actions';
 import { useRainbow } from '../../hooks/useRainbow';
+import { setConnectorInfo } from './actions';
 
 export function Updater(): null {
   const { chainId, account } = useRainbow();

@@ -1,13 +1,13 @@
+import { Nimi } from '@nimi.io/card';
+import createDebugger from 'debug';
+import { useEffect, useState } from 'react';
+
+import { Container } from '../../components/Container';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
-import { Container } from '../../components/Container';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
-import { useEffect, useState } from 'react';
-import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
-import { Nimi } from '@nimi.io/card';
 import { useRainbow } from '../../hooks/useRainbow';
-
-import createDebugger from 'debug';
+import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
 
 type CreateNimiContainerProps = {
   ensName: string;

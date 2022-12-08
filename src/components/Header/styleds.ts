@@ -1,5 +1,6 @@
 import { Flex } from 'rebass/styled-components';
 import styled from 'styled-components';
+
 import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
 
 export const HeaderWrapper = styled(Flex)`

@@ -1,9 +1,9 @@
-import { Container } from '../../../../components/Container';
 import { Button } from '../../../../components/Button';
-import { useWalletSwitcherPopoverToggle } from '../../../../state/application/hooks';
-import { NimiConnectContainer } from '../../containers/NimiConnectContainer';
+import { Container } from '../../../../components/Container';
 import { ENV_SUPPORTED_CHAIN_IDS } from '../../../../constants';
 import { useRainbow } from '../../../../hooks/useRainbow';
+import { useWalletSwitcherPopoverToggle } from '../../../../state/application/hooks';
+import { NimiConnectContainer } from '../../containers/NimiConnectContainer';
 
 /**
  * An experimental page for NimiConnect

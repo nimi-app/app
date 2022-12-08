@@ -1,12 +1,12 @@
-import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
-import { CreateNimiContainer } from '../../components/CreateNimi/CreateNimiContainer';
-import { useTranslation } from 'react-i18next';
 import { Container } from '@nimi.io/card';
-import { NimiSignatureColor } from '../../theme';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { CreateNimiContainer } from '../../components/CreateNimi/CreateNimiContainer';
+import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { useRainbow } from '../../hooks/useRainbow';
+import { NimiSignatureColor } from '../../theme';
 
 const ErrorContainer = styled.div`
   ${NimiSignatureColor};

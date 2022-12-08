@@ -1,9 +1,10 @@
 import { FC, SVGProps, useState } from 'react';
-import { InputButton } from '../../InputButton';
 import styled from 'styled-components';
-import { SharedInputStyles } from '../../../theme';
+
 import { ReactComponent as XSVG } from '../../../assets/svg/cross.svg';
+import { SharedInputStyles } from '../../../theme';
 import { renderSVG } from '../../../utils';
+import { InputButton } from '../../InputButton';
 
 export interface InputFieldWithIcon {
   inputLogo?: FC<SVGProps<SVGSVGElement>>;

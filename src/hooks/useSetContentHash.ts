@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
-import { useENSPublicResolverContract } from './useENSPublicResolverContract';
 import nameHash from '@ensdomains/eth-ens-namehash';
-import { ContractTransaction } from 'ethers';
-import { EnsPublicResolver } from '../generated/contracts';
 import { encodeContenthash } from '@ensdomains/ui';
+import { ContractTransaction } from 'ethers';
+import { useMemo } from 'react';
+
+import { EnsPublicResolver } from '../generated/contracts';
+import { useENSPublicResolverContract } from './useENSPublicResolverContract';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);

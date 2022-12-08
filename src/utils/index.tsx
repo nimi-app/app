@@ -1,6 +1,7 @@
 import { getAddress } from '@ethersproject/address';
-import { FC, SVGProps } from 'react';
+
 import { nimiLinkDetailsExtended, NimiLinkType } from '@nimi.io/card';
+import { FC, SVGProps } from 'react';
 
 export * from './explorer';
 

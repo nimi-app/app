@@ -1,6 +1,7 @@
+import createDebugger from 'debug';
 import React from 'react';
 import styled from 'styled-components';
-import createDebugger from 'debug';
+
 import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
 
 interface PaginationProps {

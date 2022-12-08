@@ -1,19 +1,19 @@
-import { useState, useCallback } from 'react';
-import Select from 'react-select';
 import * as QRCode from 'qrcode';
-
-import { Container } from '../../../../components/Container';
-import { Loader } from '../../../../components/Loader';
-import { Button } from '../../../../components/Button';
-import { CreateNimiConnectSessionResponse, getNimiConnectAppJWT } from '../../api';
-import { NIMI_CONNECT_SIGNATURE_TEXT_PAYLOAD } from '../../constants';
-import { Card as CardBase, CardBody, CardTitle } from '../../../../components/Card';
-import styled from 'styled-components';
-import { FormGroup as FormGroupBase } from '../../../../components/form';
+import { useCallback, useState } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
+import Select from 'react-select';
+import styled from 'styled-components';
+import { useSignMessage } from 'wagmi';
+
+import { Button } from '../../../../components/Button';
+import { Card as CardBase, CardBody, CardTitle } from '../../../../components/Card';
+import { Container } from '../../../../components/Container';
+import { FormGroup as FormGroupBase } from '../../../../components/form';
+import { Loader } from '../../../../components/Loader';
 import { useGetENSDomainsByAddress } from '../../../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../../../hooks/useRainbow';
-import { useSignMessage } from 'wagmi';
+import { CreateNimiConnectSessionResponse, getNimiConnectAppJWT } from '../../api';
+import { NIMI_CONNECT_SIGNATURE_TEXT_PAYLOAD } from '../../constants';
 
 const Card = styled(CardBase)`
   min-height: 300px;

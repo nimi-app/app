@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { StyledAppWrapper, StyledBodyWrapper, StyledHeaderWrapper } from './styled';
 
 export interface AppWrapperProps {

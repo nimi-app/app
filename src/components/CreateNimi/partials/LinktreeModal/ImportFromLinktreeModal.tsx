@@ -2,20 +2,20 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { getAPIBaseURL } from '../../../../modules/api-service';
-import { Button } from '../../../Button';
-import { ReactComponent as Linktree } from '../../../../assets/svg/linktree.svg';
 
+import { ReactComponent as Linktree } from '../../../../assets/svg/linktree.svg';
+import { getAPIBaseURL } from '../../../../modules/api-service';
+import { generateID, guessLinkTypeBasedOnUrl } from '../../../../utils';
+import { Button } from '../../../Button';
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {
   Modal,
-  Header as ModalHeaderBase,
-  Content as ModalContentBase,
   CloseButton as ModalCloseButton,
+  Content as ModalContentBase,
+  Header as ModalHeaderBase,
   Title as ModalTitle,
 } from '../../../Modal';
 import { ContentInput } from '../../../ReorderInput';
-import { generateID, guessLinkTypeBasedOnUrl } from '../../../../utils';
 
 export function ImportFromLinktreeModal({ onClose }) {
   const { t } = useTranslation('nimi');

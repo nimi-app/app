@@ -1,20 +1,20 @@
-import { useNavigate } from 'react-router-dom';
-import { Pagination } from '../../components/Pagination/';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { Flex } from 'rebass';
-import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
+import styled from 'styled-components';
 
-import { Container } from '../../components/Container';
-import { Loader } from '../../components/Loader';
-import { NimiSignatureColor } from '../../theme';
+import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
 import { DottedButtonBase } from '../../components/Button/styled';
-import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
+import { Container } from '../../components/Container';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
-import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
-import { useRainbow } from '../../hooks/useRainbow';
 import { InputFieldWithIcon } from '../../components/Input';
+import { Loader } from '../../components/Loader';
+import { Pagination } from '../../components/Pagination/';
+import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
+import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
+import { useRainbow } from '../../hooks/useRainbow';
+import { NimiSignatureColor } from '../../theme';
 
 const StyledDomainsWrapper = styled(Flex)`
   flex-wrap: wrap;

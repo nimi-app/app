@@ -1,13 +1,12 @@
+import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { ReorderItem } from '../ReorderItem';
-import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
 
 import { ReactComponent as XSVG } from '../../assets/svg/cross.svg';
 import { ReactComponent as PenSVG } from '../../assets/svg/pen.svg';
-
 import { SharedInputStyles } from '../../theme';
 import { InputFieldWithIcon } from '../Input';
+import { ReorderItem } from '../ReorderItem';
 
 type ReorderInputProps = {
   key?: string;

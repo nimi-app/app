@@ -1,5 +1,6 @@
 import React, { HTMLProps, useCallback } from 'react';
 import styled from 'styled-components';
+
 import { Colors } from './styled';
 
 export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColor: string }>(({ warning, theme }) => ({

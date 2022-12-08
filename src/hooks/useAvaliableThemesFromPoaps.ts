@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
 import { NimiThemeType } from '@nimi.io/card';
 import createDebugger from 'debug';
+import { useEffect, useState } from 'react';
+
 import { getPOAPAPIClient } from '../modules/poap-services';
 
 export interface UseAvaliableTheme {

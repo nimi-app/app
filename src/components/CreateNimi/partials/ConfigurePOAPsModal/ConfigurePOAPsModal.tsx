@@ -1,16 +1,13 @@
+import { NimiWidgetType, POAPToken } from '@nimi.io/card';
+import { AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { AnimatePresence } from 'framer-motion';
-
-import { ModalBase } from '../ModalBase';
-import { NimiWidgetType } from '@nimi.io/card';
-
-import { BodyNavigation, PreloaderPOAPs, NoPOAPs, RecentPOAPs, CustomizePOAPs } from './components';
-import { POAPToken } from '@nimi.io/card';
-
-import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 import { useFormContext } from 'react-hook-form';
+
 import { getPOAPAPIClient } from '../../../../modules/poap-services';
+import { ModalBase } from '../ModalBase';
+import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
+import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 
 type ConfigurePOAPsModalProps = {
   ensAddress: string;

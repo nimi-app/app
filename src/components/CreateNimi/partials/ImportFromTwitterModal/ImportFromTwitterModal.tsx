@@ -2,19 +2,18 @@ import axios from 'axios';
 import { ChangeEventHandler, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+
 import { getAPIBaseURL } from '../../../../modules/api-service';
 import { Button } from '../../../Button';
-
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {
   Modal,
-  Header as ModalHeaderBase,
-  Content as ModalContentBase,
   CloseButton as ModalCloseButton,
+  Content as ModalContentBase,
+  Header as ModalHeaderBase,
   Title as ModalTitle,
 } from '../../../Modal';
 import { ContentInput } from '../../../ReorderInput';
-
 import { ImportTwitterDataModalProps, TwitterData } from './types';
 
 const ModalHeader = styled(ModalHeaderBase)`
