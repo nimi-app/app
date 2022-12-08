@@ -5,6 +5,7 @@ import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddr
 import { PopulatedENSCard } from '../PopulatedENSCard';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
 import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
+import createDebugger from 'debug';
 import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { fetchNimiDataByENSName } from '../../../modules/api-service';
 
@@ -13,6 +14,8 @@ type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[] ? Elem
 export interface ENSCardContainerProps {
   domain: ArrElement<ReturnType<typeof useGetENSDomainsByAddress>['data']>;
 }
+
+const debug = createDebugger('components:ENSCardContainer');
 
 export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   const { data: metadata, loading: metadataLoading } = useENSMetadata(domain.name!);
@@ -34,7 +37,9 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
         })
         // Ignore error
         .catch((error) => {
-          console.log('ENSCardContainer: useEffect', error);
+          debug({
+            error,
+          });
           setDomainData(null);
           setQueryOnGoing(false);
         });

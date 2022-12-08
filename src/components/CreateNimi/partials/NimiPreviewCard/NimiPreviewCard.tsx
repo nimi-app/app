@@ -5,6 +5,8 @@ import styled, { StyleSheetManager } from 'styled-components';
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
 import { Card as CardBase } from '../../../Card';
 
+import createDebugger from 'debug';
+
 export interface NimiPreviewCardProps {
   nimi: Nimi;
 }
@@ -19,6 +21,8 @@ const PreviewFrame = styled(Frame)`
   height: 100%;
   border: 0;
 `;
+
+const debug = createDebugger('components:NimiPreviewCard');
 
 export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   const [previewNimi, setPreviewNimi] = useState<Nimi>();
@@ -35,7 +39,9 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
             return isLinkValid;
           })
           .catch((error) => {
-            console.log('error', error);
+            debug({
+              error,
+            });
             return false;
           })
       )

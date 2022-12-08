@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import createDebugger from 'debug';
 import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
 
 interface PaginationProps {
@@ -9,9 +10,14 @@ interface PaginationProps {
   loading: boolean;
 }
 
+const debug = createDebugger('components:Pagination');
+
 export function Pagination({ page, setPage, hasNextPage, loading }: PaginationProps) {
-  console.log('page', page);
-  console.log('hasNextPage', hasNextPage);
+  debug({
+    page,
+    hasNextPage,
+  });
+
   return (
     <PaginationWrapper>
       <ArrowButton disabled={page === 0} onClick={() => setPage((prev) => prev - 1)}>

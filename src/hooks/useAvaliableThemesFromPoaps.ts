@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NimiThemeType } from '@nimi.io/card';
+import createDebugger from 'debug';
 import { getPOAPAPIClient } from '../modules/poap-services';
 
 export interface UseAvaliableTheme {
@@ -13,6 +14,8 @@ const themeToPoapMapping = [
   { theme: NimiThemeType.RAAVE, eventId: [63182] },
   { theme: NimiThemeType.DAIVINITY, eventId: [74051] },
 ];
+
+const debug = createDebugger('hooks:useAvaliableThemesFromPoaps');
 
 /**
  * Returns array of themes user has avaliable
@@ -31,7 +34,7 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
       // Get all the POAPs for the given account.
       const userPOAPList = (await getPOAPAPIClient().get(`/actions/scan/${account.toLowerCase()}`)).data;
 
-      console.log({
+      debug({
         userPOAPList,
       });
 

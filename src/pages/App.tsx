@@ -46,10 +46,6 @@ export function App() {
   const theme = useTheme();
   const { client, chains } = useRainbow();
 
-  console.log({
-    chains,
-  });
-
   useEffect(() => {
     // Load Fathom if it's set in .env
     if (process.env.REACT_APP_FATHOM_SITE_ID) {

@@ -6,6 +6,7 @@ import { useRef, useState, useCallback, useMemo } from 'react';
 import { ContractTransaction, ContractReceipt } from '@ethersproject/contracts';
 import { NimiThemeType } from '@nimi.io/card';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
+import createDebugger from 'debug';
 
 import {
   Nimi,
@@ -136,6 +137,8 @@ export interface CreateNimiProps {
    */
   initialNimi?: Nimi;
 }
+
+const debug = createDebugger('Nimi:CreateNimi');
 
 export function CreateNimi({ ensAddress, ensName, provider, availableThemes, initialNimi }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
@@ -285,7 +288,9 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
         setIsPublishingNimi(false);
       });
     } catch (error) {
-      console.error(error);
+      debug({
+        error,
+      });
       unstable_batchedUpdates(() => {
         setIsPublishingNimi(false);
         setPublishNimiError(error);
@@ -294,7 +299,9 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   };
 
   const onSubmitInvalid = (data) => {
-    console.log('SUBMIT INVALID', data);
+    debug('onSubmitInvalid', {
+      data,
+    });
   };
 
   const handleKeyDown = (e) => {
@@ -348,7 +355,9 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
           url: `https://ipfs.io/ipfs/${cidV1}`,
         });
       } catch (error) {
-        console.log('error', error);
+        debug({
+          error,
+        });
         setImgErrorMessage('Network Error');
         setTimeout(() => {
           setImgErrorMessage('');
