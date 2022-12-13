@@ -2,7 +2,6 @@ import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { useEffect } from 'react';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { useTheme } from 'styled-components';
-import { WagmiConfig } from 'wagmi';
 
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
@@ -44,7 +43,7 @@ const router = createBrowserRouter([
 
 export function App() {
   const theme = useTheme();
-  const { client, chains } = useRainbow();
+  const { chains } = useRainbow();
 
   useEffect(() => {
     if (process.env.REACT_APP_FATHOM_SITE_ID) {
@@ -53,10 +52,8 @@ export function App() {
   }, []);
 
   return (
-    <WagmiConfig client={client}>
-      <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
-        <RouterProvider router={router} />
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
+      <RouterProvider router={router} />
+    </RainbowKitProvider>
   );
 }
