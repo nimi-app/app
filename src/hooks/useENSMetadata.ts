@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 import { useEffect, useState } from 'react';
-import { useProvider } from 'wagmi';
 
 import { ChainId } from '../constants';
 import { useRainbow } from './useRainbow';
@@ -53,13 +52,11 @@ const supportedENSChainIds = [ChainId.MAINNET, ChainId.GOERLI];
  * docs: https://metadata.ens.domains/docs#/paths/~1%7BnetworkName%7D~1avatar~1%7Bname%7D~1meta/get
  */
 export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
-  const { chainId, account } = useRainbow();
+  const { chainId, account, provider } = useRainbow();
   const [ensData, setData] = useState<ENSMetadata>();
   const [loading, setLoading] = useState<boolean>(true);
   const [ensName, setEnsName] = useState('');
   const [ensNameQueryInitiated, setEnsNameQuery] = useState(false);
-
-  const provider = useProvider();
 
   if (
     customENSLookup === undefined &&
