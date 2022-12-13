@@ -166,9 +166,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
   debug({
     initialNimi,
-    theme: {
-      type: availableThemes[0],
-    },
   });
 
   // Form state manager
@@ -176,9 +173,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
     resolver: yupResolver(nimiValidator),
     defaultValues: {
       ...initialNimi,
-      theme: {
-        type: availableThemes[0],
-      },
     },
   });
 
