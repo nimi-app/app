@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { ReactComponent as Cross } from '../../assets/svg/cross.svg';
 
 export const StyledInputWrapper = styled.div<{ isError?: boolean; isSimple?: boolean }>`

@@ -1,18 +1,19 @@
-import { useWeb3React } from '@web3-react/core';
-import { useState, useCallback } from 'react';
-import Select from 'react-select';
 import * as QRCode from 'qrcode';
+import { useCallback, useState } from 'react';
+import { unstable_batchedUpdates } from 'react-dom';
+import Select from 'react-select';
+import styled from 'styled-components';
+import { useSignMessage } from 'wagmi';
 
-import { Container } from '../../../../components/Container';
-import { Loader } from '../../../../components/Loader';
 import { Button } from '../../../../components/Button';
+import { Card as CardBase, CardBody, CardTitle } from '../../../../components/Card';
+import { Container } from '../../../../components/Container';
+import { FormGroup as FormGroupBase } from '../../../../components/form';
+import { Loader } from '../../../../components/Loader';
+import { useGetENSDomainsByAddress } from '../../../../hooks/useGetENSDomainsByAddress';
+import { useRainbow } from '../../../../hooks/useRainbow';
 import { CreateNimiConnectSessionResponse, getNimiConnectAppJWT } from '../../api';
 import { NIMI_CONNECT_SIGNATURE_TEXT_PAYLOAD } from '../../constants';
-import { Card as CardBase, CardBody, CardTitle } from '../../../../components/Card';
-import styled from 'styled-components';
-import { FormGroup as FormGroupBase } from '../../../../components/form';
-import { unstable_batchedUpdates } from 'react-dom';
-import { useGetENSDomainsByAddress } from '../../../../hooks/useGetENSDomainsByAddress';
 
 const Card = styled(CardBase)`
   min-height: 300px;
@@ -47,7 +48,8 @@ interface NimiConnectContainerProps {
 export function NimiConnectContainer({ address }: NimiConnectContainerProps) {
   const [fetchTokenError, setFetchTokenError] = useState<Error>();
   const [isFetchingToken, setIsFetchingToken] = useState(false);
-  const { account, provider } = useWeb3React();
+  const { account, provider } = useRainbow();
+  const { signMessageAsync } = useSignMessage();
   const [tokenQRDataURI, setTokenQRDataURI] = useState('');
   const [nimiToken, setNimiToken] = useState<CreateNimiConnectSessionResponse>();
   const [ensName, setEnsName] = useState<string>();
@@ -71,7 +73,7 @@ export function NimiConnectContainer({ address }: NimiConnectContainerProps) {
     });
 
     try {
-      const signature = await provider.getSigner().signMessage(NIMI_CONNECT_SIGNATURE_TEXT_PAYLOAD);
+      const signature = await signMessageAsync({ message: NIMI_CONNECT_SIGNATURE_TEXT_PAYLOAD });
       const nimiToken = await getNimiConnectAppJWT({ ensName, signature });
       const qrCodeURL = await QRCode.toDataURL(nimiToken.token, {
         errorCorrectionLevel: 'H',
@@ -90,7 +92,7 @@ export function NimiConnectContainer({ address }: NimiConnectContainerProps) {
         setIsFetchingToken(false);
       });
     }
-  }, [provider, account, ensName, fetchTokenError]);
+  }, [provider, account, ensName, fetchTokenError, signMessageAsync]);
 
   if (loading) {
     return <Loader />;

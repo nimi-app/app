@@ -1,19 +1,22 @@
+import { Nimi } from '@nimi.io/card';
+import createDebugger from 'debug';
+import { useEffect, useState } from 'react';
+
+import { Container } from '../../components/Container';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
-import { Container } from '../../components/Container';
-import { useWeb3React } from '@web3-react/core';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
-import { useEffect, useState } from 'react';
-import { Web3Provider } from '@ethersproject/providers';
+import { useRainbow } from '../../hooks/useRainbow';
 import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
-import { Nimi } from '@nimi.io/card';
 
 type CreateNimiContainerProps = {
   ensName: string;
 };
 
+const debug = createDebugger('CreateNimiContainer');
+
 export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
-  const { account, provider } = useWeb3React();
+  const { account, provider } = useRainbow();
   const [initialNimi, setInitialNimi] = useState<Nimi>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,7 +31,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
     const fetchInitialNimi = async () => {
       try {
         const nimiData = await fetchNimiDataByENSName(ensName);
-        console.log(nimiData);
+        debug({ nimiData });
         if (nimiData) {
           setInitialNimi(nimiData.nimi);
           return;
@@ -39,7 +42,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
           setInitialNimi(initialGeneratedNimi);
         }
       } catch (error) {
-        console.log(error);
+        debug({ error });
       } finally {
         setIsLoading(false);
       }
@@ -57,7 +60,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
       <CreateNimi
         ensAddress={account as string}
         ensName={ensName as string}
-        provider={provider as Web3Provider}
+        provider={provider as any}
         availableThemes={avaliableThemes}
         initialNimi={initialNimi}
       />

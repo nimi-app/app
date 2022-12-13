@@ -1,7 +1,6 @@
 import React, { HTMLProps, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
-import { Button as Base } from 'rebass';
+import styled from 'styled-components';
+
 import { Colors } from './styled';
 
 export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColor: string }>(({ warning, theme }) => ({
@@ -21,51 +20,6 @@ export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColo
     background-color: ${({ theme }) => theme.bg1};
     color: ${({ theme }) => theme.text4};
     cursor: auto;
-  }
-`;
-
-// A button that triggers some onClick result, but looks like a link.
-export const LinkStyledButton = styled.button<{ disabled?: boolean }>`
-  border: none;
-  text-decoration: none;
-  background: none;
-
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  color: ${({ theme, disabled }) => (disabled ? theme.text2 : theme.purple4)};
-  font-weight: 500;
-
-  :hover {
-    text-decoration: ${({ disabled }) => (disabled ? null : 'underline')};
-  }
-
-  :focus {
-    outline: none;
-    text-decoration: ${({ disabled }) => (disabled ? null : 'underline')};
-  }
-
-  :active {
-    text-decoration: none;
-  }
-`;
-
-// An internal link from the react-router-dom library that is correctly styled
-export const StyledInternalLink = styled(Link)<{ color?: keyof Colors }>`
-  text-decoration: none;
-  cursor: pointer;
-  color: ${({ theme, color }) => theme[color || 'primary1']};
-  font-weight: 500;
-
-  :hover {
-    text-decoration: underline;
-  }
-
-  :focus {
-    outline: none;
-    text-decoration: underline;
-  }
-
-  :active {
-    text-decoration: none;
   }
 `;
 
@@ -125,67 +79,3 @@ export function ExternalLink({
     />
   );
 }
-
-const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-export const Spinner = styled.img`
-  animation: 2s ${rotate} linear infinite;
-  width: 16px;
-  height: 16px;
-`;
-
-export const CustomLightSpinner = styled(Spinner)<{ size: string }>`
-  height: ${({ size }) => size};
-  width: ${({ size }) => size};
-`;
-
-export const HideSmall = styled.span`
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    display: none;
-  `};
-`;
-
-export const IconWrapper = styled.div<{
-  stroke?: string;
-  size?: string;
-  marginRight?: string;
-  marginLeft?: string;
-}>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: ${({ size }) => size ?? '20px'};
-  height: ${({ size }) => size ?? '20px'};
-  margin-right: ${({ marginRight }) => marginRight ?? 0};
-  margin-left: ${({ marginLeft }) => marginLeft ?? 0};
-  & > * {
-    stroke: ${({ theme, stroke }) => stroke ?? theme.blue1};
-  }
-`;
-
-export const ButtonText = styled(Base)`
-  padding: 0;
-  width: fit-content;
-  background: none;
-  text-decoration: none;
-  &:focus {
-    text-decoration: underline;
-  }
-  &:hover {
-    opacity: 0.9;
-  }
-  &:active {
-    text-decoration: underline;
-  }
-  &:disabled {
-    opacity: 50%;
-    cursor: auto;
-  }
-`;

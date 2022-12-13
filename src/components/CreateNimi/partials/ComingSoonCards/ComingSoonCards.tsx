@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+
 import { Card } from '../../../Card';
 import { CardBodyTextCenter } from '../../styled';
 

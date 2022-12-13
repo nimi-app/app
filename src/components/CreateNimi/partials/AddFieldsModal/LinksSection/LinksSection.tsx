@@ -1,10 +1,10 @@
+import { nimiLinkDetailsExtended } from '@nimi.io/card';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { nimiLinkDetailsExtended } from '@nimi.io/card';
-import { StyledFlexList } from '../../../styled';
 
-import { ButtonGroup } from '../../../../form/Button';
 import { renderSVG } from '../../../../../utils';
+import { ButtonGroup } from '../../../../form/Button';
+import { StyledFlexList } from '../../../styled';
 
 const SectionWrapper = styled.div`
   margin-bottom: 30px;

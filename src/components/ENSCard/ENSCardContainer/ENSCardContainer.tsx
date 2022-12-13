@@ -1,13 +1,14 @@
-import { Link } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import createDebugger from 'debug';
 import { useInView } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
-import { PopulatedENSCard } from '../PopulatedENSCard';
-import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
 import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
 import { useENSMetadata } from '../../../hooks/useENSMetadata';
+import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
 import { fetchNimiDataByENSName } from '../../../modules/api-service';
+import { PopulatedENSCard } from '../PopulatedENSCard';
+import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
 
 type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[] ? ElementType : never;
 
@@ -15,14 +16,20 @@ export interface ENSCardContainerProps {
   domain: ArrElement<ReturnType<typeof useGetENSDomainsByAddress>['data']>;
 }
 
+const debug = createDebugger('components:ENSCardContainer');
+
 export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   const { data: metadata, loading: metadataLoading } = useENSMetadata(domain.name!);
   const ref = useRef(null);
   const isInView = useInView(ref);
   const [domainData, setDomainData] = useState<Awaited<ReturnType<typeof fetchNimiDataByENSName>> | null>();
-
+  const [queryOnGoing, setQueryOnGoing] = useState(false);
   // When element is in view, fetch the data
   useEffect(() => {
+    if (queryOnGoing === true) {
+      return;
+    }
+    setQueryOnGoing(true);
     // fetch only if not already fetched
     if (isInView && domain?.name && domainData === undefined) {
       fetchNimiDataByENSName(domain.name)
@@ -31,11 +38,14 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
         })
         // Ignore error
         .catch((error) => {
-          console.log('ENSCardContainer: useEffect', error);
+          debug({
+            error,
+          });
           setDomainData(null);
+          setQueryOnGoing(false);
         });
     }
-  }, [isInView, domain.name, domainData]);
+  }, [queryOnGoing, isInView, domain.name, domainData]);
 
   if (domainData !== null && domainData !== undefined) {
     return <PopulatedENSCard data={domainData.nimi} key={domain.id} id={domain.id} />;

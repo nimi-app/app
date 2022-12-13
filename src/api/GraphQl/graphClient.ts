@@ -1,6 +1,7 @@
+import { GraphQLClient } from 'graphql-request';
+
 import { ChainId } from '../../constants';
 
-import { GraphQLClient } from 'graphql-request';
 type EndpointType = {
   [chainId: number]: string;
 };

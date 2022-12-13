@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+
 import { Button } from '../../../Button';
 import {
   Modal,
-  Header as ModalHeaderBase,
   Content as ModalContentBase,
-  Title as ModalTitle,
   Footer as ModalFooterBase,
+  Header as ModalHeaderBase,
+  Title as ModalTitle,
 } from '../../../Modal';
-
-import { NFTSelector, NFTAsset } from '../../../NFTSelector';
+import { NFTAsset, NFTSelector } from '../../../NFTSelector';
 
 const ModalHeader = styled(ModalHeaderBase)`
   padding-bottom: 0;

@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
+
 import { ChainId } from '../../constants';
-import { ApplicationModal, setOpenModal, setConnectorInfo } from './actions';
+import { ApplicationModal, setConnectorInfo, setOpenModal } from './actions';
 
 export interface ApplicationState {
   readonly openModal: ApplicationModal | null;
