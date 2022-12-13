@@ -1,10 +1,8 @@
 import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
-import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
 import { useRainbow } from '../hooks/useRainbow';
-import { AppWrapper } from '../modules/app-wrapper';
+import { LoggedInWrapper } from '../providers';
 import { CreateNimiPage } from './CreateNimiPage';
 import { DomainsHome } from './domains';
 import { Landing } from './Landing';
@@ -19,17 +17,17 @@ const router = createBrowserRouter([
   {
     path: 'domains/:ensName',
     element: (
-      <AppWrapper header={<Header />} footer={<Footer />}>
+      <LoggedInWrapper>
         <CreateNimiPage />
-      </AppWrapper>
+      </LoggedInWrapper>
     ),
   },
   {
     path: 'domains',
     element: (
-      <AppWrapper header={<Header />} footer={<Footer />}>
+      <LoggedInWrapper>
         <DomainsHome />
-      </AppWrapper>
+      </LoggedInWrapper>
     ),
   },
   {
