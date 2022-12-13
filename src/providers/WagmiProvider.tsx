@@ -1,5 +1,4 @@
 import { connectorsForWallets, getDefaultWallets } from '@rainbow-me/rainbowkit';
-import { argentWallet, imTokenWallet, ledgerWallet, omniWallet, trustWallet } from '@rainbow-me/rainbowkit/wallets';
 import { ReactNode } from 'react';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
@@ -17,19 +16,7 @@ const { wallets } = getDefaultWallets({
   chains,
 });
 
-const connectors = connectorsForWallets([
-  ...wallets,
-  {
-    groupName: 'More',
-    wallets: [
-      argentWallet({ chains }),
-      trustWallet({ chains }),
-      omniWallet({ chains }),
-      imTokenWallet({ chains }),
-      ledgerWallet({ chains }),
-    ],
-  },
-]);
+const connectors = connectorsForWallets([...wallets]);
 
 const wagmiClient = createClient({
   autoConnect: false,
