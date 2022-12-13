@@ -1,20 +1,13 @@
-import { Nimi } from '@nimi.io/card';
-import createDebugger from 'debug';
-import { useEffect, useState } from 'react';
-
 import { Container } from '../../components/Container';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 import { useDefaultNimiData } from '../../hooks/useDefaultNimiData';
 import { useRainbow } from '../../hooks/useRainbow';
-import { fetchGeneratedNimi, fetchNimiDataByENSName } from '../../modules/api-service';
 
 type CreateNimiContainerProps = {
   ensName: string;
 };
-
-const debug = createDebugger('CreateNimiContainer');
 
 export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { account, provider } = useRainbow();

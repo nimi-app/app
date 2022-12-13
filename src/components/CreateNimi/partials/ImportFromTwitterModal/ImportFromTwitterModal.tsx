@@ -3,7 +3,7 @@ import { ChangeEventHandler, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { getAPIBaseURL } from '../../../../modules/api-service';
+import { getAPIBaseURL } from '../../../../api/RestAPI/utils';
 import { Button } from '../../../Button';
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {

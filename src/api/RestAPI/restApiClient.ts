@@ -1,7 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-// import { getAPIBaseURL } from '../../modules/api-service';
-
+//will change this once production starts working
 const nimiApi = axios.create({
   baseURL: 'https://api.nimi.io/v1.4/',
 });

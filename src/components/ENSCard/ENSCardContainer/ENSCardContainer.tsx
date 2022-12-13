@@ -1,13 +1,11 @@
-import createDebugger from 'debug';
-import { useInView } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
+import ApiRequest from '../../../api/RestAPI/restApiClient';
 import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
 import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
-import { fetchNimiDataByENSName } from '../../../modules/api-service';
-import { PopulatedENSCard } from '../PopulatedENSCard';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
 
 type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[] ? ElementType : never;
@@ -16,47 +14,39 @@ export interface ENSCardContainerProps {
   domain: ArrElement<ReturnType<typeof useGetENSDomainsByAddress>['data']>;
 }
 
-const debug = createDebugger('components:ENSCardContainer');
-
 export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   const { data: metadata, loading: metadataLoading } = useENSMetadata(domain.name!);
   const ref = useRef(null);
-  const isInView = useInView(ref);
-  const [domainData, setDomainData] = useState<Awaited<ReturnType<typeof fetchNimiDataByENSName>> | null>();
-  const [queryOnGoing, setQueryOnGoing] = useState(false);
-  // When element is in view, fetch the data
-  useEffect(() => {
-    if (queryOnGoing === true) {
-      return;
-    }
-    setQueryOnGoing(true);
-    // fetch only if not already fetched
-    if (isInView && domain?.name && domainData === undefined) {
-      fetchNimiDataByENSName(domain.name)
-        .then((data) => {
-          setDomainData(data);
-        })
-        // Ignore error
-        .catch((error) => {
-          debug({
-            error,
-          });
-          setDomainData(null);
-          setQueryOnGoing(false);
-        });
-    }
-  }, [queryOnGoing, isInView, domain.name, domainData]);
 
-  if (domainData !== null && domainData !== undefined) {
-    return <PopulatedENSCard data={domainData.nimi} key={domain.id} id={domain.id} />;
-  }
+  const restClient = new ApiRequest();
+  console.log('donainName', domain);
+
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ['deployedPage', domain.name],
+    queryFn: async () => await restClient.getDeployedPageData(domain.name),
+    select: ({ data }) => data[0],
+  });
+
+  const nimiImageExists = useMemo(() => {
+    if (!isLoading && isSuccess && data && data.nimi && data.nimi.image) return true;
+    else return false;
+  }, [data, isLoading, isSuccess]);
+  console.log('nimiImageExists', nimiImageExists);
 
   return (
     <Link ref={ref} to={`/domains/${domain.name}`}>
       <StyledENSNameCardWrapper>
         <ENSNameCardImage
           alt={'ENS Name image'}
-          src={metadataLoading ? purpleCircleURL : metadata ? metadata.image : purpleCircleURL}
+          src={
+            metadataLoading || isLoading
+              ? purpleCircleURL
+              : nimiImageExists
+              ? data.nimi.image.url
+              : metadata
+              ? metadata.image
+              : purpleCircleURL
+          }
           onError={(event) => {
             const target = event.target as HTMLImageElement;
             if (target.src !== purpleCircleURL) {
