@@ -130,7 +130,7 @@ export interface CreateNimiProps {
   /**
    * The initial Nimi to edit
    */
-  initialNimi?: Nimi;
+  initialNimi: Nimi;
 }
 
 const debug = createDebugger('Nimi:CreateNimi');

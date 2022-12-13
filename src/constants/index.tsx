@@ -1,4 +1,4 @@
-import { NimiLinkType } from '@nimi.io/card';
+import { Nimi, NimiLinkType } from '@nimi.io/card';
 import { CSSProperties } from 'styled-components';
 import { chain } from 'wagmi';
 

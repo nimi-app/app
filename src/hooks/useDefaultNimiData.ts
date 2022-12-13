@@ -14,13 +14,24 @@ interface UseDefaultNimiData {
 /**
  * Returns default data to be displayed on CreateNimipage
  */
-export function useDefaultNimiData({ ensName }): UseDefaultNimiData {
+export function useDefaultNimiData({ ensName, account }): UseDefaultNimiData {
   const restClient = new RestApiRequest();
+  const defaultTheme = { type: NimiThemeType.NIMI };
 
-  const { data, isSuccess, isLoading } = useQuery({
+  const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: ['fetchDeployedNimiData', ensName],
     queryFn: async () => await restClient.getDeployedPageData(ensName),
-    select: ({ data }) => (data[0] ? (data[0].Nimi as Nimi) : undefined),
+    select: ({ data }) => {
+      if (data.length) {
+        const nimi = data[0].nimi as Nimi;
+        if (nimi.theme === undefined) {
+          nimi.theme = defaultTheme;
+        }
+        return nimi;
+      } else {
+        return undefined;
+      }
+    },
   });
 
   const {
@@ -28,25 +39,34 @@ export function useDefaultNimiData({ ensName }): UseDefaultNimiData {
     isLoading: isLoadingGenerated,
     isSuccess: isGeneratedSuccess,
   } = useQuery({
-    queryKey: ['fetchGenratedData'],
+    queryKey: ['fetchGeneratedData'],
     queryFn: async () => await restClient.getEnsGeneratedData(ensName),
     onError: (errorData) => console.log('generatedError', errorData),
     select: ({ data }) => {
-      const defaultTheme = { type: NimiThemeType.NIMI };
+      if (!data.nimi) return undefined;
+
       data.nimi.theme = defaultTheme;
       return data.nimi as Nimi;
     },
     enabled: data === undefined && isSuccess,
   });
+  console.log('enabled', data !== undefined && !isSuccess);
 
   const NimiObject = useMemo(() => {
-    console.log('first data', data);
-    console.log('generatedData', generatedData);
-
-    if (isSuccess && data !== undefined && !isLoading) return data;
+    if (isSuccess && data !== undefined && !isLoading && !isError) return data;
     else if (isGeneratedSuccess && generatedData && !isLoadingGenerated) return generatedData;
-    else return undefined;
-  }, [data, generatedData, isGeneratedSuccess, isLoading, isLoadingGenerated, isSuccess]);
+    else if (!isLoading && !isLoadingGenerated)
+      return {
+        ensName,
+        displayName: ensName,
+        addresses: [],
+        ensAddress: account,
+        links: [],
+        widgets: [],
+        theme: defaultTheme,
+      } as Nimi;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, generatedData, isGeneratedSuccess, isLoading, isLoadingGenerated, isError, isSuccess, account, ensName]);
 
   return {
     loading: isLoading && isLoadingGenerated,

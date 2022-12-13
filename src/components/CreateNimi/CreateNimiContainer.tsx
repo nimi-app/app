@@ -19,6 +19,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
 
   const { data, loading: initialDataLoading } = useDefaultNimiData({
     ensName,
+    account,
   });
 
   if (initialDataLoading || data === undefined || themeLoading) {
