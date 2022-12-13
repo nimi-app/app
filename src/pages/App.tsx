@@ -1,7 +1,5 @@
 import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { SkeletonTheme } from 'react-loading-skeleton';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import { WagmiConfig } from 'wagmi';
@@ -44,12 +42,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { refetchOnWindowFocus: false },
-  },
-});
-
 export function App() {
   const theme = useTheme();
   const { client, chains } = useRainbow();
@@ -63,11 +55,7 @@ export function App() {
   return (
     <WagmiConfig client={client}>
       <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
-        <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-          </QueryClientProvider>
-        </SkeletonTheme>
+        <RouterProvider router={router} />
       </RainbowKitProvider>
     </WagmiConfig>
   );
