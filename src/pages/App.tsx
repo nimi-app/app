@@ -2,7 +2,7 @@ import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import { WagmiConfig } from 'wagmi';
 
@@ -26,23 +26,23 @@ const router = createBrowserRouter([
   },
   {
     path: 'domains/:ensName',
-    element: <CreateNimiPage />,
+    element: (
+      <AppWrapper header={<Header />} footer={<Footer />}>
+        <CreateNimiPage />
+      </AppWrapper>
+    ),
   },
   {
     path: 'domains',
-    element: <DomainsHome />,
-  },
-  {
-    path: 'connect',
     element: (
       <AppWrapper header={<Header />} footer={<Footer />}>
-        <NimiConnectPage />
+        <DomainsHome />
       </AppWrapper>
     ),
   },
   {
     path: '*',
-    element: <NotFound />,
+    element: <Navigate to="/" />,
   },
 ]);
 
