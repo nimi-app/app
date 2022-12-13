@@ -55,6 +55,7 @@
     "styled-components": "^5.3.5",
     "typechain": "^8.0.0",
     "util": "^0.12.4",
+    "wagmi": "^0.9.2",
     "walletlink": "^2.5.0",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
