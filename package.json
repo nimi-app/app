@@ -28,6 +28,7 @@
     "i18next": "^21.6.16",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-xhr-backend": "^3.2.2",
+    "multiformats": "^10.0.2",
     "opensea-js": "^4.0.9",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
