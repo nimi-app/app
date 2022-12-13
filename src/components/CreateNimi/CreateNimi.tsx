@@ -167,7 +167,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   debug({
     initialNimi,
     theme: {
-      type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
+      type: availableThemes[0],
     },
   });
 
@@ -177,7 +177,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
     defaultValues: {
       ...initialNimi,
       theme: {
-        type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
+        type: availableThemes[0],
       },
     },
   });
