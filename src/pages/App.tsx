@@ -2,7 +2,7 @@ import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
-import { Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import { WagmiConfig } from 'wagmi';
 
@@ -19,20 +19,32 @@ import { NotFound } from './NotFound';
 
 import '@rainbow-me/rainbowkit/styles.css';
 
-const DomainsAppWrapper = () => (
-  <AppWrapper header={<Header />} footer={<Footer />}>
-    <Routes>
-      <Route path=":ensName" element={<CreateNimiPage />} />
-      <Route path="/" element={<DomainsHome />} />
-    </Routes>
-  </AppWrapper>
-);
-
-const NimiConnectAppWrapper = () => (
-  <AppWrapper header={<Header />} footer={<Footer />}>
-    <NimiConnectPage />
-  </AppWrapper>
-);
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Landing />,
+  },
+  {
+    path: 'domains/:ensName',
+    element: <CreateNimiPage />,
+  },
+  {
+    path: 'domains',
+    element: <DomainsHome />,
+  },
+  {
+    path: 'connect',
+    element: (
+      <AppWrapper header={<Header />} footer={<Footer />}>
+        <NimiConnectPage />
+      </AppWrapper>
+    ),
+  },
+  {
+    path: '*',
+    element: <NotFound />,
+  },
+]);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,7 +57,6 @@ export function App() {
   const { client, chains } = useRainbow();
 
   useEffect(() => {
-    // Load Fathom if it's set in .env
     if (process.env.REACT_APP_FATHOM_SITE_ID) {
       loadFathom(process.env.REACT_APP_FATHOM_SITE_ID);
     }
@@ -56,12 +67,7 @@ export function App() {
       <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
         <SkeletonTheme baseColor={theme.bg3} highlightColor={theme.bg2}>
           <QueryClientProvider client={queryClient}>
-            <Routes>
-              <Route element={<NimiConnectAppWrapper />} path="/connect" />
-              <Route element={<DomainsAppWrapper />} path="domains/*" />
-              <Route element={<Landing />} path="/" />
-              <Route element={<NotFound />} path="*" />
-            </Routes>
+            <RouterProvider router={router} />
           </QueryClientProvider>
         </SkeletonTheme>
       </RainbowKitProvider>
