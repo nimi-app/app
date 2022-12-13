@@ -10,12 +10,10 @@ import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { useRainbow } from '../hooks/useRainbow';
 import { AppWrapper } from '../modules/app-wrapper';
-import { NimiConnectPage } from '../modules/nimi-connect';
 import { loadFathom } from '../utils';
 import { CreateNimiPage } from './CreateNimiPage';
 import { DomainsHome } from './domains';
 import { Landing } from './Landing';
-import { NotFound } from './NotFound';
 
 import '@rainbow-me/rainbowkit/styles.css';
 
