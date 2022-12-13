@@ -4,7 +4,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { useRainbow } from '../hooks/useRainbow';
 import { LoggedInWrapper } from '../providers';
 import { CreateNimiPage } from './CreateNimiPage';
-import { DomainsHome } from './domains';
+import { DomainsHome } from './DomainsHome';
 import { Landing } from './Landing';
 
 import '@rainbow-me/rainbowkit/styles.css';
