@@ -2,11 +2,9 @@ import './i18n';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider as ReduxStoreProvider } from 'react-redux';
-import { HashRouter } from 'react-router-dom';
 
 import { App } from './pages/App';
-import { store } from './state';
+import { ReactQueryProvider, ReduxProvider, WagmiProvider } from './providers';
 import { FixedGlobalStyle, ThemedGlobalStyle, ThemeProvider } from './theme';
 
 if ('ethereum' in window) {
@@ -17,14 +15,16 @@ const root = createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <StrictMode>
-    <ReduxStoreProvider store={store}>
-      <FixedGlobalStyle />
-      <ThemeProvider>
-        <ThemedGlobalStyle />
-        <HashRouter>
-          <App />
-        </HashRouter>
-      </ThemeProvider>
-    </ReduxStoreProvider>
+    <ReduxProvider>
+      <ReactQueryProvider>
+        <WagmiProvider>
+          <FixedGlobalStyle />
+          <ThemeProvider>
+            <ThemedGlobalStyle />
+            <App />
+          </ThemeProvider>
+        </WagmiProvider>
+      </ReactQueryProvider>
+    </ReduxProvider>
   </StrictMode>
 );
