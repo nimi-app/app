@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useEnsAvatar } from 'wagmi';
 
 import { getDeployedPageData } from '../../../api/RestAPI/apiService';
 import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
@@ -17,21 +16,22 @@ export interface ENSCardContainerProps {
 
 export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   const { data: metadata, loading: metadataLoading } = useENSMetadata(domain.name!);
-  console.log('metadata', metadata);
 
   const ref = useRef(null);
 
-  const { data, isLoading, isSuccess } = useQuery({
+  const {
+    data: deployedNimi,
+    isLoading: isDelpoyedLoading,
+    isSuccess: isDeployedSuccess,
+  } = useQuery({
     queryKey: ['deployedPage', domain.name],
     queryFn: async () => await getDeployedPageData(domain.name),
     select: ({ data }) => data[0],
   });
 
   const nimiImageExists = useMemo(() => {
-    if (!isLoading && isSuccess && data && data.nimi && data.nimi.image) return true;
-    else return false;
-  }, [data, isLoading, isSuccess]);
-  console.log('nimiImageExists', nimiImageExists);
+    return !isDelpoyedLoading && isDeployedSuccess && deployedNimi && deployedNimi.nimi && deployedNimi.nimi.image;
+  }, [deployedNimi, isDelpoyedLoading, isDeployedSuccess]);
 
   return (
     <Link ref={ref} to={`/domains/${domain.name}`}>
@@ -39,10 +39,10 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
         <ENSNameCardImage
           alt={'ENS Name image'}
           src={
-            metadataLoading || isLoading
+            metadataLoading || isDelpoyedLoading
               ? purpleCircleURL
               : nimiImageExists
-              ? data.nimi.image.url
+              ? deployedNimi.nimi.image.url
               : metadata
               ? metadata.image
               : purpleCircleURL
