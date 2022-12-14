@@ -8,14 +8,14 @@ import { useRainbow } from './useRainbow';
 
 const debug = createDebugger('hooks:useDefaultNimiData');
 
-interface UseDefaultNimiData {
+interface UseInitialNimiData {
   data?: Nimi;
   loading: boolean;
 }
 /**
  * Returns default data to be displayed on CreateNimipage
  */
-export function useDefaultNimiData({ ensName, account }): UseDefaultNimiData {
+export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
   const { chainId } = useRainbow();
   const defaultTheme = { type: NimiThemeType.NIMI };
 

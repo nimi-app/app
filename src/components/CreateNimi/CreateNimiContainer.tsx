@@ -2,7 +2,7 @@ import { Container } from '../../components/Container';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
-import { useDefaultNimiData } from '../../hooks/useDefaultNimiData';
+import { useInitialtNimiData } from '../../hooks/useDefaultNimiData';
 import { useRainbow } from '../../hooks/useRainbow';
 
 type CreateNimiContainerProps = {
@@ -16,13 +16,13 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
     account,
   });
-
-  const { data, loading: initialDataLoading } = useDefaultNimiData({
+  //check for users current Nimi profile data or else adds data generated from ens
+  const { data: initialNimi, loading: initialNimiLoading } = useInitialtNimiData({
     ensName,
     account,
   });
 
-  if (initialDataLoading || data === undefined || themeLoading) {
+  if (initialNimiLoading || initialNimi === undefined || themeLoading) {
     return <Loader />;
   }
 
@@ -33,7 +33,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
         ensName={ensName as string}
         provider={provider as any}
         availableThemes={avaliableThemes}
-        initialNimi={data}
+        initialNimi={initialNimi}
       />
     </Container>
   );
