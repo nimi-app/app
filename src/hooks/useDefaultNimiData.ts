@@ -55,7 +55,7 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
     enabled: deployedNimi === undefined && isDeployedSuccess,
   });
 
-  const NimiObject = useMemo(() => {
+  const nimiObject = useMemo(() => {
     if (isDeployedSuccess && deployedNimi && !isDepoyedLoading) return deployedNimi;
     else if (isGeneratedSuccess && generatedNimi && !isGeneratedLoading) return generatedNimi;
     else if (!isDepoyedLoading && !isGeneratedLoading)
@@ -80,10 +80,10 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
     ensName,
   ]);
 
-  debug({ NimiObject });
+  debug({ NimiObject: nimiObject });
 
   return {
     loading: isDepoyedLoading && isGeneratedLoading,
-    data: NimiObject,
+    data: nimiObject,
   };
 }
