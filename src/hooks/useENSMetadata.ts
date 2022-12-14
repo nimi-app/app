@@ -1,4 +1,3 @@
-import { ensName } from '@nimi.io/card';
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 import { useEffect, useState } from 'react';
