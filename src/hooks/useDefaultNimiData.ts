@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import createDebugger from 'debug';
 import { useMemo } from 'react';
 
-import { getDeployedPageData, getEnsGeneratedData } from '../api/Rest/restApiClient';
+import { getDeployedPageData, getEnsGeneratedData } from '../api/RestAPI/apiService';
 import { useRainbow } from './useRainbow';
 
 const debug = createDebugger('hooks:useDefaultNimiData');

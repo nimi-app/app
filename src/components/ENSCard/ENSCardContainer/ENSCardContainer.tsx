@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useEnsAvatar } from 'wagmi';
 
-import { getDeployedPageData } from '../../../api/Rest/restApiClient';
+import { getDeployedPageData } from '../../../api/RestAPI/apiService';
 import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
 import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
@@ -16,6 +17,8 @@ export interface ENSCardContainerProps {
 
 export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   const { data: metadata, loading: metadataLoading } = useENSMetadata(domain.name!);
+  console.log('metadata', metadata);
+
   const ref = useRef(null);
 
   const { data, isLoading, isSuccess } = useQuery({
