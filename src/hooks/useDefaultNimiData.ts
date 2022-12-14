@@ -3,7 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import createDebugger from 'debug';
 import { useMemo } from 'react';
 
-import RestApiRequest from '../api/RestAPI/restApiClient';
+import { getDeployedPageData, getEnsGeneratedData } from '../api/Rest/restApiClient';
+import { useRainbow } from './useRainbow';
 
 const debug = createDebugger('hooks:useDefaultNimiData');
 
@@ -15,12 +16,12 @@ interface UseDefaultNimiData {
  * Returns default data to be displayed on CreateNimipage
  */
 export function useDefaultNimiData({ ensName, account }): UseDefaultNimiData {
-  const restClient = new RestApiRequest();
+  const { chainId } = useRainbow();
   const defaultTheme = { type: NimiThemeType.NIMI };
 
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: ['fetchDeployedNimiData', ensName],
-    queryFn: async () => await restClient.getDeployedPageData(ensName),
+    queryFn: async () => await getDeployedPageData(ensName),
     select: ({ data }) => {
       if (data.length) {
         const nimi = data[0].nimi as Nimi;
@@ -40,7 +41,7 @@ export function useDefaultNimiData({ ensName, account }): UseDefaultNimiData {
     isSuccess: isGeneratedSuccess,
   } = useQuery({
     queryKey: ['fetchGeneratedData'],
-    queryFn: async () => await restClient.getEnsGeneratedData(ensName),
+    queryFn: async () => await getEnsGeneratedData(ensName, chainId),
     onError: (errorData) => console.log('generatedError', errorData),
     select: ({ data }) => {
       if (!data.nimi) return undefined;

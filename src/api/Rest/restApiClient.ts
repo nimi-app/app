@@ -1,39 +1,24 @@
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 
 import { getAPIBaseURL } from './utils';
 
 //will change this once production starts working
-const nimiApi = axios.create({
+const baseClient = axios.create({
   baseURL: getAPIBaseURL(),
 });
 
-export default class ApiRequest {
-  /**
-   * @property Base Url for making requests
-   */
-  public readonly baseGetClient: AxiosInstance;
-  /**
-   * @property ChainId
-   */
-  public readonly chainId?: number;
-
-  constructor(chainId = 1) {
-    this.chainId = chainId;
-    this.baseGetClient = nimiApi;
-  }
-  getDeployedPageData = async (ensName: string) => {
-    const params = {
-      ens: ensName,
-    };
-    const { data } = await this.baseGetClient.get(`/nimi/by`, { params });
-    return data;
+export const getDeployedPageData = async (ensName: string) => {
+  const params = {
+    ens: ensName,
   };
-  getEnsGeneratedData = async (ensName: string) => {
-    const params = {
-      ensName,
-      chainId: this.chainId,
-    };
-    const { data } = await this.baseGetClient.get(`/nimi/generate`, { params });
-    return data;
+  const { data } = await baseClient.get(`/nimi/by`, { params });
+  return data;
+};
+export const getEnsGeneratedData = async (ensName: string, chainId = 1) => {
+  const params = {
+    ensName,
+    chainId,
   };
-}
+  const { data } = await baseClient.get(`/nimi/generate`, { params });
+  return data;
+};
