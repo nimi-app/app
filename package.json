@@ -9,6 +9,7 @@
     "@ensdomains/ui": "^3.4.1",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/address": "^5.7.0",
+    "@ethersproject/contracts": "^5.7.0",
     "@ethersproject/providers": "^5.7.0",
     "@hookform/resolvers": "^2.8.10",
     "@nimi.io/card": "git+https://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:x-oauth-basic@github.com/nimi-app/card.git",
@@ -81,7 +82,6 @@
     ]
   },
   "devDependencies": {
-    "@ethersproject/contracts": "^5.7.0",
     "@graphql-codegen/add": "^3.2.1",
     "@graphql-codegen/cli": "2.13.12",
     "@graphql-codegen/client-preset": "^1.1.5",
