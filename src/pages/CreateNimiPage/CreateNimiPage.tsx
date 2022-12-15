@@ -30,6 +30,7 @@ export function CreateNimiPage() {
   const navigate = useNavigate();
   const { chainId, isConnected } = useRainbow();
   const { ensName } = useParams();
+  console.log('>>>>');
   if (isConnected !== true) {
     navigate('/');
     return <Container />;
