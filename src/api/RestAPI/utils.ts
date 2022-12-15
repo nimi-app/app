@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * Returns the base URL for the Nimi API.
  * @returns {string} The base URL for the Nimi API.
@@ -17,3 +19,7 @@ export function getAPIBaseURL() {
 
   return process.env.REACT_APP_NIMI_API_BASE_URL as string;
 }
+
+export const baseClient = axios.create({
+  baseURL: getAPIBaseURL(),
+});
