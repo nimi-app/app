@@ -26,5 +26,3 @@ jobs:
         run: npm ci --legacy-peer-deps
       - name: Build
         run: npm run build
-        with:
-          token: ${{secrets.ACCESS_TOKEN}}
