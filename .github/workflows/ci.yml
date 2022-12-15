@@ -19,11 +19,9 @@ jobs:
       packages: read
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v1
         with:
-          node-version: 16
-          cache: npm
-          registry-url: "https://npm.pkg.github.com"
+          node-version: '16'
       - name: Authenticate with private NPM package
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Install
