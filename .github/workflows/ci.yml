@@ -14,14 +14,21 @@ jobs:
     strategy:
       matrix:
         node_version: [16]
+    permissions:
+    contents: read
+    packages: read
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 16
+          cache: npm
+          registry-url: "https://npm.pkg.github.com"
       - name: Authenticate with private NPM package
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Install
         run: npm ci --legacy-peer-deps
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       - name: Build
         run: npm run build
