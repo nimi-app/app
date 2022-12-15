@@ -23,12 +23,10 @@ jobs:
           token: ${{secrets.ACCESS_TOKEN}}
           node-version: '16'
       - name: Install
-        run:  npm ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
       - name: Lint
         run: npm run lint
       - name: Test
         run: npm run test
       - name: Build
         run: npm run build
-        
-
