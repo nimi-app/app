@@ -7,11 +7,14 @@ import { baseClient } from '../utils';
 interface EnsGeneratedDataType {
   nimi: Nimi;
 }
-
+interface EnsGeneratedType {
+  ensName: string;
+  shouldRunSecondQuery?: boolean;
+}
 /**
  * Returns query for fetching data generated from ens name
  */
-export function useEnsGeneratedData({ ensName }) {
+export function useEnsGeneratedData({ ensName, shouldRunSecondQuery = false }: EnsGeneratedType) {
   const { chainId } = useRainbow();
   const getEnsGenratedData = async (ensName: string, chainId = 1) => {
     const params = {
@@ -27,5 +30,6 @@ export function useEnsGeneratedData({ ensName }) {
       if (data.nimi) return data.nimi;
       else return undefined;
     },
+    enabled: shouldRunSecondQuery,
   });
 }

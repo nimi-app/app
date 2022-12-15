@@ -1,10 +1,9 @@
 import { Nimi, NimiThemeType } from '@nimi.io/card';
-import { useQuery } from '@tanstack/react-query';
 import createDebugger from 'debug';
 import { useMemo } from 'react';
 
-import { getDeployedPageData, getEnsGeneratedData } from '../api/RestAPI/apiService';
-import { useRainbow } from './useRainbow';
+import { useDeployedPageData } from '../api/RestAPI/hooks/useDeployedPageData';
+import { useEnsGeneratedData } from '../api/RestAPI/hooks/useEnsGeneratedData';
 
 const debug = createDebugger('hooks:useDefaultNimiData');
 
@@ -16,58 +15,36 @@ interface UseInitialNimiData {
  * Returns default data to be displayed on CreateNimipage
  */
 export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
-  const { chainId } = useRainbow();
   const defaultTheme = { type: NimiThemeType.NIMI };
 
   const {
     data: deployedNimi,
     isSuccess: isDeployedSuccess,
     isLoading: isDepoyedLoading,
-  } = useQuery({
-    queryKey: ['fetchDeployedNimiData', ensName],
-    queryFn: async () => await getDeployedPageData(ensName),
-    select: ({ data }) => {
-      if (data.length) {
-        const nimi = data[0].nimi as Nimi;
-        if (nimi.theme === undefined) {
-          nimi.theme = defaultTheme;
-        }
-        return nimi;
-      } else {
-        return undefined;
-      }
-    },
-  });
+  } = useDeployedPageData({ ensName });
 
+  const shouldRunSecondQuery = deployedNimi === undefined && isDeployedSuccess;
   const {
     data: generatedNimi,
     isSuccess: isGeneratedSuccess,
     isLoading: isGeneratedLoading,
-  } = useQuery({
-    queryKey: ['fetchGeneratedData'],
-    queryFn: async () => await getEnsGeneratedData(ensName, chainId),
-    select: ({ data }) => {
-      if (!data.nimi) return undefined;
-
-      data.nimi.theme = defaultTheme;
-      return data.nimi as Nimi;
-    },
-    enabled: deployedNimi === undefined && isDeployedSuccess,
-  });
+  } = useEnsGeneratedData({ ensName, shouldRunSecondQuery });
 
   const nimiObject = useMemo(() => {
-    if (isDeployedSuccess && deployedNimi && !isDepoyedLoading) return deployedNimi;
-    else if (isGeneratedSuccess && generatedNimi && !isGeneratedLoading) return generatedNimi;
-    else if (!isDepoyedLoading && !isGeneratedLoading)
-      return {
-        ensName,
-        displayName: ensName,
-        addresses: [],
-        ensAddress: account,
-        links: [],
-        widgets: [],
-        theme: defaultTheme,
-      } as Nimi;
+    let nimi: Nimi = {
+      ensName,
+      displayName: ensName,
+      addresses: [],
+      ensAddress: account,
+      links: [],
+      widgets: [],
+    };
+    if (isDeployedSuccess && deployedNimi && !isDepoyedLoading) nimi = deployedNimi.nimi;
+    else if (isGeneratedSuccess && generatedNimi && !isGeneratedLoading) nimi = generatedNimi;
+    else if (!(isDepoyedLoading || isGeneratedLoading)) {
+      if (!nimi.theme) nimi.theme = defaultTheme;
+      return nimi;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     deployedNimi,
