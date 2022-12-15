@@ -16,19 +16,19 @@ jobs:
         node_version: [16]
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{secrets.ACCESS_TOKEN}}
       - uses: actions/setup-node@v2
+        with:
+          token: ${{secrets.ACCESS_TOKEN}}
           node-version: '16'
       - name: Install
-        run: git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/" && npm ci --legacy-peer-deps
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run:  npm ci --legacy-peer-deps
       - name: Lint
         run: npm run lint
       - name: Test
         run: npm run test
       - name: Build
-        run: git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/" && npm run build
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: npm run build
         
 
