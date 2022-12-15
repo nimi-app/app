@@ -17,11 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repo-token: ${{secrets.ACCESS_TOKEN}}
+          token: ${{secrets.ACCESS_TOKEN}}
       - uses: actions/setup-node@v2
         with:
-          repo-token: ${{secrets.ACCESS_TOKEN}}
           node-version: '16'
+          token: ${{secrets.ACCESS_TOKEN}}
       - name: Install
         run: npm ci --legacy-peer-deps
       - name: Build
