@@ -7,7 +7,6 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
-
 jobs:
   CI:
     name: Build
@@ -15,20 +14,15 @@ jobs:
     strategy:
       matrix:
         node_version: [16]
-
     steps:
-
       - uses: actions/checkout@v2
+        with:
+          token: ${{secrets.ACCESS_TOKEN}}
       - uses: actions/setup-node@v2
         with:
+          token: ${{secrets.ACCESS_TOKEN}}
           node-version: '16'
       - name: Install
         run: npm ci --legacy-peer-deps
-      - name: Lint
-        run: npm run lint
-      - name: Check types
-        run: npx tsc --noEmit
-      - name: Test
-        run: npm run test
       - name: Build
         run: npm run build
