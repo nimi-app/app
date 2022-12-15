@@ -29,24 +29,21 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
     select: ({ data }) => data[0],
   });
 
-  const nimiImageExists = useMemo(() => {
-    return !isDelpoyedLoading && isDeployedSuccess && deployedNimi && deployedNimi.nimi && deployedNimi.nimi.image;
+  const nimiImage = useMemo(() => {
+    if (!isDelpoyedLoading && isDeployedSuccess && deployedNimi && deployedNimi.nimi && deployedNimi.nimi.image)
+      return deployedNimi.nimi.image.url as string;
   }, [deployedNimi, isDelpoyedLoading, isDeployedSuccess]);
+
+  const metaDataImage = useMemo(() => {
+    if (metadata && !metadataLoading) return metadata.image;
+  }, [metadataLoading, metadata]);
 
   return (
     <Link ref={ref} to={`/domains/${domain.name}`}>
       <StyledENSNameCardWrapper>
         <ENSNameCardImage
           alt={'ENS Name image'}
-          src={
-            metadataLoading || isDelpoyedLoading
-              ? purpleCircleURL
-              : nimiImageExists
-              ? deployedNimi.nimi.image.url
-              : metadata
-              ? metadata.image
-              : purpleCircleURL
-          }
+          src={nimiImage ? nimiImage : metaDataImage ? metaDataImage : purpleCircleURL}
           onError={(event) => {
             const target = event.target as HTMLImageElement;
             if (target.src !== purpleCircleURL) {

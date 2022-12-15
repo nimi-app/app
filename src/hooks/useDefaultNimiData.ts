@@ -83,7 +83,7 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
   debug({ NimiObject: nimiObject });
 
   return {
-    loading: isDepoyedLoading && isGeneratedLoading,
+    loading: isDepoyedLoading || isGeneratedLoading,
     data: nimiObject,
   };
 }
