@@ -17,17 +17,13 @@ jobs:
         
     steps:
       - uses: actions/checkout@v2
-        with: 
+        with:
+          ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
           clean: 'false'
       - uses: actions/setup-node@v2
         with:
+          ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
           node-version: '16'
-      - name: Create .env file
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_GITHUB_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          directory: "./"
-          file_name: .env
       - name: Install
         run: npm ci --legacy-peer-deps
       - name: Lint
