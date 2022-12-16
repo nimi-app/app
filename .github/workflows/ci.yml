@@ -22,13 +22,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
+      - run: git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
       - name: Install
         run: npm ci --legacy-peer-deps
-      - name: Lint
-        run: npm run lint
-      - name: Check types
-        run: npx tsc --noEmit
-      - name: Test
-        run: npm run test
       - name: Build
         run: npm run build
