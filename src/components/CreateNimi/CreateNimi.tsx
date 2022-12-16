@@ -437,32 +437,38 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
-                {links?.length !== 0 && links !== undefined && (
+                {links !== undefined && links?.length > 0 && (
                   <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
-                    {links.map((link) => (
-                      <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
-                    ))}
+                    {links.map((link) => {
+                      console.log(link);
+                      return (
+                        <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
+                      );
+                    })}
                   </ReorderGroup>
                 )}
                 {/* addresses */}
-                {formWatchPayload.addresses.length > 0 && (
-                  <FormGroup>
-                    <FormItem>
-                      <Label>Addresses</Label>
-                      <BlockchainAddresses>
-                        {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                          return (
-                            <NimiBlockchainField
-                              key={'blockchain-input-' + blockchain.toLowerCase()}
-                              index={index}
-                              blockchain={blockchain}
-                            />
-                          );
-                        })}
-                      </BlockchainAddresses>
-                    </FormItem>
-                  </FormGroup>
-                )}
+                {formWatchPayload !== undefined &&
+                  'address' in formWatchPayload === true &&
+                  formWatchPayload.addresses !== undefined &&
+                  formWatchPayload?.addresses?.length > 0 && (
+                    <FormGroup>
+                      <FormItem>
+                        <Label>Addresses</Label>
+                        <BlockchainAddresses>
+                          {formWatchPayload.addresses.map(({ blockchain }, index) => {
+                            return (
+                              <NimiBlockchainField
+                                key={'blockchain-input-' + blockchain.toLowerCase()}
+                                index={index}
+                                blockchain={blockchain}
+                              />
+                            );
+                          })}
+                        </BlockchainAddresses>
+                      </FormItem>
+                    </FormGroup>
+                  )}
                 {/* widgets */}
                 {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
                   <PoapField

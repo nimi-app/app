@@ -64,7 +64,6 @@ export function Web3Status() {
                   </StyledWrapper>
                 );
               }
-
               if (chain.unsupported) {
                 return (
                   <StyledWrapper isError={chain.unsupported} onClick={openChainModal}>
