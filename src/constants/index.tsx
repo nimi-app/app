@@ -1,6 +1,6 @@
 import { NimiLinkType } from '@nimi.io/card';
 import { CSSProperties } from 'styled-components';
-import { chain } from 'wagmi';
+import { goerli, mainnet } from 'wagmi';
 
 export interface NetworkDetails {
   chainId: string;
@@ -106,7 +106,6 @@ export const ENV_SUPPORTED_CHAIN_IDS =
 /**
  * Parse through and pick the chains from SUPPORTABLE_WAGMI_CHAINS based on the list from ENV_SUPPORTED_CHAIN_IDS;
  */
-export const SUPPORT_CHAINS_RAINBOW_KIT =
-  process.env.REACT_APP_ENV === 'production' ? [chain.mainnet] : [chain.mainnet, chain.goerli];
+export const SUPPORT_CHAINS_RAINBOW_KIT = process.env.REACT_APP_ENV === 'production' ? [mainnet] : [mainnet, goerli];
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];

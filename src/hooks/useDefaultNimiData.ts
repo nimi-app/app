@@ -28,7 +28,7 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
     data: generatedNimi,
     isSuccess: isGeneratedSuccess,
     isFetching: isGeneratedFetching,
-  } = useEnsGeneratedData({ ensName, enabled: shouldRunSecondQuery });
+  } = useEnsGeneratedData(ensName, shouldRunSecondQuery);
 
   const nimiObject = useMemo(() => {
     let nimi: Nimi = {

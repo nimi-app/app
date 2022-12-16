@@ -7,15 +7,11 @@ import { baseClient } from '../utils';
 interface EnsGeneratedDataType {
   nimi: Nimi;
 }
-interface EnsGeneratedType {
-  ensName: string;
-  //TODO: refactor this so that it supports all the query params
-  enabled: boolean;
-}
+
 /**
  * Returns query for fetching data generated from ens name
  */
-export function useEnsGeneratedData({ ensName, enabled }: EnsGeneratedType) {
+export function useEnsGeneratedData(ensName: string, enabled = true) {
   const { chainId } = useRainbow();
   const getEnsGenratedData = async (ensName: string, chainId = 1) => {
     const params = {
