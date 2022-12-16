@@ -28,6 +28,6 @@ jobs:
         run: npm ci --legacy-peer-deps
         shell: bash
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Build
         run: npm run build
