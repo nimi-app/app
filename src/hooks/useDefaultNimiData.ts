@@ -27,8 +27,8 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
   const {
     data: generatedNimi,
     isSuccess: isGeneratedSuccess,
-    isLoading: isGeneratedLoading,
-  } = useEnsGeneratedData({ ensName, shouldRunSecondQuery });
+    isFetching: isGeneratedFetching,
+  } = useEnsGeneratedData({ ensName, enabled: shouldRunSecondQuery });
 
   const nimiObject = useMemo(() => {
     let nimi: Nimi = {
@@ -39,9 +39,11 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
       links: [],
       widgets: [],
     };
+
     if (isDeployedSuccess && deployedNimi && !isDepoyedLoading) nimi = deployedNimi.nimi;
-    else if (isGeneratedSuccess && generatedNimi && !isGeneratedLoading) nimi = generatedNimi;
-    else if (!(isDepoyedLoading || isGeneratedLoading)) {
+    else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) nimi = generatedNimi;
+
+    if (!(isDepoyedLoading || isGeneratedFetching)) {
       if (!nimi.theme) nimi.theme = defaultTheme;
       return nimi;
     }
@@ -51,7 +53,7 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
     generatedNimi,
     isGeneratedSuccess,
     isDepoyedLoading,
-    isGeneratedLoading,
+    isGeneratedFetching,
     isDeployedSuccess,
     account,
     ensName,
@@ -60,7 +62,7 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
   debug({ NimiObject: nimiObject });
 
   return {
-    loading: isDepoyedLoading || isGeneratedLoading,
+    loading: isDepoyedLoading || isGeneratedFetching,
     data: nimiObject,
   };
 }

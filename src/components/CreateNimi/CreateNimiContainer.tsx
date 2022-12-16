@@ -16,6 +16,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
     account,
   });
+
   //check for users current Nimi profile data or else adds data generated from ens
   const { data: initialNimi, loading: initialNimiLoading } = useInitialtNimiData({
     ensName,

@@ -9,12 +9,13 @@ interface EnsGeneratedDataType {
 }
 interface EnsGeneratedType {
   ensName: string;
-  shouldRunSecondQuery?: boolean;
+  //TODO: refactor this so that it supports all the query params
+  enabled: boolean;
 }
 /**
  * Returns query for fetching data generated from ens name
  */
-export function useEnsGeneratedData({ ensName, shouldRunSecondQuery = false }: EnsGeneratedType) {
+export function useEnsGeneratedData({ ensName, enabled }: EnsGeneratedType) {
   const { chainId } = useRainbow();
   const getEnsGenratedData = async (ensName: string, chainId = 1) => {
     const params = {
@@ -30,6 +31,6 @@ export function useEnsGeneratedData({ ensName, shouldRunSecondQuery = false }: E
       if (data.nimi) return data.nimi;
       else return undefined;
     },
-    enabled: shouldRunSecondQuery,
+    enabled,
   });
 }
