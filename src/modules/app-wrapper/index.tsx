@@ -1,26 +1,24 @@
-import { ReactNode } from 'react';
+import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Footer } from '../../components/Footer';
 import { Header } from '../../components/Header';
 
-export interface AppWrapperProps {
-  children?: ReactNode;
-}
-
-export function AppWrapper({ children }: AppWrapperProps) {
+export function AppWrapper() {
   return (
     <StyledAppWrapper id="app-wrapper">
       <StyledHeaderWrapper>
         <Header />
       </StyledHeaderWrapper>
-      <StyledBodyWrapper>{children}</StyledBodyWrapper>
+      <StyledBodyWrapper>
+        <Outlet />
+      </StyledBodyWrapper>
       <Footer />
     </StyledAppWrapper>
   );
 }
 
-export const StyledAppWrapper = styled.div`
+const StyledAppWrapper = styled.div`
   display: flex;
   flex-flow: column;
   align-items: flex-start;
@@ -30,14 +28,14 @@ export const StyledAppWrapper = styled.div`
   background-color: ${({ theme }) => theme.mainBackgoround};
 `;
 
-export const StyledHeaderWrapper = styled.div`
+const StyledHeaderWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   flex-shrink: 0;
   justify-content: space-between;
 `;
 
-export const StyledBodyWrapper = styled.main`
+const StyledBodyWrapper = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: start;
