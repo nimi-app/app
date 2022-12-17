@@ -4,13 +4,12 @@ import { NimiSignatureColor } from '../../theme';
 
 type HeadingProps = {
   children: string;
-  size?: 'main' | 'sub';
+  type?: 'main' | 'sub';
   color?: string;
 };
 
-export function Heading({ children, size = 'main', color }: HeadingProps) {
-  console.log(color);
-  if (size === 'sub') return <SubHeading color={color}>{children}</SubHeading>;
+export function Heading({ children, type = 'main', color }: HeadingProps) {
+  if (type === 'sub') return <SubHeading color={color}>{children}</SubHeading>;
   return <MainHeading color={color}>{children}</MainHeading>;
 }
 

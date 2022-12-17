@@ -23,7 +23,7 @@ export function AppWrapper() {
             return (
               <ErrorContainer>
                 <Heading>{t('error.unsupportedNetwork')}</Heading>
-                <Heading size="sub" color="#000">
+                <Heading type="sub" color="#000">
                   Please change your network by clicking the account button on the top right.
                 </Heading>
               </ErrorContainer>

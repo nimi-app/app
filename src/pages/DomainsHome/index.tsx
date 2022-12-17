@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
-import { DottedButtonBase } from '../../components/Button/styled';
+import { DottedBorder } from '../../components/Button/styled';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
+import { Heading } from '../../components/Heading';
 import { InputFieldWithIcon } from '../../components/Input';
 import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
-import { NimiSignatureColor } from '../../theme';
 
 export function DomainsHome() {
   const { account } = useRainbow();
@@ -34,7 +33,7 @@ function Domains({ address }: DomainsProps) {
   return (
     <Container>
       <TopSection>
-        <DomainsHeader>Your Identities</DomainsHeader>
+        <Heading>Your Identities</Heading>
         <StyledInput
           id="domain-seach"
           isSimple={true}
@@ -48,9 +47,7 @@ function Domains({ address }: DomainsProps) {
       </TopSection>
 
       {loading ? (
-        <LoaderWrapper>
-          <Loader />
-        </LoaderWrapper>
+        <Loader />
       ) : (
         <>
           {domainList?.length === 0 ? (
@@ -77,6 +74,14 @@ function Domains({ address }: DomainsProps) {
   );
 }
 
+function ENSItem() {
+  return <></>;
+}
+
+function NoENSBanner() {
+  return <></>;
+}
+
 const Container = styled.div`
   width: 100%;
 `;
@@ -88,17 +93,8 @@ const StyledDomainsWrapper = styled.div`
   justify-content: start;
 `;
 
-const DomainsHeader = styled.h1`
-  display: flex;
-  width: fit-content;
-  line-height: 40px;
-  font-size: 36px;
-  font-weight: 800;
-  ${NimiSignatureColor};
-  margin-bottom: 36px;
-`;
-
-const AddDomain = styled(DottedButtonBase)`
+const AddDomain = styled.button`
+  ${DottedBorder}
   width: 308px;
   border-radius: 16px;
   height: 146px;
@@ -107,7 +103,8 @@ const AddDomain = styled(DottedButtonBase)`
   font-size: 24px;
 `;
 
-const BigBanner = styled(DottedButtonBase)`
+const BigBanner = styled.button`
+  ${DottedBorder}
   border-radius: 16px;
   font-weight: 400;
   font-size: 24px;
@@ -136,11 +133,4 @@ const StyledInput = styled(InputFieldWithIcon)`
   max-width: 200px !important;
   display: flex !important;
   align-items: flex-start;
-`;
-
-const LoaderWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 80px 0;
 `;

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { NimiSignatureColor } from '../../theme';
 
@@ -76,10 +76,9 @@ export const StyledInnerWrapper = styled.div`
   gap: 10px;
 `;
 
-export const DottedButtonBase = styled.button`
-  cursor: pointer;
+export const DottedBorder = css`
   line-height: 24px;
   letter-spacing: 0.1em;
   ${NimiSignatureColor};
-  border: 2px dotted rgba(67, 104, 234, 1);
+  border: 2px dotted #4368ea;
 `;
