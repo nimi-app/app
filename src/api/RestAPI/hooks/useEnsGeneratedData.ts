@@ -13,6 +13,7 @@ interface EnsGeneratedDataType {
  */
 export function useEnsGeneratedData(ensName: string, enabled = true) {
   const { chainId } = useRainbow();
+
   const getEnsGenratedData = async (ensName: string, chainId = 1) => {
     const params = {
       ensName,

@@ -2,8 +2,8 @@ import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useDeployedPageData } from '../../../api/RestAPI/hooks/useDeployedPageData';
+import { useEnsMetadataImage } from '../../../api/RestAPI/hooks/useEnsMetadataImage';
 import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
-import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
 
@@ -14,7 +14,7 @@ export interface ENSCardContainerProps {
 }
 
 export function ENSCardContainer({ domain }: ENSCardContainerProps) {
-  const { data: metadata, loading: metadataLoading } = useENSMetadata(domain.name!);
+  const { data: metadataImage, isLoading: metadataLoading } = useEnsMetadataImage(domain.name);
 
   const ref = useRef(null);
   const {
@@ -29,8 +29,8 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   }, [deployedNimi, isDelpoyedLoading, isDeployedSuccess]);
 
   const metaDataImage = useMemo(() => {
-    if (metadata && !metadataLoading) return metadata.image;
-  }, [metadataLoading, metadata]);
+    if (metadataImage && !metadataLoading) return metadataImage;
+  }, [metadataLoading, metadataImage]);
 
   return (
     <Link ref={ref} to={`/domains/${domain.name}`}>
