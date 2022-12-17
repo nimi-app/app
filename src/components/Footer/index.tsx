@@ -1,32 +1,58 @@
-// Styled components
-
-// SVGs
+import styled from 'styled-components';
 
 import { ReactComponent as GitHubLogo } from '../../assets/svg/github-logo.svg';
-import { ExternalLink } from '../../theme';
-import { Container } from '../Container';
-import { FooterContent, FooterMain, FooterNav, FooterWrapper, TwitterLogo } from './styled';
+import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
+import { ExternalLink, MEDIA_WIDTHS } from '../../theme';
 
 export function Footer() {
   return (
-    <FooterMain>
-      <Container>
-        <FooterWrapper>
-          <FooterContent>
-            <span>
-              Nimi.eth | <a href="https://amsterdam.ethglobal.com/">ETHAmsterdam 2022 Hackathon</a> winners
-            </span>
-          </FooterContent>
-          <FooterNav>
-            <ExternalLink title="Nimi on Twitter" href="https://twitter.com/0xNimi">
-              <TwitterLogo />
-            </ExternalLink>
-            <ExternalLink title="Nimi on GitHub" href="https://github.com/nimi-app">
-              <GitHubLogo fill="#1F3E4F" />
-            </ExternalLink>
-          </FooterNav>
-        </FooterWrapper>
-      </Container>
-    </FooterMain>
+    <Container>
+      <Content>
+        <Paragraph>
+          Nimi.eth |&nbsp;<a href="https://amsterdam.ethglobal.com/">ETHAmsterdam 2022 Hackathon</a>&nbsp;winners
+        </Paragraph>
+        <Navigation>
+          <ExternalLink title="Nimi on Twitter" href="https://twitter.com/0xNimi">
+            <Twitter />
+          </ExternalLink>
+          <ExternalLink title="Nimi on GitHub" href="https://github.com/nimi-app">
+            <GitHubLogo fill="#1F3E4F" />
+          </ExternalLink>
+        </Navigation>
+      </Content>
+    </Container>
   );
 }
+
+const Container = styled.footer`
+  width: 100%;
+  padding: 40px 0 40px;
+`;
+
+const Content = styled.div`
+  max-width: ${MEDIA_WIDTHS.upToMedium}px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin: 0 auto;
+
+  @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
+    flex-direction: column;
+  }
+`;
+
+const Paragraph = styled.p`
+  display: inline-block;
+  line-height: 24px;
+  text-align: left;
+`;
+
+const Navigation = styled.nav`
+  height: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
