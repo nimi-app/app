@@ -1,4 +1,3 @@
-import { Flex } from 'rebass';
 import styled from 'styled-components';
 
 import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
@@ -9,7 +8,8 @@ import { CardBody } from '../Card';
 /**
  * Defines the layout
  */
-export const InnerWrapper = styled(Flex)`
+export const InnerWrapper = styled.div`
+  display: flex;
   justify-content: center;
   gap: 24px;
   @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {

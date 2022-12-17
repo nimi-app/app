@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Flex } from 'rebass';
 import styled from 'styled-components';
 
 import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
@@ -96,7 +95,8 @@ function Domains({ address }: DomainsProps) {
   );
 }
 
-const StyledDomainsWrapper = styled(Flex)`
+const StyledDomainsWrapper = styled.div`
+  display: flex;
   flex-wrap: wrap;
   gap: 18px;
   justify-content: start;
