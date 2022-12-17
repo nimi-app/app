@@ -96,7 +96,6 @@ const StyledDomainsWrapper = styled.div`
 const AddDomain = styled.button`
   ${DottedBorder}
   width: 308px;
-  border-radius: 16px;
   height: 146px;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -105,7 +104,6 @@ const AddDomain = styled.button`
 
 const BigBanner = styled.button`
   ${DottedBorder}
-  border-radius: 16px;
   font-weight: 400;
   font-size: 24px;
   width: 100%;

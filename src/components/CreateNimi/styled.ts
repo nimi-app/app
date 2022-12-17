@@ -120,7 +120,6 @@ export const AddFieldsButton = styled.button`
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.1em;
-  border-radius: 12px;
   padding: 22px 16px;
   width: 100%;
 `;

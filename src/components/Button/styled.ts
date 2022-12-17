@@ -81,4 +81,5 @@ export const DottedBorder = css`
   letter-spacing: 0.1em;
   ${NimiSignatureColor};
   border: 2px dotted #4368ea;
+  border-radius: 16px;
 `;
