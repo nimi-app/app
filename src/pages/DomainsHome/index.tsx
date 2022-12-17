@@ -30,21 +30,22 @@ export function DomainsHome() {
 
   const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(account as string, page, searchText);
 
+  const openENSWebsiteHandler = () => window.open('https://app.ens.domains/', '_blank')?.focus();
   const searchTextChangedHandler = (event: ChangeEvent<HTMLInputElement>) => setSearchText(event.target.value);
 
   return (
     <Container>
-      <ControlBar value={searchText} onChange={searchTextChangedHandler} />
+      <ControlBar value={searchText} searchTextChangedHandler={searchTextChangedHandler} />
       {(() => {
         if (loading) return <Loader />;
-        if (domainList?.length === 0) return <NoENSBanner />;
+        if (domainList?.length === 0) return <NoENSBanner openENSWebsiteHandler={openENSWebsiteHandler} />;
 
         return (
           <StyledDomainsWrapper>
             {domainList?.map((domain) => (
               <ENSCardContainer key={domain.id} domain={domain} />
             ))}
-            <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
+            <AddDomain onClick={openENSWebsiteHandler}>Buy an ENS</AddDomain>
           </StyledDomainsWrapper>
         );
       })()}
