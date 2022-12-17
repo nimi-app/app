@@ -7,10 +7,10 @@ import { InputFieldWithIcon } from '../../components/Input';
 
 type ControlBarProps = {
   value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  searchTextChangedHandler: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export function ControlBar({ value, onChange }: ControlBarProps) {
+export function ControlBar({ value, searchTextChangedHandler }: ControlBarProps) {
   return (
     <TopSection>
       <Heading>Your Identities</Heading>
@@ -20,7 +20,7 @@ export function ControlBar({ value, onChange }: ControlBarProps) {
         inputLogo={SearchIcon}
         placeholder="Search"
         content={value}
-        onChange={onChange}
+        onChange={searchTextChangedHandler}
         style={{ maxWidth: '200px', background: 'none' }}
         isInvalidInput={false}
       />

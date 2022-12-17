@@ -4,15 +4,17 @@ import styled from 'styled-components';
 import { DottedBorder } from '../../components/Button/styled';
 import { Heading } from '../../components/Heading';
 
-export function NoENSBanner() {
-  const { t } = useTranslation('nimi');
+type NoENSBannerProps = {
+  openENSWebsiteHandler: () => void;
+};
 
-  const openENS = () => window.open('https://app.ens.domains/', '_blank')?.focus();
+export function NoENSBanner({ openENSWebsiteHandler }: NoENSBannerProps) {
+  const { t } = useTranslation('nimi');
 
   return (
     <NoENSSection>
       <Heading type="sub">{t('noEnsFound')}</Heading>
-      <BuyDomainLink onClick={openENS}>{t('buyDomain')}</BuyDomainLink>
+      <BuyDomainLink onClick={openENSWebsiteHandler}>{t('buyDomain')}</BuyDomainLink>
     </NoENSSection>
   );
 }
