@@ -51,12 +51,12 @@ function Domains({ address }: DomainsProps) {
       ) : (
         <>
           {domainList?.length === 0 ? (
-            <BigBanner>
-              {t('noEnsFound')}
+            <NoENSBanner>
+              <Heading type="sub">{t('noEnsFound')}</Heading>
               <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
                 {t('buyDomain')}
               </BuyDomainLink>
-            </BigBanner>
+            </NoENSBanner>
           ) : (
             <StyledDomainsWrapper>
               {domainList?.map((domain) => (
@@ -72,14 +72,6 @@ function Domains({ address }: DomainsProps) {
       <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
     </Container>
   );
-}
-
-function ENSItem() {
-  return <></>;
-}
-
-function NoENSBanner() {
-  return <></>;
 }
 
 const Container = styled.div`
@@ -100,20 +92,21 @@ const AddDomain = styled.button`
   letter-spacing: -0.02em;
 `;
 
-const BigBanner = styled.button`
+const NoENSBanner = styled.section`
   ${DottedBorder}
+  display: block;
   width: 100%;
-  padding: 80px 0;
+  padding: 40px 0;
   letter-spacing: -0.02em;
 `;
 
-const BuyDomainLink = styled.p`
+const BuyDomainLink = styled.a`
   font-weight: 700;
   font-size: 20px;
   line-height: 22px;
   text-decoration-line: underline;
   text-decoration-color: #9280e3;
-  margin-top: 17px;
+  background-color: white;
   cursor: pointer;
 `;
 

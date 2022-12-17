@@ -117,12 +117,13 @@ export const SaveAndDeployButton = styled(Button)`
 `;
 export const AddFieldsButton = styled.button`
   ${DottedBorder}
+  width: 100%;
   font-size: 16px;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.1em;
-  padding: 22px 16px;
-  width: 100%;
+  text-transform: uppercase;
+  padding: 10px 0;
+  cursor: pointer;
 `;
 export const PreviewMobile = styled.div`
   display: none;
