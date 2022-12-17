@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
@@ -14,13 +14,7 @@ import { useRainbow } from '../../hooks/useRainbow';
 import { NimiSignatureColor } from '../../theme';
 
 export function DomainsHome() {
-  const { account, isConnected } = useRainbow();
-  const navigate = useNavigate();
-
-  if (isConnected !== true) {
-    navigate('/');
-    return <Container />;
-  }
+  const { account } = useRainbow();
 
   return <Domains address={account as string} />;
 }
