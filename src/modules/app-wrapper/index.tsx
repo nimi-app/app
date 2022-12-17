@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Footer } from '../../components/Footer';
@@ -10,23 +10,26 @@ import { useRainbow } from '../../hooks/useRainbow';
 import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS } from '../../theme';
 
 export function AppWrapper() {
-  const { chainId } = useRainbow();
+  const { chainId, isConnected } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
 
   return (
     <Container>
       <Header />
       <Content>
-        {!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) ? (
-          <ErrorContainer>
-            <Heading>{t('error.unsupportedNetwork')}</Heading>
-            <Heading size="sub" color="#000">
-              Please change your network by clicking the account button on the top right.
-            </Heading>
-          </ErrorContainer>
-        ) : (
-          <Outlet />
-        )}
+        {(() => {
+          if (!isConnected) return <Navigate to="/" />;
+          if (!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number))
+            return (
+              <ErrorContainer>
+                <Heading>{t('error.unsupportedNetwork')}</Heading>
+                <Heading size="sub" color="#000">
+                  Please change your network by clicking the account button on the top right.
+                </Heading>
+              </ErrorContainer>
+            );
+          return <Outlet />;
+        })()}
       </Content>
       <Footer />
     </Container>
