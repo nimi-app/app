@@ -18,8 +18,6 @@ export function DomainsHome() {
 
   const { account } = useRainbow();
 
-  const { t } = useTranslation('nimi');
-
   const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(account as string, page, searchText);
 
   return (
@@ -39,16 +37,8 @@ export function DomainsHome() {
       </TopSection>
       {(() => {
         if (loading) return <Loader />;
-        if (domainList?.length === 0)
-          return (
-            <NoENSBanner>
-              <Heading type="sub">{t('noEnsFound')}</Heading>
-              <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-                {t('buyDomain')}
-              </BuyDomainLink>
-            </NoENSBanner>
-          );
-
+        if (domainList?.length === 0) return <NoENSBanner />;
+        console.log('DOMAINS', domainList);
         return (
           <StyledDomainsWrapper>
             {domainList?.map((domain) => (
@@ -60,6 +50,19 @@ export function DomainsHome() {
       })()}
       <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
     </Container>
+  );
+}
+
+function NoENSBanner() {
+  const { t } = useTranslation('nimi');
+
+  const openENS = () => window.open('https://app.ens.domains/', '_blank')?.focus();
+
+  return (
+    <NoENSSection>
+      <Heading type="sub">{t('noEnsFound')}</Heading>
+      <BuyDomainLink onClick={openENS}>{t('buyDomain')}</BuyDomainLink>
+    </NoENSSection>
   );
 }
 
@@ -81,7 +84,7 @@ const AddDomain = styled.button`
   letter-spacing: -0.02em;
 `;
 
-const NoENSBanner = styled.section`
+const NoENSSection = styled.section`
   ${DottedBorder}
   display: block;
   width: 100%;
