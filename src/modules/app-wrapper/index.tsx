@@ -6,36 +6,24 @@ import { Header } from '../../components/Header';
 
 export function AppWrapper() {
   return (
-    <StyledAppWrapper id="app-wrapper">
-      <StyledHeaderWrapper>
-        <Header />
-      </StyledHeaderWrapper>
-      <StyledBodyWrapper>
+    <Container id="app-wrapper">
+      <Header />
+      <Content>
         <Outlet />
-      </StyledBodyWrapper>
+      </Content>
       <Footer />
-    </StyledAppWrapper>
+    </Container>
   );
 }
 
-const StyledAppWrapper = styled.div`
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  flex-direction: column;
-  overflow: hidden;
+const Container = styled.div`
   min-height: 100vh;
-  background-color: ${({ theme }) => theme.mainBackgoround};
-`;
-
-const StyledHeaderWrapper = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
-  flex-shrink: 0;
-  justify-content: space-between;
+  background-color: ${({ theme }) => theme.mainBackgoround};
+  overflow: hidden;
 `;
 
-const StyledBodyWrapper = styled.main`
+const Content = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: start;

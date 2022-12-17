@@ -18,11 +18,11 @@ export function Header() {
   );
 }
 
-const Container = styled.div`
+const Container = styled.header`
   width: 100%;
 `;
 
-export const Content = styled.div`
+const Content = styled.div`
   max-width: ${MEDIA_WIDTHS.upToMedium}px;
   height: 80px;
   display: flex;
