@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { CreateNimiContainer } from '../../components/CreateNimi/CreateNimiContainer';
 import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { useRainbow } from '../../hooks/useRainbow';
-import { AppWrapper } from '../../modules/app-wrapper';
 import { NimiSignatureColor } from '../../theme';
 
 const ErrorContainer = styled.div`
@@ -37,18 +36,12 @@ export function CreateNimiPage() {
 
   if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
     return (
-      <AppWrapper>
-        <Container>
-          <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
-          <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
-        </Container>
-      </AppWrapper>
+      <Container>
+        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+      </Container>
     );
   }
 
-  return (
-    <AppWrapper>
-      <CreateNimiContainer ensName={ensName as string} />{' '}
-    </AppWrapper>
-  );
+  return <CreateNimiContainer ensName={ensName as string} />;
 }
