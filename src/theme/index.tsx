@@ -10,6 +10,9 @@ import { Colors } from './styled';
 
 export * from './components';
 
+export const HEADER_HEIGHT = '80px';
+export const FOOTER_HEIGHT = '80px';
+
 export const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
   upToSmall: 720,

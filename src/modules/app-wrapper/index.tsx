@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Footer } from '../../components/Footer';
 import { Header } from '../../components/Header';
+import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS } from '../../theme';
 
 export function AppWrapper() {
   return (
@@ -24,14 +25,9 @@ const Container = styled.div`
 `;
 
 const Content = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
+  max-width: ${MEDIA_WIDTHS.upToMedium}px;
   width: 100%;
-  margin-top: 24px;
-  align-items: center;
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overflow: visible;
+  min-height: calc(100vh - (${HEADER_HEIGHT} + ${FOOTER_HEIGHT}));
+  padding: 0 20px;
+  margin: 0 auto;
 `;
