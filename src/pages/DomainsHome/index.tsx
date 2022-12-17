@@ -1,26 +1,26 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
 import { DottedBorder } from '../../components/Button/styled';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
-import { Heading } from '../../components/Heading';
-import { InputFieldWithIcon } from '../../components/Input';
 import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
+import { ControlBar } from './ControlBar';
+import { NoENSBanner } from './NoENSBanner';
 
-type ENSDomain = {
-  id: string;
-  labelName: string;
-  labelhash: string;
-  name: string;
-  parent: {
-    name: string;
-  };
-};
+// TODO: ADD ENSDomain AS MODEL
+
+// type ENSDomain = {
+//   id: string;
+//   labelName: string;
+//   labelhash: string;
+//   name: string;
+//   parent: {
+//     name: string;
+//   };
+// };
 
 export function DomainsHome() {
   const [searchText, setSearchText] = useState('');
@@ -30,25 +30,15 @@ export function DomainsHome() {
 
   const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(account as string, page, searchText);
 
+  const searchTextChangedHandler = (event: ChangeEvent<HTMLInputElement>) => setSearchText(event.target.value);
+
   return (
     <Container>
-      <TopSection>
-        <Heading>Your Identities</Heading>
-        <StyledInput
-          id="domain-seach"
-          isSimple={true}
-          inputLogo={SearchIcon}
-          placeholder="Search"
-          content={searchText}
-          onChange={({ target }) => setSearchText(target.value)}
-          style={{ maxWidth: '200px', background: 'none' }}
-          isInvalidInput={false}
-        />
-      </TopSection>
+      <ControlBar value={searchText} onChange={searchTextChangedHandler} />
       {(() => {
         if (loading) return <Loader />;
         if (domainList?.length === 0) return <NoENSBanner />;
-        console.log('DOMAINS', domainList);
+
         return (
           <StyledDomainsWrapper>
             {domainList?.map((domain) => (
@@ -60,19 +50,6 @@ export function DomainsHome() {
       })()}
       <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
     </Container>
-  );
-}
-
-function NoENSBanner() {
-  const { t } = useTranslation('nimi');
-
-  const openENS = () => window.open('https://app.ens.domains/', '_blank')?.focus();
-
-  return (
-    <NoENSSection>
-      <Heading type="sub">{t('noEnsFound')}</Heading>
-      <BuyDomainLink onClick={openENS}>{t('buyDomain')}</BuyDomainLink>
-    </NoENSSection>
   );
 }
 
@@ -92,34 +69,4 @@ const AddDomain = styled.button`
   width: 308px;
   height: 146px;
   letter-spacing: -0.02em;
-`;
-
-const NoENSSection = styled.section`
-  ${DottedBorder}
-  display: block;
-  width: 100%;
-  padding: 40px 0;
-  letter-spacing: -0.02em;
-  text-align: center;
-`;
-
-const BuyDomainLink = styled.a`
-  line-height: 24px;
-  font-size: 20px;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-`;
-
-const TopSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 20px;
-`;
-
-const StyledInput = styled(InputFieldWithIcon)`
-  max-width: 200px !important;
-  display: flex !important;
-  align-items: flex-start;
 `;
