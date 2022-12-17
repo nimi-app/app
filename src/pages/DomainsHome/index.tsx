@@ -12,6 +12,16 @@ import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
 
+type ENSDomain = {
+  id: string;
+  labelName: string;
+  labelhash: string;
+  name: string;
+  parent: {
+    name: string;
+  };
+};
+
 export function DomainsHome() {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
@@ -42,7 +52,7 @@ export function DomainsHome() {
         return (
           <StyledDomainsWrapper>
             {domainList?.map((domain) => (
-              <ENSCardContainer key={domain.name} domain={domain} />
+              <ENSCardContainer key={domain.id} domain={domain} />
             ))}
             <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
           </StyledDomainsWrapper>
