@@ -45,8 +45,9 @@ function Domains({ address }: DomainsProps) {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
 
-  const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(address, page, searchText);
   const { t } = useTranslation('nimi');
+
+  const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(address, page, searchText);
 
   return (
     <Container>
