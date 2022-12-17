@@ -77,7 +77,9 @@ export const StyledInnerWrapper = styled.div`
 `;
 
 export const DottedBorder = css`
-  line-height: 24px;
+  line-height: 32px;
+  font-size: 24px;
+  font-weight: 400;
   letter-spacing: 0.1em;
   ${NimiSignatureColor};
   border: 2px dotted #4368ea;

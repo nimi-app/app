@@ -97,15 +97,11 @@ const AddDomain = styled.button`
   ${DottedBorder}
   width: 308px;
   height: 146px;
-  font-weight: 400;
   letter-spacing: -0.02em;
-  font-size: 24px;
 `;
 
 const BigBanner = styled.button`
   ${DottedBorder}
-  font-weight: 400;
-  font-size: 24px;
   width: 100%;
   padding: 80px 0;
   letter-spacing: -0.02em;

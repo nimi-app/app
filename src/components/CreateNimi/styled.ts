@@ -117,8 +117,9 @@ export const SaveAndDeployButton = styled(Button)`
 `;
 export const AddFieldsButton = styled.button`
   ${DottedBorder}
-  text-transform: uppercase;
+  font-size: 16px;
   font-weight: 600;
+  text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 22px 16px;
   width: 100%;
