@@ -9,28 +9,18 @@ import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
 import { InputFieldWithIcon } from '../../components/Input';
 import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
-import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
 import { NimiSignatureColor } from '../../theme';
 
 export function DomainsHome() {
-  const { chainId, account, isConnected } = useRainbow();
-  const { t } = useTranslation(['common', 'landing']);
+  const { account, isConnected } = useRainbow();
   const navigate = useNavigate();
 
   if (isConnected !== true) {
     navigate('/');
     return <Container />;
   }
-
-  if (!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number))
-    return (
-      <Container>
-        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
-        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
-      </Container>
-    );
 
   return <Domains address={account as string} />;
 }
@@ -102,22 +92,6 @@ const StyledDomainsWrapper = styled.div`
   flex-wrap: wrap;
   gap: 18px;
   justify-content: start;
-`;
-
-const ErrorContainer = styled.div`
-  ${NimiSignatureColor};
-  font-weight: 800;
-  font-size: 36px;
-  line-height: 39px;
-  margin-bottom: 36px;
-`;
-
-const NormalText = styled.p`
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 22px;
-  margin-top: 17px;
-  cursor: pointer;
 `;
 
 const DomainsHeader = styled.h1`
