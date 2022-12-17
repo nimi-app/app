@@ -42,7 +42,7 @@ export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
       for (const theme of themeToPoapMapping) {
         const hasTheme = userPOAPList.some((poap) => theme.eventId.includes(poap.event.id));
         if (hasTheme) {
-          themes.unshift(theme.theme);
+          themes.push(theme.theme);
         }
       }
 
