@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
 import { DottedButtonBase } from '../../components/Button/styled';
-import { Container } from '../../components/Container';
 import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
 import { InputFieldWithIcon } from '../../components/Input';
 import { Loader } from '../../components/Loader';
@@ -25,14 +24,13 @@ export function DomainsHome() {
     return <Container />;
   }
 
-  if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
+  if (!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number))
     return (
       <Container>
         <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
         <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
       </Container>
     );
-  }
 
   return <Domains address={account as string} />;
 }
@@ -53,7 +51,6 @@ function Domains({ address }: DomainsProps) {
     <Container>
       <TopSection>
         <DomainsHeader>Your Identities</DomainsHeader>
-
         <StyledInput
           id="domain-seach"
           isSimple={true}
@@ -96,6 +93,10 @@ function Domains({ address }: DomainsProps) {
   );
 }
 
+const Container = styled.div`
+  width: 100%;
+`;
+
 const StyledDomainsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -109,6 +110,14 @@ const ErrorContainer = styled.div`
   font-size: 36px;
   line-height: 39px;
   margin-bottom: 36px;
+`;
+
+const NormalText = styled.p`
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  margin-top: 17px;
+  cursor: pointer;
 `;
 
 const DomainsHeader = styled.h1`
@@ -166,12 +175,4 @@ const LoaderWrapper = styled.div`
   justify-content: center;
   width: 100%;
   padding: 80px 0;
-`;
-
-const NormalText = styled.p`
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 22px;
-  margin-top: 17px;
-  cursor: pointer;
 `;

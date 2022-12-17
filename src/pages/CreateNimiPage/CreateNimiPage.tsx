@@ -8,6 +8,28 @@ import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { useRainbow } from '../../hooks/useRainbow';
 import { NimiSignatureColor } from '../../theme';
 
+export function CreateNimiPage() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { chainId, isConnected } = useRainbow();
+  const { ensName } = useParams();
+
+  if (isConnected !== true) {
+    navigate('/');
+    return <Container />;
+  }
+
+  if (!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number))
+    return (
+      <Container>
+        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+      </Container>
+    );
+
+  return <CreateNimiContainer ensName={ensName as string} />;
+}
+
 const ErrorContainer = styled.div`
   ${NimiSignatureColor};
   font-weight: 800;
@@ -23,25 +45,3 @@ const NormalText = styled.p`
   margin-top: 17px;
   cursor: pointer;
 `;
-
-export function CreateNimiPage() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { chainId, isConnected } = useRainbow();
-  const { ensName } = useParams();
-  if (isConnected !== true) {
-    navigate('/');
-    return <Container />;
-  }
-
-  if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
-    return (
-      <Container>
-        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
-        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
-      </Container>
-    );
-  }
-
-  return <CreateNimiContainer ensName={ensName as string} />;
-}
