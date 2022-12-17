@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo-text.svg';
-import { MEDIA_WIDTHS } from '../../theme';
+import { HEADER_HEIGHT, MEDIA_WIDTHS } from '../../theme';
 import { Web3Status } from '../Web3Status';
 
 export function Header() {
@@ -24,7 +24,7 @@ const Container = styled.header`
 
 const Content = styled.div`
   max-width: ${MEDIA_WIDTHS.upToMedium}px;
-  height: 80px;
+  height: ${HEADER_HEIGHT};
   display: flex;
   justify-content: space-between;
   align-items: center;

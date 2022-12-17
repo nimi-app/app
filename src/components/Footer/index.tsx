@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { ReactComponent as GitHubLogo } from '../../assets/svg/github-logo.svg';
 import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
-import { ExternalLink, MEDIA_WIDTHS } from '../../theme';
+import { ExternalLink, FOOTER_HEIGHT, MEDIA_WIDTHS } from '../../theme';
 
 export function Footer() {
   return (
@@ -26,12 +26,12 @@ export function Footer() {
 
 const Container = styled.footer`
   width: 100%;
-  padding: 40px 0 40px;
 `;
 
 const Content = styled.div`
   max-width: ${MEDIA_WIDTHS.upToMedium}px;
   width: 100%;
+  height: ${FOOTER_HEIGHT};
   display: flex;
   justify-content: space-between;
   align-items: center;
