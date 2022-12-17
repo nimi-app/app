@@ -51,6 +51,8 @@ export function formatEnsMetadataImage(ensData: ENSMetadata) {
       imageUrl = ensData.image.replace('ipfs/', IPFS_GATEWAY);
     } else if (isCID(ensData.image)) {
       imageUrl = `${IPFS_GATEWAY}${ensData.image}`;
+    } else {
+      imageUrl = ensData.image;
     }
     return imageUrl;
   } else return undefined;
