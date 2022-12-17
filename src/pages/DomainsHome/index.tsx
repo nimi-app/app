@@ -11,25 +11,16 @@ import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
-import { NimiSignatureColor } from '../../theme';
 
 export function DomainsHome() {
-  const { account } = useRainbow();
-
-  return <Domains address={account as string} />;
-}
-
-interface DomainsProps {
-  address: string;
-}
-
-function Domains({ address }: DomainsProps) {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
 
+  const { account } = useRainbow();
+
   const { t } = useTranslation('nimi');
 
-  const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(address, page, searchText);
+  const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(account as string, page, searchText);
 
   return (
     <Container>
@@ -46,30 +37,27 @@ function Domains({ address }: DomainsProps) {
           isInvalidInput={false}
         />
       </TopSection>
-
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          {domainList?.length === 0 ? (
+      {(() => {
+        if (loading) return <Loader />;
+        if (domainList?.length === 0)
+          return (
             <NoENSBanner>
               <Heading type="sub">{t('noEnsFound')}</Heading>
               <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
                 {t('buyDomain')}
               </BuyDomainLink>
             </NoENSBanner>
-          ) : (
-            <StyledDomainsWrapper>
-              {domainList?.map((domain) => (
-                <ENSCardContainer key={domain.name} domain={domain} />
-              ))}
-              <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-                Buy an ENS
-              </AddDomain>
-            </StyledDomainsWrapper>
-          )}
-        </>
-      )}
+          );
+
+        return (
+          <StyledDomainsWrapper>
+            {domainList?.map((domain) => (
+              <ENSCardContainer key={domain.name} domain={domain} />
+            ))}
+            <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>Buy an ENS</AddDomain>
+          </StyledDomainsWrapper>
+        );
+      })()}
       <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
     </Container>
   );
