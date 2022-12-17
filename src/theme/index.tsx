@@ -148,8 +148,8 @@ export const NimiSignatureColor = css`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
 `;
+
 export const NimiModalStyles = css`
   background: #f0f3fb;
   border-radius: 12px;

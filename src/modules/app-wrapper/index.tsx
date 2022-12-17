@@ -4,23 +4,26 @@ import styled from 'styled-components';
 
 import { Footer } from '../../components/Footer';
 import { Header } from '../../components/Header';
+import { Heading } from '../../components/Heading';
 import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { useRainbow } from '../../hooks/useRainbow';
-import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
+import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS } from '../../theme';
 
 export function AppWrapper() {
   const { chainId } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
 
   return (
-    <Container id="app-wrapper">
+    <Container>
       <Header />
       <Content>
         {!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) ? (
-          <Container>
-            <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
-            <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
-          </Container>
+          <ErrorContainer>
+            <Heading>{t('error.unsupportedNetwork')}</Heading>
+            <Heading size="sub" color="#000">
+              Please change your network by clicking the account button on the top right.
+            </Heading>
+          </ErrorContainer>
         ) : (
           <Outlet />
         )}
@@ -46,17 +49,6 @@ const Content = styled.main`
 `;
 
 const ErrorContainer = styled.div`
-  ${NimiSignatureColor};
-  font-weight: 800;
-  font-size: 36px;
-  line-height: 39px;
-  margin-bottom: 36px;
-`;
-
-const NormalText = styled.p`
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 22px;
-  margin-top: 17px;
-  cursor: pointer;
+  width: 100%;
+  text-align: center;
 `;
