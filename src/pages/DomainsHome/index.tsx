@@ -11,6 +11,7 @@ import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
+import { NimiSignatureColor } from '../../theme';
 
 export function DomainsHome() {
   const { account } = useRainbow();
@@ -98,15 +99,14 @@ const NoENSBanner = styled.section`
   width: 100%;
   padding: 40px 0;
   letter-spacing: -0.02em;
+  text-align: center;
 `;
 
 const BuyDomainLink = styled.a`
-  font-weight: 700;
+  line-height: 24px;
   font-size: 20px;
-  line-height: 22px;
-  text-decoration-line: underline;
-  text-decoration-color: #9280e3;
-  background-color: white;
+  font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
 `;
 
@@ -114,6 +114,7 @@ const TopSection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 20px;
 `;
 
 const StyledInput = styled(InputFieldWithIcon)`
