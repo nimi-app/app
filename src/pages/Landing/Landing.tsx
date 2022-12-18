@@ -53,7 +53,7 @@ export function Landing() {
                         <Button
                           onClick={() => {
                             if (!connected) openConnectModal();
-                            else if (chain.unsupported) openChainModal();
+                            else openChainModal();
                           }}
                         >
                           <span>
