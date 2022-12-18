@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import { useRainbow } from '../../../hooks/useRainbow';
 import { baseClient, formatLinktreeData } from '../utils';
 
 interface ImportFromLinktree {
@@ -20,8 +19,6 @@ export type LinktreeData = {
  * Returns query for fetching data generated from ens name
  */
 export function useImportFromLinktree({ linktreeUrl, enabled = false, onSuccess }: ImportFromLinktree) {
-  const { chainId } = useRainbow();
-
   const getLinktreeData = async (linktreeUrl: string) => {
     const params = {
       url: linktreeUrl,
@@ -32,7 +29,7 @@ export function useImportFromLinktree({ linktreeUrl, enabled = false, onSuccess 
     return data;
   };
 
-  return useQuery(['fetchLinktreeUsername', linktreeUrl, chainId], async () => await getLinktreeData(linktreeUrl), {
+  return useQuery(['fetchLinktreeUsername', linktreeUrl], async () => await getLinktreeData(linktreeUrl), {
     select: ({ data }) => formatLinktreeData(data),
     enabled,
     onError: (err: AxiosError) => err,

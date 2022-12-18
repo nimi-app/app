@@ -505,44 +505,42 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
         <AddFieldsModal
           onClose={() => setIsAddFieldsModalOpen(false)}
           onSubmit={({ link, blockchainAddresse, widget }) => {
-            unstable_batchedUpdates(() => {
-              setIsAddFieldsModalOpen(false);
+            setIsAddFieldsModalOpen(false);
 
-              //if link is submitted
-              if (link) {
-                let newLinksArray: NimiLinkBaseDetails[] = [];
-                const linksData = getValues('links');
+            //if link is submitted
+            if (link) {
+              let newLinksArray: NimiLinkBaseDetails[] = [];
+              const linksData = getValues('links');
 
-                newLinksArray = [
-                  ...linksData,
-                  {
-                    id: generateID(),
-                    type: link,
-                    // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
-                    title: '',
-                    content: '',
-                  },
-                ];
+              newLinksArray = [
+                ...linksData,
+                {
+                  id: generateID(),
+                  type: link,
+                  // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
+                  title: '',
+                  content: '',
+                },
+              ];
 
-                setValue('links', newLinksArray);
-              }
-              //if address is submitted
-              if (blockchainAddresse) {
-                let newAddressesArray: NimiBlockchainAddress[] = [];
-                const currentAddresses = getValues('addresses');
-                newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresse, address: '' }];
-                setValue('addresses', newAddressesArray);
-              }
+              setValue('links', newLinksArray);
+            }
+            //if address is submitted
+            if (blockchainAddresse) {
+              let newAddressesArray: NimiBlockchainAddress[] = [];
+              const currentAddresses = getValues('addresses');
+              newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresse, address: '' }];
+              setValue('addresses', newAddressesArray);
+            }
 
-              //if widget is submitted
-              if (widget) {
-                let newWidgets: NimiWidget[] = [];
-                const currentWidgets = getValues('widgets');
-                newWidgets = [...currentWidgets, { type: widget }];
+            //if widget is submitted
+            if (widget) {
+              let newWidgets: NimiWidget[] = [];
+              const currentWidgets = getValues('widgets');
+              newWidgets = [...currentWidgets, { type: widget }];
 
-                setValue('widgets', newWidgets);
-              }
-            });
+              setValue('widgets', newWidgets);
+            }
           }}
         />
       )}
@@ -550,23 +548,21 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
         <ImportFromTwitterModal
           onClose={() => setIsImportFromTwitterModalOpen(false)}
           onDataImport={(data) => {
-            unstable_batchedUpdates(() => {
-              // Set the fields and close the modal
-              setValue('displayName', data.name);
-              setValue('description', data.description);
-              setValue('image', { type: NimiImageType.URL, url: data.profileImageUrl });
+            // Set the fields and close the modal
+            setValue('displayName', data.name);
+            setValue('description', data.description);
+            setValue('image', { type: NimiImageType.URL, url: data.profileImageUrl });
 
-              const prevLinkState = getValues('links') || [];
+            const prevLinkState = getValues('links') || [];
 
-              const newState: NimiLinkBaseDetails[] = [
-                ...prevLinkState,
-                { type: NimiLinkType.TWITTER, title: '', content: data.username },
-              ];
+            const newState: NimiLinkBaseDetails[] = [
+              ...prevLinkState,
+              { type: NimiLinkType.TWITTER, title: '', content: data.username },
+            ];
 
-              setValue('links', newState);
+            setValue('links', newState);
 
-              setIsImportFromTwitterModalOpen(false);
-            });
+            setIsImportFromTwitterModalOpen(false);
           }}
         />
       )}
