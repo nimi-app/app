@@ -24,9 +24,27 @@ export function getAPIBaseURL() {
   return process.env.REACT_APP_NIMI_API_BASE_URL as string;
 }
 
-export const baseClient = axios.create({
+export const nimiClient = axios.create({
   baseURL: getAPIBaseURL(),
 });
+
+/**
+ * Returns the POAP API client.
+ * @returns
+ */
+export function getPOAPAPIClient() {
+  if (!process.env.REACT_APP_POAP_API_KEY) {
+    throw new Error('REACT_APP_POAP_API_KEY is not set.');
+  }
+
+  return axios.create({
+    baseURL: 'https://api.poap.tech',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': process.env.REACT_APP_POAP_API_KEY,
+    },
+  });
+}
 
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
 

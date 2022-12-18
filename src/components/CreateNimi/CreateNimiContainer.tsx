@@ -13,7 +13,11 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { account, provider } = useRainbow();
 
   //check if user has certain poap
-  const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
+  const {
+    avaliableThemes,
+    isLoading: isThemeLoading,
+    hasPoaps,
+  } = useAvaliableThemesFromPoaps({
     account,
   });
 
@@ -23,10 +27,10 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
     account,
   });
 
-  if (initialNimiLoading || initialNimi === undefined || themeLoading) {
+  if (initialNimiLoading || initialNimi === undefined || isThemeLoading) {
     return <Loader />;
   }
-
+  console.log('TODO: add poap widget is user has poaps via hasPaops:', hasPoaps);
   return (
     <Container>
       <CreateNimi

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { ChainId } from '../../../constants';
 import { useRainbow } from '../../../hooks/useRainbow';
-import { baseClient, formatEnsMetadataImage } from '../utils';
+import { formatEnsMetadataImage, nimiClient } from '../utils';
 
 export interface ENSMetadata {
   uri: string;
@@ -23,7 +23,7 @@ export function useEnsMetadataImage(ensName: string) {
 
   const getEnsMetadata = async (ensName: string, chainId = 1) => {
     const networkName = supportedENSNetworks[chainId];
-    const { data } = await baseClient.get<ENSMetadata>(
+    const { data } = await nimiClient.get<ENSMetadata>(
       `https://metadata.ens.domains/${networkName}/avatar/${ensName}/meta`
     );
     return data;

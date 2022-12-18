@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import { baseClient, formatLinktreeData } from '../utils';
+import { formatLinktreeData, nimiClient } from '../utils';
 
 interface ImportFromLinktree {
   linktreeUrl: string;
@@ -16,14 +16,14 @@ export type LinktreeData = {
 };
 
 /**
- * Returns query for fetching data generated from ens name
+ * Returns query for fetching linktree data
  */
 export function useImportFromLinktree({ linktreeUrl, enabled = false, onSuccess }: ImportFromLinktree) {
   const getLinktreeData = async (linktreeUrl: string) => {
     const params = {
       url: linktreeUrl,
     };
-    const { data } = await baseClient.get<{ data: LinktreeData[] }>('/nimi/import', {
+    const { data } = await nimiClient.get<{ data: LinktreeData[] }>('/nimi/import', {
       params,
     });
     return data;

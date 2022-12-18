@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import { baseClient } from '../utils';
+import { nimiClient } from '../utils';
 
 interface ImportFromTwitter {
   twitterUsername: string;
@@ -36,7 +36,7 @@ export function useImportFromTwitter({ twitterUsername, enabled = false, onSucce
     const params = {
       username: twitterUsername,
     };
-    const { data } = await baseClient.get<{ data: TwitterData }>('/twitter/info', {
+    const { data } = await nimiClient.get<{ data: TwitterData }>('/twitter/info', {
       params,
     });
     return data;
