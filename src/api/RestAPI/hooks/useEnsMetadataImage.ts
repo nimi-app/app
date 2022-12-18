@@ -20,6 +20,7 @@ const supportedENSNetworks: Record<number, string> = {
  */
 export function useEnsMetadataImage(ensName: string) {
   const { chainId } = useRainbow();
+
   const getEnsMetadata = async (ensName: string, chainId = 1) => {
     const networkName = supportedENSNetworks[chainId];
     const { data } = await baseClient.get<ENSMetadata>(

@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 
+import { generateID, guessLinkTypeBasedOnUrl } from '../../utils';
 import { ENSMetadata } from './hooks/useEnsMetadataImage';
+import { LinktreeData } from './hooks/useImportFromLinktree';
 /**
  * Returns the base URL for the Nimi API.
  * @returns {string} The base URL for the Nimi API.
@@ -56,4 +58,11 @@ export function formatEnsMetadataImage(ensData: ENSMetadata) {
     }
     return imageUrl;
   } else return undefined;
+}
+
+export function formatLinktreeData(data: LinktreeData[]) {
+  return data.map(({ content, title }) => {
+    const guessLinkType = guessLinkTypeBasedOnUrl(content);
+    return { type: guessLinkType, title, content, id: generateID() };
+  });
 }
