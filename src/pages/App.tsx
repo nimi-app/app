@@ -2,6 +2,7 @@ import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
 import { useRainbow } from '../hooks/useRainbow';
+import { AppWrapper } from '../modules/app-wrapper';
 import { CreateNimiPage } from './CreateNimiPage';
 import { DomainsHome } from './DomainsHome';
 import { Landing } from './Landing';
