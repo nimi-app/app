@@ -1,11 +1,10 @@
-import { Nimi, NimiWidgetType } from '@nimi.io/card';
-
 import { Container } from '../../components/Container';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 import { useInitialtNimiData } from '../../hooks/useDefaultNimiData';
 import { useRainbow } from '../../hooks/useRainbow';
+import { insertPoapWidgetIntoNimi } from '../../utils';
 
 type CreateNimiContainerProps = {
   ensName: string;
@@ -33,19 +32,6 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
     return <Loader />;
   }
 
-  const insertPoapWidget = (nimi: Nimi, hasPoaps: boolean, address?: string) => {
-    const nimiObject = nimi;
-
-    const hasPoapWidget = nimi.widgets.some(({ type }) => type === NimiWidgetType.POAP);
-
-    if (!hasPoapWidget && hasPoaps && address) {
-      const widget = { type: NimiWidgetType.POAP, address };
-      nimiObject.widgets.push(widget);
-    }
-
-    return nimiObject;
-  };
-
   return (
     <Container>
       <CreateNimi
@@ -53,7 +39,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
         ensName={ensName as string}
         provider={provider as any}
         availableThemes={avaliableThemes}
-        initialNimi={insertPoapWidget(initialNimi, hasPoaps, account)}
+        initialNimi={insertPoapWidgetIntoNimi(initialNimi, hasPoaps, account)}
       />
     </Container>
   );
