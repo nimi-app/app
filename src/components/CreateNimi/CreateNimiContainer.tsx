@@ -1,3 +1,5 @@
+import { Nimi, NimiWidgetType } from '@nimi.io/card';
+
 import { Container } from '../../components/Container';
 import { CreateNimi } from '../../components/CreateNimi';
 import { Loader } from '../../components/Loader';
@@ -30,7 +32,20 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   if (initialNimiLoading || initialNimi === undefined || isThemeLoading) {
     return <Loader />;
   }
-  console.log('TODO: add poap widget is user has poaps via hasPaops:', hasPoaps);
+
+  const insertPoapWidget = (nimi: Nimi, hasPoaps: boolean, address?: string) => {
+    const nimiObject = nimi;
+
+    const hasPoapWidget = nimi.widgets.some(({ type }) => type === NimiWidgetType.POAP);
+
+    if (!hasPoapWidget && hasPoaps && address) {
+      const widget = { type: NimiWidgetType.POAP, address };
+      nimiObject.widgets.push(widget);
+    }
+
+    return nimiObject;
+  };
+
   return (
     <Container>
       <CreateNimi
@@ -38,7 +53,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
         ensName={ensName as string}
         provider={provider as any}
         availableThemes={avaliableThemes}
-        initialNimi={initialNimi}
+        initialNimi={insertPoapWidget(initialNimi, hasPoaps, account)}
       />
     </Container>
   );
