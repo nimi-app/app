@@ -161,10 +161,12 @@ export function DomainsHome() {
   }
   if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
     return (
-      <Container>
-        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
-        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
-      </Container>
+      <AppWrapper>
+        <Container>
+          <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+          <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+        </Container>
+      </AppWrapper>
     );
   }
   return <Domains address={account as string} />;
