@@ -306,6 +306,13 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   };
 
   const updateLink = (linkId: string, key: string, value: string) => {
+    console.log(key, value);
+    let url = value;
+    if (key === 'content') {
+      const isHttpsMissing = value.substring(0, 4) !== 'http';
+      url = isHttpsMissing === true ? 'https://' + url : url;
+      value = url;
+    }
     const updatedLinks = getValues('links').map((link) => (link.id === linkId ? { ...link, [key]: value } : link));
 
     setValue('links', updatedLinks);
@@ -434,7 +441,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
                 {links !== undefined && links?.length > 0 && (
                   <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                     {links.map((link) => {
-                      console.log(link);
                       return (
                         <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
                       );
