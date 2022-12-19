@@ -52,39 +52,19 @@ const supportedENSChainIds = [ChainId.MAINNET, ChainId.GOERLI];
  * docs: https://metadata.ens.domains/docs#/paths/~1%7BnetworkName%7D~1avatar~1%7Bname%7D~1meta/get
  */
 export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
-  const { chainId, account, provider } = useRainbow();
+  const { chainId } = useRainbow();
   const [ensData, setData] = useState<ENSMetadata>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [ensName, setEnsName] = useState('');
-  const [ensNameQueryInitiated, setEnsNameQuery] = useState(false);
-
-  if (
-    customENSLookup === undefined &&
-    account !== undefined &&
-    account !== null &&
-    ensName === '' &&
-    ensNameQueryInitiated === false
-  ) {
-    setEnsNameQuery(true);
-
-    provider.lookupAddress(account.toLowerCase()).then((r) => {
-      if (r !== null) {
-        setEnsName(r);
-      }
-    });
-  }
 
   useEffect(() => {
     // ENS supports Mainnet and Goerli
-    if (!chainId || !supportedENSChainIds.includes(chainId) || !ensName) {
+    if (!chainId || !supportedENSChainIds.includes(chainId) || !customENSLookup) {
       setLoading(false);
       return;
     }
     const networkName = supportedENSNetworks[chainId];
     axios
-      .get<ENSMetadata>(
-        `https://metadata.ens.domains/${networkName}/avatar/${customENSLookup ? customENSLookup : ensName}/meta`
-      )
+      .get<ENSMetadata>(`https://metadata.ens.domains/${networkName}/avatar/${customENSLookup}/meta`)
       .then(({ data: ensData }) => {
         if ('image' in ensData && ensData.image) {
           if (ensData.image.startsWith('ipfs://ipfs/')) {
@@ -104,7 +84,7 @@ export function useENSMetadata(customENSLookup?: string): UseENSMetadataResult {
         setLoading(false);
         console.error('useENSMetadata error: ', e);
       });
-  }, [chainId, ensName, customENSLookup]);
+  }, [chainId, customENSLookup]);
 
   return {
     loading,

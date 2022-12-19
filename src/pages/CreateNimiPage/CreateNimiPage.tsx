@@ -45,5 +45,10 @@ export function CreateNimiPage() {
       </AppWrapper>
     );
   }
-  return <CreateNimiContainer ensName={ensName as string} />;
+
+  return (
+    <AppWrapper>
+      <CreateNimiContainer ensName={ensName as string} />{' '}
+    </AppWrapper>
+  );
 }

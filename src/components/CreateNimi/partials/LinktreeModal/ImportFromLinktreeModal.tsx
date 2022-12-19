@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { getAPIBaseURL } from '../../../../api/RestAPI/utils';
 import { ReactComponent as Linktree } from '../../../../assets/svg/linktree.svg';
-import { getAPIBaseURL } from '../../../../modules/api-service';
 import { generateID, guessLinkTypeBasedOnUrl } from '../../../../utils';
 import { Button } from '../../../Button';
 import { Loader, LoaderWrapper } from '../../../Loader';

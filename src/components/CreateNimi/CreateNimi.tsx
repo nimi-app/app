@@ -130,7 +130,7 @@ export interface CreateNimiProps {
   /**
    * The initial Nimi to edit
    */
-  initialNimi?: Nimi;
+  initialNimi: Nimi;
 }
 
 const debug = createDebugger('Nimi:CreateNimi');
@@ -166,9 +166,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
   debug({
     initialNimi,
-    theme: {
-      type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
-    },
   });
 
   // Form state manager
@@ -176,9 +173,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
     resolver: yupResolver(nimiValidator),
     defaultValues: {
       ...initialNimi,
-      theme: {
-        type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
-      },
     },
   });
 
