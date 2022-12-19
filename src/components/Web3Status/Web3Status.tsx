@@ -40,8 +40,7 @@ export function Web3Status() {
     <ConnectButton.Custom>
       {({ account, chain, openChainModal, openAccountModal, openConnectModal, authenticationStatus, mounted }) => {
         const ready = mounted && authenticationStatus !== 'loading';
-        const connected =
-          ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
+        const connected = ready && account && chain;
         return (
           <div
             {...(!ready && {
@@ -71,7 +70,7 @@ export function Web3Status() {
                     <Web3Avatar url={account.ensAvatar} alt={account.displayName} />
 
                     <StyledInnerWrapper>
-                      <StyledTextContent>{t('error.unsupportedNetwork')}</StyledTextContent>
+                      <StyledTextContent>{t('error.wrongNetwork')}</StyledTextContent>
                     </StyledInnerWrapper>
                   </StyledWrapper>
                 );
