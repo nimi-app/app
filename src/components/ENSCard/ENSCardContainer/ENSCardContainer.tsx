@@ -24,6 +24,7 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   const isInView = useInView(ref);
   const [domainData, setDomainData] = useState<Awaited<ReturnType<typeof fetchNimiDataByENSName>> | null>();
   const [queryOnGoing, setQueryOnGoing] = useState(false);
+
   // When element is in view, fetch the data
   useEffect(() => {
     if (queryOnGoing === true) {
