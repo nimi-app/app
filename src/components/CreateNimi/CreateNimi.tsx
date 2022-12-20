@@ -306,10 +306,9 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   };
 
   const updateLink = (linkId: string, key: string, value: string) => {
-    console.log(key, value);
     let url = value;
     if (key === 'content') {
-      const isHttpsMissing = value.substring(0, 4) !== 'http';
+      const isHttpsMissing = value.startsWith('http');
       url = isHttpsMissing === true ? 'https://' + url : url;
       value = url;
     }
