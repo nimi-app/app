@@ -1,14 +1,11 @@
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
   argentWallet,
-  braveWallet,
   coinbaseWallet,
-  imTokenWallet,
   injectedWallet,
   ledgerWallet,
   metaMaskWallet,
   rainbowWallet,
-  trustWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { ReactNode } from 'react';
@@ -30,9 +27,7 @@ const connectors = connectorsForWallets([
       metaMaskWallet({ chains }),
       argentWallet({ chains }),
       coinbaseWallet({ appName: 'Nimi', chains }),
-      trustWallet({ chains }),
       rainbowWallet({ chains }),
-      imTokenWallet({ chains }),
       ledgerWallet({ chains }),
       injectedWallet({ chains }),
       walletConnectWallet({ chains }),
