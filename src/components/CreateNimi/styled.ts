@@ -61,16 +61,6 @@ export const PreviewContent = styled.aside<{ showMobile: boolean }>`
   }
 `;
 
-/**
- * Card title wrapper
- */
-export const CardTitle = styled.div`
-  ${NimiSignatureColor}
-  font-size: 46px;
-  line-height: 116%;
-  text-align: start;
-`;
-
 export const StyledGridList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
