@@ -4,15 +4,13 @@ import { Link } from 'react-router-dom';
 
 import PurpleCircle from '../../../assets/svg/purpleCircle.svg';
 import { useENSMetadata } from '../../../hooks/useENSMetadata';
-import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
 import { useNimiData } from '../../../hooks/useNimiData';
+import { ENSDomain } from '../../../models';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
 
-type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[] ? ElementType : never;
-
-export interface ENSCardContainerProps {
-  domain: ArrElement<ReturnType<typeof useGetENSDomainsByAddress>['data']>;
-}
+type ENSCardContainerProps = {
+  domain: ENSDomain;
+};
 
 export function ENSCardContainer({ domain }: ENSCardContainerProps) {
   const ref = useRef(null);
@@ -23,13 +21,13 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
 
   if (domainData !== null && domainData !== undefined) {
     return (
-      <Link to={`/domains/${domainData.nimi.ensName}`} state={domainData}>
+      <Link to={`/domains/${domain.name}`} state={domainData}>
         <StyledENSNameCardWrapper>
           <ENSNameCardImage
             alt={domainData.nimi.ensAddress}
             src={domainData.nimi.image ? domainData.nimi.image.url : PurpleCircle}
           />
-          <StyledDomainName>{domainData.nimi.ensName}</StyledDomainName>;
+          <StyledDomainName>{domain.name}</StyledDomainName>;
         </StyledENSNameCardWrapper>
       </Link>
     );
@@ -39,7 +37,7 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
     <Link ref={ref} to={`/domains/${domain.name}`}>
       <StyledENSNameCardWrapper>
         <ENSNameCardImage
-          alt={'ENS Name image'}
+          alt={`${domain.name} Image`}
           src={metadataLoading ? PurpleCircle : metadata ? metadata.image : PurpleCircle}
           onError={(event) => {
             const target = event.target as HTMLImageElement;
