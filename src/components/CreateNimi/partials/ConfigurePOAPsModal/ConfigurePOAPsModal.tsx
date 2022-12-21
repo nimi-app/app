@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useFormContext } from 'react-hook-form';
 
-import { getPOAPAPIClient } from '../../../../modules/poap-services';
+import { getPOAPAPIClient } from '../../../../api/RestAPI/utils';
 import { ModalBase } from '../ModalBase';
 import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
@@ -16,6 +16,11 @@ type ConfigurePOAPsModalProps = {
 
 export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsModalProps) {
   const { getValues, setValue } = useFormContext();
+
+  // TODO: Implement react-query fetching here
+  // const { data: poapData, isFetching } = usePoapsFromUser(ensAddress);
+  // console.log('poapData', poapData);
+  // console.log('isFetching', isFetching);
 
   const {
     modalContainer,

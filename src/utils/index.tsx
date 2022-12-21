@@ -1,6 +1,6 @@
 import { getAddress } from '@ethersproject/address';
 
-import { nimiLinkDetailsExtended, NimiLinkType } from '@nimi.io/card';
+import { Nimi, nimiLinkDetailsExtended, NimiLinkType, NimiWidgetType } from '@nimi.io/card';
 import { FC, SVGProps } from 'react';
 
 export * from './explorer';
@@ -63,4 +63,24 @@ export function guessLinkTypeBasedOnUrl(url: string): string {
   );
 
   return linkSearch ? linkSearch[0] : NimiLinkType.URL;
+}
+
+/**
+ * Returns Nimi object with poaps widget inserted if avaliable
+ * @param nimi Nimi object
+ * @param hasPoaps boolean for checking if user has poaps related to his address
+ * @param address users address
+ * @returns modified nimi object
+ */
+export function insertPoapWidgetIntoNimi(nimi: Nimi, hasPoaps: boolean, address?: string) {
+  const nimiObject = nimi;
+
+  const hasPoapWidget = nimi.widgets.some(({ type }) => type === NimiWidgetType.POAP);
+
+  if (!hasPoapWidget && hasPoaps && address) {
+    const widget = { type: NimiWidgetType.POAP, address };
+    nimiObject.widgets.push(widget);
+  }
+
+  return nimiObject;
 }

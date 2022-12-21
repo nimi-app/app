@@ -1,11 +1,9 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { getAPIBaseURL } from '../../../../api/RestAPI/utils';
+import { useImportFromLinktree } from '../../../../api/RestAPI/hooks/useImportFromLinktree';
 import { ReactComponent as Linktree } from '../../../../assets/svg/linktree.svg';
-import { generateID, guessLinkTypeBasedOnUrl } from '../../../../utils';
 import { Button } from '../../../Button';
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {
@@ -20,34 +18,11 @@ import { ContentInput } from '../../../ReorderInput';
 export function ImportFromLinktreeModal({ onClose }) {
   const { t } = useTranslation('nimi');
   const [linktreeUsername, setLinktreeUsername] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error>();
 
-  const fetchLinktreeData = () => {
-    setIsLoading(true);
-    setError(undefined);
-
-    const url = `${getAPIBaseURL()}/nimi/import`;
-
-    axios
-      .get<{ data }>(url, {
-        params: {
-          url: `https://linktr.ee/${linktreeUsername}`,
-        },
-      })
-      .then(({ data }) => {
-        const mappedLinks = data.data.map(({ content, title }) => {
-          const guessLinkType = guessLinkTypeBasedOnUrl(content);
-          return { type: guessLinkType, title, content, id: generateID() };
-        });
-        onClose(mappedLinks);
-      })
-      .catch((error) => {
-        console.error('error', error);
-        setError(error.message);
-      })
-      .then(() => setIsLoading(false));
-  };
+  const { refetch, error, isError, isFetching } = useImportFromLinktree({
+    linktreeUrl: `https://linktr.ee/${linktreeUsername}`,
+    onSuccess: onClose,
+  });
 
   return (
     <Modal>
@@ -60,7 +35,7 @@ export function ImportFromLinktreeModal({ onClose }) {
       </ModalHeader>
       <ModalContent>
         <ModalContentInnerWrapper>
-          {isLoading ? (
+          {isFetching ? (
             <LoaderWrapper>
               <Loader />
             </LoaderWrapper>
@@ -76,8 +51,8 @@ export function ImportFromLinktreeModal({ onClose }) {
                 placeholder={t('importFromLinktreeModal.inputPlaceholder')}
               />
 
-              <Button onClick={fetchLinktreeData}>{t('importFromLinktreeModal.buttonLabel')}</Button>
-              <div>{error && error.message}</div>
+              <Button onClick={() => refetch()}>{t('importFromLinktreeModal.buttonLabel')}</Button>
+              <div>{isError && error.message}</div>
             </>
           )}
         </ModalContentInnerWrapper>

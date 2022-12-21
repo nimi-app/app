@@ -4,6 +4,7 @@ import { Loader } from '../../components/Loader';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 import { useInitialtNimiData } from '../../hooks/useDefaultNimiData';
 import { useRainbow } from '../../hooks/useRainbow';
+import { insertPoapWidgetIntoNimi } from '../../utils';
 
 type CreateNimiContainerProps = {
   ensName: string;
@@ -13,7 +14,11 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { account, provider } = useRainbow();
 
   //check if user has certain poap
-  const { avaliableThemes, loading: themeLoading } = useAvaliableThemesFromPoaps({
+  const {
+    avaliableThemes,
+    isLoading: isThemeLoading,
+    hasPoaps,
+  } = useAvaliableThemesFromPoaps({
     account,
   });
 
@@ -23,7 +28,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
     account,
   });
 
-  if (initialNimiLoading || initialNimi === undefined || themeLoading) {
+  if (initialNimiLoading || initialNimi === undefined || isThemeLoading) {
     return <Loader />;
   }
 
@@ -34,7 +39,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
         ensName={ensName as string}
         provider={provider as any}
         availableThemes={avaliableThemes}
-        initialNimi={initialNimi}
+        initialNimi={insertPoapWidgetIntoNimi(initialNimi, hasPoaps, account)}
       />
     </Container>
   );
