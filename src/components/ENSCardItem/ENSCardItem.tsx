@@ -3,17 +3,17 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import PurpleCircle from '../../../assets/svg/purpleCircle.svg';
-// import { useENSMetadata } from '../../../hooks/useENSMetadata';
-import { useNimiData } from '../../../hooks/useNimiData';
-import { ENSDomain } from '../../../models';
-import { NimiSignatureColor } from '../../../theme';
+import PurpleCircle from '../../assets/svg/purpleCircle.svg';
+// import { useENSMetadata } from '../../hooks/useENSMetadata';
+import { useNimiData } from '../../hooks/useNimiData';
+import { ENSDomain } from '../../models';
+import { NimiSignatureColor } from '../../theme';
 
-type ENSCardContainerProps = {
+type ENSCardItemProps = {
   domain: ENSDomain;
 };
 
-export function ENSCardContainer({ domain }: ENSCardContainerProps) {
+export function ENSCardItem({ domain }: ENSCardItemProps) {
   const ref = useRef(null);
   const isInView = useInView(ref);
 

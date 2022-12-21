@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { DottedBorder } from '../../components/Button/styled';
-import { ENSCardContainer } from '../../components/ENSCard/ENSCardContainer';
+import { ENSCardItem } from '../../components/ENSCardItem';
 import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
@@ -43,7 +43,7 @@ export function DomainsHome() {
         return (
           <StyledDomainsWrapper>
             {domainList?.map((domain) => (
-              <ENSCardContainer key={domain.id} domain={domain} />
+              <ENSCardItem key={domain.id} domain={domain} />
             ))}
             <AddDomain onClick={openENSWebsiteHandler}>Buy an ENS</AddDomain>
           </StyledDomainsWrapper>
