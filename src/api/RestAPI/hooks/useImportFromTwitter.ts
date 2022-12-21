@@ -32,7 +32,7 @@ export interface TwitterData {
  * Returns query for fetching twitter data
  */
 export function useImportFromTwitter({ twitterUsername, enabled = false, onSuccess }: ImportFromTwitter) {
-  const getTwitterData = async (twitterUsername: string) => {
+  const getTwitterData = async () => {
     const params = {
       username: twitterUsername,
     };
@@ -42,7 +42,7 @@ export function useImportFromTwitter({ twitterUsername, enabled = false, onSucce
     return data;
   };
 
-  return useQuery(['fetchLinktreeUsername', twitterUsername], async () => await getTwitterData(twitterUsername), {
+  return useQuery(['fetchLinktreeUsername', twitterUsername], getTwitterData, {
     select: ({ data }) => data,
     enabled,
     onError: (err: AxiosError) => err,

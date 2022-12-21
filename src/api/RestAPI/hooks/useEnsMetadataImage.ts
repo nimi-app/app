@@ -21,15 +21,15 @@ const supportedENSNetworks: Record<number, string> = {
 export function useEnsMetadataImage(ensName: string) {
   const { chainId } = useRainbow();
 
-  const getEnsMetadata = async (ensName: string, chainId = 1) => {
-    const networkName = supportedENSNetworks[chainId];
+  const getEnsMetadata = async () => {
+    const networkName = supportedENSNetworks[chainId || 1];
     const { data } = await nimiClient.get<ENSMetadata>(
       `https://metadata.ens.domains/${networkName}/avatar/${ensName}/meta`
     );
     return data;
   };
 
-  return useQuery(['fetchEnsMetadataImage', ensName, chainId], async () => await getEnsMetadata(ensName, chainId), {
+  return useQuery(['fetchEnsMetadataImage', ensName, chainId], getEnsMetadata, {
     select: formatEnsMetadataImage,
   });
 }

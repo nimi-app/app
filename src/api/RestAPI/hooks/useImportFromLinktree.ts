@@ -19,7 +19,7 @@ export type LinktreeData = {
  * Returns query for fetching linktree data
  */
 export function useImportFromLinktree({ linktreeUrl, enabled = false, onSuccess }: ImportFromLinktree) {
-  const getLinktreeData = async (linktreeUrl: string) => {
+  const getLinktreeData = async () => {
     const params = {
       url: linktreeUrl,
     };
@@ -29,7 +29,7 @@ export function useImportFromLinktree({ linktreeUrl, enabled = false, onSuccess 
     return data;
   };
 
-  return useQuery(['fetchLinktreeUsername', linktreeUrl], async () => await getLinktreeData(linktreeUrl), {
+  return useQuery(['fetchLinktreeUsername', linktreeUrl], getLinktreeData, {
     select: ({ data }) => formatLinktreeData(data),
     enabled,
     onError: (err: AxiosError) => err,

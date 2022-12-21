@@ -21,7 +21,7 @@ interface DeployedNimiPageType {
 export function useDeployedPageData({ ensName }) {
   const { chainId } = useRainbow();
 
-  const getDeployedPageData = async (ensName: string) => {
+  const getDeployedPageData = async () => {
     const params = {
       ens: ensName,
     };
@@ -29,7 +29,7 @@ export function useDeployedPageData({ ensName }) {
     return data;
   };
 
-  return useQuery(['fetchDeployedNimiData', ensName, chainId], async () => await getDeployedPageData(ensName), {
+  return useQuery(['fetchDeployedNimiData', ensName, chainId], getDeployedPageData, {
     select: ({ data }) => {
       if (data.length) return data[0];
       else return undefined;
