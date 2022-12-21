@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Flex } from 'rebass';
@@ -155,8 +155,14 @@ export function DomainsHome() {
   const { chainId, account, isConnected } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isConnected !== true) {
+      navigate('/');
+    }
+  }, [isConnected]);
+
   if (isConnected !== true) {
-    navigate('/');
     return <Container />;
   }
   if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
