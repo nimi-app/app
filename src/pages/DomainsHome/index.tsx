@@ -10,18 +10,6 @@ import { useRainbow } from '../../hooks/useRainbow';
 import { ControlBar } from './ControlBar';
 import { NoENSBanner } from './NoENSBanner';
 
-// TODO: ADD ENSDomain AS MODEL
-
-// type ENSDomain = {
-//   id: string;
-//   labelName: string;
-//   labelhash: string;
-//   name: string;
-//   parent: {
-//     name: string;
-//   };
-// };
-
 export function DomainsHome() {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
