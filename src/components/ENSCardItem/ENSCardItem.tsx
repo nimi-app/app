@@ -23,8 +23,8 @@ export function ENSCardItem({ domain }: ENSCardItemProps) {
 
   return (
     <Link ref={ref} to={`/domains/${domain.name}`} state={domainData}>
-      <StyledENSNameCardWrapper>
-        <ENSNameCardImage
+      <Container>
+        <DomainProfilePhoto
           alt={`${domain.name} Image`}
           src={domainData?.nimi?.image ? domainData.nimi.image.url : PurpleCircle}
           onError={(event) => {
@@ -33,13 +33,13 @@ export function ENSCardItem({ domain }: ENSCardItemProps) {
             if (target.src !== PurpleCircle) target.src = PurpleCircle;
           }}
         />
-        <StyledDomainName>{domain.name}</StyledDomainName>
-      </StyledENSNameCardWrapper>
+        <DomainName>{domain.name}</DomainName>
+      </Container>
     </Link>
   );
 }
 
-export const StyledENSNameCardWrapper = styled.div`
+export const Container = styled.div`
   width: 308px;
   height: 146px;
   display: flex;
@@ -54,7 +54,7 @@ export const StyledENSNameCardWrapper = styled.div`
   overflow: hidden;
 `;
 
-export const ENSNameCardImage = styled.img`
+export const DomainProfilePhoto = styled.img`
   background-position: center center;
   background-size: cover;
   border-radius: 200px;
@@ -65,7 +65,7 @@ export const ENSNameCardImage = styled.img`
   backdrop-filter: blur(20px);
 `;
 
-export const StyledDomainName = styled.div`
+export const DomainName = styled.div`
   ${NimiSignatureColor};
   font-size: 24px;
   overflow: hidden;
