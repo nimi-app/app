@@ -38,7 +38,13 @@ export function App() {
   const { chains } = useRainbow();
 
   return (
-    <RainbowKitProvider modalSize="compact" chains={chains as Chain[]}>
+    <RainbowKitProvider
+      modalSize="compact"
+      chains={chains as Chain[]}
+      appInfo={{
+        appName: 'Nimi',
+      }}
+    >
       <RouterProvider router={router} />
     </RainbowKitProvider>
   );

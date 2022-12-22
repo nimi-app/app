@@ -33,10 +33,9 @@ export function Landing() {
             </HeroLead>
           </HeroText>
           <ConnectButton.Custom>
-            {({ account, chain, openConnectModal, authenticationStatus, mounted }) => {
+            {({ account, chain, openConnectModal, openChainModal, authenticationStatus, mounted }) => {
               const ready = mounted && authenticationStatus !== 'loading';
-              const connected =
-                ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
+              const connected = ready && account && chain;
               return (
                 <div
                   {...(!ready && {
@@ -49,10 +48,17 @@ export function Landing() {
                   })}
                 >
                   {(() => {
-                    if (!connected) {
+                    if (!connected || chain.unsupported) {
                       return (
-                        <Button onClick={openConnectModal}>
-                          <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
+                        <Button
+                          onClick={() => {
+                            if (!connected) openConnectModal();
+                            else openChainModal();
+                          }}
+                        >
+                          <span>
+                            {chain?.unsupported ? t('error.wrongNetwork') : t('hero.buttonLabel', { ns: 'landing' })}
+                          </span>
                         </Button>
                       );
                     }

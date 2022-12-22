@@ -86,6 +86,7 @@ const SocialsSectionLinks = [
   NimiLinkType.LINKEDIN,
   NimiLinkType.FACEBOOK,
   NimiLinkType.TWITCH,
+  NimiLinkType.YOUTUBE_CHANNEL,
 ];
 
 const PortfolioSectionLinks = [NimiLinkType.DRIBBBLE, NimiLinkType.FIGMA, NimiLinkType.GITHUB];

@@ -1,4 +1,13 @@
-import { connectorsForWallets, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import {
+  argentWallet,
+  coinbaseWallet,
+  injectedWallet,
+  ledgerWallet,
+  metaMaskWallet,
+  rainbowWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets';
 import { ReactNode } from 'react';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
@@ -11,15 +20,23 @@ export const { chains, provider } = configureChains(SUPPORT_CHAINS_RAINBOW_KIT, 
   publicProvider(),
 ]);
 
-const { wallets } = getDefaultWallets({
-  appName: 'Nimi',
-  chains,
-});
-
-const connectors = connectorsForWallets([...wallets]);
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [
+      metaMaskWallet({ chains }),
+      argentWallet({ chains }),
+      coinbaseWallet({ appName: 'Nimi', chains }),
+      rainbowWallet({ chains }),
+      ledgerWallet({ chains }),
+      injectedWallet({ chains }),
+      walletConnectWallet({ chains }),
+    ],
+  },
+]);
 
 const wagmiClient = createClient({
-  autoConnect: false,
+  autoConnect: true,
   connectors,
   provider,
 });

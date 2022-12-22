@@ -130,7 +130,7 @@ export interface CreateNimiProps {
   /**
    * The initial Nimi to edit
    */
-  initialNimi?: Nimi;
+  initialNimi: Nimi;
 }
 
 const debug = createDebugger('Nimi:CreateNimi');
@@ -166,9 +166,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
 
   debug({
     initialNimi,
-    theme: {
-      type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
-    },
   });
 
   // Form state manager
@@ -176,9 +173,6 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
     resolver: yupResolver(nimiValidator),
     defaultValues: {
       ...initialNimi,
-      theme: {
-        type: availableThemes.length !== 0 ? availableThemes[0] : NimiThemeType.NIMI,
-      },
     },
   });
 
@@ -312,6 +306,11 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
   };
 
   const updateLink = (linkId: string, key: string, value: string) => {
+    let url = value;
+    if (key === 'content') {
+      url = value.startsWith('http') === false ? 'https://' + url : url;
+      value = url;
+    }
     const updatedLinks = getValues('links').map((link) => (link.id === linkId ? { ...link, [key]: value } : link));
 
     setValue('links', updatedLinks);
@@ -437,7 +436,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
                 </FormGroup>
                 {/* links */}
                 {/* reorder group */}
-                {links?.length !== 0 && links !== undefined && (
+                {links !== undefined && links?.length > 0 && (
                   <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                     {links.map((link) => (
                       <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
@@ -445,24 +444,27 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
                   </ReorderGroup>
                 )}
                 {/* addresses */}
-                {formWatchPayload.addresses.length > 0 && (
-                  <FormGroup>
-                    <FormItem>
-                      <Label>Addresses</Label>
-                      <BlockchainAddresses>
-                        {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                          return (
-                            <NimiBlockchainField
-                              key={'blockchain-input-' + blockchain.toLowerCase()}
-                              index={index}
-                              blockchain={blockchain}
-                            />
-                          );
-                        })}
-                      </BlockchainAddresses>
-                    </FormItem>
-                  </FormGroup>
-                )}
+                {formWatchPayload !== undefined &&
+                  'address' in formWatchPayload === true &&
+                  formWatchPayload.addresses !== undefined &&
+                  formWatchPayload?.addresses?.length > 0 && (
+                    <FormGroup>
+                      <FormItem>
+                        <Label>Addresses</Label>
+                        <BlockchainAddresses>
+                          {formWatchPayload.addresses.map(({ blockchain }, index) => {
+                            return (
+                              <NimiBlockchainField
+                                key={'blockchain-input-' + blockchain.toLowerCase()}
+                                index={index}
+                                blockchain={blockchain}
+                              />
+                            );
+                          })}
+                        </BlockchainAddresses>
+                      </FormItem>
+                    </FormGroup>
+                  )}
                 {/* widgets */}
                 {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
                   <PoapField
@@ -511,44 +513,42 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
         <AddFieldsModal
           onClose={() => setIsAddFieldsModalOpen(false)}
           onSubmit={({ link, blockchainAddresse, widget }) => {
-            unstable_batchedUpdates(() => {
-              setIsAddFieldsModalOpen(false);
+            setIsAddFieldsModalOpen(false);
 
-              //if link is submitted
-              if (link) {
-                let newLinksArray: NimiLinkBaseDetails[] = [];
-                const linksData = getValues('links');
+            //if link is submitted
+            if (link) {
+              let newLinksArray: NimiLinkBaseDetails[] = [];
+              const linksData = getValues('links');
 
-                newLinksArray = [
-                  ...linksData,
-                  {
-                    id: generateID(),
-                    type: link,
-                    // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
-                    title: '',
-                    content: '',
-                  },
-                ];
+              newLinksArray = [
+                ...linksData,
+                {
+                  id: generateID(),
+                  type: link,
+                  // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
+                  title: '',
+                  content: '',
+                },
+              ];
 
-                setValue('links', newLinksArray);
-              }
-              //if address is submitted
-              if (blockchainAddresse) {
-                let newAddressesArray: NimiBlockchainAddress[] = [];
-                const currentAddresses = getValues('addresses');
-                newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresse, address: '' }];
-                setValue('addresses', newAddressesArray);
-              }
+              setValue('links', newLinksArray);
+            }
+            //if address is submitted
+            if (blockchainAddresse) {
+              let newAddressesArray: NimiBlockchainAddress[] = [];
+              const currentAddresses = getValues('addresses');
+              newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresse, address: '' }];
+              setValue('addresses', newAddressesArray);
+            }
 
-              //if widget is submitted
-              if (widget) {
-                let newWidgets: NimiWidget[] = [];
-                const currentWidgets = getValues('widgets');
-                newWidgets = [...currentWidgets, { type: widget }];
+            //if widget is submitted
+            if (widget) {
+              let newWidgets: NimiWidget[] = [];
+              const currentWidgets = getValues('widgets');
+              newWidgets = [...currentWidgets, { type: widget }];
 
-                setValue('widgets', newWidgets);
-              }
-            });
+              setValue('widgets', newWidgets);
+            }
           }}
         />
       )}
@@ -556,23 +556,21 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
         <ImportFromTwitterModal
           onClose={() => setIsImportFromTwitterModalOpen(false)}
           onDataImport={(data) => {
-            unstable_batchedUpdates(() => {
-              // Set the fields and close the modal
-              setValue('displayName', data.name);
-              setValue('description', data.description);
-              setValue('image', { type: NimiImageType.URL, url: data.profileImageUrl });
+            // Set the fields and close the modal
+            setValue('displayName', data.name);
+            setValue('description', data.description);
+            setValue('image', { type: NimiImageType.URL, url: data.profileImageUrl });
 
-              const prevLinkState = getValues('links') || [];
+            const prevLinkState = getValues('links') || [];
 
-              const newState: NimiLinkBaseDetails[] = [
-                ...prevLinkState,
-                { type: NimiLinkType.TWITTER, title: '', content: data.username },
-              ];
+            const newState: NimiLinkBaseDetails[] = [
+              ...prevLinkState,
+              { type: NimiLinkType.TWITTER, title: '', content: data.username },
+            ];
 
-              setValue('links', newState);
+            setValue('links', newState);
 
-              setIsImportFromTwitterModalOpen(false);
-            });
+            setIsImportFromTwitterModalOpen(false);
           }}
         />
       )}
