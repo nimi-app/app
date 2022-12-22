@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { DottedBorder } from '../../components/Button/styled';
-import { ENSCardItem } from '../../components/ENSCardItem';
+import { DomainItem } from '../../components/DomainItem';
 import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
@@ -41,12 +41,12 @@ export function DomainsHome() {
         if (domainList?.length === 0) return <NoENSBanner openENSWebsiteHandler={openENSWebsiteHandler} />;
 
         return (
-          <StyledDomainsWrapper>
+          <DomainsContainer>
             {domainList?.map((domain) => (
-              <ENSCardItem key={domain.id} domain={domain} />
+              <DomainItem key={domain.id} domain={domain} />
             ))}
             <AddDomain onClick={openENSWebsiteHandler}>Buy an ENS</AddDomain>
-          </StyledDomainsWrapper>
+          </DomainsContainer>
         );
       })()}
       <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
@@ -58,7 +58,7 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const StyledDomainsWrapper = styled.div`
+const DomainsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 18px;

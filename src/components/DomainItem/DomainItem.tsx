@@ -9,11 +9,11 @@ import { useNimiData } from '../../hooks/useNimiData';
 import { ENSDomain } from '../../models';
 import { NimiSignatureColor } from '../../theme';
 
-type ENSCardItemProps = {
+type DomainItemProps = {
   domain: ENSDomain;
 };
 
-export function ENSCardItem({ domain }: ENSCardItemProps) {
+export function DomainItem({ domain }: DomainItemProps) {
   const ref = useRef(null);
   const isInView = useInView(ref);
 
