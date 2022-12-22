@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-import { getAPIBaseURL } from '../modules/api-service';
+import { getAPIBaseURL } from '../api/RestAPI/utils';
 
 export function useNimiData(name: string, isInView: boolean) {
   const getNimiData = async () => {

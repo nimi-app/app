@@ -1,1 +1,1 @@
-export * from './ENSCardItem';
+export * from './DomainItem';
