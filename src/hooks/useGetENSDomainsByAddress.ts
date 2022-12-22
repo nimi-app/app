@@ -96,8 +96,6 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isSuccess, isError, isFetching]);
 
-  console.log('DOMAINS DATAAA: ', data);
-
   return {
     data: waitedForData && waitedForData.slice(0, numberOfItemsPerPage),
     loading: isLoading || isFetching,
