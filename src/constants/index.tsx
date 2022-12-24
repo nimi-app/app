@@ -1,6 +1,6 @@
 import { NimiLinkType } from '@nimi.io/card';
 import { CSSProperties } from 'styled-components';
-import { chain } from 'wagmi';
+import { goerli, mainnet } from 'wagmi';
 
 export interface NetworkDetails {
   chainId: string;
@@ -85,7 +85,7 @@ export enum ChainId {
 
 export const PUBLIC_RESOLVER_ADDRESSES = {
   [ChainId.MAINNET]: '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41',
-  [ChainId.GOERLI]: '0x4b1488b7a6b320d2d721406204abc3eeaa9ad329',
+  [ChainId.GOERLI]: '0xE264d5bb84bA3b8061ADC38D3D76e6674aB91852',
 };
 
 export function getChainLabel(chainId: ChainId): string {
@@ -106,7 +106,6 @@ export const ENV_SUPPORTED_CHAIN_IDS =
 /**
  * Parse through and pick the chains from SUPPORTABLE_WAGMI_CHAINS based on the list from ENV_SUPPORTED_CHAIN_IDS;
  */
-export const SUPPORT_CHAINS_RAINBOW_KIT =
-  process.env.REACT_APP_ENV === 'production' ? [chain.mainnet] : [chain.mainnet, chain.goerli];
+export const SUPPORT_CHAINS_RAINBOW_KIT = process.env.REACT_APP_ENV === 'production' ? [mainnet] : [mainnet, goerli];
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];

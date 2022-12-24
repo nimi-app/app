@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Flex } from 'rebass';
@@ -14,6 +14,7 @@ import { Pagination } from '../../components/Pagination/';
 import { ENV_SUPPORTED_CHAIN_IDS } from '../../constants';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
+import { AppWrapper } from '../../modules/app-wrapper';
 import { NimiSignatureColor } from '../../theme';
 
 const StyledDomainsWrapper = styled(Flex)`
@@ -99,49 +100,51 @@ function Domains({ address }: DomainsProps) {
   const { t } = useTranslation('nimi');
 
   return (
-    <Container>
-      <TopSection>
-        <DomainsHeader>Your Identities</DomainsHeader>
+    <AppWrapper>
+      <Container>
+        <TopSection>
+          <DomainsHeader>Your Identities</DomainsHeader>
 
-        <StyledInput
-          id="domain-seach"
-          isSimple={true}
-          inputLogo={SearchIcon}
-          placeholder="Search"
-          content={searchText}
-          onChange={({ target }) => setSearchText(target.value)}
-          style={{ maxWidth: '200px', background: 'none' }}
-          isInvalidInput={false}
-        />
-      </TopSection>
+          <StyledInput
+            id="domain-seach"
+            isSimple={true}
+            inputLogo={SearchIcon}
+            placeholder="Search"
+            content={searchText}
+            onChange={({ target }) => setSearchText(target.value)}
+            style={{ maxWidth: '200px', background: 'none' }}
+            isInvalidInput={false}
+          />
+        </TopSection>
 
-      {loading ? (
-        <LoaderWrapper>
-          <Loader />
-        </LoaderWrapper>
-      ) : (
-        <>
-          {domainList?.length === 0 ? (
-            <BigBanner>
-              {t('noEnsFound')}
-              <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-                {t('buyDomain')}
-              </BuyDomainLink>
-            </BigBanner>
-          ) : (
-            <StyledDomainsWrapper>
-              {domainList?.map((domain) => (
-                <ENSCardContainer key={domain.name} domain={domain} />
-              ))}
-              <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
-                Buy an ENS
-              </AddDomain>
-            </StyledDomainsWrapper>
-          )}
-        </>
-      )}
-      <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
-    </Container>
+        {loading ? (
+          <LoaderWrapper>
+            <Loader />
+          </LoaderWrapper>
+        ) : (
+          <>
+            {domainList?.length === 0 ? (
+              <BigBanner>
+                {t('noEnsFound')}
+                <BuyDomainLink onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                  {t('buyDomain')}
+                </BuyDomainLink>
+              </BigBanner>
+            ) : (
+              <StyledDomainsWrapper>
+                {domainList?.map((domain) => (
+                  <ENSCardContainer key={domain.name} domain={domain} />
+                ))}
+                <AddDomain onClick={() => window.open('https://app.ens.domains/', '_blank')?.focus()}>
+                  Buy an ENS
+                </AddDomain>
+              </StyledDomainsWrapper>
+            )}
+          </>
+        )}
+        <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
+      </Container>
+    </AppWrapper>
   );
 }
 
@@ -152,16 +155,24 @@ export function DomainsHome() {
   const { chainId, account, isConnected } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isConnected !== true) {
+      navigate('/');
+    }
+  }, [isConnected]);
+
   if (isConnected !== true) {
-    navigate('/');
     return <Container />;
   }
   if (ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number) === false) {
     return (
-      <Container>
-        <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
-        <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
-      </Container>
+      <AppWrapper>
+        <Container>
+          <ErrorContainer>{t('error.unsupportedNetwork')}</ErrorContainer>
+          <NormalText>Please change your network by clicking the account button on the top right.</NormalText>
+        </Container>
+      </AppWrapper>
     );
   }
   return <Domains address={account as string} />;

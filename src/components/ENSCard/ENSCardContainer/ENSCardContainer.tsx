@@ -1,13 +1,10 @@
-import createDebugger from 'debug';
-import { useInView } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useDeployedPageData } from '../../../api/RestAPI/hooks/useDeployedPageData';
+import { useEnsMetadataImage } from '../../../api/RestAPI/hooks/useEnsMetadataImage';
 import purpleCircleURL from '../../../assets/svg/purpleCircle.svg';
-import { useENSMetadata } from '../../../hooks/useENSMetadata';
 import { useGetENSDomainsByAddress } from '../../../hooks/useGetENSDomainsByAddress';
-import { fetchNimiDataByENSName } from '../../../modules/api-service';
-import { PopulatedENSCard } from '../PopulatedENSCard';
 import { ENSNameCardImage, StyledDomainName, StyledENSNameCardWrapper } from '../styleds';
 
 type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[] ? ElementType : never;
@@ -16,47 +13,31 @@ export interface ENSCardContainerProps {
   domain: ArrElement<ReturnType<typeof useGetENSDomainsByAddress>['data']>;
 }
 
-const debug = createDebugger('components:ENSCardContainer');
-
 export function ENSCardContainer({ domain }: ENSCardContainerProps) {
-  const { data: metadata, loading: metadataLoading } = useENSMetadata(domain.name!);
-  const ref = useRef(null);
-  const isInView = useInView(ref);
-  const [domainData, setDomainData] = useState<Awaited<ReturnType<typeof fetchNimiDataByENSName>> | null>();
-  const [queryOnGoing, setQueryOnGoing] = useState(false);
-  // When element is in view, fetch the data
-  useEffect(() => {
-    if (queryOnGoing === true) {
-      return;
-    }
-    setQueryOnGoing(true);
-    // fetch only if not already fetched
-    if (isInView && domain?.name && domainData === undefined) {
-      fetchNimiDataByENSName(domain.name)
-        .then((data) => {
-          setDomainData(data);
-        })
-        // Ignore error
-        .catch((error) => {
-          debug({
-            error,
-          });
-          setDomainData(null);
-          setQueryOnGoing(false);
-        });
-    }
-  }, [queryOnGoing, isInView, domain.name, domainData]);
+  const { data: metadataImage, isLoading: metadataLoading } = useEnsMetadataImage(domain.name);
 
-  if (domainData !== null && domainData !== undefined) {
-    return <PopulatedENSCard data={domainData.nimi} key={domain.id} id={domain.id} />;
-  }
+  const ref = useRef(null);
+  const {
+    data: deployedNimi,
+    isLoading: isDelpoyedLoading,
+    isSuccess: isDeployedSuccess,
+  } = useDeployedPageData({ ensName: domain.name });
+
+  const nimiImage = useMemo(() => {
+    if (!isDelpoyedLoading && isDeployedSuccess && deployedNimi && deployedNimi.nimi && deployedNimi.nimi.image)
+      return deployedNimi.nimi.image.url as string;
+  }, [deployedNimi, isDelpoyedLoading, isDeployedSuccess]);
+
+  const metaDataImage = useMemo(() => {
+    if (metadataImage && !metadataLoading) return metadataImage;
+  }, [metadataLoading, metadataImage]);
 
   return (
     <Link ref={ref} to={`/domains/${domain.name}`}>
       <StyledENSNameCardWrapper>
         <ENSNameCardImage
           alt={'ENS Name image'}
-          src={metadataLoading ? purpleCircleURL : metadata ? metadata.image : purpleCircleURL}
+          src={nimiImage ? nimiImage : metaDataImage ? metaDataImage : purpleCircleURL}
           onError={(event) => {
             const target = event.target as HTMLImageElement;
             if (target.src !== purpleCircleURL) {

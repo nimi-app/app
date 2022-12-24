@@ -1,5 +1,0 @@
-/**
- *
- */
-export const NIMI_CONNECT_SIGNATURE_TEXT_PAYLOAD =
-  process.env.REACT_APP_NIMI_CONNECT_SIGNATURE_TEXT_PAYLOAD || 'Nimi Connect';
