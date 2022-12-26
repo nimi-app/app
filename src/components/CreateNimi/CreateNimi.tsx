@@ -1,5 +1,4 @@
 import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts';
-import { Web3Provider } from '@ethersproject/providers';
 
 import { encodeContenthash, namehash as ensNameHash } from '@ensdomains/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -120,10 +119,6 @@ export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
   /**
-   * Web3 provider
-   */
-  provider: Web3Provider;
-  /**
    * Available themes for the user to choose from
    */
   availableThemes: NimiThemeType[];
@@ -135,7 +130,7 @@ export interface CreateNimiProps {
 
 const debug = createDebugger('Nimi:CreateNimi');
 
-export function CreateNimi({ ensAddress, ensName, provider, availableThemes, initialNimi }: CreateNimiProps) {
+export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { t } = useTranslation('nimi');
   const { chainId } = useRainbow();
@@ -219,6 +214,9 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
       if (!publicResolverContract) {
         throw new Error('ENS Public Resolver contract is not available.');
       }
+      if (!chainId) {
+        throw new Error('No chain');
+      }
 
       publishNimiAbortController.current = new AbortController();
 
@@ -246,7 +244,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
         cid = (
           await publishNimi({
             nimi,
-            chainId: provider.network.chainId,
+            chainId,
             controller: publishNimiAbortController.current,
           })
         ).cid;

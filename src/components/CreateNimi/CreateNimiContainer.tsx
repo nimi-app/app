@@ -11,7 +11,7 @@ type CreateNimiContainerProps = {
 };
 
 export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
-  const { account, provider } = useRainbow();
+  const { account } = useRainbow();
 
   //check if user has certain poap
   const {
@@ -37,7 +37,6 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
       <CreateNimi
         ensAddress={account as string}
         ensName={ensName as string}
-        provider={provider as any}
         availableThemes={avaliableThemes}
         initialNimi={insertPoapWidgetIntoNimi(initialNimi, hasPoaps, account)}
       />
