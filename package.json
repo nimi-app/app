@@ -7,8 +7,6 @@
   "dependencies": {
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ensdomains/ui": "^3.4.1",
-    "@ethersproject/abi": "^5.7.0",
-    "@ethersproject/address": "^5.7.0",
     "@ethersproject/contracts": "^5.7.0",
     "@hookform/resolvers": "^2.8.10",
     "@nimi.io/card": "git+https://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:x-oauth-basic@github.com/nimi-app/card.git",
