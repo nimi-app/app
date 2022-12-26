@@ -22,7 +22,7 @@ export function useUploadImageToIPFS() {
 
     const { data } = await nimiClient.post<{
       data: PublishNimiApiResponse;
-    }>('/nimi/publish/ipns', formData, config);
+    }>('/nimi/assets', formData, config);
     return data.data;
   };
 
