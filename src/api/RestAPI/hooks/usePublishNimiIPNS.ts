@@ -16,10 +16,6 @@ interface PublishNimiViaIPNSParams {
    * EIP-712 signature
    */
   signature: string;
-  /**
-   * Abort controller
-   */
-  controller?: AbortController;
 }
 
 interface PublishNimiIPNSResponse {
