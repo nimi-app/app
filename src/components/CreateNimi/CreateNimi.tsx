@@ -218,9 +218,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       if (!publicResolverContract) {
         throw new Error('ENS Public Resolver contract is not available.');
       }
-      if (!chainId) {
-        throw new Error('No chain');
-      }
 
       const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
 
