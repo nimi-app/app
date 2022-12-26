@@ -1,9 +1,9 @@
-import { Flex } from 'rebass/styled-components';
 import styled from 'styled-components';
 
 import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
 
-export const HeaderWrapper = styled(Flex)`
+export const HeaderWrapper = styled.div`
+  display: flex;
   padding: 27px 90px;
   width: 100%;
   justify-content: space-between;
@@ -12,7 +12,8 @@ export const HeaderWrapper = styled(Flex)`
     padding: 27px 10px;
   }
 `;
-export const AccountAndLinks = styled(Flex)`
+export const AccountAndLinks = styled.div`
+  display: flex;
   align-items: center;
   gap: 50px;
   @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
