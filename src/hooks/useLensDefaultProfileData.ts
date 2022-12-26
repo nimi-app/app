@@ -9,6 +9,7 @@ export interface LensDefaultProfileData {
 
 export function useLensDefaultProfileData(): { loading: boolean; defaultProfileData?: LensDefaultProfileData } {
   const { account, chainId } = useRainbow();
+
   const { data, isLoading, isFetching } = useGetDefaultLensProfileQuery(
     GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.LENS),
     {
