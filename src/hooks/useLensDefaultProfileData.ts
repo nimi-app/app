@@ -15,16 +15,16 @@ export function useLensDefaultProfileData(): { loading: boolean; defaultProfileD
       account,
     },
     {
-      select: (data) => {
-        if (!data.defaultProfile) return undefined;
+      select: ({ defaultProfile }) => {
+        if (!defaultProfile) return undefined;
         else {
           return {
-            name: data.defaultProfile.name,
-            description: data.defaultProfile.bio,
+            name: defaultProfile.name,
+            description: defaultProfile.bio,
             pictureUrl:
-              data.defaultProfile.picture && 'uri' in data.defaultProfile?.picture
-                ? data.defaultProfile.picture.uri
-                : data.defaultProfile.picture?.original.url,
+              defaultProfile.picture && 'uri' in defaultProfile?.picture
+                ? defaultProfile.picture.uri
+                : defaultProfile.picture?.original.url,
           } as LensDefaultProfileData;
         }
       },
