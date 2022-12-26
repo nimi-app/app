@@ -14,6 +14,7 @@ export function useLensDefaultProfileData(): { loading: boolean; defaultProfileD
     GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.LENS),
     {
       account,
+      chainId,
     },
     {
       select: ({ defaultProfile }) => {
