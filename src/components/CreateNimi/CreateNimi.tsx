@@ -20,6 +20,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
+import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
+import { useUploadImageToIPFS } from '../../api/RestAPI/hooks/useUploadImageToIPFS';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
 import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
@@ -47,7 +49,6 @@ import { FormWrapper } from '../form/FormGroup';
 import { ReorderGroup } from '../ReorderGroup';
 import { ContentInput, ReorderInput } from '../ReorderInput';
 import { TemplatePickerButton } from '../TemplatePickerButton';
-import { publishNimi, publishNimiViaIPNS, uploadImage } from './api';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { ImportButtonsWrapper } from './partials/buttons';
 import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
@@ -132,6 +133,9 @@ const debug = createDebugger('Nimi:CreateNimi');
 
 export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
+  const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
+  const { mutateAsync: uploadImageAsync } = useUploadImageToIPFS();
+
   const { t } = useTranslation('nimi');
   const { chainId } = useRainbow();
   const { signMessageAsync } = useSignMessage();
@@ -218,38 +222,19 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
         throw new Error('No chain');
       }
 
-      publishNimiAbortController.current = new AbortController();
-
       const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
 
-      let contentHash: string | undefined;
-      let cid: string | undefined;
+      const { cidV1, ipns } = await publishNimiAsync({
+        nimi,
+        signature,
+        chainId: 1, // always mainnet
+      });
 
-      // In development, use IPFS
-      if (process.env.REACT_APP_ENV === 'production') {
-        const { cidV1, ipns } = await publishNimiViaIPNS({
-          nimi,
-          signature,
-          chainId: 1, // always mainnet
-          controller: publishNimiAbortController.current,
-        });
-
-        if (!cidV1) {
-          throw new Error('No CID returned from publishNimiViaIPNS');
-        }
-
-        cid = cidV1;
-        contentHash = `ipns://${ipns}`;
-      } else {
-        cid = (
-          await publishNimi({
-            nimi,
-            chainId,
-            controller: publishNimiAbortController.current,
-          })
-        ).cid;
-        contentHash = `ipns://${cid}`;
+      if (!cidV1) {
+        throw new Error('No CID returned from publishNimiViaIPNS');
       }
+
+      const contentHash = `ipns://${ipns}`;
 
       // Get current content hash from ENS contract
       const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
@@ -265,7 +250,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       }
 
       // Set the content
-      setPublishNimiResponseIpfsHash(cid);
+      setPublishNimiResponseIpfsHash(cidV1);
       const setContentHashTransaction = await setENSNameContentHash({
         contract: publicResolverContract,
         name: nimi.ensName,
@@ -347,7 +332,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       };
 
       try {
-        const { cidV1 } = await uploadImage(file);
+        const { cidV1 } = await uploadImageAsync(file);
 
         setValue('image', {
           type: NimiImageType.URL,

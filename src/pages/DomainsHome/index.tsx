@@ -160,7 +160,7 @@ export function DomainsHome() {
     if (isConnected !== true) {
       navigate('/');
     }
-  }, [isConnected]);
+  }, [isConnected, navigate]);
 
   if (isConnected !== true) {
     return <Container />;

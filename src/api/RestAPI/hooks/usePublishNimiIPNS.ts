@@ -28,12 +28,14 @@ interface PublishNimiIPNSResponse {
 }
 
 /**
- * Returns query for fetching poaps user owns
+ * Returns mutation for getting IPNS hash
  */
-export function usePublishNimiIPNS(params: PublishNimiViaIPNSParams) {
-  const postUserData = async () => {
-    const { data } = await nimiClient.post<PublishNimiIPNSResponse>('/nimi/publish/ipns', params);
-    return data;
+export function usePublishNimiIPNS() {
+  const postUserData = async (params: PublishNimiViaIPNSParams) => {
+    const { data } = await nimiClient.post<{
+      data: PublishNimiIPNSResponse;
+    }>('/nimi/publish/ipns', params);
+    return data.data;
   };
 
   return useMutation(['publishNimiIPNS'], postUserData);
