@@ -1,4 +1,4 @@
-query getDefaultLensProfile($account: EthereumAddress!) {
+query getDefaultLensProfile($account: EthereumAddress!, $chainId: Int) {
   defaultProfile(request: { ethereumAddress: $account }) {
     name
     bio
