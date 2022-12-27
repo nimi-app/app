@@ -9,7 +9,7 @@
     "@ensdomains/ui": "^3.4.1",
     "@ethersproject/contracts": "^5.7.0",
     "@hookform/resolvers": "^2.8.10",
-    "@nimi.io/card": "git+https://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:x-oauth-basic@github.com/nimi-app/card.git",
+    "@nimi.io/card": "git+https://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:x-oauth-basic@github.com/nimi-app/card.git",
     "@rainbow-me/rainbowkit": "^0.8.0",
     "@reduxjs/toolkit": "^1.8.1",
     "@tanstack/react-query": "^4.16.1",
