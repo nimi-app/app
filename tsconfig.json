@@ -22,10 +22,9 @@
     "useUnknownInCatchVariables": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    // "noImplicitReturns": true,
   },
   "include": [
     "src"
   ],
-  "exclude": ["generated"]
+  "exclude": ["src/generated"]
 }
