@@ -18,7 +18,7 @@ interface DeployedNimiPageType {
 /**
  * Returns query for fetching deployed Nimi page data
  */
-export function useDeployedPageData({ ensName }) {
+export function useDeployedPageData(ensName: string) {
   const { chainId } = useRainbow();
 
   const getDeployedPageData = async () => {

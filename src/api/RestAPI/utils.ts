@@ -1,3 +1,4 @@
+import { NimiLinkBaseDetails, NimiLinkType } from '@nimi.io/card';
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 
@@ -78,9 +79,9 @@ export function formatEnsMetadataImage(ensData: ENSMetadata) {
   } else return undefined;
 }
 
-export function formatLinktreeData(data: LinktreeData[]) {
+export function formatLinktreeData(data: LinktreeData[]): NimiLinkBaseDetails[] {
   return data.map(({ content, title }) => {
     const guessLinkType = guessLinkTypeBasedOnUrl(content);
-    return { type: guessLinkType, title, content, id: generateID() };
+    return { type: guessLinkType, title, content, id: generateID() } as NimiLinkBaseDetails;
   });
 }

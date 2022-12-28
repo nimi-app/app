@@ -2,15 +2,16 @@ import { NimiThemeType } from '@nimi.io/card';
 import createDebugger from 'debug';
 
 import { PoapData, usePoapsFromUser } from '../api/RestAPI/hooks/usePoapsFromUser';
+import { ThemesCurated } from '../types';
 
 export interface UseAvaliableTheme {
-  avaliableThemes: NimiThemeType[];
+  avaliableThemes: ThemesCurated[];
   isLoading: boolean;
   hasPoaps: boolean;
 }
 
 //Order determines precedent for default theme
-const themeToPoapMapping = [
+const themeToPoapMapping: { theme: ThemesCurated; eventId: number[] }[] = [
   { theme: NimiThemeType.DEVCON, eventId: [60695, 73449] },
   { theme: NimiThemeType.RAAVE, eventId: [63182] },
   { theme: NimiThemeType.DAIVINITY, eventId: [74051] },
@@ -21,11 +22,11 @@ const debug = createDebugger('hooks:useAvaliableThemesFromPoaps');
 /**
  * Returns array of themes user has avaliable
  */
-export function useAvaliableThemesFromPoaps({ account }): UseAvaliableTheme {
+export function useAvaliableThemesFromPoaps(account?: string): UseAvaliableTheme {
   const { data, isLoading, isFetching } = usePoapsFromUser(account);
 
   function getAvaliableThemes(userPOAPList?: PoapData[]) {
-    const themes: NimiThemeType[] = [NimiThemeType.NIMI];
+    const themes: ThemesCurated[] = [NimiThemeType.NIMI];
 
     if (userPOAPList) {
       for (const theme of themeToPoapMapping) {

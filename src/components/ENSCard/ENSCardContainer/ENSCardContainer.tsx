@@ -21,7 +21,7 @@ export function ENSCardContainer({ domain }: ENSCardContainerProps) {
     data: deployedNimi,
     isLoading: isDelpoyedLoading,
     isSuccess: isDeployedSuccess,
-  } = useDeployedPageData({ ensName: domain.name });
+  } = useDeployedPageData(domain.name);
 
   const nimiImage = useMemo(() => {
     if (!isDelpoyedLoading && isDeployedSuccess && deployedNimi && deployedNimi.nimi && deployedNimi.nimi.image)
