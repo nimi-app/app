@@ -46,7 +46,7 @@ import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
 import { ReorderGroup } from '../ReorderGroup';
-import { ContentInput, ReorderInput } from '../ReorderInput';
+import { ReorderInput } from '../ReorderInput';
 import { TemplatePickerButton } from '../TemplatePickerButton';
 import { publishNimi, publishNimiViaIPNS, uploadImage } from './api';
 import { AddFieldsModal } from './partials/AddFieldsModal';
