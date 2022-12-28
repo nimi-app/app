@@ -411,18 +411,7 @@ export function CreateNimi({ ensAddress, ensName, provider, availableThemes, ini
               </ImageAndTemplateSection>
 
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
-                {/* display name input */}
                 <FormGroup>
-                  <FormItem>
-                    <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
-                    <ContentInput
-                      inputInvalid={false}
-                      paddingLeft={'20px'}
-                      placeholder="Name"
-                      id="displayName"
-                      {...register('displayName')}
-                    />
-                  </FormItem>
                   <FormItem>
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
                     <TextArea
