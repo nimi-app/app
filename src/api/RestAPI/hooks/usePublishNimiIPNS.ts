@@ -4,17 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 import { nimiClient } from '../utils';
 
 interface PublishNimiViaIPNSParams {
-  /**
-   * Chain Id
-   */
   chainId: number;
-  /**
-   * Nimi
-   */
   nimi: Nimi;
-  /**
-   * EIP-712 signature
-   */
   signature: string;
 }
 
