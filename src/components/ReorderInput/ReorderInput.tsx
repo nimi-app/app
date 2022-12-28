@@ -15,15 +15,11 @@ type ReorderInputProps = {
   removeLink: (linkId: string) => void;
 };
 
-// Zett, are you sure you want to change link type SVG icon to exclamation mark in case of invalid input?
-// User might change title to e.g. bejzik8 and he might forget what is the type of link.
-// I can easily update this if necessary.
-
 export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
   const [isInvalidInput, setInvalidInput] = useState(false);
   const { type, title, content } = value;
 
-  const onChange = (event) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateLink(value.id!, 'content', event.target.value);
     nimiLinkValidator
       .isValid({
@@ -52,12 +48,14 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
           )}
         />
         {title && <ClearButton className="clear-button" onClick={() => updateLink(value.id!, 'title', '')} />}
-        <PenComponent
-          text={
-            title ||
-            type.replace(/(^\w)(\S*)/g, (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase())
-          }
-        />
+
+        <PenContainer className="pen-component">
+          <PenPlaceholder>
+            {title ||
+              type.replace(/(^\w)(\S*)/g, (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase())}
+          </PenPlaceholder>
+          <Pen />
+        </PenContainer>
       </InputContainer>
       <InputFieldWithIcon
         inputLogo={nimiLinkDetailsExtended[type].logo}
@@ -121,13 +119,6 @@ const ClearButton = styled(XSVG)<{ right?: string }>`
     fill: #8c90a0;
   }
 `;
-
-const PenComponent = ({ text }) => (
-  <PenContainer className="pen-component">
-    <PenPlaceholder>{text}</PenPlaceholder>
-    <Pen />
-  </PenContainer>
-);
 
 const PenContainer = styled.div`
   display: none;

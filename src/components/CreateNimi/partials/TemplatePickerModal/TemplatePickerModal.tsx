@@ -6,11 +6,11 @@ import { ThemeAssets } from '../../../../types';
 import { ModalBase } from '../ModalBase';
 import { TemplateItem } from './TemplateItem';
 
-type TemplatePickerModalProps = {
+interface TemplatePickerModalProps {
   themes: ThemeAssets[];
   handleThemeSelection: (theme: ThemeAssets) => void;
   closeModal: () => void;
-};
+}
 
 export function TemplatePickerModal({ closeModal, handleThemeSelection, themes }: TemplatePickerModalProps) {
   const [modalContainer] = useState(() => document.createElement('div'));

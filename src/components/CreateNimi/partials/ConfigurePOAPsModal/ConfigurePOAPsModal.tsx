@@ -1,6 +1,6 @@
-import { NimiWidgetType, POAPToken } from '@nimi.io/card';
+import { NimiWidget, NimiWidgetType, POAPToken } from '@nimi.io/card';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect } from 'react';
+import { MouseEvent, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useFormContext } from 'react-hook-form';
 
@@ -70,9 +70,9 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
     };
   }, [ensAddress, modalContainer, setItems, setFetchingItems]);
 
-  const handleCloseModal = (event) => {
+  const handleCloseModal = (event: MouseEvent) => {
     if (event.target === event.currentTarget) {
-      const otherWidgets = getValues('widgets').filter((el) => el.type !== NimiWidgetType.POAP);
+      const otherWidgets = getValues('widgets').filter((el: NimiWidget) => el.type !== NimiWidgetType.POAP);
       const selectedTokens = selectedItems.filter((item) => item !== null);
 
       setValue('widgets', [

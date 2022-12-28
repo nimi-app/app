@@ -20,8 +20,14 @@ export const StyledButton = styled.button<{ disabled: boolean }>`
     gap: none;
   }
 `;
+interface ButtonGroupProps {
+  id?: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}
 
-export const ButtonGroup = ({ id, children, onClick, disabled = false }) => {
+export const ButtonGroup = ({ id, children, onClick, disabled = false }: ButtonGroupProps) => {
   return (
     <StyledButton disabled={disabled} id={id} onClick={onClick}>
       {children}

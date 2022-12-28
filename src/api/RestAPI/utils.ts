@@ -1,4 +1,4 @@
-import { NimiLinkBaseDetails, NimiLinkType } from '@nimi.io/card';
+import { NimiLinkBaseDetails } from '@nimi.io/card';
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 

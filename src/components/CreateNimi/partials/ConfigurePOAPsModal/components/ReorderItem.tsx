@@ -1,9 +1,19 @@
+import { POAPToken } from '@nimi.io/card';
 import { Reorder, useDragControls } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as DotsIcon } from '../../../../../assets/svg/dots.svg';
 import { POAPPlaceholder, StaticPOAP } from './POAPs';
+
+interface ReorderItemProps {
+  value: POAPToken;
+  zIndex: number;
+  getReorderingGroupRectangle: () => DOMRect;
+  getDraggingEvent: (event: DragEvent) => void;
+  getDraggingEventEnd: (event: DragEvent, poap: POAPToken) => void;
+  movingChild: boolean;
+}
 
 export const ReorderItem = ({
   value,
@@ -12,7 +22,7 @@ export const ReorderItem = ({
   getDraggingEvent,
   getDraggingEventEnd,
   movingChild,
-}) => {
+}: ReorderItemProps) => {
   const [amountOfRed, setAmountOfRed] = useState(0);
   const controls = useDragControls();
 

@@ -11,7 +11,7 @@ export function useConfigurePOAPsModal() {
   const openRecentPage = () => setPage('recent');
   const openCustomPage = () => setPage('custom');
 
-  const handleReordering = (items) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)]);
+  const handleReordering = (items: any) => setSelectedItems([...items, ...new Array(6 - items.length).fill(null)]);
 
   const getAddedPOAPs = () => selectedItems.filter((item) => item !== null);
 

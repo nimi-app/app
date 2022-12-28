@@ -9,6 +9,16 @@ import { StaticPOAP } from './POAPs';
 import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { ReorderItem } from './ReorderItem';
 
+interface CustomizePoapsProps {
+  items: POAPToken[];
+  selectedItems: POAPToken[];
+  handleReordering: (items: POAPToken[]) => void;
+  addPOAPToSelectedItems: (poap: POAPToken) => void;
+  removePOAPFromSelectedItems: (poap: POAPToken) => void;
+  clearSelectedItems: () => void;
+  checkIfPOAPIsSelected: (poap: POAPToken) => boolean;
+}
+
 export const CustomizePOAPs = ({
   items,
   selectedItems,
@@ -17,7 +27,7 @@ export const CustomizePOAPs = ({
   removePOAPFromSelectedItems,
   clearSelectedItems,
   checkIfPOAPIsSelected,
-}) => {
+}: CustomizePoapsProps) => {
   const [filterValue, setFilterValue] = useState('');
   const [childOutside, setChildOutside] = useState<'left' | 'right' | 'none'>('none');
   const [movingChild, setMovingChild] = useState(false);
@@ -28,7 +38,8 @@ export const CustomizePOAPs = ({
     token.event.country.toLowerCase().includes(filterValue.toLowerCase()) ||
     token.event.city.toLowerCase().includes(filterValue.toLowerCase());
 
-  const getReorderingGroupRectangle = () => document.getElementById('reorder-group')?.getBoundingClientRect();
+  const getReorderingGroupRectangle = () =>
+    document.getElementById('reorder-group')?.getBoundingClientRect() as DOMRect;
 
   const getDraggingEvent = (event: DragEvent) => {
     setMovingChild(true);

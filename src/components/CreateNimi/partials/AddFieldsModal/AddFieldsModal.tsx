@@ -143,7 +143,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
               }
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
-              const checked = getValues('widgets').some(({ type }) => type === widget);
+              const checked = getValues('widgets').some(({ type }: { type: NimiWidgetType }) => type === widget);
 
               const inputOnChange = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state
@@ -174,8 +174,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           <StyledFlexList>
             {Object.values(NimiBlockchain)
               .filter((item) => item !== NimiBlockchain.SOLANA)
-              .map((blockchai) => {
-                const blockchain = blockchai as string;
+              .map((blockchain) => {
                 const inputId = `modal-checkbox-${blockchain}`;
                 const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
                 const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];
@@ -212,7 +211,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
 
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
-              const checked = getValues('widgets').some(({ type }) => type === widget);
+              const checked = getValues('widgets').some(({ type }: { type: NimiWidgetType }) => type === widget);
 
               const inputOnChange = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state

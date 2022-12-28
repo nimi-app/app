@@ -36,7 +36,7 @@ export function InputFieldWithIcon({
   const [inputTouched, setInputTouched] = useState(false);
   return (
     <InputContainer style={style} id={id}>
-      <Logo logo={renderSVG(inputLogo, 15)} />
+      <LogoContainer>{renderSVG(inputLogo, 15)}</LogoContainer>
       <ContentInput
         inputInvalid={inputTouched && isInvalidInput}
         value={content}
@@ -91,5 +91,3 @@ const LogoContainer = styled.div`
   left: 18px;
   transform: translate(0, -50%);
 `;
-
-const Logo = ({ logo }) => <LogoContainer>{logo}</LogoContainer>;

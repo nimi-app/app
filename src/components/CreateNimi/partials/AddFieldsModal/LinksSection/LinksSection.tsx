@@ -1,4 +1,4 @@
-import { nimiLinkDetailsExtended } from '@nimi.io/card';
+import { nimiLinkDetailsExtended, NimiLinkType } from '@nimi.io/card';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -19,7 +19,7 @@ const SectionTitle = styled.h2`
 `;
 
 export interface LinksSectionProps {
-  sectionLinks: string[];
+  sectionLinks: NimiLinkType[];
   title: string;
   onChange: any;
 }

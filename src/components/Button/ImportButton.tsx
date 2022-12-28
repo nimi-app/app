@@ -29,15 +29,24 @@ const StyledImg = styled.img`
 
 interface ImportButtonProps {
   onClick: any;
-  type: string;
+  type: ImportButtonType;
   disabled?: boolean;
 }
 
-const Logos = {
-  Twitter: Twitter,
-  Lens: Lens,
-  Nft: Nft,
-  Linktree: Linktree,
+export enum ImportButtonType {
+  Twitter = 'Twitter',
+  Lens = 'Lens',
+  Nft = 'Nft',
+  Linktree = 'Linktree',
+}
+
+const Logos: {
+  [key in ImportButtonType]: string;
+} = {
+  [ImportButtonType.Twitter]: Twitter,
+  [ImportButtonType.Lens]: Lens,
+  [ImportButtonType.Nft]: Nft,
+  [ImportButtonType.Linktree]: Linktree,
 };
 
 export function ImporButton({ onClick, type, disabled = false }: ImportButtonProps) {

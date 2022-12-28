@@ -35,7 +35,7 @@ const numberOfItemsPerPage = 8;
 export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
   const { chainId } = useRainbow();
 
-  function domainOrdering(data) {
+  function domainOrdering(data: any) {
     const domainsOwned = data?.account?.domainsOwned ?? [];
     const domainsControlled = data?.domainsControlled ?? [];
 
@@ -44,7 +44,7 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
 
     const uniqueDomains = allUserDomains.reduce((acc, domain) => {
       // If the domain is already in the array, we don't want to add it again
-      const isDomainDuplicate = acc.find((d) => d?.id === domain?.id);
+      const isDomainDuplicate = acc.find((d: any) => d?.id === domain?.id);
       if (isDomainDuplicate) return acc;
 
       const isNameEncrypted = domain?.name?.includes('[');

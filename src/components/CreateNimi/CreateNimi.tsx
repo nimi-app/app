@@ -43,7 +43,7 @@ import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import { ThemeAssets, ThemesCurated } from '../../types';
 import { generateID } from '../../utils';
-import { ImporButton } from '../Button/ImportButton';
+import { ImporButton, ImportButtonType } from '../Button/ImportButton';
 import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
@@ -382,12 +382,15 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                   <ImportSection>
                     <Toplabel>Import from</Toplabel>
                     <ImportButtonsWrapper>
-                      <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
+                      <ImporButton
+                        type={ImportButtonType.Twitter}
+                        onClick={() => setIsImportFromTwitterModalOpen(true)}
+                      />
                       {!loadingLensProfile && !!lensProfile && (
-                        <ImporButton type="Lens" onClick={handleImportLensProfile} />
+                        <ImporButton type={ImportButtonType.Lens} onClick={handleImportLensProfile} />
                       )}
-                      <ImporButton type="Linktree" onClick={() => setIsLinktreeOpen(true)} />
-                      <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
+                      <ImporButton type={ImportButtonType.Linktree} onClick={() => setIsLinktreeOpen(true)} />
+                      <ImporButton type={ImportButtonType.Nft} onClick={() => setIsNFTSelectorModalOpen(true)} />
                     </ImportButtonsWrapper>
                   </ImportSection>
                 </TemplateImportContainer>

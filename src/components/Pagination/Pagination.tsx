@@ -1,12 +1,12 @@
 import createDebugger from 'debug';
-import React from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
 
 interface PaginationProps {
   page: number;
-  setPage: any;
+  setPage: Dispatch<SetStateAction<number>>;
   hasNextPage?: boolean;
   loading: boolean;
 }
