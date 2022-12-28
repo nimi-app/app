@@ -79,7 +79,7 @@ export function formatEnsMetadataImage(ensData: ENSMetadata) {
   } else return undefined;
 }
 
-export function formatLinktreeData(data: LinktreeData[]): NimiLinkBaseDetails[] {
+export function formatLinktreeData(data: LinktreeData[]) {
   return data.map(({ content, title }) => {
     const guessLinkType = guessLinkTypeBasedOnUrl(content);
     return { type: guessLinkType, title, content, id: generateID() } as NimiLinkBaseDetails;
