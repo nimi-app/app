@@ -2,8 +2,10 @@ import { Chain } from '@rainbow-me/rainbowkit';
 import { ProviderWithFallbackConfig } from '@wagmi/core';
 import { useAccount, useNetwork, useProvider } from 'wagmi';
 
+import { ChainId } from '../constants';
+
 interface RainbowHookTypes {
-  chainId?: number;
+  chainId?: ChainId;
   chains: Chain[];
   account?: string;
   provider: ProviderWithFallbackConfig;

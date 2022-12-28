@@ -83,9 +83,7 @@ export enum ChainId {
   GOERLI = 5,
 }
 
-export const PUBLIC_RESOLVER_ADDRESSES: {
-  [chainId in ChainId]?: string;
-} = {
+export const PUBLIC_RESOLVER_ADDRESSES = {
   [ChainId.MAINNET]: '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41',
   [ChainId.GOERLI]: '0xE264d5bb84bA3b8061ADC38D3D76e6674aB91852',
 };

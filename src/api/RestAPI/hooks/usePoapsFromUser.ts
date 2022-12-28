@@ -29,8 +29,11 @@ export interface PoapData {
 /**
  * Returns query for fetching poaps user owns
  */
-export function usePoapsFromUser(account: string) {
+export function usePoapsFromUser(account?: string) {
   const getPoapsFromUser = async () => {
+    if (!account) {
+      return [];
+    }
     const poapClient = getPOAPAPIClient();
     const { data } = await poapClient.get<PoapData[]>(`/actions/scan/${account.toLowerCase()}`);
     return data;
