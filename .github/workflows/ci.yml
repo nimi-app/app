@@ -2,29 +2,24 @@ name: CI
 
 on:
   push:
-    branches:
-      - development
-      - main
+    branches: [ "main", "development" ]
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ "main", "development" ]
 
 jobs:
-  CI:
-    name: Build
-    runs-on: ubuntu-18.04
+  build:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node_version: [16]
+        node_version: [18.12.0]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
         with:
-          node-version: '16'
-      - uses: shimataro/ssh-key-action@v2
+            persist-credentials: false
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-         key: ${{ secrets.SSH_KEY }}
-         known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      - name: Install
-        run: npm ci --legacy-peer-deps
-      - name: Build
-        run: npm run build
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build

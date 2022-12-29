@@ -43,7 +43,7 @@
   },
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-app-rewired start --config-overrides ./config-overrides.cjs",
-    "build": "GENERATE_SOURCEMAP=false react-app-rewired build --config-overrides ./config-overrides.cjs",
+    "build": "CI=false && GENERATE_SOURCEMAP=false react-app-rewired build --config-overrides ./config-overrides.cjs",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "eslint \"./src/**/*.{ts,tsx,js}\"",
