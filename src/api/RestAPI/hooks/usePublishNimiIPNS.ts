@@ -14,16 +14,16 @@ interface PublishNimiIPNSResponse {
   ipns: string;
 }
 
+const postUserData = async (params: PublishNimiViaIPNSParams) => {
+  const { data } = await nimiClient.post<{
+    data: PublishNimiIPNSResponse;
+  }>('/nimi/publish/ipns', params);
+  return data.data;
+};
+
 /**
  * Returns mutation for getting IPNS hash
  */
 export function usePublishNimiIPNS() {
-  const postUserData = async (params: PublishNimiViaIPNSParams) => {
-    const { data } = await nimiClient.post<{
-      data: PublishNimiIPNSResponse;
-    }>('/nimi/publish/ipns', params);
-    return data.data;
-  };
-
   return useMutation(['publishNimiIPNS'], postUserData);
 }
