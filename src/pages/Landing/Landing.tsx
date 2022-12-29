@@ -62,7 +62,7 @@ export function Landing() {
                         </Button>
                       );
                     }
-                    navigate('/domains');
+                    navigate('/domains/all');
                   })()}
                 </div>
               );

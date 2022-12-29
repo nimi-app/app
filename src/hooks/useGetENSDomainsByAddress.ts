@@ -5,17 +5,11 @@ import {
   GetDomainsOwnedOrControlledByQuery,
   useGetDomainsOwnedOrControlledByQuery,
 } from '../api/GraphQl/schemas/generated/ens';
+import { ENSDomain } from '../models';
 import { useRainbow } from './useRainbow';
 
-export type DataModified = {
-  id: string;
-  labelName: string;
-  labelHash: string;
-  name: string;
-  parent: { name: string };
-};
 export interface UserENSDomains {
-  data: DataModified[] | undefined;
+  data: ENSDomain[];
   loading: boolean;
   hasNextPage?: boolean;
 }
@@ -96,7 +90,7 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
     },
     { keepPreviousData: true, select: domainOrdering }
   );
-  const waitedForData: DataModified[] = useMemo(() => {
+  const waitedForData: ENSDomain[] = useMemo(() => {
     if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
