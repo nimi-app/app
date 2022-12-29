@@ -4,7 +4,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { App } from './pages/App';
-import { ReactQueryProvider, ReduxProvider, WagmiProvider } from './providers';
+import { ReactQueryProvider, WagmiProvider } from './providers';
 import { FixedGlobalStyle, ThemedGlobalStyle, ThemeProvider } from './theme';
 
 if ('ethereum' in window) {
@@ -15,16 +15,14 @@ const root = createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <StrictMode>
-    <ReduxProvider>
-      <ReactQueryProvider>
-        <WagmiProvider>
-          <FixedGlobalStyle />
-          <ThemeProvider>
-            <ThemedGlobalStyle />
-            <App />
-          </ThemeProvider>
-        </WagmiProvider>
-      </ReactQueryProvider>
-    </ReduxProvider>
+    <ReactQueryProvider>
+      <WagmiProvider>
+        <FixedGlobalStyle />
+        <ThemeProvider>
+          <ThemedGlobalStyle />
+          <App />
+        </ThemeProvider>
+      </WagmiProvider>
+    </ReactQueryProvider>
   </StrictMode>
 );

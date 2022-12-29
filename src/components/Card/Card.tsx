@@ -23,9 +23,3 @@ export const CardBody = styled.div`
     padding:14px;
   `};
 `;
-
-export const CardTitle = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 12px;
-`;

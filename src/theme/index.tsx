@@ -10,6 +10,9 @@ import { Colors } from './styled';
 
 export * from './components';
 
+export const HEADER_HEIGHT = '80px';
+export const FOOTER_HEIGHT = '80px';
+
 export const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
   upToSmall: 720,
@@ -145,8 +148,8 @@ export const NimiSignatureColor = css`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
 `;
+
 export const NimiModalStyles = css`
   background: #f0f3fb;
   border-radius: 12px;

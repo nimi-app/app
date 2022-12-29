@@ -6,7 +6,7 @@
 
 *Add screenshots if applicable. Images are nice :)*
 
-  # To Test
+# To Test
 
 1. <<Step one>> Open the page `about`
 - [ ] <<What to expect?>> Verify it contains about information...
@@ -15,7 +15,7 @@
 - [ ] Input should not accept Numbers
 2. <<Step two>> ...
 
-  # Background
+# Background
 
 *Optional: Give background information for changes you've made, that might be difficult to explain via comments*
 
