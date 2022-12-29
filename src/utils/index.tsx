@@ -1,18 +1,7 @@
-import { getAddress } from '@ethersproject/address';
-
 import { Nimi, nimiLinkDetailsExtended, NimiLinkType, NimiWidgetType } from '@nimi.io/card';
 import { FC, SVGProps } from 'react';
 
 export * from './explorer';
-
-// shorten the checksummed version of the input address to have 0x + 4 characters at start and end
-export function shortenAddress(address: string, charsBefore = 4, charsAfter = 4): string {
-  const parsed = getAddress(address);
-  if (!parsed) {
-    throw Error(`Invalid 'address' parameter '${address}'.`);
-  }
-  return `${parsed.substring(0, charsBefore + 2)}...${parsed.substring(42 - charsAfter)}`;
-}
 
 /**
  * Loads a Fathom instance into the page

@@ -1,4 +1,4 @@
-query getDomainsByNamehash($domainId: ID!) {
+query getDomainsByNamehash($domainId: ID!, $chainId: Int) {
   domain(id: $domainId) {
     id
     labelName
@@ -56,7 +56,7 @@ query getDomainsOwnedOrControlledBy(
   }
 }
 
-query getDomainFromSubgraph($domainId: ID!) {
+query getDomainFromSubgraph($domainId: ID!, $chainId: Int) {
   domain(id: $domainId) {
     id
     name

@@ -1,11 +1,10 @@
-import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { useDeployedPageData } from '../../api/RestAPI/hooks/useDeployedPageData';
+import { useEnsMetadataImage } from '../../api/RestAPI/hooks/useEnsMetadataImage';
 import PurpleCircle from '../../assets/svg/purpleCircle.svg';
-// import { useENSMetadata } from '../../hooks/useENSMetadata';
-import { useNimiData } from '../../hooks/useNimiData';
 import { ENSDomain } from '../../models';
 import { NimiSignatureColor } from '../../theme';
 
@@ -15,18 +14,16 @@ type DomainItemProps = {
 
 export function DomainItem({ domain }: DomainItemProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref);
 
-  // TODO: MIRKO CHECK IF useENSMetadata HOOK IS NECESSARY OVER HERE AND AT ALL
-  // const { data: metadata, loading: metadataLoading } = useENSMetadata(domain.name!);
-  const { data: domainData } = useNimiData(domain?.name, isInView);
+  const { data: metadata } = useEnsMetadataImage(domain.name!);
+  const { data: domainData } = useDeployedPageData({ ensName: domain?.name });
 
   return (
     <Link ref={ref} to={`/domains/${domain.name}`} state={domainData}>
       <Container>
         <DomainProfilePhoto
           alt={`${domain.name} Image`}
-          src={domainData?.nimi?.image ? domainData.nimi.image.url : PurpleCircle}
+          src={domainData?.nimi?.image ? domainData.nimi.image.url : metadata ? metadata : PurpleCircle}
           onError={(event) => {
             const target = event.target as HTMLImageElement;
 

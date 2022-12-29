@@ -1,13 +1,12 @@
-import { Provider } from '@ethersproject/providers';
-
 import { Chain } from '@rainbow-me/rainbowkit';
+import { ProviderWithFallbackConfig } from '@wagmi/core';
 import { useAccount, useNetwork, useProvider } from 'wagmi';
 
 interface RainbowHookTypes {
   chainId?: number;
   chains: Chain[];
   account?: string;
-  provider: Provider;
+  provider: ProviderWithFallbackConfig;
   isConnected: boolean;
   isActivating: boolean;
 }

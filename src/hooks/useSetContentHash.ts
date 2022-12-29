@@ -1,6 +1,7 @@
+import { ContractTransaction } from '@ethersproject/contracts';
+
 import nameHash from '@ensdomains/eth-ens-namehash';
 import { encodeContenthash } from '@ensdomains/ui';
-import { ContractTransaction } from 'ethers';
 import { useMemo } from 'react';
 
 import { EnsPublicResolver } from '../generated/contracts';
