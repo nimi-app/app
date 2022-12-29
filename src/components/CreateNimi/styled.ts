@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { Button } from '../Button';
-import { DottedButtonBase } from '../Button/styled';
+import { DottedBorder } from '../Button/styled';
 import { CardBody } from '../Card';
 
 /**
@@ -61,16 +61,6 @@ export const PreviewContent = styled.aside<{ showMobile: boolean }>`
   }
 `;
 
-/**
- * Card title wrapper
- */
-export const CardTitle = styled.div`
-  ${NimiSignatureColor}
-  font-size: 46px;
-  line-height: 116%;
-  text-align: start;
-`;
-
 export const StyledGridList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -115,13 +105,15 @@ export const SaveAndDeployButton = styled(Button)`
   letter-spacing: -0.02em;
   width: 100%;
 `;
-export const AddFieldsButton = styled(DottedButtonBase)`
-  text-transform: uppercase;
+export const AddFieldsButton = styled.button`
+  ${DottedBorder}
+  width: 100%;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.1em;
-  border-radius: 12px;
-  padding: 22px 16px;
-  width: 100%;
+  text-transform: uppercase;
+  padding: 10px 0;
+  cursor: pointer;
 `;
 export const PreviewMobile = styled.div`
   display: none;
