@@ -25,6 +25,7 @@ export function useDeployedPageData(ensName: string) {
     const params = {
       ens: ensName,
     };
+
     const { data } = await nimiClient.get<{ data: DeployedNimiPageType[] }>(`/nimi/by`, { params });
     return data;
   };
