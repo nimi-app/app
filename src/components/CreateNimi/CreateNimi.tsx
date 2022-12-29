@@ -47,7 +47,7 @@ import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
 import { ReorderGroup } from '../ReorderGroup';
-import { ContentInput, ReorderInput } from '../ReorderInput';
+import { ReorderInput } from '../ReorderInput';
 import { TemplatePickerButton } from '../TemplatePickerButton';
 import { AddFieldsModal } from './partials/AddFieldsModal';
 import { ImportButtonsWrapper } from './partials/buttons';
@@ -391,18 +391,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
               </ImageAndTemplateSection>
 
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
-                {/* display name input */}
                 <FormGroup>
-                  <FormItem>
-                    <Label htmlFor="displayName">{t('formLabel.displayName')}</Label>
-                    <ContentInput
-                      inputInvalid={false}
-                      paddingLeft={'20px'}
-                      placeholder="Name"
-                      id="displayName"
-                      {...register('displayName')}
-                    />
-                  </FormItem>
                   <FormItem>
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
                     <TextArea
