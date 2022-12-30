@@ -9,7 +9,7 @@ import { StaticPOAP } from './POAPs';
 import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { ReorderItem } from './ReorderItem';
 
-interface CustomizePoapsProps {
+interface CustomizePOAPsProps {
   items: POAPToken[];
   selectedItems: POAPToken[];
   handleReordering: (items: POAPToken[]) => void;
@@ -27,7 +27,7 @@ export const CustomizePOAPs = ({
   removePOAPFromSelectedItems,
   clearSelectedItems,
   checkIfPOAPIsSelected,
-}: CustomizePoapsProps) => {
+}: CustomizePOAPsProps) => {
   const [filterValue, setFilterValue] = useState('');
   const [childOutside, setChildOutside] = useState<'left' | 'right' | 'none'>('none');
   const [movingChild, setMovingChild] = useState(false);

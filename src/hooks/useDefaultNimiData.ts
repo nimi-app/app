@@ -11,14 +11,14 @@ interface UseInitialNimiData {
   data?: Nimi;
   loading: boolean;
 }
-interface InitialDataProps {
+interface InitialNimiDataProps {
   ensName: string;
   account?: string;
 }
 /**
  * Returns default data to be displayed on CreateNimipage
  */
-export function useInitialtNimiData({ ensName, account }: InitialDataProps): UseInitialNimiData {
+export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps): UseInitialNimiData {
   const defaultTheme = { type: NimiThemeType.NIMI };
 
   const {

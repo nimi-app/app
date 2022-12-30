@@ -41,7 +41,7 @@ import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverCo
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
-import { ThemeAssets, ThemesCurated } from '../../types';
+import { NimiCuratedTheme, ThemeAssets } from '../../types';
 import { generateID } from '../../utils';
 import { ImporButton, ImportButtonType } from '../Button/ImportButton';
 import { Card, CardBody } from '../Card';
@@ -84,7 +84,7 @@ import {
   Toplabel,
 } from './styled';
 
-const themes: Record<ThemesCurated, ThemeAssets> = {
+const themes: Record<NimiCuratedTheme, ThemeAssets> = {
   [NimiThemeType.NIMI]: {
     type: NimiThemeType.NIMI,
     logoImage: nimiOGLogoImage,
@@ -123,7 +123,7 @@ export interface CreateNimiProps {
   /**
    * Available themes for the user to choose from
    */
-  availableThemes: ThemesCurated[];
+  availableThemes: NimiCuratedTheme[];
   /**
    * The initial Nimi to edit
    */
