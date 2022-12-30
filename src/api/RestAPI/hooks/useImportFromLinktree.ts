@@ -1,3 +1,4 @@
+import { NimiLinkBaseDetails } from '@nimi.io/card';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
@@ -6,7 +7,7 @@ import { formatLinktreeData, nimiClient } from '../utils';
 interface ImportFromLinktree {
   linktreeUrl: string;
   enabled?: boolean;
-  onSuccess?: (data: void) => void;
+  onSuccess: (data?: NimiLinkBaseDetails[]) => void;
 }
 
 export type LinktreeData = {
@@ -33,6 +34,6 @@ export function useImportFromLinktree({ linktreeUrl, enabled = false, onSuccess 
     select: ({ data }) => formatLinktreeData(data),
     enabled,
     onError: (err: AxiosError) => err,
-    onSuccess,
+    onSuccess: (data: NimiLinkBaseDetails[]) => onSuccess(data),
   });
 }

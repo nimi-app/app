@@ -1,4 +1,4 @@
-import { filterEmptyFields, Nimi, NimiCard, nimiLinkValidator, validateNimi } from '@nimi.io/card';
+import { filterEmptyFields, Nimi, NimiCard, NimiLinkBaseDetails, nimiLinkValidator, validateNimi } from '@nimi.io/card';
 import createDebugger from 'debug';
 import { useEffect, useState } from 'react';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
@@ -27,7 +27,7 @@ const debug = createDebugger('components:NimiPreviewCard');
 export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   const [previewNimi, setPreviewNimi] = useState<Nimi>();
 
-  const removeInvalidLinks = async (links) => {
+  const removeInvalidLinks = async (links: NimiLinkBaseDetails[]) => {
     const result = await Promise.all(
       links.map((link) =>
         nimiLinkValidator

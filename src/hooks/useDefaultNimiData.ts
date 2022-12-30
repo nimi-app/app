@@ -11,17 +11,21 @@ interface UseInitialNimiData {
   data?: Nimi;
   loading: boolean;
 }
+interface InitialNimiDataProps {
+  ensName: string;
+  account?: string;
+}
 /**
  * Returns default data to be displayed on CreateNimipage
  */
-export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
+export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps): UseInitialNimiData {
   const defaultTheme = { type: NimiThemeType.NIMI };
 
   const {
     data: deployedNimi,
     isSuccess: isDeployedSuccess,
     isLoading: isDepoyedLoading,
-  } = useDeployedPageData({ ensName });
+  } = useDeployedPageData(ensName);
 
   const shouldRunSecondQuery = deployedNimi === undefined && isDeployedSuccess;
   const {
@@ -31,6 +35,7 @@ export function useInitialtNimiData({ ensName, account }): UseInitialNimiData {
   } = useEnsGeneratedData(ensName, shouldRunSecondQuery);
 
   const nimiObject = useMemo(() => {
+    if (!account) return undefined;
     let nimi: Nimi = {
       ensName,
       displayName: ensName,

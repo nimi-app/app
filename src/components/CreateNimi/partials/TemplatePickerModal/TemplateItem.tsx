@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 import { MEDIA_WIDTHS } from '../../../../theme';
-import { Theme } from '../../../../types';
+import { ThemeAssets } from '../../../../types';
 
 type TemplateItemProps = {
-  theme: Theme;
+  theme: ThemeAssets;
   onClick: () => void;
   noMargin?: boolean;
 };

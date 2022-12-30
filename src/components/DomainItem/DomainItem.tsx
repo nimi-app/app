@@ -15,8 +15,8 @@ type DomainItemProps = {
 export function DomainItem({ domain }: DomainItemProps) {
   const ref = useRef(null);
 
-  const { data: metadata } = useEnsMetadataImage(domain.name!);
-  const { data: domainData } = useDeployedPageData({ ensName: domain?.name });
+  const { data: metadata } = useEnsMetadataImage(domain?.name);
+  const { data: domainData } = useDeployedPageData(domain?.name);
 
   return (
     <Link ref={ref} to={`/domains/${domain.name}`} state={domainData}>

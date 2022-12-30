@@ -14,7 +14,7 @@ import {
   NimiWidgetType,
 } from '@nimi.io/card';
 import createDebugger from 'debug';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { KeyboardEventHandler, useCallback, useMemo, useRef, useState } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -41,8 +41,9 @@ import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverCo
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
+import { NimiCuratedTheme, ThemeAssets } from '../../types';
 import { generateID } from '../../utils';
-import { ImporButton } from '../Button/ImportButton';
+import { ImporButton, ImportButtonType } from '../Button/ImportButton';
 import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
@@ -83,7 +84,7 @@ import {
   Toplabel,
 } from './styled';
 
-const themes = {
+const themes: Record<NimiCuratedTheme, ThemeAssets> = {
   [NimiThemeType.NIMI]: {
     type: NimiThemeType.NIMI,
     logoImage: nimiOGLogoImage,
@@ -122,7 +123,7 @@ export interface CreateNimiProps {
   /**
    * Available themes for the user to choose from
    */
-  availableThemes: NimiThemeType[];
+  availableThemes: NimiCuratedTheme[];
   /**
    * The initial Nimi to edit
    */
@@ -197,7 +198,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
     });
   }, [setValue, lensProfile]);
 
-  function handleThemeSelection({ type }) {
+  function handleThemeSelection({ type }: { type: NimiThemeType }) {
     setValue('theme', { type });
     setIsTemplatePickerModalOpened(false);
   }
@@ -274,15 +275,17 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
     }
   };
 
-  const onSubmitInvalid = (data) => {
+  const onSubmitInvalid = (data: any) => {
     debug('onSubmitInvalid', {
       data,
     });
   };
 
-  const handleKeyDown = (e) => {
-    e.target.style.height = 'inherit';
-    e.target.style.height = `${e.target.scrollHeight}px`;
+  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
+    const eventTarget = e.target as HTMLTextAreaElement;
+
+    eventTarget.style.height = 'inherit';
+    eventTarget.style.height = `${eventTarget.scrollHeight}px`;
   };
 
   const updateLink = (linkId: string, key: string, value: string) => {
@@ -372,19 +375,22 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                   <TemplateSection>
                     <Toplabel>Template</Toplabel>
                     <TemplatePickerButton
-                      selectedTheme={themes[getValues('theme').type]}
+                      selectedTheme={themes[getValues('theme').type as keyof typeof themes]}
                       onClick={() => setIsTemplatePickerModalOpened(true)}
                     />
                   </TemplateSection>
                   <ImportSection>
                     <Toplabel>Import from</Toplabel>
                     <ImportButtonsWrapper>
-                      <ImporButton type="Twitter" onClick={() => setIsImportFromTwitterModalOpen(true)} />
+                      <ImporButton
+                        type={ImportButtonType.Twitter}
+                        onClick={() => setIsImportFromTwitterModalOpen(true)}
+                      />
                       {!loadingLensProfile && !!lensProfile && (
-                        <ImporButton type="Lens" onClick={handleImportLensProfile} />
+                        <ImporButton type={ImportButtonType.Lens} onClick={handleImportLensProfile} />
                       )}
-                      <ImporButton type="Linktree" onClick={() => setIsLinktreeOpen(true)} />
-                      <ImporButton type="Nft" onClick={() => setIsNFTSelectorModalOpen(true)} />
+                      <ImporButton type={ImportButtonType.Linktree} onClick={() => setIsLinktreeOpen(true)} />
+                      <ImporButton type={ImportButtonType.Nft} onClick={() => setIsNFTSelectorModalOpen(true)} />
                     </ImportButtonsWrapper>
                   </ImportSection>
                 </TemplateImportContainer>
@@ -561,7 +567,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       )}
       {isLinktreeOpen && (
         <ImportFromLinktreeModal
-          onClose={(linktreeLinks) => {
+          onClose={(linktreeLinks?: NimiLinkBaseDetails[]) => {
             if (linktreeLinks) setValue('links', [...linktreeLinks, ...links]);
             setIsLinktreeOpen(false);
           }}

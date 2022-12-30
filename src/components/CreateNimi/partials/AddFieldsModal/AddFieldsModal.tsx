@@ -1,4 +1,5 @@
 import {
+  Nimi,
   NIMI_BLOCKCHAIN_LOGO_URL,
   NimiBlockchain,
   nimiLinkDetailsExtended,
@@ -99,7 +100,7 @@ const PortfolioSectionLinks = [NimiLinkType.DRIBBBLE, NimiLinkType.FIGMA, NimiLi
  */
 export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalProps) {
   const { t } = useTranslation('nimi');
-  const { getValues } = useFormContext();
+  const { getValues } = useFormContext<Nimi>();
 
   const onLinksChange = (newLink: NimiLinkType) => {
     const newState: NimiLinkType = newLink as NimiLinkType;
@@ -143,6 +144,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
               }
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
+
               const checked = getValues('widgets').some(({ type }) => type === widget);
 
               const inputOnChange = () => {
@@ -174,8 +176,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           <StyledFlexList>
             {Object.values(NimiBlockchain)
               .filter((item) => item !== NimiBlockchain.SOLANA)
-              .map((blockchai) => {
-                const blockchain = blockchai as string;
+              .map((blockchain) => {
                 const inputId = `modal-checkbox-${blockchain}`;
                 const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
                 const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];

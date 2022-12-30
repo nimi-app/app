@@ -45,13 +45,13 @@ export function generateID(randomString?: string): string {
  * @param url string url that should be evaluated
  * @returns NimiLinkType
  */
-export function guessLinkTypeBasedOnUrl(url: string): string {
+export function guessLinkTypeBasedOnUrl(url: string): NimiLinkType {
   //loops through prepend urls and check if some of them contain url from linkree
   const linkSearch = Object.entries(nimiLinkDetailsExtended).find(
     (item) => item[1].prepend && url.includes(item[1].prepend.substring(8))
   );
 
-  return linkSearch ? linkSearch[0] : NimiLinkType.URL;
+  return linkSearch ? (linkSearch[0] as NimiLinkType) : NimiLinkType.URL;
 }
 
 /**

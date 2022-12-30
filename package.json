@@ -5,7 +5,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ensdomains/ui": "^3.4.1",
     "@ethersproject/contracts": "^5.7.0",
     "@hookform/resolvers": "^2.8.10",
@@ -81,6 +80,7 @@
     "@graphql-codegen/typescript-operations": "^2.5.7",
     "@graphql-codegen/typescript-react-query": "4.0.5",
     "@typechain/ethers-v5": "^10.0.0",
+    "@types/debug": "^4.1.7",
     "@types/jest": "^27.4.1",
     "@types/react": "^18.0.7",
     "@types/react-dom": "^18.0.0",

@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
-import { Theme } from '../../../../types';
+import { ThemeAssets } from '../../../../types';
 import { ModalBase } from '../ModalBase';
 import { TemplateItem } from './TemplateItem';
 
-type TemplatePickerModalProps = {
-  themes: Theme[];
-  handleThemeSelection: (theme: Theme) => void;
+interface TemplatePickerModalProps {
+  themes: ThemeAssets[];
+  handleThemeSelection: (theme: ThemeAssets) => void;
   closeModal: () => void;
-};
+}
 
 export function TemplatePickerModal({ closeModal, handleThemeSelection, themes }: TemplatePickerModalProps) {
   const [modalContainer] = useState(() => document.createElement('div'));

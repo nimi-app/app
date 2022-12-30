@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-import { Theme } from '../../types';
+import { ThemeAssets } from '../../types';
 
 type TemplatePickerButtonProps = {
-  selectedTheme: Theme;
+  selectedTheme: ThemeAssets;
   onClick: () => void;
 };
 

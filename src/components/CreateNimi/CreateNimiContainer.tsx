@@ -14,13 +14,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { account } = useRainbow();
 
   //check if user has certain poap
-  const {
-    avaliableThemes,
-    isLoading: isThemeLoading,
-    hasPoaps,
-  } = useAvaliableThemesFromPoaps({
-    account,
-  });
+  const { avaliableThemes, isLoading: isThemeLoading, hasPoaps } = useAvaliableThemesFromPoaps(account);
 
   //check for users current Nimi profile data or else adds data generated from ens
   const { data: initialNimi, loading: initialNimiLoading } = useInitialtNimiData({
