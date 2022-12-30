@@ -1,4 +1,5 @@
 import {
+  Nimi,
   NIMI_BLOCKCHAIN_LOGO_URL,
   NimiBlockchain,
   nimiLinkDetailsExtended,
@@ -99,7 +100,7 @@ const PortfolioSectionLinks = [NimiLinkType.DRIBBBLE, NimiLinkType.FIGMA, NimiLi
  */
 export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalProps) {
   const { t } = useTranslation('nimi');
-  const { getValues } = useFormContext();
+  const { getValues } = useFormContext<Nimi>();
 
   const onLinksChange = (newLink: NimiLinkType) => {
     const newState: NimiLinkType = newLink as NimiLinkType;
@@ -143,7 +144,8 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
               }
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
-              const checked = getValues('widgets').some(({ type }: { type: NimiWidgetType }) => type === widget);
+
+              const checked = getValues('widgets').some(({ type }) => type === widget);
 
               const inputOnChange = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state
@@ -211,7 +213,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
 
               const inputId = `modal-checkbox-${widget}`;
               const i18nKey = `formWidgetLabel.${widget}`;
-              const checked = getValues('widgets').some(({ type }: { type: NimiWidgetType }) => type === widget);
+              const checked = getValues('widgets').some(({ type }) => type === widget);
 
               const inputOnChange = () => {
                 // Compute the new state and then batch it previous state for onChange have newest state

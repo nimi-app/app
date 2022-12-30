@@ -1,4 +1,4 @@
-import { NimiWidget, NimiWidgetType, POAPToken } from '@nimi.io/card';
+import { Nimi, NimiWidget, NimiWidgetType, POAPToken } from '@nimi.io/card';
 import { AnimatePresence } from 'framer-motion';
 import { MouseEvent, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -15,7 +15,7 @@ type ConfigurePOAPsModalProps = {
 };
 
 export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsModalProps) {
-  const { getValues, setValue } = useFormContext();
+  const { getValues, setValue } = useFormContext<Nimi>();
 
   // TODO: Implement react-query fetching here
   // const { data: poapData, isFetching } = usePoapsFromUser(ensAddress);
@@ -84,7 +84,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
               tokenIds: selectedTokens.map((token) => token.tokenId),
             },
           }),
-        },
+        } as NimiWidget,
       ]);
 
       closeModal();
