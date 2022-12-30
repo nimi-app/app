@@ -1,18 +1,17 @@
 import { motion } from 'framer-motion';
-import { MouseEvent, ReactNode } from 'react';
+import { MouseEvent, PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as CloseIcon } from '../../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../../theme';
 
 type ModalProps = {
-  children: ReactNode;
   title: string;
   subtitle: string;
   handleCloseModal: (event: MouseEvent) => void;
 };
 
-export function ModalBase({ children, title, subtitle, handleCloseModal }: ModalProps) {
+export function ModalBase({ children, title, subtitle, handleCloseModal }: PropsWithChildren<ModalProps>) {
   return (
     <Backdrop onClick={handleCloseModal}>
       <Modal

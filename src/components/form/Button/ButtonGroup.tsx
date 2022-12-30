@@ -1,4 +1,5 @@
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card';
+import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 export const StyledButton = styled.button<{ disabled: boolean }>`
@@ -22,12 +23,11 @@ export const StyledButton = styled.button<{ disabled: boolean }>`
 `;
 interface ButtonGroupProps {
   id?: string;
-  children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
 }
 
-export const ButtonGroup = ({ id, children, onClick, disabled = false }: ButtonGroupProps) => {
+export const ButtonGroup = ({ id, children, onClick, disabled = false }: PropsWithChildren<ButtonGroupProps>) => {
   return (
     <StyledButton disabled={disabled} id={id} onClick={onClick}>
       {children}
