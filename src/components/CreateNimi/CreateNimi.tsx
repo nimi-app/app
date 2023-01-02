@@ -586,8 +586,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                 tokenUri: nftAsset.externalLink,
                 url: nftAsset.imageUrl,
               });
-            } else {
-              setValue('image', undefined);
             }
 
             setIsNFTSelectorModalOpen(false);
