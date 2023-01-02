@@ -1,4 +1,4 @@
-import { Nimi } from '@nimi.io/card';
+import { Nimi } from '@nimi.io/card/types';
 import { useQuery } from '@tanstack/react-query';
 
 import { useRainbow } from '../../../hooks/useRainbow';

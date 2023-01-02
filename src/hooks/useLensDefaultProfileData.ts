@@ -1,4 +1,4 @@
-import { GRAPH_ENDPOINT, GraphQlClientDynamic } from '../api/GraphQl/graphClient';
+import { getGraphQLClient, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import { useGetDefaultLensProfileQuery } from '../api/GraphQl/schemas/generated/lens';
 import { useRainbow } from './useRainbow';
 export interface LensDefaultProfileData {
@@ -11,7 +11,7 @@ export function useLensDefaultProfileData(): { loading: boolean; defaultProfileD
   const { account, chainId } = useRainbow();
 
   const { data, isLoading, isFetching } = useGetDefaultLensProfileQuery(
-    GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.LENS),
+    getGraphQLClient(GRAPH_ENDPOINT.LENS, chainId),
     {
       account,
     },

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { DottedBorder } from '../../components/Button/styled';
-import { Heading } from '../../components/Heading';
+import { DottedBorder } from '../Button/styled';
+import { Heading } from '../Heading';
 
 type NoENSBannerProps = {
   openENSWebsiteHandler: () => void;

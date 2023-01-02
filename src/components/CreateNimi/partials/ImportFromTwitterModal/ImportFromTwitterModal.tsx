@@ -59,7 +59,7 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder={t('importFromTwitterModal.inputPlaceholder')}
+                placeholder={t('importFromTwitterModal.inputPlaceholder') as string}
               />
 
               <Button onClick={() => refetch()}>{t('importFromTwitterModal.buttonLabel')}</Button>

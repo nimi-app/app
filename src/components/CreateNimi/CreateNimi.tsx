@@ -23,25 +23,13 @@ import { useSignMessage } from 'wagmi';
 import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
 import { useUploadImageToIPFS } from '../../api/RestAPI/hooks/useUploadImageToIPFS';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
-import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
-import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
-import daivinityPreview from '../../assets/theme/daivinity-preview.png';
-import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
-import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
-import devconPreview from '../../assets/theme/devcon-preview.png';
-import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
-import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
-import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
-import raaveLogoImage from '../../assets/theme/raave-logo-image.png';
-import raaveLogoText from '../../assets/theme/raave-logo-text.svg';
-import raavePreview from '../../assets/theme/raave-preview.png';
 // Partials
 import { supportedImageTypes } from '../../constants';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
-import { NimiCuratedTheme, ThemeAssets } from '../../types';
+import { NimiCuratedTheme } from '../../types';
 import { generateID } from '../../utils';
 import { ImporButton, ImportButtonType } from '../Button/ImportButton';
 import { Card, CardBody } from '../Card';
@@ -83,39 +71,7 @@ import {
   TemplateSection,
   Toplabel,
 } from './styled';
-
-const themes: Record<NimiCuratedTheme, ThemeAssets> = {
-  [NimiThemeType.NIMI]: {
-    type: NimiThemeType.NIMI,
-    logoImage: nimiOGLogoImage,
-    logoText: nimiOGLogoText,
-    preview: nimiOGPreview,
-  },
-  [NimiThemeType.DEVCON]: {
-    type: NimiThemeType.DEVCON,
-    logoImage: devconLogoImage,
-    logoText: devconLogoText,
-    preview: devconPreview,
-  },
-  [NimiThemeType.RAAVE]: {
-    type: NimiThemeType.RAAVE,
-    logoImage: raaveLogoImage,
-    logoText: raaveLogoText,
-    preview: raavePreview,
-  },
-  [NimiThemeType.DAIVINITY]: {
-    type: NimiThemeType.DAIVINITY,
-    logoImage: daivinityLogoImage,
-    logoText: daivinityLogoText,
-    preview: daivinityPreview,
-  },
-  // [NimiThemeType.INFINITE]: {
-  //   type: NimiThemeType.RAAVE,
-  //   logoImage: raaveLogoImage,
-  //   logoText: raaveLogoText,
-  //   preview: devconPreview,
-  // },
-};
+import { themes } from './themes';
 
 export interface CreateNimiProps {
   ensAddress: string;

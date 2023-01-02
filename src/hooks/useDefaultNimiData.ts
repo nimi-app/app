@@ -1,4 +1,4 @@
-import { Nimi, NimiThemeType } from '@nimi.io/card';
+import { Nimi, NimiThemeType } from '@nimi.io/card/types';
 import createDebugger from 'debug';
 import { useMemo } from 'react';
 

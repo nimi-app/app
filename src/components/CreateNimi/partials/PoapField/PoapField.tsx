@@ -1,4 +1,4 @@
-import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
+import POAPLogo from '../../../../assets/svg/poap-logo.svg';
 import { InputButton } from '../../../InputButton';
 import { InnerPoapWrapper, PoapButton, PoapWrapper } from './styled';
 
@@ -12,7 +12,7 @@ export function PoapField({ onConfigure, onRemove }: POAPFieldProps) {
     <PoapWrapper>
       <InnerPoapWrapper>
         <PoapButton>
-          <PoapLogo />
+          <POAPLogo />
           POAPs
         </PoapButton>
         <InputButton displayInlineFlex={true} variant="sliders" marginRight="4px" onClick={onConfigure} />

@@ -1,9 +1,9 @@
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
-import { Heading } from '../../components/Heading';
-import { InputFieldWithIcon } from '../../components/Input';
+import SearchIcon from '../../assets/svg/search-icon.svg';
+import { Heading } from '../Heading';
+import { InputFieldWithIcon } from '../Input';
 
 type ControlBarProps = {
   value: string;

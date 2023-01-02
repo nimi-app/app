@@ -1,7 +1,7 @@
 import { FC, SVGProps, useState } from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as XSVG } from '../../../assets/svg/cross.svg';
+import XSVG from '../../../assets/svg/cross.svg';
 import { SharedInputStyles } from '../../../theme';
 import { renderSVG } from '../../../utils';
 import { InputButton } from '../../InputButton';

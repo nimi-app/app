@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-import Lens from '../../assets/svg/lens-logo.svg';
-import Linktree from '../../assets/svg/linktree.svg';
-import Nft from '../../assets/svg/nft-logo.svg';
-import Twitter from '../../assets/svg/twitter-logo.svg';
+import LensLogoImage from '../../assets/svg/lens-logo.svg?url';
+import LinktreeLogoImage from '../../assets/svg/linktree.svg?url';
+import NFTImage from '../../assets/svg/nft-logo.svg?url';
+import TwitterLogoImage from '../../assets/svg/twitter-logo.svg?url';
 
 const Button = styled.button`
   display: flex;
@@ -43,10 +43,10 @@ export enum ImportButtonType {
 const Logos: {
   [key in ImportButtonType]: string;
 } = {
-  [ImportButtonType.Twitter]: Twitter,
-  [ImportButtonType.Lens]: Lens,
-  [ImportButtonType.Nft]: Nft,
-  [ImportButtonType.Linktree]: Linktree,
+  [ImportButtonType.Twitter]: TwitterLogoImage.src,
+  [ImportButtonType.Lens]: LensLogoImage.src,
+  [ImportButtonType.Nft]: NFTImage.src,
+  [ImportButtonType.Linktree]: LinktreeLogoImage.src,
 };
 
 export function ImporButton({ onClick, type, disabled = false }: ImportButtonProps) {

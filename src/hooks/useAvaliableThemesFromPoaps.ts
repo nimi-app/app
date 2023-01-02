@@ -1,4 +1,4 @@
-import { NimiThemeType } from '@nimi.io/card';
+import { NimiThemeType } from '@nimi.io/card/types';
 import createDebugger from 'debug';
 
 import { PoapData, usePoapsFromUser } from '../api/RestAPI/hooks/usePoapsFromUser';

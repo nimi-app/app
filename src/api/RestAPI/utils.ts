@@ -10,19 +10,19 @@ import { LinktreeData } from './hooks/useImportFromLinktree';
  * @returns {string} The base URL for the Nimi API.
  */
 export function getAPIBaseURL() {
-  // If the REACT_APP_NIMI_API_BASE_URL is not set, throw an error.
-  if (!process.env.REACT_APP_NIMI_API_BASE_URL) {
-    throw new Error('REACT_APP_NIMI_API_BASE_URL is not set.');
+  // If the NIMI_API_BASE_URL is not set, throw an error.
+  if (!process.env.NIMI_API_BASE_URL) {
+    throw new Error('NIMI_API_BASE_URL is not set.');
   }
 
   if (
-    process.env.REACT_APP_NIMI_API_DEV_BASE_URL &&
-    (process.env.NODE_ENV === 'development' || process.env.REACT_APP_ENV === 'development')
+    process.env.NIMI_API_DEV_BASE_URL &&
+    (process.env.NODE_ENV === 'development' || process.env.APP_ENV === 'development')
   ) {
-    return process.env.REACT_APP_NIMI_API_DEV_BASE_URL;
+    return process.env.NIMI_API_DEV_BASE_URL;
   }
 
-  return process.env.REACT_APP_NIMI_API_BASE_URL as string;
+  return process.env.NIMI_API_BASE_URL as string;
 }
 
 export const nimiClient = axios.create({
@@ -34,15 +34,15 @@ export const nimiClient = axios.create({
  * @returns
  */
 export function getPOAPAPIClient() {
-  if (!process.env.REACT_APP_POAP_API_KEY) {
-    throw new Error('REACT_APP_POAP_API_KEY is not set.');
+  if (!process.env.POAP_API_KEY) {
+    throw new Error('POAP_API_KEY is not set.');
   }
 
   return axios.create({
     baseURL: 'https://api.poap.tech',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': process.env.REACT_APP_POAP_API_KEY,
+      'x-api-key': process.env.POAP_API_KEY,
     },
   });
 }

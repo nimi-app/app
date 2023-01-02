@@ -1,4 +1,4 @@
-import { NIMI_CARDS_WIDTH } from '@nimi.io/card';
+import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 

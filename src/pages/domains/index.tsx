@@ -1,16 +1,18 @@
+import Head from 'next/head';
 import { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { DottedBorder } from '../../components/Button/styled';
 import { DomainItem } from '../../components/DomainItem';
+import { ControlBar } from '../../components/domains/ControlBar';
+import { NoENSBanner } from '../../components/domains/NoENSBanner';
 import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
-import { ControlBar } from './ControlBar';
-import { NoENSBanner } from './NoENSBanner';
+import { PageLayout } from '../../layout';
 
-export function DomainsHome() {
+export default function DomainsHomePage() {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
 
@@ -22,23 +24,31 @@ export function DomainsHome() {
   const searchTextChangedHandler = (event: ChangeEvent<HTMLInputElement>) => setSearchText(event.target.value);
 
   return (
-    <Container>
-      <ControlBar value={searchText} searchTextChangedHandler={searchTextChangedHandler} />
-      {(() => {
-        if (loading) return <Loader />;
-        if (domainList?.length === 0) return <NoENSBanner openENSWebsiteHandler={openENSWebsiteHandler} />;
+    <>
+      <Head>
+        <title>Domains</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <PageLayout>
+        <Container>
+          <ControlBar value={searchText} searchTextChangedHandler={searchTextChangedHandler} />
+          {(() => {
+            if (loading) return <Loader />;
+            if (domainList?.length === 0) return <NoENSBanner openENSWebsiteHandler={openENSWebsiteHandler} />;
 
-        return (
-          <DomainsContainer>
-            {domainList?.map((domain) => (
-              <DomainItem key={domain.id} domain={domain} />
-            ))}
-            <AddDomain onClick={openENSWebsiteHandler}>Buy an ENS</AddDomain>
-          </DomainsContainer>
-        );
-      })()}
-      <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
-    </Container>
+            return (
+              <DomainsContainer>
+                {domainList?.map((domain) => (
+                  <DomainItem key={domain.id} domain={domain} />
+                ))}
+                <AddDomain onClick={openENSWebsiteHandler}>Buy an ENS</AddDomain>
+              </DomainsContainer>
+            );
+          })()}
+          <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
+        </Container>
+      </PageLayout>
+    </>
   );
 }
 

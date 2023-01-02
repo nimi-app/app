@@ -220,12 +220,10 @@ p {
 }
 
 /** Full-width and height */
-body, html, #root {
+body, html, #root, #__next {
   min-height:100vh;
   width: 100%;
 }
-
-
 
 button {
   user-select: none;
