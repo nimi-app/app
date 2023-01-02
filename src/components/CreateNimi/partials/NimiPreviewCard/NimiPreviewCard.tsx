@@ -1,4 +1,6 @@
-import { filterEmptyFields, Nimi, NimiCard, NimiLinkBaseDetails, nimiLinkValidator, validateNimi } from '@nimi.io/card';
+import { NimiCard } from '@nimi.io/card';
+import { Nimi, NimiLinkBaseDetails } from '@nimi.io/card/types';
+import { filterEmptyFields, nimiLinkValidator, validateNimi } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
 import { useEffect, useState } from 'react';
 import Frame, { FrameContextConsumer } from 'react-frame-component';

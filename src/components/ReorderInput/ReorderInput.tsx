@@ -1,4 +1,6 @@
-import { NimiLinkBaseDetails, nimiLinkDetailsExtended, nimiLinkValidator } from '@nimi.io/card';
+import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
+import { NimiLinkBaseDetails } from '@nimi.io/card/types';
+import { nimiLinkValidator } from '@nimi.io/card/validators';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -58,7 +60,7 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
         </PenContainer>
       </InputContainer>
       <InputFieldWithIcon
-        inputLogo={nimiLinkDetailsExtended[type].logo}
+        inputLogo={NIMI_LINK_DETAIL_EXTENDED[type].logo}
         isInvalidInput={isInvalidInput}
         content={content}
         onChange={onChange}

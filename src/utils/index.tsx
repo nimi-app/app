@@ -1,4 +1,5 @@
-import { Nimi, nimiLinkDetailsExtended, NimiLinkType, NimiWidgetType } from '@nimi.io/card';
+import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
+import { Nimi, NimiLinkType, NimiWidgetType } from '@nimi.io/card/types';
 import { FC, SVGProps } from 'react';
 
 export * from './explorer';
@@ -47,7 +48,7 @@ export function generateID(randomString?: string): string {
  */
 export function guessLinkTypeBasedOnUrl(url: string): NimiLinkType {
   //loops through prepend urls and check if some of them contain url from linkree
-  const linkSearch = Object.entries(nimiLinkDetailsExtended).find(
+  const linkSearch = Object.entries(NIMI_LINK_DETAIL_EXTENDED).find(
     (item) => item[1].prepend && url.includes(item[1].prepend.substring(8))
   );
 

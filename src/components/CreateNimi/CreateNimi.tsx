@@ -9,10 +9,10 @@ import {
   NimiLinkBaseDetails,
   NimiLinkType,
   NimiThemeType,
-  nimiValidator,
   NimiWidget,
   NimiWidgetType,
-} from '@nimi.io/card';
+} from '@nimi.io/card/types';
+import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
 import { KeyboardEventHandler, useCallback, useMemo, useRef, useState } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
