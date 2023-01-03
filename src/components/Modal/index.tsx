@@ -1,6 +1,11 @@
 import { Property } from 'csstype';
-import { PropsWithChildren } from 'react';
+import { motion } from 'framer-motion';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import styled from 'styled-components';
 
+import { NimiSignatureColor } from '../../theme';
+import CloseIcon from '../assets/svg/close-icon.svg';
 // Import the the Modal components
 import { StyledModalBackdrop, StyledModalDialog, StyledModalInnerWrapper, StyledModalOutterWrapper } from './styled';
 // Export the three main modal elements
@@ -31,3 +36,107 @@ export function Modal({ children, maxWidth }: PropsWithChildren<ModalProps>) {
     </StyledModalDialog>
   );
 }
+
+type ModalProps2 = {
+  title: string;
+  subtitle: string;
+  handleCloseModal: (event: MouseEvent) => void;
+  maxHeight?: string;
+};
+
+export function ModalBase({ children, title, subtitle, handleCloseModal }: PropsWithChildren<ModalProps2>) {
+  return (
+    <Backdrop onClick={handleCloseModal}>
+      <Modal2
+        initial={{ opacity: 0, scale: 0.5, y: '-100%' }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.5, y: '-100%' }}
+      >
+        <Header>
+          <ModalTitle>{title}</ModalTitle>
+          {subtitle && <ModalSubtitle>{subtitle}</ModalSubtitle>}
+          <CloseButton onClick={handleCloseModal} />
+        </Header>
+        <Body>{children}</Body>
+      </Modal2>
+    </Backdrop>
+  );
+}
+
+export function ModalPortal({
+  children,
+  title,
+  subtitle,
+  handleCloseModal,
+  maxHeight,
+}: PropsWithChildren<ModalProps2>) {
+  const [modalContainer] = useState(() => document.createElement('div'));
+
+  useEffect(() => {
+    modalContainer.classList.add('modal-root');
+    document.body.appendChild(modalContainer);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.removeChild(modalContainer);
+      document.body.style.overflow = 'auto';
+    };
+  }, [modalContainer]);
+
+  return createPortal(
+    <ModalBase title={title} subtitle={subtitle} handleCloseModal={handleCloseModal}>
+      <Container maxHeight={maxHeight}>{children}</Container>
+    </ModalBase>,
+    modalContainer
+  );
+}
+const Container = styled.div<{ maxHeight?: string }>`
+  width: 100%;
+  max-height: ${({ maxHeight }) => (maxHeight ? maxHeight : '470')}px;
+  overflow-y: scroll;
+`;
+
+const Backdrop = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  padding-top: 40px;
+`;
+
+const Modal2 = styled(motion.div)`
+  max-width: 620px;
+  padding: 32px;
+  border-radius: 24px;
+  background-color: white;
+  box-shadow: 0px 0 62px rgba(52, 55, 100, 0.15);
+  margin: 0 auto;
+`;
+
+const Header = styled.header`
+  position: relative;
+  margin-bottom: 24px;
+`;
+
+const ModalTitle = styled.h1`
+  line-height: 28px;
+  font-size: 28px;
+  ${NimiSignatureColor}
+  margin-bottom: 16px;
+`;
+
+const ModalSubtitle = styled.p`
+  line-height: 15px;
+  font-size: 14px;
+  color: #7a7696;
+`;
+
+const CloseButton = styled(CloseIcon)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+`;
+
+const Body = styled.main`
+  width: 100%;
+`;

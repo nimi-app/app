@@ -21,7 +21,7 @@ export function ModalBase({ children, title, subtitle, handleCloseModal }: Props
       >
         <Header>
           <ModalTitle>{title}</ModalTitle>
-          <ModalSubtitle>{subtitle}</ModalSubtitle>
+          {subtitle && <ModalSubtitle>{subtitle}</ModalSubtitle>}
           <CloseButton onClick={handleCloseModal} />
         </Header>
         <Body>{children}</Body>
