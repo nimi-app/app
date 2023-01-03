@@ -85,7 +85,7 @@ export function PublishNimiModal({
               !
             </Trans>
           </p>
-          {process.env.REACT_APP_ENV !== 'production' && ipfsHash && (
+          {process.env.APP_ENV !== 'production' && ipfsHash && (
             <p>
               You can also view it on the via the{' '}
               <a target="_blank" rel="noreferrer" href={`https://ipfs.io/ipfs/${ipfsHash}`}>

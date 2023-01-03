@@ -1,5 +1,5 @@
+import { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Footer } from '../components/Footer';
@@ -9,8 +9,8 @@ import { ENV_SUPPORTED_CHAIN_IDS } from '../constants';
 import { useRainbow } from '../hooks/useRainbow';
 import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS } from '../theme';
 
-export function AppWrapper() {
-  const { chainId, isConnected } = useRainbow();
+export function PageLayout({ children }: PropsWithChildren) {
+  const { chainId } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
 
   return (
@@ -18,7 +18,6 @@ export function AppWrapper() {
       <Header />
       <Content>
         {(() => {
-          if (!isConnected) return <Navigate to="/" />;
           if (!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number))
             return (
               <ErrorContainer>
@@ -28,7 +27,7 @@ export function AppWrapper() {
                 </Heading>
               </ErrorContainer>
             );
-          return <Outlet />;
+          return children;
         })()}
       </Content>
       <Footer />
@@ -37,6 +36,8 @@ export function AppWrapper() {
 }
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   width: 100%;
   background-color: ${({ theme }) => theme.mainBackgoround};

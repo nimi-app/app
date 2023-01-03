@@ -1,4 +1,4 @@
-import { Nimi } from '@nimi.io/card';
+import { Nimi } from '@nimi.io/card/types';
 import { useMutation } from '@tanstack/react-query';
 
 import { nimiClient } from '../utils';

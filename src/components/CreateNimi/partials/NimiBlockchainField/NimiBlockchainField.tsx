@@ -1,6 +1,6 @@
 import { NIMI_BLOCKCHAIN_LOGO_URL } from '@nimi.io/card/constants';
 import { Nimi, NimiBlockchain } from '@nimi.io/card/types';
-import { blockchainAddresses } from '@nimi.io/card/validators';
+import { validateNimiBlockchainAddress } from '@nimi.io/card/validators';
 import { ChangeEventHandler, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -29,22 +29,22 @@ export function NimiBlockchainField({ blockchain, index }: NimiBlockchainFieldPr
 
     setValue(targetValue);
 
-    blockchainAddresses
-      .isValid([
-        {
-          blockchain: blockchain,
-          address: targetValue,
-        },
-      ])
+    validateNimiBlockchainAddress({
+      blockchain: blockchain,
+      address: targetValue,
+    })
       .then((isValidAddress) => {
         if (isValidAddress) {
           const addressPrevState = getValues('addresses') || [];
-
-          addressPrevState[index] = { blockchain: blockchain, address: targetValue };
+          addressPrevState[index] = {
+            blockchain,
+            address: targetValue,
+          };
           setAddressValue('addresses', addressPrevState);
+          setIsValueValid(true);
+        } else {
+          setIsValueValid(false);
         }
-
-        setIsValueValid(isValidAddress);
       })
       .catch(() => setIsValueValid(false));
   };

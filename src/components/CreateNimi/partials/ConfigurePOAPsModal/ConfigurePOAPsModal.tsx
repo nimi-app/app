@@ -1,4 +1,4 @@
-import { Nimi, NimiWidget, NimiWidgetType, POAPToken } from '@nimi.io/card';
+import { Nimi, NimiWidget, NimiWidgetType, POAPToken } from '@nimi.io/card/types';
 import { AnimatePresence } from 'framer-motion';
 import { MouseEvent, useEffect } from 'react';
 import { createPortal } from 'react-dom';

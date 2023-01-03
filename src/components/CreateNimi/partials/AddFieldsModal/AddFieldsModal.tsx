@@ -4,8 +4,8 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ReactComponent as NftyChatLogo } from '../../../../assets/svg/nftychat-logo.svg';
-import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
+import NftyChatLogo from '../../../../assets/svg/nftychat-logo.svg';
+import PoapLogo from '../../../../assets/svg/poap-logo.svg';
 import { renderSVG } from '../../../../utils';
 import { ButtonGroup } from '../../../form/Button';
 import {
@@ -122,7 +122,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
             {ContactsSectionLinks.map((link) => {
               const inputId = `modal-checkbox-${link}`;
               const i18nKey = `formLabel.${link.toLowerCase()}`;
-              const logo = NIMI_LINK_DETAIL_EXTENDED[link].logo && NIMI_LINK_DETAIL_EXTENDED[link].logo;
+              const logo = NIMI_LINK_DETAIL_EXTENDED[link].logo;
 
               return (
                 <ButtonGroup key={inputId} id={inputId} onClick={() => onLinksChange(link)}>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { ReactComponent as GitHubLogo } from '../../assets/svg/github-logo.svg';
-import { ReactComponent as Twitter } from '../../assets/svg/twitter-logo.svg';
+import GitHubLogo from '../../assets/svg/github-logo.svg';
+import Twitter from '../../assets/svg/twitter-logo.svg';
 import { ExternalLink, FOOTER_HEIGHT, MEDIA_WIDTHS } from '../../theme';
 
 export function Footer() {

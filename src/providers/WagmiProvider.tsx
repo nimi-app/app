@@ -16,7 +16,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { SUPPORT_CHAINS_RAINBOW_KIT } from '../constants';
 
 export const { chains, provider } = configureChains(SUPPORT_CHAINS_RAINBOW_KIT, [
-  alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_API_KEY as string }),
+  alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY as string }),
   publicProvider(),
 ]);
 

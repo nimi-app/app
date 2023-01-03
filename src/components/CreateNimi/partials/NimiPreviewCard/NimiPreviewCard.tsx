@@ -1,13 +1,23 @@
-import { NimiCard } from '@nimi.io/card';
 import { Nimi, NimiLinkBaseDetails } from '@nimi.io/card/types';
-import { filterEmptyFields, nimiLinkValidator, validateNimi } from '@nimi.io/card/validators';
+import { validateNimi, validateNimiLink } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import styled, { StyleSheetManager } from 'styled-components';
 
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
 import { Card as CardBase } from '../../../Card';
+
+// document.body is undefined in SSR
+const NimiCardApp = dynamic(
+  async () => {
+    const NimiCardModule = await import('@nimi.io/card');
+
+    return NimiCardModule.NimiCard;
+  },
+  { ssr: false }
+);
 
 export interface NimiPreviewCardProps {
   nimi: Nimi;
@@ -32,11 +42,10 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   const removeInvalidLinks = async (links: NimiLinkBaseDetails[]) => {
     const result = await Promise.all(
       links.map((link) =>
-        nimiLinkValidator
-          .isValid({
-            type: link.type,
-            content: link.content,
-          })
+        validateNimiLink({
+          type: link.type,
+          content: link.content,
+        })
           .then((isLinkValid) => {
             return isLinkValid;
           })
@@ -55,7 +64,8 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   useEffect(() => {
     // Filter invalid links
     const filterFunction = async () => {
-      const filteredNimi = filterEmptyFields(nimi);
+      // const filteredNimi = filterEmptyFields(nimi);
+      const filteredNimi = nimi;
 
       const filteredLinks = await removeInvalidLinks(filteredNimi.links);
 
@@ -90,7 +100,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 </style>
                 <FixedGlobalStyle />
                 <ThemeProvider>
-                  <NimiCard nimi={previewNimi} isApp={false} />
+                  <NimiCardApp nimi={previewNimi} isApp={false} />
                 </ThemeProvider>
               </>
             </StyleSheetManager>

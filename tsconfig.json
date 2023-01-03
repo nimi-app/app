@@ -18,14 +18,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
+    "noImplicitAny": false,
     "useUnknownInCatchVariables": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-  
+    "incremental": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": ["src/generated"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "node_modules"
+  ]
 }

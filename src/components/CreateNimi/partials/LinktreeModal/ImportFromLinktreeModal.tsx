@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { useImportFromLinktree } from '../../../../api/RestAPI/hooks/useImportFromLinktree';
-import { ReactComponent as Linktree } from '../../../../assets/svg/linktree.svg';
+import Linktree from '../../../../assets/svg/linktree.svg';
 import { Button } from '../../../Button';
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {
@@ -49,7 +49,7 @@ export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: NimiLink
                 type="text"
                 value={linktreeUsername}
                 onChange={(e) => setLinktreeUsername(e.target.value)}
-                placeholder={t('importFromLinktreeModal.inputPlaceholder')}
+                placeholder={t('importFromLinktreeModal.inputPlaceholder') as string}
               />
 
               <Button onClick={() => refetch()}>{t('importFromLinktreeModal.buttonLabel')}</Button>

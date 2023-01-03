@@ -1,7 +1,7 @@
 import { Property } from 'csstype';
 import styled, { keyframes } from 'styled-components';
 
-import { ReactComponent as CloseIcon } from '../../assets/svg/close-icon.svg';
+import CloseIcon from '../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../theme';
 
 /**

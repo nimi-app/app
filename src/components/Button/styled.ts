@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styled, { css } from 'styled-components';
 
 import { NimiSignatureColor } from '../../theme';

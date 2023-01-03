@@ -1,4 +1,4 @@
-import { POAPToken } from '@nimi.io/card';
+import { POAPToken } from '@nimi.io/card/types';
 import { useState } from 'react';
 
 export function useConfigurePOAPsModal() {

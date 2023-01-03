@@ -1,4 +1,4 @@
-import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card';
+import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkType } from '@nimi.io/card/types';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -39,7 +39,7 @@ export function LinksSection({ sectionLinks, onChange, title }: LinksSectionProp
         {sectionLinks.map((link) => {
           const inputId = `modal-checkbox-${link}`;
           const i18nKey = `formLabel.${link.toLowerCase()}`;
-          const logo = NIMI_LINK_DETAIL_EXTENDED[link].logo && NIMI_LINK_DETAIL_EXTENDED[link].logo;
+          const logo = NIMI_LINK_DETAIL_EXTENDED[link].logo;
 
           return (
             <ButtonGroup key={inputId} id={inputId} onClick={() => onChange(link)}>

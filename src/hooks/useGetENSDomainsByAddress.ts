@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { GRAPH_ENDPOINT, GraphQlClientDynamic } from '../api/GraphQl/graphClient';
+import { getGraphQLClient, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import {
   GetDomainsOwnedOrControlledByQuery,
   useGetDomainsOwnedOrControlledByQuery,
@@ -29,7 +29,7 @@ const numberOfItemsPerPage = 8;
 export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
   const { chainId } = useRainbow();
 
-  function domainOrdering(data: any) {
+  function domainOrdering(data) {
     const domainsOwned = data?.account?.domainsOwned ?? [];
     const domainsControlled = data?.domainsControlled ?? [];
 
@@ -79,17 +79,18 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
   }
 
   const { isLoading, data, isError, isSuccess, isFetching } = useGetDomainsOwnedOrControlledByQuery(
-    GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.ENS),
+    getGraphQLClient(GRAPH_ENDPOINT.ENS, chainId),
     {
-      addressID: address.toLowerCase(),
+      addressID: address?.toLowerCase(),
       searchString: searchString,
-      addressString: address.toLowerCase(),
+      addressString: address?.toLowerCase(),
       skip: page * numberOfItemsPerPage,
       first: numberOfItemsPerPage + 1,
       chainId,
     },
     { keepPreviousData: true, select: domainOrdering }
   );
+
   const waitedForData: ENSDomain[] = useMemo(() => {
     if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
     return [];

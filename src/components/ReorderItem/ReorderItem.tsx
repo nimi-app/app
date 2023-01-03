@@ -2,7 +2,7 @@ import { Reorder } from 'framer-motion';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as DragDotsSVG } from '../../assets/svg/dragdots.svg';
+import DragDotsSVG from '../../assets/svg/dragdots.svg';
 
 type ReorderItemProps<T> = {
   value: T;
