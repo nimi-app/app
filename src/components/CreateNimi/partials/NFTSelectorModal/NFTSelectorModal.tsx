@@ -3,19 +3,8 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Button } from '../../../Button';
-import {
-  Modal,
-  Content as ModalContentBase,
-  Footer as ModalFooterBase,
-  Header as ModalHeaderBase,
-  Title as ModalTitle,
-} from '../../../Modal';
+import { Content as ModalContentBase, Footer as ModalFooterBase, ModalPortal } from '../../../Modal';
 import { NFTAsset, NFTSelector } from '../../../NFTSelector';
-
-const ModalHeader = styled(ModalHeaderBase)`
-  padding-bottom: 0;
-  justify-content: center;
-`;
 
 const ModalContent = styled(ModalContentBase)`
   min-height: 200px;
@@ -46,10 +35,7 @@ export function NFTSelectorModal({ address, onClose }: NFTSelectorModalProps) {
   const [selectedAsset, setSelectedAsset] = useState<NFTAsset>();
 
   return (
-    <Modal maxWidth="560px">
-      <ModalHeader>
-        <ModalTitle>Select an NFT</ModalTitle>
-      </ModalHeader>
+    <ModalPortal title={'Select an NFT'} handleCloseModal={() => onClose(selectedAsset)} maxWidth="560px">
       <ModalContent>
         <NFTSelector
           address={address}
@@ -59,8 +45,8 @@ export function NFTSelectorModal({ address, onClose }: NFTSelectorModalProps) {
         />
       </ModalContent>
       <ModalFooter>
-        <Button onClick={() => onClose(selectedAsset)}>{t('close')}</Button>
+        <Button onClick={() => onClose(selectedAsset)}>Submit</Button>
       </ModalFooter>
-    </Modal>
+    </ModalPortal>
   );
 }
