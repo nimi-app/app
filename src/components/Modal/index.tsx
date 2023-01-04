@@ -100,7 +100,7 @@ const Backdrop = styled.div`
   padding-right: 16px;
 `;
 
-export const StyledModal = styled(motion.div)<{ maxWidth: string; maxHeight: string }>`
+const StyledModal = styled(motion.div)<{ maxWidth: string; maxHeight: string }>`
   max-width: ${({ maxWidth }) => maxWidth};
   max-height: ${({ maxHeight }) => maxHeight};
   padding: 32px;
@@ -111,7 +111,7 @@ export const StyledModal = styled(motion.div)<{ maxWidth: string; maxHeight: str
   overflow: auto;
 `;
 
-export const Header = styled.header`
+const Header = styled.header`
   position: relative;
   margin-bottom: 24px;
 `;
