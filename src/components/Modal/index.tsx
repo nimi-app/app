@@ -41,7 +41,6 @@ type ModalProps2 = {
   title: string;
   subtitle: string;
   handleCloseModal: (event: MouseEvent) => void;
-  maxHeight?: string;
 };
 
 export function ModalBase({ children, title, subtitle, handleCloseModal }: PropsWithChildren<ModalProps2>) {
@@ -63,13 +62,19 @@ export function ModalBase({ children, title, subtitle, handleCloseModal }: Props
   );
 }
 
+type ModalPortalProps = {
+  maxHeight: number;
+  maxWidth?: string;
+};
+
 export function ModalPortal({
   children,
   title,
   subtitle,
   handleCloseModal,
-  maxHeight,
-}: PropsWithChildren<ModalProps2>) {
+  maxHeight = 470,
+  maxWidth = '100%',
+}: PropsWithChildren<ModalProps2 & ModalPortalProps>) {
   const [modalContainer] = useState(() => document.createElement('div'));
 
   useEffect(() => {
@@ -85,14 +90,17 @@ export function ModalPortal({
 
   return createPortal(
     <ModalBase title={title} subtitle={subtitle} handleCloseModal={handleCloseModal}>
-      <Container maxHeight={maxHeight}>{children}</Container>
+      <Container maxWidth={maxWidth} maxHeight={maxHeight}>
+        {children}
+      </Container>
     </ModalBase>,
     modalContainer
   );
 }
-const Container = styled.div<{ maxHeight?: string }>`
+const Container = styled.div<{ maxHeight: number; maxWidth: string }>`
   width: 100%;
-  max-height: ${({ maxHeight }) => (maxHeight ? maxHeight : '470')}px;
+  max-width: ${({ maxWidth }) => `${maxWidth}`};
+  max-height: ${({ maxHeight }) => `${maxHeight}px}`};
   overflow-y: scroll;
 `;
 
