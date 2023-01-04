@@ -1,11 +1,10 @@
 import { Nimi, NimiWidget, NimiWidgetType, POAPToken } from '@nimi.io/card/types';
 import { AnimatePresence } from 'framer-motion';
-import { MouseEvent, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { getPOAPAPIClient } from '../../../../api/RestAPI/utils';
-import { ModalBase } from '../ModalBase';
+import { ModalPortal } from '../../../Modal';
 import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 
@@ -23,7 +22,6 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
   // console.log('isFetching', isFetching);
 
   const {
-    modalContainer,
     page,
     openRecentPage,
     openCustomPage,
@@ -58,41 +56,30 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
       }
     }
 
-    modalContainer.classList.add('modal-root');
-    document.body.appendChild(modalContainer);
-    document.body.style.overflow = 'hidden';
-
     fetchPOAPs();
+  }, [ensAddress, setItems, setFetchingItems]);
 
-    return () => {
-      document.body.removeChild(modalContainer);
-      document.body.style.overflow = 'auto';
-    };
-  }, [ensAddress, modalContainer, setItems, setFetchingItems]);
+  const handleCloseModal = () => {
+    const otherWidgets = getValues('widgets').filter((el: NimiWidget) => el.type !== NimiWidgetType.POAP);
+    const selectedTokens = selectedItems.filter((item) => item !== null);
 
-  const handleCloseModal = (event: MouseEvent) => {
-    if (event.target === event.currentTarget) {
-      const otherWidgets = getValues('widgets').filter((el: NimiWidget) => el.type !== NimiWidgetType.POAP);
-      const selectedTokens = selectedItems.filter((item) => item !== null);
+    setValue('widgets', [
+      ...otherWidgets,
+      {
+        type: NimiWidgetType.POAP,
+        ...(selectedTokens.length && {
+          context: {
+            tokenIds: selectedTokens.map((token) => token.tokenId),
+          },
+        }),
+      } as NimiWidget,
+    ]);
 
-      setValue('widgets', [
-        ...otherWidgets,
-        {
-          type: NimiWidgetType.POAP,
-          ...(selectedTokens.length && {
-            context: {
-              tokenIds: selectedTokens.map((token) => token.tokenId),
-            },
-          }),
-        } as NimiWidget,
-      ]);
-
-      closeModal();
-    }
+    closeModal();
   };
 
-  return createPortal(
-    <ModalBase
+  return (
+    <ModalPortal
       title="Configure POAPs"
       subtitle="Add your POAPs in the order you want to showcase them."
       handleCloseModal={handleCloseModal}
@@ -124,7 +111,6 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
           </AnimatePresence>
         );
       })()}
-    </ModalBase>,
-    modalContainer
+    </ModalPortal>
   );
 }
