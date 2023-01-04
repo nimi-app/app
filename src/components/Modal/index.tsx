@@ -12,9 +12,7 @@ export {
   StyledModalHeader as Header,
   StyledModalFooter as Footer,
   StyledModalContent as Content,
-  StyledCloseModalButton as CloseButton,
-  StyledModalTitle as Title,
-  ModalSubTitle,
+  ModalTitleBig as Title,
 } from './styled';
 
 type ModalProps = {
@@ -41,7 +39,7 @@ export function ModalBase({
   };
   return (
     <Backdrop onClick={onClose}>
-      <Modal2
+      <Modal
         initial={{ opacity: 0, scale: 0.5, y: '-100%' }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.5, y: '-100%' }}
@@ -54,7 +52,7 @@ export function ModalBase({
           <CloseButton onClick={onClose} />
         </Header>
         <Body>{children}</Body>
-      </Modal2>
+      </Modal>
     </Backdrop>
   );
 }
@@ -103,7 +101,7 @@ const Backdrop = styled.div`
   padding-right: 16px;
 `;
 
-const Modal2 = styled(motion.div)<{ maxWidth: string; maxHeight: string }>`
+const Modal = styled(motion.div)<{ maxWidth: string; maxHeight: string }>`
   max-width: ${({ maxWidth }) => maxWidth};
   max-height: ${({ maxHeight }) => maxHeight};
   padding: 32px;
