@@ -7,7 +7,7 @@
   "creatingSiteNamesPersonalSite": "Creating {{siteName}}'s Personal Nimi site",
   "buttonLabel.importFromTwitter": "Import from Twitter",
   "buttonLabel.importFromLensProtocol": "Import from Lens Protocol",
-  "importFromTwitterModal.title": "Import Data from Twitter profile",
+  "importFromTwitterModal.title": "Import from Twitter profile",
   "importFromTwitterModal.inputPlaceholder": "Your Twitter username",
   "importFromTwitterModal.buttonLabel": "Import From Twitter",
   "importFromLinktreeModal.title": "Import from Linktree",

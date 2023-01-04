@@ -8,13 +8,13 @@ import Linktree from '../../../../assets/svg/linktree.svg';
 import { Button } from '../../../Button';
 import { Loader, LoaderWrapper } from '../../../Loader';
 import {
-  Modal,
-  CloseButton as ModalCloseButton,
   Content as ModalContentBase,
   Header as ModalHeaderBase,
+  ModalPortal,
   Title as ModalTitle,
 } from '../../../Modal';
 import { ContentInput } from '../../../ReorderInput';
+import { ErrorMessage } from '../../styled';
 
 export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: NimiLinkBaseDetails[]) => void }) {
   const { t } = useTranslation('nimi');
@@ -26,64 +26,51 @@ export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: NimiLink
   });
 
   return (
-    <Modal>
+    <ModalPortal maxWidth="462px" handleCloseModal={onClose}>
       <ModalHeader>
-        <ModalCloseButton role="button" onClick={() => onClose?.()} />
-        <HeaderImageWrapper>
-          <LinktreeLogo />
-        </HeaderImageWrapper>
+        <LinktreeLogo />
         <ModalTitle>{t('importFromLinktreeModal.title')}</ModalTitle>
       </ModalHeader>
       <ModalContent>
-        <ModalContentInnerWrapper>
-          {isFetching ? (
-            <LoaderWrapper>
-              <Loader />
-            </LoaderWrapper>
-          ) : (
-            <>
-              <ContentInput
-                inputInvalid={false}
-                border={'2px solid #E6E8EC'}
-                paddingLeft={'20px'}
-                type="text"
-                value={linktreeUsername}
-                onChange={(e) => setLinktreeUsername(e.target.value)}
-                placeholder={t('importFromLinktreeModal.inputPlaceholder') as string}
-              />
-
-              <Button onClick={() => refetch()}>{t('importFromLinktreeModal.buttonLabel')}</Button>
-              <div>{isError && error.message}</div>
-            </>
-          )}
-        </ModalContentInnerWrapper>
+        {isFetching ? (
+          <LoaderWrapper>
+            <Loader />
+          </LoaderWrapper>
+        ) : (
+          <>
+            <ContentInput
+              inputInvalid={false}
+              border={'2px solid #E6E8EC'}
+              paddingLeft={'20px'}
+              type="text"
+              value={linktreeUsername}
+              onChange={(e) => setLinktreeUsername(e.target.value)}
+              placeholder={t('importFromLinktreeModal.inputPlaceholder') as string}
+            />
+            {isError && <ErrorMessage>{error.message}</ErrorMessage>}
+            <Button onClick={() => refetch()}>{t('importFromLinktreeModal.buttonLabel')}</Button>
+          </>
+        )}
       </ModalContent>
-    </Modal>
+    </ModalPortal>
   );
 }
 
 const ModalHeader = styled(ModalHeaderBase)`
-  padding: 82px;
   padding-bottom: 0;
+  gap: 32px;
   justify-content: center;
   text-align: center;
 `;
 
 const ModalContent = styled(ModalContentBase)`
-  padding: 82px;
   padding-top: 32px;
-`;
-
-const ModalContentInnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 33px;
 `;
 
-const HeaderImageWrapper = styled.div`
-  margin-bottom: 32px;
-`;
 const LinktreeLogo = styled(Linktree)`
   width: 60px;
   height: 40px;
