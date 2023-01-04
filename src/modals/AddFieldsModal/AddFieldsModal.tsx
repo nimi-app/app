@@ -4,8 +4,8 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import NftyChatLogo from '../../../../assets/svg/nftychat-logo.svg';
-import PoapLogo from '../../../../assets/svg/poap-logo.svg';
+import NftyChatLogo from '../../assets/svg/nftychat-logo.svg';
+import PoapLogo from '../../assets/svg/poap-logo.svg';
 import { ButtonGroup } from '../../components/form/Button';
 import { Modal, Content as ModalContentBase } from '../../components/Modal';
 import { renderSVG } from '../../utils';

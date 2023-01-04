@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Button } from '../../components/Button';
@@ -27,7 +26,6 @@ export interface NFTSelectorModalProps {
 }
 
 export function NFTSelectorModal({ address, onClose }: NFTSelectorModalProps) {
-  const { t } = useTranslation();
   const [selectedAsset, setSelectedAsset] = useState<NFTAsset>();
 
   return (
@@ -41,7 +39,9 @@ export function NFTSelectorModal({ address, onClose }: NFTSelectorModalProps) {
         />
       </ModalContent>
       <ModalFooterBase>
-        <Button onClick={() => onClose(selectedAsset)}>Submit</Button>
+        <Button style={{ marginTop: '10px' }} onClick={() => onClose(selectedAsset)}>
+          Submit
+        </Button>
       </ModalFooterBase>
     </Modal>
   );

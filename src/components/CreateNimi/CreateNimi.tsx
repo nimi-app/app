@@ -47,7 +47,6 @@ import { FormWrapper } from '../form/FormGroup';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { TemplatePickerButton } from '../TemplatePickerButton';
-import { ImportButtonsWrapper } from './partials/buttons';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { PoapField } from './partials/PoapField';
@@ -60,6 +59,7 @@ import {
   FormItem,
   ImageAndTemplateSection,
   ImportButton,
+  ImportButtonsWrapper,
   ImportSection,
   InnerWrapper,
   MainContent,

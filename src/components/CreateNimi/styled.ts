@@ -268,3 +268,10 @@ export const ImportSection = styled.div`
   ${NimiModalStyles};
 `;
 export const TemplateImportContainer = styled.div``;
+
+export const ImportButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+`;

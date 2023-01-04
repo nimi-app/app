@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import Linktree from '../../../assets/svg/linktree.svg';
 import { useImportFromLinktree } from '../../api/RestAPI/hooks/useImportFromLinktree';
+import Linktree from '../../assets/svg/linktree.svg';
 import { Button } from '../../components/Button';
 import { ErrorMessage } from '../../components/CreateNimi/styled';
 import { Loader, LoaderWrapper } from '../../components/Loader';
