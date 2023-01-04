@@ -1,5 +1,4 @@
 import { Property } from 'csstype';
-import { max } from 'cypress/types/lodash';
 import { motion } from 'framer-motion';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -43,7 +42,7 @@ type ModalProps2 = {
   subtitle?: string;
   maxWidth?: string;
   maxHeight?: string;
-  handleCloseModal: (event: React.MouseEvent<HTMLDivElement>) => void;
+  handleCloseModal: () => void;
 };
 
 export function ModalBase({
@@ -52,12 +51,12 @@ export function ModalBase({
   subtitle,
   handleCloseModal,
   maxWidth = '620px',
-  maxHeight = '470px',
+  maxHeight = '100%',
 }: PropsWithChildren<ModalProps2>) {
   const onClose = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       event.stopPropagation();
-      handleCloseModal(event);
+      handleCloseModal();
     }
   };
   return (
@@ -132,6 +131,7 @@ const Modal2 = styled(motion.div)<{ maxWidth: string; maxHeight: string }>`
   background-color: white;
   box-shadow: 0px 0 62px rgba(52, 55, 100, 0.15);
   margin: 0 auto;
+  overflow: auto;
 `;
 
 const Header = styled.header`
