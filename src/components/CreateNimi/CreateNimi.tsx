@@ -29,6 +29,15 @@ import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverCo
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
+import {
+  AddFieldsModal,
+  ConfigurePOAPsModal,
+  ImportFromLinktreeModal,
+  ImportFromTwitterModal,
+  NFTSelectorModal,
+  PublishNimiModal,
+  TemplatePickerModal,
+} from '../../modals';
 import { NimiCuratedTheme } from '../../types';
 import { generateID } from '../../utils';
 import { ImporButton, ImportButtonType } from '../Button/ImportButton';
@@ -38,17 +47,10 @@ import { FormWrapper } from '../form/FormGroup';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { TemplatePickerButton } from '../TemplatePickerButton';
-import { AddFieldsModal } from './partials/AddFieldsModal';
 import { ImportButtonsWrapper } from './partials/buttons';
-import { ConfigurePOAPsModal } from './partials/ConfigurePOAPsModal';
-import { ImportFromTwitterModal } from './partials/ImportFromTwitterModal';
-import { ImportFromLinktreeModal } from './partials/LinktreeModal';
-import { NFTSelectorModal } from './partials/NFTSelectorModal';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { PoapField } from './partials/PoapField';
-import { PublishNimiModal } from './partials/PublishNimiModal';
-import { TemplatePickerModal } from './partials/TemplatePickerModal';
 import {
   AddFieldsButton,
   BackButton,

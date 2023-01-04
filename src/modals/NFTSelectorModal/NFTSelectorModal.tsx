@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { Button } from '../../../Button';
-import { Modal, Content as ModalContentBase, Footer as ModalFooterBase } from '../../../Modal';
-import { NFTAsset, NFTSelector } from '../../../NFTSelector';
+import { Button } from '../../components/Button';
+import { Modal, Content as ModalContentBase, Footer as ModalFooterBase } from '../../components/Modal';
+import { NFTAsset, NFTSelector } from '../../components/NFTSelector';
 
 const ModalContent = styled(ModalContentBase)`
   min-height: 200px;

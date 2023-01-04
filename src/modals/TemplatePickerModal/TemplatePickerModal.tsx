@@ -1,5 +1,5 @@
-import { ThemeAssets } from '../../../../types';
-import { Modal } from '../../../Modal';
+import { Modal } from '../../components/Modal';
+import { ThemeAssets } from '../../types';
 import { TemplateItem } from './TemplateItem';
 
 interface TemplatePickerModalProps {

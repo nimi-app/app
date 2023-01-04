@@ -3,10 +3,10 @@ import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { getEtherscanExplorerLink } from '../../../../utils/explorer';
-import { Button } from '../../../Button';
-import { Loader } from '../../../Loader';
-import { Modal, Content as ModalContentBase, Footer as ModalFooterBase } from '../../../Modal';
+import { Button } from '../../components/Button';
+import { Loader } from '../../components/Loader';
+import { Modal, Content as ModalContentBase, Footer as ModalFooterBase } from '../../components/Modal';
+import { getEtherscanExplorerLink } from '../../utils';
 
 const LoaderWrapper = styled.div`
   margin-bottom: 32px;

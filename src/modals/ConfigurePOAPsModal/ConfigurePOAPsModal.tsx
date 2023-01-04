@@ -3,8 +3,8 @@ import { AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { getPOAPAPIClient } from '../../../../api/RestAPI/utils';
-import { Modal } from '../../../Modal';
+import { getPOAPAPIClient } from '../../api/RestAPI/utils';
+import { Modal } from '../../components/Modal';
 import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 

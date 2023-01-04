@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { NimiSignatureColor } from '../../../../../theme';
+import { NimiSignatureColor } from '../../../theme';
 
 type BodyNavigationProps = {
   page: 'recent' | 'custom';

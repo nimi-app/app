@@ -2,13 +2,18 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { TwitterData, useImportFromTwitter } from '../../../../api/RestAPI/hooks/useImportFromTwitter';
 import TwitterLogoBig from '../../../../assets/svg/twitter-big.svg';
-import { Button } from '../../../Button';
-import { Loader, LoaderWrapper } from '../../../Loader';
-import { Modal, Content as ModalContentBase, HeaderBase as ModalHeaderBase, Title as ModalTitle } from '../../../Modal';
-import { ContentInput } from '../../../ReorderInput';
-import { ErrorMessage } from '../../styled';
+import { TwitterData, useImportFromTwitter } from '../../api/RestAPI/hooks/useImportFromTwitter';
+import { Button } from '../../components/Button';
+import { ErrorMessage } from '../../components/CreateNimi/styled';
+import { Loader, LoaderWrapper } from '../../components/Loader';
+import {
+  Modal,
+  Content as ModalContentBase,
+  HeaderBase as ModalHeaderBase,
+  Title as ModalTitle,
+} from '../../components/Modal';
+import { ContentInput } from '../../components/ReorderInput';
 
 export interface ImportTwitterDataModalProps {
   onClose: () => void;
