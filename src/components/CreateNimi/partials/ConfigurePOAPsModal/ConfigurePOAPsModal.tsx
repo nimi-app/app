@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { getPOAPAPIClient } from '../../../../api/RestAPI/utils';
-import { ModalPortal } from '../../../Modal';
+import { Modal } from '../../../Modal';
 import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 
@@ -79,7 +79,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
   };
 
   return (
-    <ModalPortal
+    <Modal
       title="Configure POAPs"
       subtitle="Add your POAPs in the order you want to showcase them."
       handleCloseModal={handleCloseModal}
@@ -111,6 +111,6 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
           </AnimatePresence>
         );
       })()}
-    </ModalPortal>
+    </Modal>
   );
 }

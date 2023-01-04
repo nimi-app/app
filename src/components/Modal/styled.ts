@@ -19,10 +19,6 @@ export interface ModalInnerComponentProps {
   padding?: Property.Padding;
 }
 
-export interface StyledModalOutterWrapperProps {
-  maxWidth?: Property.MaxWidth;
-}
-
 export const StyledModalHeader = styled.header<ModalInnerComponentProps>(
   ({ padding = DEFAULT_INNER_COMPONENT_SPACING }) => `
   font-weight: 500;
@@ -42,7 +38,7 @@ export const StyledModalFooter = styled.footer<ModalInnerComponentProps>(
   line-height: 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   color: #6f6e84;
   padding: 0px 28px 20px;
   padding: ${padding};

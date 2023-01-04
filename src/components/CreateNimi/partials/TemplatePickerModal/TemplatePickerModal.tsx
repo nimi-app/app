@@ -1,5 +1,5 @@
 import { ThemeAssets } from '../../../../types';
-import { ModalPortal } from '../../../Modal';
+import { Modal } from '../../../Modal';
 import { TemplateItem } from './TemplateItem';
 
 interface TemplatePickerModalProps {
@@ -10,7 +10,7 @@ interface TemplatePickerModalProps {
 
 export function TemplatePickerModal({ closeModal, handleThemeSelection, themes }: TemplatePickerModalProps) {
   return (
-    <ModalPortal
+    <Modal
       title="Choose a Template"
       subtitle="Here is the selection of template you can choose from. To unlock more templates, collect POAPs and NFTs"
       handleCloseModal={closeModal}
@@ -23,6 +23,6 @@ export function TemplatePickerModal({ closeModal, handleThemeSelection, themes }
           noMargin={index + 1 === themes.length}
         />
       ))}
-    </ModalPortal>
+    </Modal>
   );
 }

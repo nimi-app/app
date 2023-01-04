@@ -6,12 +6,7 @@ import { TwitterData, useImportFromTwitter } from '../../../../api/RestAPI/hooks
 import TwitterLogoBig from '../../../../assets/svg/twitter-big.svg';
 import { Button } from '../../../Button';
 import { Loader, LoaderWrapper } from '../../../Loader';
-import {
-  Content as ModalContentBase,
-  Header as ModalHeaderBase,
-  ModalPortal,
-  Title as ModalTitle,
-} from '../../../Modal';
+import { Modal, Content as ModalContentBase, Header as ModalHeaderBase, Title as ModalTitle } from '../../../Modal';
 import { ContentInput } from '../../../ReorderInput';
 import { ErrorMessage } from '../../styled';
 
@@ -32,7 +27,7 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
   });
 
   return (
-    <ModalPortal maxWidth="462px" handleCloseModal={onClose}>
+    <Modal maxWidth="462px" handleCloseModal={onClose}>
       <ModalHeader>
         <TwitterLogoBig />
         <ModalTitle>{t('importFromTwitterModal.title')}</ModalTitle>
@@ -58,7 +53,7 @@ export function ImportFromTwitterModal({ onClose, onDataImport }: ImportTwitterD
           </>
         )}
       </ModalContent>
-    </ModalPortal>
+    </Modal>
   );
 }
 

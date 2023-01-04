@@ -3,9 +3,8 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
-import CloseIcon from '../../assets/svg/close-icon.svg';
+import CloseSvg from '../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../theme';
-// Import the the Modal components
 
 // Export the three main modal elements
 export {
@@ -23,7 +22,7 @@ type ModalProps = {
   handleCloseModal: () => void;
 };
 
-export function ModalBase({
+function ModalBase({
   children,
   title,
   subtitle,
@@ -39,7 +38,7 @@ export function ModalBase({
   };
   return (
     <Backdrop onClick={onClose}>
-      <Modal
+      <StyledModal
         initial={{ opacity: 0, scale: 0.5, y: '-100%' }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.5, y: '-100%' }}
@@ -49,15 +48,15 @@ export function ModalBase({
         <Header>
           {title && <ModalTitle>{title}</ModalTitle>}
           {subtitle && <ModalSubtitle>{subtitle}</ModalSubtitle>}
-          <CloseButton onClick={onClose} />
+          <CloseIcon onClick={onClose} />
         </Header>
         <Body>{children}</Body>
-      </Modal>
+      </StyledModal>
     </Backdrop>
   );
 }
 
-export function ModalPortal({
+export function Modal({
   children,
   title,
   subtitle,
@@ -101,7 +100,7 @@ const Backdrop = styled.div`
   padding-right: 16px;
 `;
 
-const Modal = styled(motion.div)<{ maxWidth: string; maxHeight: string }>`
+export const StyledModal = styled(motion.div)<{ maxWidth: string; maxHeight: string }>`
   max-width: ${({ maxWidth }) => maxWidth};
   max-height: ${({ maxHeight }) => maxHeight};
   padding: 32px;
@@ -130,7 +129,7 @@ const ModalSubtitle = styled.p`
   color: #7a7696;
 `;
 
-const CloseButton = styled(CloseIcon)`
+const CloseIcon = styled(CloseSvg)`
   position: absolute;
   top: 0;
   right: 0;

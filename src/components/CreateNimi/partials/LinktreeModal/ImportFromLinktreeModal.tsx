@@ -7,12 +7,7 @@ import { useImportFromLinktree } from '../../../../api/RestAPI/hooks/useImportFr
 import Linktree from '../../../../assets/svg/linktree.svg';
 import { Button } from '../../../Button';
 import { Loader, LoaderWrapper } from '../../../Loader';
-import {
-  Content as ModalContentBase,
-  Header as ModalHeaderBase,
-  ModalPortal,
-  Title as ModalTitle,
-} from '../../../Modal';
+import { Modal, Content as ModalContentBase, Header as ModalHeaderBase, Title as ModalTitle } from '../../../Modal';
 import { ContentInput } from '../../../ReorderInput';
 import { ErrorMessage } from '../../styled';
 
@@ -26,7 +21,7 @@ export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: NimiLink
   });
 
   return (
-    <ModalPortal maxWidth="462px" handleCloseModal={onClose}>
+    <Modal maxWidth="462px" handleCloseModal={onClose}>
       <ModalHeader>
         <LinktreeLogo />
         <ModalTitle>{t('importFromLinktreeModal.title')}</ModalTitle>
@@ -52,7 +47,7 @@ export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: NimiLink
           </>
         )}
       </ModalContent>
-    </ModalPortal>
+    </Modal>
   );
 }
 

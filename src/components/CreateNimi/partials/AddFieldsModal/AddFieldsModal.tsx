@@ -8,7 +8,7 @@ import NftyChatLogo from '../../../../assets/svg/nftychat-logo.svg';
 import PoapLogo from '../../../../assets/svg/poap-logo.svg';
 import { renderSVG } from '../../../../utils';
 import { ButtonGroup } from '../../../form/Button';
-import { Content as ModalContentBase, ModalPortal } from '../../../Modal';
+import { Modal, Content as ModalContentBase } from '../../../Modal';
 import { StyledFlexList, StyledGridList } from '../../styled';
 import { LinksSection } from './LinksSection';
 
@@ -92,7 +92,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
   };
 
   return (
-    <ModalPortal
+    <Modal
       title={t('addFieldsModal.title')!}
       subtitle={t('addFieldsModal.description')!}
       handleCloseModal={onClose}
@@ -217,6 +217,6 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
           </StyledGridList>
         </SectionWrapper>
       </ModalContentBase>
-    </ModalPortal>
+    </Modal>
   );
 }
