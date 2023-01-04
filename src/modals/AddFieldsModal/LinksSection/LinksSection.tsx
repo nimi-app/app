@@ -3,8 +3,8 @@ import { NimiLinkType } from '@nimi.io/card/types';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { renderSVG } from '../../../utils';
 import { ButtonGroup } from '../../../components/form/Button';
+import { renderSVG } from '../../../utils';
 import { StyledFlexList } from '../styled';
 
 const SectionWrapper = styled.div`
