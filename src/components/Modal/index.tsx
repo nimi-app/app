@@ -1,4 +1,3 @@
-import { Property } from 'csstype';
 import { motion } from 'framer-motion';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -7,7 +6,7 @@ import styled from 'styled-components';
 import CloseIcon from '../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../theme';
 // Import the the Modal components
-import { StyledModalBackdrop, StyledModalDialog, StyledModalInnerWrapper, StyledModalOutterWrapper } from './styled';
+
 // Export the three main modal elements
 export {
   StyledModalHeader as Header,
@@ -18,26 +17,7 @@ export {
   ModalSubTitle,
 } from './styled';
 
-export interface ModalProps {
-  maxWidth?: Property.MaxWidth;
-}
-
-/**
- * Modal main component. This is the main component that is used to render the modal.
- */
-export function Modal({ children, maxWidth }: PropsWithChildren<ModalProps>) {
-  return (
-    <StyledModalDialog>
-      <StyledModalBackdrop>
-        <StyledModalOutterWrapper maxWidth={maxWidth}>
-          <StyledModalInnerWrapper>{children}</StyledModalInnerWrapper>
-        </StyledModalOutterWrapper>
-      </StyledModalBackdrop>
-    </StyledModalDialog>
-  );
-}
-
-type ModalProps2 = {
+type ModalProps = {
   title?: string;
   subtitle?: string;
   maxWidth?: string;
@@ -52,7 +32,7 @@ export function ModalBase({
   handleCloseModal,
   maxWidth = '620px',
   maxHeight = '100%',
-}: PropsWithChildren<ModalProps2>) {
+}: PropsWithChildren<ModalProps>) {
   const onClose = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       event.stopPropagation();
@@ -86,7 +66,7 @@ export function ModalPortal({
   handleCloseModal,
   maxHeight,
   maxWidth,
-}: PropsWithChildren<ModalProps2>) {
+}: PropsWithChildren<ModalProps>) {
   const [modalContainer] = useState(() => document.createElement('div'));
 
   useEffect(() => {
