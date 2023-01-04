@@ -1,11 +1,12 @@
 import { Property } from 'csstype';
+import { max } from 'cypress/types/lodash';
 import { motion } from 'framer-motion';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
+import CloseIcon from '../../assets/svg/close-icon.svg';
 import { NimiSignatureColor } from '../../theme';
-import CloseIcon from '../assets/svg/close-icon.svg';
 // Import the the Modal components
 import { StyledModalBackdrop, StyledModalDialog, StyledModalInnerWrapper, StyledModalOutterWrapper } from './styled';
 // Export the three main modal elements
@@ -38,23 +39,40 @@ export function Modal({ children, maxWidth }: PropsWithChildren<ModalProps>) {
 }
 
 type ModalProps2 = {
-  title: string;
-  subtitle: string;
-  handleCloseModal: (event: MouseEvent) => void;
+  title?: string;
+  subtitle?: string;
+  maxWidth?: string;
+  maxHeight?: string;
+  handleCloseModal: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-export function ModalBase({ children, title, subtitle, handleCloseModal }: PropsWithChildren<ModalProps2>) {
+export function ModalBase({
+  children,
+  title,
+  subtitle,
+  handleCloseModal,
+  maxWidth = '620px',
+  maxHeight = '470px',
+}: PropsWithChildren<ModalProps2>) {
+  const onClose = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      event.stopPropagation();
+      handleCloseModal(event);
+    }
+  };
   return (
-    <Backdrop onClick={handleCloseModal}>
+    <Backdrop onClick={onClose}>
       <Modal2
         initial={{ opacity: 0, scale: 0.5, y: '-100%' }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.5, y: '-100%' }}
+        maxWidth={maxWidth}
+        maxHeight={maxHeight}
       >
         <Header>
-          <ModalTitle>{title}</ModalTitle>
+          {title && <ModalTitle>{title}</ModalTitle>}
           {subtitle && <ModalSubtitle>{subtitle}</ModalSubtitle>}
-          <CloseButton onClick={handleCloseModal} />
+          <CloseButton onClick={onClose} />
         </Header>
         <Body>{children}</Body>
       </Modal2>
@@ -62,19 +80,14 @@ export function ModalBase({ children, title, subtitle, handleCloseModal }: Props
   );
 }
 
-type ModalPortalProps = {
-  maxHeight: number;
-  maxWidth?: string;
-};
-
 export function ModalPortal({
   children,
   title,
   subtitle,
   handleCloseModal,
-  maxHeight = 470,
-  maxWidth = '100%',
-}: PropsWithChildren<ModalProps2 & ModalPortalProps>) {
+  maxHeight,
+  maxWidth,
+}: PropsWithChildren<ModalProps2>) {
   const [modalContainer] = useState(() => document.createElement('div'));
 
   useEffect(() => {
@@ -89,30 +102,31 @@ export function ModalPortal({
   }, [modalContainer]);
 
   return createPortal(
-    <ModalBase title={title} subtitle={subtitle} handleCloseModal={handleCloseModal}>
-      <Container maxWidth={maxWidth} maxHeight={maxHeight}>
-        {children}
-      </Container>
+    <ModalBase
+      maxHeight={maxHeight}
+      maxWidth={maxWidth}
+      title={title}
+      subtitle={subtitle}
+      handleCloseModal={handleCloseModal}
+    >
+      {children}
     </ModalBase>,
     modalContainer
   );
 }
-const Container = styled.div<{ maxHeight: number; maxWidth: string }>`
-  width: 100%;
-  max-width: ${({ maxWidth }) => `${maxWidth}`};
-  max-height: ${({ maxHeight }) => `${maxHeight}px}`};
-  overflow-y: scroll;
-`;
 
 const Backdrop = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
   padding-top: 40px;
+  padding-left: 16px;
+  padding-right: 16px;
 `;
 
-const Modal2 = styled(motion.div)`
-  max-width: 620px;
+const Modal2 = styled(motion.div)<{ maxWidth: string; maxHeight: string }>`
+  max-width: ${({ maxWidth }) => maxWidth};
+  max-height: ${({ maxHeight }) => maxHeight};
   padding: 32px;
   border-radius: 24px;
   background-color: white;
