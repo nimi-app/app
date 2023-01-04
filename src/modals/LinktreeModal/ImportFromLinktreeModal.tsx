@@ -3,13 +3,18 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { Modal, Content as ModalContentBase, HeaderBase as ModalHeaderBase, Title as ModalTitle } from '..';
-import { useImportFromLinktree } from '../../../api/RestAPI/hooks/useImportFromLinktree';
 import Linktree from '../../../assets/svg/linktree.svg';
-import { Button } from '../../Button';
-import { ErrorMessage } from '../../CreateNimi/styled';
-import { Loader, LoaderWrapper } from '../../Loader';
-import { ContentInput } from '../../ReorderInput';
+import { useImportFromLinktree } from '../../api/RestAPI/hooks/useImportFromLinktree';
+import { Button } from '../../components/Button';
+import { ErrorMessage } from '../../components/CreateNimi/styled';
+import { Loader, LoaderWrapper } from '../../components/Loader';
+import {
+  Modal,
+  Content as ModalContentBase,
+  HeaderBase as ModalHeaderBase,
+  Title as ModalTitle,
+} from '../../components/Modal';
+import { ContentInput } from '../../components/ReorderInput';
 
 export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: NimiLinkBaseDetails[]) => void }) {
   const { t } = useTranslation('nimi');
