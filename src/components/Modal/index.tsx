@@ -8,7 +8,7 @@ import { NimiSignatureColor } from '../../theme';
 
 // Export the three main modal elements
 export {
-  StyledModalHeader as Header,
+  StyledModalHeader as HeaderBase,
   StyledModalFooter as Footer,
   StyledModalContent as Content,
   ModalTitleBig as Title,
@@ -111,7 +111,7 @@ export const StyledModal = styled(motion.div)<{ maxWidth: string; maxHeight: str
   overflow: auto;
 `;
 
-const Header = styled.header`
+export const Header = styled.header`
   position: relative;
   margin-bottom: 24px;
 `;

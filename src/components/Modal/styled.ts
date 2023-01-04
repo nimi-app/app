@@ -19,21 +19,24 @@ export interface ModalInnerComponentProps {
   padding?: Property.Padding;
 }
 
-export const StyledModalHeader = styled.header<ModalInnerComponentProps>(
-  ({ padding = DEFAULT_INNER_COMPONENT_SPACING }) => `
+export const StyledModalHeader = styled.header<{ padding?: string }>`
+  gap: 32px;
+  justify-content: center;
+  text-align: center;
   font-weight: 500;
   font-size: 20px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 24px 28px 20px;
-  padding: ${padding};
-  position: relative;
-`
-);
+  padding: ${({ padding }) => padding};
+  padding-bottom: 0;
+`;
 
-export const StyledModalFooter = styled.footer<ModalInnerComponentProps>(
-  ({ padding = DEFAULT_INNER_COMPONENT_SPACING }) => `
+StyledModalHeader.defaultProps = {
+  padding: DEFAULT_INNER_COMPONENT_SPACING,
+};
+
+export const StyledModalFooter = styled.footer<{ padding?: string }>`
   font-size: 15px;
   line-height: 20px;
   display: flex;
@@ -41,15 +44,19 @@ export const StyledModalFooter = styled.footer<ModalInnerComponentProps>(
   justify-content: center;
   color: #6f6e84;
   padding: 0px 28px 20px;
-  padding: ${padding};
-`
-);
+  padding: ${({ padding }) => padding};
+  padding-top: 0;
+`;
+StyledModalFooter.defaultProps = {
+  padding: DEFAULT_INNER_COMPONENT_SPACING,
+};
 
-export const StyledModalContent = styled.main<ModalInnerComponentProps>(
-  ({ padding = DEFAULT_INNER_COMPONENT_SPACING }) => `
-    padding: ${padding};
-`
-);
+export const StyledModalContent = styled.main<{ padding?: string }>`
+  padding: ${({ padding }) => padding};
+`;
+StyledModalContent.defaultProps = {
+  padding: DEFAULT_INNER_COMPONENT_SPACING,
+};
 
 /**
  * Modal Title

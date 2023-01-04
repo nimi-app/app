@@ -27,10 +27,6 @@ const ModalContent = styled(ModalContentBase)`
   }
 `;
 
-const ModalFooter = styled(ModalFooterBase)`
-  padding-top: 0;
-`;
-
 export interface PublishNimiModalProps {
   cancel: () => void;
   isPublishing: boolean;
@@ -126,11 +122,11 @@ export function PublishNimiModal({
   return (
     <Modal handleCloseModal={cancel} title={t('publishNimiModal.title', { ns: 'nimi' })!} maxWidth="560px">
       <ModalContent>{modalContent()}</ModalContent>
-      <ModalFooter>
+      <ModalFooterBase>
         {(setContentHashTransactionReceipt || publishError || isPublished) && (
           <Button onClick={cancel}>{t('close')}</Button>
         )}
-      </ModalFooter>
+      </ModalFooterBase>
     </Modal>
   );
 }
