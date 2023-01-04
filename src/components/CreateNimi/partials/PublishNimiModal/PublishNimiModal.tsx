@@ -7,11 +7,10 @@ import { getEtherscanExplorerLink } from '../../../../utils/explorer';
 import { Button } from '../../../Button';
 import { Loader } from '../../../Loader';
 import {
-  Modal,
   Content as ModalContentBase,
   Footer as ModalFooterBase,
   Header as ModalHeaderBase,
-  Title as ModalTitle,
+  ModalPortal,
 } from '../../../Modal';
 
 const LoaderWrapper = styled.div`
@@ -136,16 +135,13 @@ export function PublishNimiModal({
   };
 
   return (
-    <Modal maxWidth="560px">
-      <ModalHeader>
-        <ModalTitle>{t('publishNimiModal.title', { ns: 'nimi' })}</ModalTitle>
-      </ModalHeader>
+    <ModalPortal handleCloseModal={cancel} title={t('publishNimiModal.title', { ns: 'nimi' })!} maxWidth="560px">
       <ModalContent>{modalContent()}</ModalContent>
       <ModalFooter>
         {(setContentHashTransactionReceipt || publishError || isPublished) && (
           <Button onClick={cancel}>{t('close')}</Button>
         )}
       </ModalFooter>
-    </Modal>
+    </ModalPortal>
   );
 }
