@@ -31,6 +31,8 @@ interface ButtonGroupProps {
 export const ButtonGroup = ({ id, children, onClick, disabled = false }: PropsWithChildren<ButtonGroupProps>) => {
   return (
     <StyledButton
+      //set because of ssr rendering
+      initial={false}
       whileHover={{
         scale: 1.1,
         transition: { duration: 0.2 },

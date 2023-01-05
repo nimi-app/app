@@ -53,6 +53,7 @@ const Logos: {
 export function ImporButton({ onClick, type, disabled = false }: ImportButtonProps) {
   return (
     <Button
+      initial={false}
       whileHover={{ scale: 1.1, transition: { duration: 0.05 } }}
       whileTap={{ scale: 0.9 }}
       disabled={disabled}
