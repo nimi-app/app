@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 import LensLogoImage from '../../assets/svg/lens-logo.svg?url';
@@ -5,7 +6,7 @@ import LinktreeLogoImage from '../../assets/svg/linktree.svg?url';
 import NFTImage from '../../assets/svg/nft-logo.svg?url';
 import TwitterLogoImage from '../../assets/svg/twitter-logo.svg?url';
 
-const Button = styled.button`
+const Button = styled(motion.button)`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -51,7 +52,12 @@ const Logos: {
 
 export function ImporButton({ onClick, type, disabled = false }: ImportButtonProps) {
   return (
-    <Button disabled={disabled} onClick={onClick}>
+    <Button
+      whileHover={{ scale: 1.1, transition: { duration: 0.05 } }}
+      whileTap={{ scale: 0.9 }}
+      disabled={disabled}
+      onClick={onClick}
+    >
       <StyledImg src={Logos[type]} />
     </Button>
   );
