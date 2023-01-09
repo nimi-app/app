@@ -99,7 +99,7 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
       </AssetListInnerWrapper>
       {nextCursor && (
         <Button onClick={fetchMoreOpenSeaAssets} disabled={isFetchingMore}>
-          Load more
+          {isFetchingMore ? <Loader /> : 'Load more'}
         </Button>
       )}
     </>

@@ -2,7 +2,6 @@ import { POAPToken } from '@nimi.io/card/types';
 import { useState } from 'react';
 
 export function useConfigurePOAPsModal() {
-  const [modalContainer] = useState(() => document.createElement('div'));
   const [page, setPage] = useState<'recent' | 'custom'>('recent');
   const [items, setItems] = useState<POAPToken[]>([]);
   const [fetchingItems, setFetchingItems] = useState(false);
@@ -36,7 +35,6 @@ export function useConfigurePOAPsModal() {
   const clearSelectedItems = () => setSelectedItems(new Array(6).fill(null));
 
   return {
-    modalContainer,
     page,
     openRecentPage,
     openCustomPage,

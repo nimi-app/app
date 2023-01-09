@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { MEDIA_WIDTHS } from '../../../../theme';
-import { ThemeAssets } from '../../../../types';
+import { MEDIA_WIDTHS } from '../../theme';
+import { ThemeAssets } from '../../types';
 
 type TemplateItemProps = {
   theme: ThemeAssets;

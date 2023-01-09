@@ -61,20 +61,6 @@ export const PreviewContent = styled.aside<{ showMobile: boolean }>`
   }
 `;
 
-export const StyledGridList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-`;
-
-export const StyledFlexList = styled.div`
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-`;
-
 export const PageSectionTitle = styled.h1`
   ${NimiSignatureColor};
   font-size: 36px;
@@ -282,3 +268,10 @@ export const ImportSection = styled.div`
   ${NimiModalStyles};
 `;
 export const TemplateImportContainer = styled.div``;
+
+export const ImportButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+`;

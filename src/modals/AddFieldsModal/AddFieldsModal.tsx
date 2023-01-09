@@ -4,29 +4,13 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import NftyChatLogo from '../../../../assets/svg/nftychat-logo.svg';
-import PoapLogo from '../../../../assets/svg/poap-logo.svg';
-import { renderSVG } from '../../../../utils';
-import { ButtonGroup } from '../../../form/Button';
-import {
-  Modal,
-  CloseButton as ModalCloseButton,
-  Content as ModalContentBase,
-  Header as ModalHeaderBase,
-  ModalSubTitle,
-  Title as ModalTitle,
-} from '../../../Modal';
-import { StyledFlexList, StyledGridList } from '../../styled';
+import NftyChatLogo from '../../assets/svg/nftychat-logo.svg';
+import PoapLogo from '../../assets/svg/poap-logo.svg';
+import { ButtonGroup } from '../../components/form/Button';
+import { Modal, Content as ModalContentBase } from '../../components/Modal';
+import { renderSVG } from '../../utils';
 import { LinksSection } from './LinksSection';
-
-const ModalHeader = styled(ModalHeaderBase)`
-  padding: 82px 82px 0 82px;
-  justify-content: center;
-`;
-
-const ModalContent = styled(ModalContentBase)`
-  padding: 50px 82px;
-`;
+import { StyledFlexList, StyledGridList } from './styled';
 
 const SectionWrapper = styled.div`
   margin-bottom: 30px;
@@ -57,7 +41,7 @@ interface AddFieldsOptions {
 }
 
 export interface AddFieldsModalProps {
-  onClose?: () => void;
+  onClose: () => void;
   onChange?: (data: AddFieldsOptions) => void;
   onSubmit?: (data: AddFieldsOptions) => void;
 }
@@ -108,13 +92,13 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
   };
 
   return (
-    <Modal maxWidth={'620px'}>
-      <ModalHeader>
-        <ModalCloseButton role="button" onClick={() => onClose?.()} />
-        <ModalTitle>{t('addFieldsModal.title')}</ModalTitle>
-        <ModalSubTitle>{t('addFieldsModal.description')}</ModalSubTitle>
-      </ModalHeader>
-      <ModalContent>
+    <Modal
+      title={t('addFieldsModal.title')!}
+      subtitle={t('addFieldsModal.description')!}
+      handleCloseModal={onClose}
+      maxWidth={'620px'}
+    >
+      <ModalContentBase>
         <LinksSection title={'profile'} sectionLinks={ProfileSectionLinks} onChange={onLinksChange} />
         <SectionWrapper>
           <SectionTitle>{t('addFieldsModal.contacts')}</SectionTitle>
@@ -232,7 +216,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
             })}
           </StyledGridList>
         </SectionWrapper>
-      </ModalContent>
+      </ModalContentBase>
     </Modal>
   );
 }
