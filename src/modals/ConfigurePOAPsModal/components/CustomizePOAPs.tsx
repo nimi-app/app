@@ -3,7 +3,7 @@ import { Reorder } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import TrashCanSVG from '../../../../../assets/svg/trash-can.svg';
+import TrashCanSVG from '../../../assets/svg/trash-can.svg';
 import { AnimatedSection } from './AnimatedSection';
 import { StaticPOAP } from './POAPs';
 import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
