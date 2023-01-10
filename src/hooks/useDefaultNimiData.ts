@@ -8,12 +8,12 @@ import { useEnsGeneratedData } from '../api/RestAPI/hooks/useEnsGeneratedData';
 const debug = createDebugger('hooks:useDefaultNimiData');
 
 interface UseInitialNimiData {
-  data?: Nimi;
+  data: Nimi;
   loading: boolean;
 }
 interface InitialNimiDataProps {
   ensName: string;
-  account?: string;
+  account: string;
 }
 /**
  * Returns default data to be displayed on CreateNimipage
@@ -35,7 +35,6 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
   } = useEnsGeneratedData(ensName, shouldRunSecondQuery);
 
   const nimiObject = useMemo(() => {
-    if (!account) return undefined;
     let nimi: Nimi = {
       ensName,
       displayName: ensName,
@@ -45,13 +44,13 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
       widgets: [],
     };
 
+    if (!nimi.theme) nimi.theme = defaultTheme;
+
     if (isDeployedSuccess && deployedNimi && !isDepoyedLoading) nimi = deployedNimi.nimi;
     else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) nimi = generatedNimi;
 
-    if (!(isDepoyedLoading || isGeneratedFetching)) {
-      if (!nimi.theme) nimi.theme = defaultTheme;
-      return nimi;
-    }
+    return nimi;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     deployedNimi,
