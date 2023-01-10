@@ -1,4 +1,4 @@
-import { NimiLinkBaseDetails } from '@nimi.io/card';
+import { Nimi } from '@nimi.io/card/types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -16,7 +16,7 @@ import {
 } from '../../components/Modal';
 import { ContentInput } from '../../components/ReorderInput';
 
-export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: NimiLinkBaseDetails[]) => void }) {
+export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: Nimi) => void }) {
   const { t } = useTranslation('nimi');
   const [linktreeUsername, setLinktreeUsername] = useState('');
 

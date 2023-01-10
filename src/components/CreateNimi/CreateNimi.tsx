@@ -525,8 +525,18 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       )}
       {isLinktreeOpen && (
         <ImportFromLinktreeModal
-          onClose={(linktreeLinks?: NimiLinkBaseDetails[]) => {
-            if (linktreeLinks) setValue('links', [...linktreeLinks, ...links]);
+          onClose={(linktreeNimi) => {
+            if (!linktreeNimi) return;
+
+            if (linktreeNimi.links && linktreeNimi.links.length > 0) {
+              setValue('links', [...linktreeNimi.links, ...links]);
+            }
+
+            // NFT avatar
+            if (linktreeNimi.image && linktreeNimi.image.type === NimiImageType.ERC721) {
+              setValue('image', linktreeNimi.image);
+            }
+
             setIsLinktreeOpen(false);
           }}
         />
