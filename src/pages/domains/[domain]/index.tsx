@@ -1,9 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { Container } from '../../../components/Container';
 import { CreateNimi } from '../../../components/CreateNimi';
-import { CreateNimiContainer } from '../../../components/CreateNimi/CreateNimiContainer';
 import { Loader } from '../../../components/Loader';
 import { useAvaliableThemesFromPoaps } from '../../../hooks/useAvaliableThemesFromPoaps';
 import { useInitialtNimiData } from '../../../hooks/useDefaultNimiData';
@@ -30,18 +28,16 @@ export default function CreateNimiPage() {
         <title>Create Nimi for {domain}</title>
       </Head>
       <PageLayout>
-        <Container>
-          {initialNimiLoading || initialNimi === undefined || isThemeLoading ? (
-            <Loader />
-          ) : (
-            <CreateNimi
-              ensAddress={account as string}
-              ensName={domain as string}
-              availableThemes={avaliableThemes}
-              initialNimi={insertPoapWidgetIntoNimi(initialNimi, hasPoaps, account)}
-            />
-          )}
-        </Container>
+        {initialNimiLoading || initialNimi === undefined || isThemeLoading ? (
+          <Loader />
+        ) : (
+          <CreateNimi
+            ensAddress={account as string}
+            ensName={domain as string}
+            availableThemes={avaliableThemes}
+            initialNimi={insertPoapWidgetIntoNimi(initialNimi, hasPoaps, account)}
+          />
+        )}
       </PageLayout>
     </>
   );
