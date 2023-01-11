@@ -97,15 +97,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   const { chainId } = useRainbow();
   const { signMessageAsync } = useSignMessage();
 
-  // TODO: UPDATE MODAL STATE HANLING
-  const [isAddFieldsModalOpen, setIsAddFieldsModalOpen] = useState(false);
-  const [isImportFromTwitterModalOpen, setIsImportFromTwitterModalOpen] = useState(false);
-  const [isNFTSelectorModalOpen, setIsNFTSelectorModalOpen] = useState(false);
-  const [isPublishNimiModalOpen, setIsPublishNimiModalOpen] = useState(false);
-  const [isLinktreeOpen, setIsLinktreeOpen] = useState(false);
-  const [isPOAPModalOpened, setIsPOAPModalOpened] = useState(false);
-  const [isTemplatePickerModalOpened, setIsTemplatePickerModalOpened] = useState(false);
-
   /**
    * Publish Nimi state
    * @todo create a reducer or context for this
@@ -120,9 +111,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
-  debug({
-    initialNimi,
-  });
+  debug({ initialNimi });
 
   // Form state manager
   const useFormContext = useForm<Nimi>({
