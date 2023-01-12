@@ -5,13 +5,16 @@ import styled from 'styled-components';
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { Heading } from '../components/Heading';
+import { Spinner } from '../components/Spinner';
 import { ENV_SUPPORTED_CHAIN_IDS } from '../constants';
 import { useRainbow } from '../hooks/useRainbow';
+import { useUserInterface } from '../services/useUserInterface';
 import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS } from '../theme';
 
 export function PageLayout({ children }: PropsWithChildren) {
   const { chainId } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
+  const { isSpinnerShown } = useUserInterface();
 
   return (
     <Container>
@@ -30,6 +33,7 @@ export function PageLayout({ children }: PropsWithChildren) {
           return children;
         })()}
       </Content>
+      {isSpinnerShown && <Spinner />}
       <Footer />
     </Container>
   );
