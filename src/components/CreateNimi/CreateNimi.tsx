@@ -26,7 +26,6 @@ import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 import { supportedImageTypes } from '../../constants';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
-import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import {
   AddFieldsModal,
@@ -90,7 +89,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
-  const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const [imgErrorMessage, setImgErrorMessage] = useState('');
 
@@ -101,7 +99,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   const { mutateAsync: uploadImageAsync } = useUploadImageToIPFS();
 
   const { t } = useTranslation('nimi');
-  const { chainId } = useRainbow();
   const { signMessageAsync } = useSignMessage();
 
   const publicResolverContract = useENSPublicResolverContract();
@@ -182,8 +179,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
         name: nimi.ensName,
         contentHash,
       });
-
-      setSetContentHashTransaction(setContentHashTransaction);
 
       const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
 
@@ -411,13 +406,13 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
         <TemplatePickerModal
           themes={availableThemes.map((availableTheme) => themes[availableTheme])}
           handleThemeSelection={handleThemeSelection}
-          closeModal={() => closeModal()}
+          closeModal={closeModal}
         />
       )}
 
       {modalOpened === ModalTypes.ADD_FIELDS && (
         <AddFieldsModal
-          onClose={() => closeModal()}
+          onClose={closeModal}
           onSubmit={({ link, blockchainAddresse, widget }) => {
             closeModal();
 
@@ -461,7 +456,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
 
       {modalOpened === ModalTypes.IMPORT_FROM_TWITTER && (
         <ImportFromTwitterModal
-          onClose={() => closeModal()}
+          onClose={closeModal}
           onDataImport={(data) => {
             // Set the fields and close the modal
             setValue('displayName', data.name);
@@ -517,7 +512,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
 
       {modalOpened === ModalTypes.NFT_SELECTOR && (
         <NFTSelectorModal
-          address={ensAddress}
+          ensAddress={ensAddress}
           onClose={(nftAsset) => {
             if (nftAsset) {
               setValue('image', {

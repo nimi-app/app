@@ -9,7 +9,7 @@ import { AssetListInnerWrapper, AssetListItem /* SearchBar */ } from './NFTSelec
 import { NFTAsset, NFTSelectorProps } from './NFTSelector.types';
 import { AssetCard } from './partials/AssetCard/AssetCard';
 
-export function NFTSelector({ address, onChange }: NFTSelectorProps) {
+export function NFTSelector({ ensAddress, onChange }: NFTSelectorProps) {
   const [isFetching, setIsFetching] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
@@ -27,7 +27,7 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
 
     setIsFetchingMore(true);
     fetchAssets({
-      address,
+      ensAddress,
       cursor: nextCursor,
     }).then(({ assets, next }) => {
       unstable_batchedUpdates(() => {
@@ -49,7 +49,7 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
     });
 
     fetchAssets({
-      address,
+      ensAddress,
       cursor: nextCursor,
     }).then(({ assets, next }) => {
       unstable_batchedUpdates(() => {
@@ -60,7 +60,7 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address]);
+  }, [ensAddress]);
 
   if (isFetching) {
     return (

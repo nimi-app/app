@@ -1,14 +1,14 @@
 import { Network, OpenSeaAPI } from 'opensea-js';
 
 export interface FetchOpenSeaAssetsParams {
-  address: string;
+  ensAddress: string;
   cursor?: string;
 }
 
-export function fetchAssets({ address, cursor }: FetchOpenSeaAssetsParams) {
+export function fetchAssets({ ensAddress, cursor }: FetchOpenSeaAssetsParams) {
   const opensea = new OpenSeaAPI({
     networkName: Network.Main,
   });
 
-  return opensea.getAssets({ owner: address, cursor });
+  return opensea.getAssets({ owner: ensAddress, cursor });
 }
