@@ -1,4 +1,4 @@
-import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts';
+import { ContractReceipt } from '@ethersproject/contracts';
 
 import { encodeContenthash, namehash as ensNameHash } from '@ensdomains/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,6 +26,7 @@ import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 import { supportedImageTypes } from '../../constants';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
+import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import {
   AddFieldsModal,
@@ -83,16 +84,17 @@ export interface CreateNimiProps {
   initialNimi: Nimi;
 }
 
-export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }: CreateNimiProps) {
+export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimiProps) {
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
+  const { account: ensAddress } = useRainbow();
+
+  const { modalOpened, ModalTypes, openModal, closeModal, showSpinner, hideSpinner } = useUserInterface();
 
   const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const [imgErrorMessage, setImgErrorMessage] = useState('');
-
-  const { modalOpened, ModalTypes, openModal, closeModal, showSpinner, hideSpinner } = useUserInterface();
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
@@ -102,7 +104,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   const { signMessageAsync } = useSignMessage();
 
   const publicResolverContract = useENSPublicResolverContract();
-  const publishNimiAbortController = useRef<AbortController>();
 
   debug({ initialNimi });
 
@@ -426,7 +427,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                 {
                   id: generateID(),
                   type: link,
-                  // TODO: Should be updated with NimiLinkType update. Updated naming consistency accross the application with NimiLinkType update.
                   title: '',
                   content: '',
                 },
@@ -458,7 +458,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
         <ImportFromTwitterModal
           onClose={closeModal}
           onDataImport={(data) => {
-            // Set the fields and close the modal
             setValue('displayName', data.name);
             setValue('description', data.description);
             setValue('image', { type: NimiImageType.URL, url: data.profileImageUrl });
@@ -484,10 +483,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
           isPublished={isNimiPublished}
           publishError={publishNimiError}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
-          cancel={() => {
-            closeModal();
-            publishNimiAbortController?.current?.abort();
-          }}
+          onClose={closeModal}
         />
       )}
 

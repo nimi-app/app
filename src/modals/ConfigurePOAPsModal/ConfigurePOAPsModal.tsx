@@ -9,7 +9,7 @@ import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } 
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 
 type ConfigurePOAPsModalProps = {
-  ensAddress: string;
+  ensAddress?: string;
   closeModal: () => void;
 };
 

@@ -7,7 +7,7 @@ import { NFTAsset, NFTSelector } from '../../components/NFTSelector';
 
 export interface NFTSelectorModalProps {
   onClose: (asset?: NFTAsset) => void;
-  ensAddress: string;
+  ensAddress?: string;
 }
 
 export function NFTSelectorModal({ ensAddress, onClose }: NFTSelectorModalProps) {
@@ -17,7 +17,7 @@ export function NFTSelectorModal({ ensAddress, onClose }: NFTSelectorModalProps)
     <Modal title={'Select an NFT'} handleCloseModal={() => onClose(selectedAsset)} maxWidth="560px">
       <ModalContent>
         <NFTSelector
-          ensAddress={ensAddress}
+          ensAddress={ensAddress as string}
           onChange={(newValue) => {
             setSelectedAsset(newValue);
           }}

@@ -1,16 +1,9 @@
-import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts';
+import { ContractReceipt } from '@ethersproject/contracts';
 
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { Button } from '../../components/Button';
-import { Loader } from '../../components/Loader';
-import { Modal, Content as ModalContentBase, Footer as ModalFooterBase } from '../../components/Modal';
-import { getEtherscanExplorerLink } from '../../utils';
-
-const LoaderWrapper = styled.div`
-  margin-bottom: 32px;
-`;
+import { Modal, Content as ModalContentBase } from '../../components/Modal';
 
 const ModalContent = styled(ModalContentBase)`
   min-height: 200px;
@@ -28,7 +21,7 @@ const ModalContent = styled(ModalContentBase)`
 `;
 
 export interface PublishNimiModalProps {
-  cancel: () => void;
+  onClose: () => void;
   isPublished: boolean;
   ensName: string;
   ipfsHash: string | undefined;
@@ -41,7 +34,7 @@ export interface PublishNimiModalProps {
  * @returns
  */
 export function PublishNimiModal({
-  cancel,
+  onClose,
   ipfsHash,
   ensName,
   publishError,
@@ -89,13 +82,8 @@ export function PublishNimiModal({
   };
 
   return (
-    <Modal handleCloseModal={cancel} title={t('publishNimiModal.title', { ns: 'nimi' })!} maxWidth="560px">
+    <Modal handleCloseModal={onClose} title={t('publishNimiModal.title', { ns: 'nimi' })!} maxWidth="560px">
       <ModalContent>{modalContent()}</ModalContent>
-      <ModalFooterBase>
-        {(setContentHashTransactionReceipt || publishError || isPublished) && (
-          <Button onClick={cancel}>{t('close')}</Button>
-        )}
-      </ModalFooterBase>
     </Modal>
   );
 }
