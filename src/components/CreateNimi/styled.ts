@@ -245,7 +245,6 @@ export const Toplabel = styled.div`
   font-weight: 600;
   font-size: 18px;
   line-height: 20px;
-  /* identical to box height */
   letter-spacing: -0.02em;
 `;
 
@@ -264,14 +263,9 @@ export const TemplateSection = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 export const ImportSection = styled.div`
   ${NimiModalStyles};
 `;
-export const TemplateImportContainer = styled.div``;
 
-export const ImportButtonsWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: left;
-`;
+export const TemplateImportContainer = styled.div``;
