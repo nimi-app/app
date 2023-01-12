@@ -71,17 +71,6 @@ export const PageSectionTitle = styled.h1`
     text-align: center;
   }
 `;
-export const ProfileImage = styled.img`
-  background-position: center, center;
-  background-size: cover;
-  border: 8px solid #ffffff;
-  border-radius: 200px;
-  height: 186px;
-  width: 186px;
-  z-index: 1;
-  align-self: center;
-  margin-bottom: 10px;
-`;
 
 export const SaveAndDeployButton = styled(Button)`
   background: linear-gradient(291.35deg, #4368ea -25.85%, #c490dd 73.38%);
@@ -162,56 +151,6 @@ export const PoapButton = styled.div`
 export const FileInput = styled.input`
   display: none;
 `;
-export const ImportButton = styled.label`
-  display: flex;
-  position: relative;
-  align-self: center;
-  margin: 0 auto;
-  margin-bottom: 22px;
-  background: #4589ef;
-  padding: 10px 24px;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 17px;
-  text-align: center;
-  letter-spacing: -0.02em;
-  width: fit-content;
-  opacity: 0.8;
-  border-radius: 30px;
-  color: #ffffff;
-  cursor: pointer;
-  transition-duration: 0.4s;
-  -webkit-transition-duration: 0.4s;
-  :hover {
-    transition-duration: 0.1s;
-    background-color: #c9d1f1;
-  }
-  :after {
-    content: '';
-    display: block;
-    position: absolute;
-    border-radius: 4em;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: all 0.5s;
-    box-shadow: 0 0 10px 40px #a78aff;
-  }
-  :active:after {
-    box-shadow: 0 0 0 0 white;
-    position: absolute;
-    border-radius: 4em;
-    left: 0;
-    top: 0;
-    opacity: 1;
-    transition: 0s;
-  }
-  :active {
-    top: 1px;
-  }
-`;
 
 export const ErrorMessage = styled.div`
   color: red;
@@ -240,15 +179,6 @@ export const Toplabel = styled.div`
   letter-spacing: -0.02em;
 `;
 
-export const TemplateSection = styled.div`
-  ${NimiModalStyles};
-  margin-bottom: 14px;
-  display: flex;
-  flex-direction: column;
-`;
-
 export const ImportSection = styled.div`
   ${NimiModalStyles};
 `;
-
-export const TemplateImportContainer = styled.div``;

@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
 import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
-// Partials
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';

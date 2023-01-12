@@ -8,15 +8,7 @@ import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 import { supportedImageTypes } from '../../constants';
 import { useUserInterface } from '../../services/useUserInterface';
 import { MEDIA_WIDTHS, NimiModalStyles } from '../../theme';
-import {
-  ErrorMessage,
-  FileInput,
-  ImportButton,
-  ProfileImage,
-  TemplateImportContainer,
-  TemplateSection,
-  Toplabel,
-} from '../CreateNimi/styled';
+import { ErrorMessage, FileInput, Toplabel } from '../CreateNimi/styled';
 import { themes } from '../CreateNimi/themes';
 import { ImportSection } from '../ImportSection';
 import { TemplatePickerButton } from '../TemplatePickerButton';
@@ -117,4 +109,76 @@ const ProfilePictureContainer = styled.div`
   flex-direction: column;
   flex-grow: 1;
   ${NimiModalStyles};
+`;
+
+export const ProfileImage = styled.img`
+  background-position: center, center;
+  background-size: cover;
+  border: 8px solid #ffffff;
+  border-radius: 200px;
+  height: 186px;
+  width: 186px;
+  z-index: 1;
+  align-self: center;
+  margin-bottom: 10px;
+`;
+
+export const ImportButton = styled.label`
+  display: flex;
+  position: relative;
+  align-self: center;
+  margin: 0 auto;
+  margin-bottom: 22px;
+  background: #4589ef;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 17px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  width: fit-content;
+  opacity: 0.8;
+  border-radius: 30px;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  -webkit-transition-duration: 0.4s;
+  :hover {
+    transition-duration: 0.1s;
+    background-color: #c9d1f1;
+  }
+  :after {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 4em;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s;
+    box-shadow: 0 0 10px 40px #a78aff;
+  }
+  :active:after {
+    box-shadow: 0 0 0 0 white;
+    position: absolute;
+    border-radius: 4em;
+    left: 0;
+    top: 0;
+    opacity: 1;
+    transition: 0s;
+  }
+  :active {
+    top: 1px;
+  }
+`;
+
+const TemplateImportContainer = styled.div``;
+
+const TemplateSection = styled.div`
+  ${NimiModalStyles};
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
 `;
