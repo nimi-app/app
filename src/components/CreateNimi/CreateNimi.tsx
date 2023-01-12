@@ -39,7 +39,7 @@ import {
   PublishNimiModal,
   TemplatePickerModal,
 } from '../../modals';
-import { modalOpenedAtom, ModalTypes } from '../../state';
+import { useUserInterface } from '../../services/useUserInterface';
 import { NimiCuratedTheme } from '../../types';
 import { generateID } from '../../utils';
 import { ImporButton, ImportButtonType } from '../Button/ImportButton';
@@ -87,7 +87,7 @@ export interface CreateNimiProps {
 const debug = createDebugger('Nimi:CreateNimi');
 
 export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }: CreateNimiProps) {
-  const [modalOpened, setModalOpened] = useAtom(modalOpenedAtom);
+  const { modalOpened, ModalTypes, openModal, closeModal } = useUserInterface();
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
@@ -97,10 +97,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   const { chainId } = useRainbow();
   const { signMessageAsync } = useSignMessage();
 
-  /**
-   * Publish Nimi state
-   * @todo create a reducer or context for this
-   */
   const publicResolverContract = useENSPublicResolverContract();
   const [isPublishingNimi, setIsPublishingNimi] = useState(false);
   const [isNimiPublished, setIsNimiPublished] = useState(false);
@@ -113,7 +109,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
 
   debug({ initialNimi });
 
-  // Form state manager
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
     defaultValues: {
@@ -145,7 +140,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
 
   function handleThemeSelection({ type }: { type: NimiThemeType }) {
     setValue('theme', { type });
-    setModalOpened(null);
+    closeModal();
   }
 
   /**
@@ -154,7 +149,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
    */
   const onSubmitValid = async (nimi: Nimi) => {
     unstable_batchedUpdates(() => {
-      setModalOpened(ModalTypes.PUBLISH_NIMI);
+      openModal(ModalTypes.PUBLISH_NIMI);
       setIsPublishingNimi(true);
       setPublishNimiError(undefined);
       setIsNimiPublished(false);
@@ -321,7 +316,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                     <Toplabel>Template</Toplabel>
                     <TemplatePickerButton
                       selectedTheme={themes[getValues('theme').type as keyof typeof themes]}
-                      onClick={() => setModalOpened(ModalTypes.TEMPLATE_PICKER)}
+                      onClick={() => openModal(ModalTypes.TEMPLATE_PICKER)}
                     />
                   </TemplateSection>
                   <ImportSection>
@@ -329,19 +324,16 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                     <ImportButtonsWrapper>
                       <ImporButton
                         type={ImportButtonType.Twitter}
-                        onClick={() => setModalOpened(ModalTypes.IMPORT_FROM_TWITTER)}
+                        onClick={() => openModal(ModalTypes.IMPORT_FROM_TWITTER)}
                       />
                       {!loadingLensProfile && !!lensProfile && (
                         <ImporButton type={ImportButtonType.Lens} onClick={handleImportLensProfile} />
                       )}
                       <ImporButton
                         type={ImportButtonType.Linktree}
-                        onClick={() => setModalOpened(ModalTypes.IMPORT_FROM_LINKTREE)}
+                        onClick={() => openModal(ModalTypes.IMPORT_FROM_LINKTREE)}
                       />
-                      <ImporButton
-                        type={ImportButtonType.Nft}
-                        onClick={() => setModalOpened(ModalTypes.NFT_SELECTOR)}
-                      />
+                      <ImporButton type={ImportButtonType.Nft} onClick={() => openModal(ModalTypes.NFT_SELECTOR)} />
                     </ImportButtonsWrapper>
                   </ImportSection>
                 </TemplateImportContainer>
@@ -360,8 +352,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                     />
                   </FormItem>
                 </FormGroup>
-                {/* links */}
-                {/* reorder group */}
+
                 {links !== undefined && links?.length > 0 && (
                   <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
                     {links.map((link) => (
@@ -369,7 +360,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                     ))}
                   </ReorderGroup>
                 )}
-                {/* addresses */}
+
                 {formWatchPayload !== undefined &&
                   'address' in formWatchPayload === true &&
                   formWatchPayload.addresses !== undefined &&
@@ -391,12 +382,12 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                       </FormItem>
                     </FormGroup>
                   )}
-                {/* widgets */}
+
                 {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
                   <PoapField
                     onConfigure={(e) => {
                       e.stopPropagation();
-                      setModalOpened(ModalTypes.CONFIGURE_POAPS);
+                      openModal(ModalTypes.CONFIGURE_POAPS);
                     }}
                     onRemove={() =>
                       setValue(
@@ -406,11 +397,10 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
                     }
                   />
                 )}
-                {/* add fields button */}
-                <AddFieldsButton type="button" onClick={() => setModalOpened(ModalTypes.ADD_FIELDS)}>
+
+                <AddFieldsButton type="button" onClick={() => openModal(ModalTypes.ADD_FIELDS)}>
                   + {t('buttonLabel.addFields')}
                 </AddFieldsButton>
-                {/* publish button */}
 
                 <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
 
@@ -427,22 +417,22 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       </InnerWrapper>
 
       {modalOpened === ModalTypes.CONFIGURE_POAPS && (
-        <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => setModalOpened(null)} />
+        <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => closeModal()} />
       )}
 
       {modalOpened === ModalTypes.TEMPLATE_PICKER && (
         <TemplatePickerModal
           themes={availableThemes.map((availableTheme) => themes[availableTheme])}
           handleThemeSelection={handleThemeSelection}
-          closeModal={() => setModalOpened(null)}
+          closeModal={() => closeModal()}
         />
       )}
 
       {modalOpened === ModalTypes.ADD_FIELDS && (
         <AddFieldsModal
-          onClose={() => setModalOpened(null)}
+          onClose={() => closeModal()}
           onSubmit={({ link, blockchainAddresse, widget }) => {
-            setModalOpened(null);
+            closeModal();
 
             //if link is submitted
             if (link) {
@@ -484,7 +474,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
 
       {modalOpened === ModalTypes.IMPORT_FROM_TWITTER && (
         <ImportFromTwitterModal
-          onClose={() => setModalOpened(null)}
+          onClose={() => closeModal()}
           onDataImport={(data) => {
             // Set the fields and close the modal
             setValue('displayName', data.name);
@@ -500,7 +490,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
 
             setValue('links', newState);
 
-            setModalOpened(null);
+            closeModal();
           }}
         />
       )}
@@ -516,7 +506,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
           setContentHashTransactionChainId={chainId as number}
           cancel={() => {
-            setModalOpened(null);
+            closeModal();
             publishNimiAbortController?.current?.abort();
           }}
         />
@@ -525,7 +515,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       {modalOpened === ModalTypes.IMPORT_FROM_LINKTREE && (
         <ImportFromLinktreeModal
           onClose={(linktreeNimi) => {
-            setModalOpened(null);
+            closeModal();
 
             if (!linktreeNimi) return;
 
@@ -555,7 +545,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
               });
             }
 
-            setModalOpened(null);
+            closeModal();
           }}
         />
       )}
