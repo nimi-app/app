@@ -230,14 +230,6 @@ export const BlockchainAddresses = styled.div`
   flex-direction: column;
 `;
 
-export const ProfilePictureContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  flex-direction: column;
-  flex-grow: 1;
-  ${NimiModalStyles};
-`;
 export const Toplabel = styled.div`
   display: flex;
   margin-bottom: 16px;
@@ -248,15 +240,6 @@ export const Toplabel = styled.div`
   letter-spacing: -0.02em;
 `;
 
-export const ImageAndTemplateSection = styled.div`
-  display: flex;
-
-  margin-bottom: 14px;
-  gap: 14px;
-  @media (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
-    flex-direction: column;
-  }
-`;
 export const TemplateSection = styled.div`
   ${NimiModalStyles};
   margin-bottom: 14px;
