@@ -8,13 +8,12 @@ import {
   NimiImageType,
   NimiLinkBaseDetails,
   NimiLinkType,
-  NimiThemeType,
   NimiWidget,
   NimiWidgetType,
 } from '@nimi.io/card/types';
 import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
-import { KeyboardEventHandler, useCallback, useMemo, useRef, useState } from 'react';
+import { KeyboardEventHandler, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
@@ -25,7 +24,6 @@ import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 // Partials
 import { supportedImageTypes } from '../../constants';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
-import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import {
@@ -40,10 +38,10 @@ import {
 import { useUserInterface } from '../../services/useUserInterface';
 import { NimiCuratedTheme } from '../../types';
 import { generateID } from '../../utils';
-import { ImporButton, ImportButtonType } from '../Button/ImportButton';
 import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
+import { ImportSection } from '../ImportSection';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { TemplatePickerButton } from '../TemplatePickerButton';
@@ -59,8 +57,6 @@ import {
   FormItem,
   ImageAndTemplateSection,
   ImportButton,
-  ImportButtonsWrapper,
-  ImportSection,
   InnerWrapper,
   MainContent,
   PageSectionTitle,
@@ -96,7 +92,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
   const [imgErrorMessage, setImgErrorMessage] = useState('');
 
-  const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
   const { mutateAsync: uploadImageAsync } = useUploadImageToIPFS();
 
@@ -121,21 +116,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   const formWatchPayload = watch();
 
   const links = useMemo(() => (formWatchPayload === undefined ? [] : formWatchPayload.links), [formWatchPayload]);
-
-  const handleImportLensProfile = useCallback(() => {
-    if (!lensProfile) return;
-    setValue('displayName', lensProfile.name);
-    setValue('description', lensProfile.description);
-    setValue('image', {
-      type: NimiImageType.URL,
-      url: lensProfile?.pictureUrl,
-    });
-  }, [setValue, lensProfile]);
-
-  function handleThemeSelection({ type }: { type: NimiThemeType }) {
-    setValue('theme', { type });
-    closeModal();
-  }
 
   const onSubmitValid = async (nimi: Nimi) => {
     showSpinner();
@@ -302,23 +282,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                       onClick={() => openModal(ModalTypes.TEMPLATE_PICKER)}
                     />
                   </TemplateSection>
-                  <ImportSection>
-                    <Toplabel>Import from</Toplabel>
-                    <ImportButtonsWrapper>
-                      <ImporButton
-                        type={ImportButtonType.Twitter}
-                        onClick={() => openModal(ModalTypes.IMPORT_FROM_TWITTER)}
-                      />
-                      {!loadingLensProfile && !!lensProfile && (
-                        <ImporButton type={ImportButtonType.Lens} onClick={handleImportLensProfile} />
-                      )}
-                      <ImporButton
-                        type={ImportButtonType.Linktree}
-                        onClick={() => openModal(ModalTypes.IMPORT_FROM_LINKTREE)}
-                      />
-                      <ImporButton type={ImportButtonType.Nft} onClick={() => openModal(ModalTypes.NFT_SELECTOR)} />
-                    </ImportButtonsWrapper>
-                  </ImportSection>
+                  <ImportSection />
                 </TemplateImportContainer>
               </ImageAndTemplateSection>
 
@@ -406,7 +370,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
       {modalOpened === ModalTypes.TEMPLATE_PICKER && (
         <TemplatePickerModal
           themes={availableThemes.map((availableTheme) => themes[availableTheme])}
-          handleThemeSelection={handleThemeSelection}
           closeModal={closeModal}
         />
       )}
