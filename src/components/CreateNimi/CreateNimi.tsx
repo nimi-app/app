@@ -14,7 +14,6 @@ import {
 } from '@nimi.io/card/types';
 import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
-import { useAtom } from 'jotai';
 import { KeyboardEventHandler, useCallback, useMemo, useRef, useState } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -77,6 +76,8 @@ import {
 } from './styled';
 import { themes } from './themes';
 
+const debug = createDebugger('Nimi:CreateNimi');
+
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
@@ -84,10 +85,18 @@ export interface CreateNimiProps {
   initialNimi: Nimi;
 }
 
-const debug = createDebugger('Nimi:CreateNimi');
-
 export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }: CreateNimiProps) {
-  const { modalOpened, ModalTypes, openModal, closeModal } = useUserInterface();
+  const [showPreviewMobile, setShowPreviewMobile] = useState(false);
+
+  const [isPublishingNimi, setIsPublishingNimi] = useState(false);
+  const [isNimiPublished, setIsNimiPublished] = useState(false);
+  const [publishNimiError, setPublishNimiError] = useState<Error>();
+  const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
+  const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
+  const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
+  const [imgErrorMessage, setImgErrorMessage] = useState('');
+
+  const { modalOpened, ModalTypes, openModal, closeModal, showSpinner, hideSpinner } = useUserInterface();
 
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
@@ -98,13 +107,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   const { signMessageAsync } = useSignMessage();
 
   const publicResolverContract = useENSPublicResolverContract();
-  const [isPublishingNimi, setIsPublishingNimi] = useState(false);
-  const [isNimiPublished, setIsNimiPublished] = useState(false);
-  const [publishNimiError, setPublishNimiError] = useState<Error>();
-  const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
-  const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
-  const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
-  const [imgErrorMessage, setImgErrorMessage] = useState('');
   const publishNimiAbortController = useRef<AbortController>();
 
   debug({ initialNimi });
@@ -117,10 +119,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   });
 
   const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
-
-  // To keep the same order of links and addresses, compute
-  // the list of blockchain addresses and links from Nimi
-  const [showPreviewMobile, setShowPreviewMobile] = useState(false);
 
   const [customImg, setCustomImg] = useState<any>(null);
 
@@ -143,14 +141,10 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
     closeModal();
   }
 
-  /**
-   * Handle the form submit via ENS contract interaction
-   * @param data a validated Nimi object
-   */
   const onSubmitValid = async (nimi: Nimi) => {
     unstable_batchedUpdates(() => {
       openModal(ModalTypes.PUBLISH_NIMI);
-      setIsPublishingNimi(true);
+      showSpinner();
       setPublishNimiError(undefined);
       setIsNimiPublished(false);
     });
@@ -182,7 +176,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       if (newContentHashEncoded === currentContentHashEncoded) {
         unstable_batchedUpdates(() => {
           setIsNimiPublished(true);
-          setIsPublishingNimi(false);
+          hideSpinner();
         });
         return;
       }
@@ -202,14 +196,14 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       unstable_batchedUpdates(() => {
         setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
         setIsNimiPublished(true);
-        setIsPublishingNimi(false);
+        hideSpinner();
       });
     } catch (error) {
       debug({
         error,
       });
       unstable_batchedUpdates(() => {
-        setIsPublishingNimi(false);
+        hideSpinner();
         setPublishNimiError(error);
       });
     }
