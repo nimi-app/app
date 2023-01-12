@@ -19,10 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
 import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
-import { useUploadImageToIPFS } from '../../api/RestAPI/hooks/useUploadImageToIPFS';
-import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 // Partials
-import { supportedImageTypes } from '../../constants';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
@@ -41,10 +38,9 @@ import { generateID } from '../../utils';
 import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
-import { ImportSection } from '../ImportSection';
+import { ProfileSettings } from '../ProfileSettings';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
-import { TemplatePickerButton } from '../TemplatePickerButton';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { PoapField } from './partials/PoapField';
@@ -52,22 +48,13 @@ import {
   AddFieldsButton,
   BackButton,
   BlockchainAddresses,
-  ErrorMessage,
-  FileInput,
   FormItem,
-  ImageAndTemplateSection,
-  ImportButton,
   InnerWrapper,
   MainContent,
   PageSectionTitle,
   PreviewContent,
   PreviewMobile,
-  ProfileImage,
-  ProfilePictureContainer,
   SaveAndDeployButton,
-  TemplateImportContainer,
-  TemplateSection,
-  Toplabel,
 } from './styled';
 import { themes } from './themes';
 
@@ -90,10 +77,8 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   const [publishNimiError, setPublishNimiError] = useState<Error>();
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
   const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
-  const [imgErrorMessage, setImgErrorMessage] = useState('');
 
   const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
-  const { mutateAsync: uploadImageAsync } = useUploadImageToIPFS();
 
   const { t } = useTranslation('nimi');
   const { signMessageAsync } = useSignMessage();
@@ -110,8 +95,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   });
 
   const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
-
-  const [customImg, setCustomImg] = useState<any>(null);
 
   const formWatchPayload = watch();
 
@@ -208,51 +191,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
       getValues('links').filter((link) => link.id !== linkId)
     );
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files !== null) {
-      const file = event.target.files[0];
-
-      if (file.size > 2000000) {
-        setImgErrorMessage('File too big! Max size: 2mb');
-        setTimeout(() => {
-          setImgErrorMessage('');
-        }, 5000);
-        return;
-      }
-      if (!supportedImageTypes.includes(file.type)) {
-        setImgErrorMessage('File type unsupported!');
-
-        setTimeout(() => {
-          setImgErrorMessage('');
-        }, 5000);
-
-        return;
-      }
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setCustomImg([reader.result]);
-      };
-
-      try {
-        const { cidV1 } = await uploadImageAsync(file);
-
-        setValue('image', {
-          type: NimiImageType.URL,
-          url: `https://ipfs.io/ipfs/${cidV1}`,
-        });
-      } catch (error) {
-        debug({
-          error,
-        });
-        setImgErrorMessage('Network Error');
-        setTimeout(() => {
-          setImgErrorMessage('');
-        }, 5000);
-      }
-    }
-  };
-
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -260,31 +198,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
           <PageSectionTitle>{t('creatingYourProfile')}</PageSectionTitle>
           <Card>
             <CardBody>
-              <ImageAndTemplateSection>
-                <ProfilePictureContainer>
-                  <Toplabel>Profile Picture</Toplabel>
-                  <ProfileImage
-                    src={
-                      customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini
-                    }
-                  />
-                  {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
-                  <ImportButton>
-                    <FileInput name="myfile" type="file" onChange={handleUpload} />
-                    Change Profile Picture
-                  </ImportButton>
-                </ProfilePictureContainer>
-                <TemplateImportContainer>
-                  <TemplateSection>
-                    <Toplabel>Template</Toplabel>
-                    <TemplatePickerButton
-                      selectedTheme={themes[getValues('theme').type as keyof typeof themes]}
-                      onClick={() => openModal(ModalTypes.TEMPLATE_PICKER)}
-                    />
-                  </TemplateSection>
-                  <ImportSection />
-                </TemplateImportContainer>
-              </ImageAndTemplateSection>
+              <ProfileSettings />
 
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
