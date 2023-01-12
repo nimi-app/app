@@ -11,3 +11,4 @@ export enum ModalTypes {
 }
 
 export const modalOpenedAtom = atom<keyof typeof ModalTypes | null>(null);
+export const showSpinnerAtom = atom(false);
