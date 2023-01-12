@@ -29,14 +29,11 @@ const ModalContent = styled(ModalContentBase)`
 
 export interface PublishNimiModalProps {
   cancel: () => void;
-  isPublishing: boolean;
   isPublished: boolean;
   ensName: string;
   ipfsHash: string | undefined;
   publishError: Error | undefined;
-  setContentHashTransaction: ContractTransaction | undefined;
   setContentHashTransactionReceipt: ContractReceipt | undefined;
-  setContentHashTransactionChainId: number;
 }
 
 /**
@@ -46,12 +43,9 @@ export interface PublishNimiModalProps {
 export function PublishNimiModal({
   cancel,
   ipfsHash,
-  isPublishing,
   ensName,
   publishError,
-  setContentHashTransaction,
   setContentHashTransactionReceipt,
-  setContentHashTransactionChainId,
   isPublished,
 }: PublishNimiModalProps) {
   const { t } = useTranslation(['common', 'nimi']);
@@ -79,31 +73,6 @@ export function PublishNimiModal({
           )}
           <p>{t('publishNimiModal.successParagraph2', { ns: 'nimi' })}</p>
           <p>{t('publishNimiModal.successParagraph3', { ns: 'nimi' })}</p>
-        </>
-      );
-    }
-
-    if (isPublishing) {
-      return (
-        <>
-          <LoaderWrapper>
-            <Loader size={72} />
-          </LoaderWrapper>
-          {setContentHashTransaction && (
-            <p>
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href={getEtherscanExplorerLink(
-                  setContentHashTransactionChainId,
-                  setContentHashTransaction.hash,
-                  'transaction'
-                )}
-              >
-                {t('viewTransactionOnBlockExplorer')}
-              </a>
-            </p>
-          )}
         </>
       );
     }
