@@ -15,7 +15,6 @@ import {
 import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
 import { KeyboardEventHandler, useCallback, useMemo, useRef, useState } from 'react';
-import { unstable_batchedUpdates } from 'react-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
@@ -88,7 +87,6 @@ export interface CreateNimiProps {
 export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }: CreateNimiProps) {
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
 
-  const [isPublishingNimi, setIsPublishingNimi] = useState(false);
   const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
@@ -142,12 +140,10 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
   }
 
   const onSubmitValid = async (nimi: Nimi) => {
-    unstable_batchedUpdates(() => {
-      openModal(ModalTypes.PUBLISH_NIMI);
-      showSpinner();
-      setPublishNimiError(undefined);
-      setIsNimiPublished(false);
-    });
+    showSpinner();
+
+    setPublishNimiError(undefined);
+    setIsNimiPublished(false);
 
     try {
       if (!publicResolverContract) {
@@ -159,30 +155,28 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       const { cidV1, ipns } = await publishNimiAsync({
         nimi,
         signature,
-        chainId: 1, // always mainnet
+        chainId: 1,
       });
 
       if (!cidV1) {
         throw new Error('No CID returned from publishNimiViaIPNS');
       }
 
-      const contentHash = `ipns://${ipns}`;
-
-      // Get current content hash from ENS contract
       const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
+
+      const contentHash = `ipns://${ipns}`;
       const newContentHashEncoded = encodeContenthash(contentHash).encoded as unknown as string;
 
-      // User already uses the Nimi IPNS
-      if (newContentHashEncoded === currentContentHashEncoded) {
-        unstable_batchedUpdates(() => {
-          setIsNimiPublished(true);
-          hideSpinner();
-        });
+      if (currentContentHashEncoded === newContentHashEncoded) {
+        setIsNimiPublished(true);
+        openModal(ModalTypes.PUBLISH_NIMI);
+        hideSpinner();
+
         return;
       }
 
-      // Set the content
       setPublishNimiResponseIpfsHash(cidV1);
+
       const setContentHashTransaction = await setENSNameContentHash({
         contract: publicResolverContract,
         name: nimi.ensName,
@@ -193,19 +187,18 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
 
       const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
 
-      unstable_batchedUpdates(() => {
-        setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
-        setIsNimiPublished(true);
-        hideSpinner();
-      });
+      setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
+      setIsNimiPublished(true);
+      openModal(ModalTypes.PUBLISH_NIMI);
+      hideSpinner();
     } catch (error) {
       debug({
         error,
       });
-      unstable_batchedUpdates(() => {
-        hideSpinner();
-        setPublishNimiError(error);
-      });
+
+      setPublishNimiError(error);
+      openModal(ModalTypes.PUBLISH_NIMI);
+      hideSpinner();
     }
   };
 
@@ -493,12 +486,9 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
         <PublishNimiModal
           ensName={ensName}
           ipfsHash={publishNimiResponseIpfsHash}
-          isPublishing={isPublishingNimi}
           isPublished={isNimiPublished}
           publishError={publishNimiError}
-          setContentHashTransaction={setContentHashTransaction}
           setContentHashTransactionReceipt={setContentHashTransactionReceipt}
-          setContentHashTransactionChainId={chainId as number}
           cancel={() => {
             closeModal();
             publishNimiAbortController?.current?.abort();
