@@ -1,4 +1,4 @@
-import type { OpenSeaAsset } from 'opensea-js/lib/types';
+import type { OpenSeaAsset } from './api';
 
 export type NFTAsset = OpenSeaAsset & {
   value: string;
