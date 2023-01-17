@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -12,23 +12,26 @@ import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS } from '../theme';
 export function PageLayout({ children }: PropsWithChildren) {
   const { chainId } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
+  const [isNetworkSupported, setIsNetworkSupported] = useState(false);
+
+  useEffect(() => {
+    setIsNetworkSupported(ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number));
+  }, [chainId]);
 
   return (
     <Container>
       <Header />
       <Content>
-        {(() => {
-          if (!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number))
-            return (
-              <ErrorContainer>
-                <Heading>{t('error.unsupportedNetwork')}</Heading>
-                <Heading type="sub" color="#000">
-                  Please change your network by clicking the account button on the top right.
-                </Heading>
-              </ErrorContainer>
-            );
-          return children;
-        })()}
+        {isNetworkSupported ? (
+          children
+        ) : (
+          <ErrorContainer>
+            <Heading>{t('error.unsupportedNetwork')}</Heading>
+            <Heading type="sub" color="#000">
+              Please change your network by clicking the account button on the top right.
+            </Heading>
+          </ErrorContainer>
+        )}
       </Content>
       <Footer />
     </Container>
