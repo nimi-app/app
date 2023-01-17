@@ -22,7 +22,7 @@ import { useSignMessage } from 'wagmi';
 
 import { usePublishNimiIPNS, useUpdateNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
 import { useUploadImageToIPFS } from '../../api/RestAPI/hooks/useUploadImageToIPFS';
-import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
+import nimiPlaceholderImage from '../../assets/images/nimi-placeholder.png';
 // Partials
 import { supportedImageTypes } from '../../constants';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
@@ -78,13 +78,7 @@ import { themes } from './themes';
 export interface CreateNimiProps {
   ensAddress: string;
   ensName: string;
-  /**
-   * Available themes for the user to choose from
-   */
   availableThemes: NimiCuratedTheme[];
-  /**
-   * The initial Nimi to edit
-   */
   initialNimi: Nimi;
   nimiIPNSKey?: string;
 }
@@ -188,7 +182,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
           chainId: 1, // always mainnet
           signature,
         });
-        if (!updateNimiResponse || !updateNimiResponse.cidV1) {
+        if (!updateNimiResponse || !updateNimiResponse.cid) {
           throw new Error('No response from updateNimiAsync');
         }
 
@@ -198,12 +192,12 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
       }
 
       // Publishing a new Nimi IPNS record
-      const { cidV1, ipns } = await publishNimiAsync({
+      const { cid, ipns } = await publishNimiAsync({
         nimi,
-        chainId: 1, // always mainnet
+        chainId: chainId as number,
       });
 
-      if (!cidV1) {
+      if (!cid) {
         throw new Error('No CID returned from publishNimiViaIPNS');
       }
 
@@ -222,7 +216,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
       }
 
       // Set the content
-      setPublishNimiResponseIpfsHash(cidV1);
+      setPublishNimiResponseIpfsHash(cid);
       const setContentHashTransaction = await setENSNameContentHash({
         contract: publicResolverContract,
         name: nimi.ensName,
@@ -336,7 +330,11 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
                   <Toplabel>Profile Picture</Toplabel>
                   <ProfileImage
                     src={
-                      customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini
+                      customImg
+                        ? customImg
+                        : formWatchPayload.image?.url
+                        ? formWatchPayload.image.url
+                        : nimiPlaceholderImage.src
                     }
                   />
                   {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
@@ -565,10 +563,10 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
             if (nftAsset) {
               setValue('image', {
                 type: NimiImageType.ERC721,
-                contract: nftAsset.assetContract.address,
-                tokenId: nftAsset.tokenId as any,
-                tokenUri: nftAsset.externalLink,
-                url: nftAsset.imageUrl,
+                contract: nftAsset.asset_contract.address,
+                tokenId: nftAsset.token_id as any,
+                tokenUri: nftAsset.external_link,
+                url: nftAsset.image_url,
               });
             }
 

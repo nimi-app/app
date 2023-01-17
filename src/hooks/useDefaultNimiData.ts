@@ -68,7 +68,7 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
     ensName,
   ]);
 
-  debug({ NimiObject: nimiObject });
+  debug({ nimiObject });
 
   return {
     loading: isDepoyedLoading || isGeneratedFetching,

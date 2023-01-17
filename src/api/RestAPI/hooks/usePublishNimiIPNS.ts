@@ -13,7 +13,7 @@ type UpdateNimiViaIPNSParams = PublishNimiViaIPNSParams & {
 };
 
 interface PublishNimiIPNSResponse {
-  cidV1: string;
+  cid: string;
   ipns: string;
 }
 
