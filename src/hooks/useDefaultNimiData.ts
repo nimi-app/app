@@ -9,6 +9,7 @@ const debug = createDebugger('hooks:useDefaultNimiData');
 
 interface UseInitialNimiData {
   data?: Nimi;
+  ipns?: string;
   loading: boolean;
 }
 interface InitialNimiDataProps {
@@ -45,8 +46,11 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
       widgets: [],
     };
 
-    if (isDeployedSuccess && deployedNimi && !isDepoyedLoading) nimi = deployedNimi.nimi;
-    else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) nimi = generatedNimi;
+    if (isDeployedSuccess && deployedNimi.nimi && !isDepoyedLoading) {
+      nimi = deployedNimi.nimi.nimi;
+    } else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) {
+      nimi = generatedNimi;
+    }
 
     if (!(isDepoyedLoading || isGeneratedFetching)) {
       if (!nimi.theme) nimi.theme = defaultTheme;
@@ -69,5 +73,6 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
   return {
     loading: isDepoyedLoading || isGeneratedFetching,
     data: nimiObject,
+    ipns: deployedNimi?.ipns,
   };
 }

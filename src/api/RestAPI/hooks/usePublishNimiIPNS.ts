@@ -3,11 +3,14 @@ import { useMutation } from '@tanstack/react-query';
 
 import { nimiClient } from '../utils';
 
-interface PublishNimiViaIPNSParams {
+export interface PublishNimiViaIPNSParams {
   chainId: number;
   nimi: Nimi;
-  signature: string;
 }
+
+type UpdateNimiViaIPNSParams = PublishNimiViaIPNSParams & {
+  signature: string;
+};
 
 interface PublishNimiIPNSResponse {
   cidV1: string;
@@ -21,9 +24,23 @@ const postUserData = async (params: PublishNimiViaIPNSParams) => {
   return data.data;
 };
 
+const updateNimiIPNS = async (params: UpdateNimiViaIPNSParams) => {
+  const { data } = await nimiClient.put<{
+    data: PublishNimiIPNSResponse;
+  }>('/nimi/publish/ipns', params);
+  return data.data;
+};
+
 /**
  * Returns mutation for getting IPNS hash
  */
 export function usePublishNimiIPNS() {
   return useMutation(['publishNimiIPNS'], postUserData);
+}
+
+/**
+ * Returns mutation for getting IPNS hash
+ */
+export function useUpdateNimiIPNS() {
+  return useMutation(['updateNimiIPNS'], updateNimiIPNS);
 }

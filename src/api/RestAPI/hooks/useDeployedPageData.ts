@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useRainbow } from '../../../hooks/useRainbow';
 import { nimiClient } from '../utils';
 
-interface DeployedNimiPageType {
+interface NimiSnapshot {
   publisher: string;
   cid: string | null;
   cidV1: string | null;
@@ -22,18 +22,22 @@ export function useDeployedPageData(ensName: string) {
   const { chainId } = useRainbow();
 
   const getDeployedPageData = async () => {
-    const params = {
-      ens: ensName,
-    };
-
-    const { data } = await nimiClient.get<{ data: DeployedNimiPageType[] }>(`/nimi/by`, { params });
+    const { data } = await nimiClient.get<{
+      data: {
+        ipns?: string;
+        nimi?: NimiSnapshot;
+      };
+    }>(`/ens/has-nimi-ipns`, {
+      params: {
+        domain: ensName,
+      },
+    });
     return data;
   };
 
   return useQuery(['fetchDeployedNimiData', ensName, chainId], getDeployedPageData, {
     select: ({ data }) => {
-      if (data.length) return data[0];
-      else return undefined;
+      return data;
     },
   });
 }

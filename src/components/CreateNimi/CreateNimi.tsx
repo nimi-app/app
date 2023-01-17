@@ -20,7 +20,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
-import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
+import { usePublishNimiIPNS, useUpdateNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
 import { useUploadImageToIPFS } from '../../api/RestAPI/hooks/useUploadImageToIPFS';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
 // Partials
@@ -86,13 +86,15 @@ export interface CreateNimiProps {
    * The initial Nimi to edit
    */
   initialNimi: Nimi;
+  nimiIPNSKey?: string;
 }
 
 const debug = createDebugger('Nimi:CreateNimi');
 
-export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }: CreateNimiProps) {
+export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, nimiIPNSKey }: CreateNimiProps) {
   const { loading: loadingLensProfile, defaultProfileData: lensProfile } = useLensDefaultProfileData();
   const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
+  const { mutateAsync: updateNimiAsync } = useUpdateNimiIPNS();
   const { mutateAsync: uploadImageAsync } = useUploadImageToIPFS();
 
   const { t } = useTranslation('nimi');
@@ -178,11 +180,26 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
         throw new Error('ENS Public Resolver contract is not available.');
       }
 
-      const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
+      // Updating a current Nimi IPNS record
+      if (nimiIPNSKey) {
+        const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
+        const updateNimiResponse = await updateNimiAsync({
+          nimi,
+          chainId: 1, // always mainnet
+          signature,
+        });
+        if (!updateNimiResponse || !updateNimiResponse.cidV1) {
+          throw new Error('No response from updateNimiAsync');
+        }
 
+        setIsNimiPublished(true);
+        setIsPublishingNimi(false);
+        return;
+      }
+
+      // Publishing a new Nimi IPNS record
       const { cidV1, ipns } = await publishNimiAsync({
         nimi,
-        signature,
         chainId: 1, // always mainnet
       });
 
@@ -191,7 +208,6 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi }
       }
 
       const contentHash = `ipns://${ipns}`;
-
       // Get current content hash from ENS contract
       const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
       const newContentHashEncoded = encodeContenthash(contentHash).encoded as unknown as string;

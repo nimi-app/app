@@ -17,7 +17,11 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { avaliableThemes, isLoading: isThemeLoading, hasPoaps } = useAvaliableThemesFromPoaps(account);
 
   //check for users current Nimi profile data or else adds data generated from ens
-  const { data: initialNimi, loading: initialNimiLoading } = useInitialtNimiData({
+  const {
+    data: initialNimi,
+    loading: initialNimiLoading,
+    ipns,
+  } = useInitialtNimiData({
     ensName,
     account,
   });
@@ -33,6 +37,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
         ensName={ensName as string}
         availableThemes={avaliableThemes}
         initialNimi={insertPoapWidgetIntoNimi(initialNimi, hasPoaps, account)}
+        nimiIPNSKey={ipns}
       />
     </Container>
   );
