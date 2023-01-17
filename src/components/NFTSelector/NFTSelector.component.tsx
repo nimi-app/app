@@ -33,7 +33,11 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
       unstable_batchedUpdates(() => {
         const appendedAssets = assets.map(mapOpenSeaAssetToNFTAsset).filter((asset) => !isENSName(asset));
         setAssetList((prev) => [...prev, ...appendedAssets]);
-        setNextCursor(next);
+
+        if (next !== null) {
+          setNextCursor(next);
+        }
+
         setIsFetchingMore(false);
       });
     });
@@ -56,7 +60,9 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
         const appendedAssets = assets.map(mapOpenSeaAssetToNFTAsset).filter((asset) => !isENSName(asset));
         setAssetList(appendedAssets);
         setIsFetching(false);
-        setNextCursor(next);
+        if (next !== null) {
+          setNextCursor(next);
+        }
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

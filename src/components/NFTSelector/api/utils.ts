@@ -1,6 +1,6 @@
-import { OpenSeaAsset } from 'opensea-js/lib/types';
+import type { NFTAsset } from '../NFTSelector.types';
 
-import { NFTAsset } from '../NFTSelector.types';
+import type { OpenSeaAsset } from '.';
 
 /**
  * Remove ENS name from search term
@@ -9,8 +9,8 @@ import { NFTAsset } from '../NFTSelector.types';
  */
 export function isENSName(asset: NFTAsset): boolean {
   return (
-    asset.assetContract.address.toLowerCase() === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85' ||
-    asset.assetContract.name === 'ENS'
+    asset.asset_contract.address.toLowerCase() === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85' ||
+    asset.asset_contract.name === 'ENS'
   );
 }
 
@@ -22,6 +22,6 @@ export function isENSName(asset: NFTAsset): boolean {
 export function mapOpenSeaAssetToNFTAsset(asset: OpenSeaAsset): NFTAsset {
   return {
     ...asset,
-    value: `${asset.tokenAddress} -${asset.tokenId}`,
+    value: asset.token_id,
   };
 }
