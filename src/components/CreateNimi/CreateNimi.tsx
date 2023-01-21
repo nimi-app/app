@@ -38,6 +38,7 @@ import { AddFieldsButton } from '../AddFieldsButton';
 import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
+import { NimiPreview } from '../NimiPreview';
 import { ProfileSettings } from '../ProfileSettings';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
@@ -45,7 +46,6 @@ import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { PoapField } from './partials/PoapField';
 import {
-  BackButton,
   BlockchainAddresses,
   FormItem,
   InnerWrapper,
@@ -260,7 +260,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                 )}
 
                 <AddFieldsButton />
-
                 <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
 
                 <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
@@ -268,11 +267,11 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
             </CardBody>
           </Card>
         </MainContent>
-        <PreviewContent showMobile={showPreviewMobile}>
-          <BackButton onClick={() => setShowPreviewMobile(false)}>← Back To Editor</BackButton>
-          <PageSectionTitle>{t('preview')}</PageSectionTitle>
-          <NimiPreviewCard nimi={formWatchPayload} />
-        </PreviewContent>
+        <NimiPreview
+          nimi={formWatchPayload}
+          isContentShown={showPreviewMobile}
+          hideContent={() => setShowPreviewMobile(false)}
+        />
       </InnerWrapper>
 
       {modalOpened === ModalTypes.CONFIGURE_POAPS && (
