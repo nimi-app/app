@@ -34,6 +34,7 @@ import {
 import { useUserInterface } from '../../services/useUserInterface';
 import { NimiCuratedTheme } from '../../types';
 import { generateID } from '../../utils';
+import { AddFieldsButton } from '../AddFieldsButton';
 import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
@@ -44,7 +45,6 @@ import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { PoapField } from './partials/PoapField';
 import {
-  AddFieldsButton,
   BackButton,
   BlockchainAddresses,
   FormItem,
@@ -96,6 +96,8 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
 
   const formWatchPayload = watch();
+
+  console.log('FWP', formWatchPayload);
 
   const links = useMemo(() => (formWatchPayload === undefined ? [] : formWatchPayload.links), [formWatchPayload]);
 
@@ -198,7 +200,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
           <Card>
             <CardBody>
               <ProfileSettings />
-
               <FormWrapper onSubmit={handleSubmit(onSubmitValid, onSubmitInvalid)}>
                 <FormGroup>
                   <FormItem>
@@ -258,9 +259,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                   />
                 )}
 
-                <AddFieldsButton type="button" onClick={() => openModal(ModalTypes.ADD_FIELDS)}>
-                  + {t('buttonLabel.addFields')}
-                </AddFieldsButton>
+                <AddFieldsButton />
 
                 <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
 
