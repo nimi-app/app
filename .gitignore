@@ -46,10 +46,12 @@ yarn-error.log*
 
 # generated stuff
 src/generated/
-
+src/api/GraphQl/schemas/generated/
 
 # Disable yarn
 yarn.lock
 
 # typescript
 *.tsbuildinfo
+
+

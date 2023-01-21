@@ -37,8 +37,8 @@ export function renderSVG(logo?: FC<SVGProps<SVGSVGElement>>, size = 20): JSX.El
  * Generates random Id based on timestamp
  * @returns
  */
-export function generateID(randomString?: string): string {
-  return 'id' + new Date().getTime() + randomString;
+export function generateID(): string {
+  return 'id' + new Date().getTime();
 }
 
 /**

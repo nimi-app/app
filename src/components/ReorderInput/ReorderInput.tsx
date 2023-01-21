@@ -2,6 +2,7 @@ import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkBaseDetails } from '@nimi.io/card/types';
 import { validateNimiLink } from '@nimi.io/card/validators';
 import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 
 import XSVG from '../../assets/svg/cross.svg';
@@ -12,17 +13,36 @@ import { ReorderItem } from '../ReorderItem';
 
 type ReorderInputProps = {
   key?: string;
+  index: number;
   value: NimiLinkBaseDetails;
-  updateLink: (linkId: string, key: string, value: string) => void;
-  removeLink: (linkId: string) => void;
+  removeLink: (index: number) => void;
+};
+interface UpdateLinkProps {
+  links: NimiLinkBaseDetails[];
+  linkId: string;
+  key: string;
+  value: string;
+  setValue: (key: string, value: NimiLinkBaseDetails[]) => void;
+}
+const updateLink = ({ links, linkId, key, value, setValue }: UpdateLinkProps) => {
+  const updatedLinks = links.map((link) => (link.id === linkId ? { ...link, [key]: value } : link));
+
+  setValue('links', updatedLinks);
 };
 
-export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
+export function ReorderInput({ value, index, removeLink }: ReorderInputProps) {
+  const { getValues, setValue } = useFormContext();
   const [isInvalidInput, setInvalidInput] = useState(false);
-  const { type, title, content } = value;
+  const { type, title, content, id } = value;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateLink(value.id!, 'content', event.target.value);
+    updateLink({
+      links: getValues('links'),
+      linkId: id!,
+      key: 'content',
+      value: event.target.value,
+      setValue,
+    });
     validateNimiLink({
       type,
       content: event.target.value,
@@ -41,14 +61,14 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
         <TitleInput
           id="title-input"
           value={title}
-          onChange={(event) => updateLink(value.id!, 'title', event.target.value)}
+          onChange={(event) => updateLink(id!, 'title', event.target.value, index)}
           spellCheck={false}
           placeholder={type.replace(
             /(^\w)(\S*)/g,
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
-        {title && <ClearButton className="clear-button" onClick={() => updateLink(value.id!, 'title', '')} />}
+        {title && <ClearButton className="clear-button" onClick={() => updateLink(id!, 'title', '', index)} />}
 
         <PenContainer className="pen-component">
           <PenPlaceholder>
@@ -63,10 +83,10 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
         isInvalidInput={isInvalidInput}
         content={content}
         onChange={onChange}
-        onClearClick={() => updateLink(value.id!, 'content', '')}
-        onInputClick={() => removeLink(value.id!)}
+        onClearClick={() => updateLink(id!, 'content', '', index)}
+        onInputClick={() => removeLink(index)}
         placeholder={''}
-        id={value.id || ''}
+        id={id! || ''}
       />
     </ReorderItem>
   );

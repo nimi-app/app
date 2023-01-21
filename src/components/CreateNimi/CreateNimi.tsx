@@ -14,7 +14,7 @@ import {
 import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
 import { KeyboardEventHandler, useMemo, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
@@ -93,13 +93,22 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     },
   });
 
-  const { register, watch, handleSubmit, setValue, getValues } = useFormContext;
+  const { register, watch, handleSubmit, setValue, getValues, control } = useFormContext;
+
+  const {
+    fields: linkFields,
+    prepend: addLinkToStart,
+    replace,
+    remove,
+  } = useFieldArray({
+    control: control,
+    name: 'links',
+    keyName: 'linkId',
+  });
 
   const formWatchPayload = watch();
 
   console.log('FWP', formWatchPayload);
-
-  const links = useMemo(() => (formWatchPayload === undefined ? [] : formWatchPayload.links), [formWatchPayload]);
 
   const onSubmitValid = async (nimi: Nimi) => {
     showSpinner();
@@ -175,23 +184,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     eventTarget.style.height = `${eventTarget.scrollHeight}px`;
   };
 
-  const updateLink = (linkId: string, key: string, value: string) => {
-    let url = value;
-    if (key === 'content') {
-      url = value.startsWith('http') === false ? 'https://' + url : url;
-      value = url;
-    }
-    const updatedLinks = getValues('links').map((link) => (link.id === linkId ? { ...link, [key]: value } : link));
-
-    setValue('links', updatedLinks);
-  };
-
-  const removeLink = (linkId: string) =>
-    setValue(
-      'links',
-      getValues('links').filter((link) => link.id !== linkId)
-    );
-
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -214,10 +206,10 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                   </FormItem>
                 </FormGroup>
 
-                {links !== undefined && links?.length > 0 && (
-                  <ReorderGroup values={links} onReorder={(links) => setValue('links', links)}>
-                    {links.map((link) => (
-                      <ReorderInput key={link.id!} value={link} updateLink={updateLink} removeLink={removeLink} />
+                {linkFields && (
+                  <ReorderGroup values={linkFields} onReorder={(fields) => replace(fields)}>
+                    {linkFields.map((field, index) => (
+                      <ReorderInput key={field.linkId} index={index} value={field} removeLink={remove} />
                     ))}
                   </ReorderGroup>
                 )}
@@ -293,20 +285,12 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
 
             //if link is submitted
             if (link) {
-              let newLinksArray: NimiLinkBaseDetails[] = [];
-              const linksData = getValues('links');
-
-              newLinksArray = [
-                ...linksData,
-                {
-                  id: generateID(),
-                  type: link,
-                  title: '',
-                  content: '',
-                },
-              ];
-
-              setValue('links', newLinksArray);
+              addLinkToStart({
+                id: generateID(),
+                type: link,
+                title: '',
+                content: '',
+              });
             }
             //if address is submitted
             if (blockchainAddresse) {
@@ -336,14 +320,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
             setValue('description', data.description);
             setValue('image', { type: NimiImageType.URL, url: data.profileImageUrl });
 
-            const prevLinkState = getValues('links') || [];
-
-            const newState: NimiLinkBaseDetails[] = [
-              ...prevLinkState,
-              { type: NimiLinkType.TWITTER, title: '', content: data.username },
-            ];
-
-            setValue('links', newState);
+            addLinkToStart({ id: generateID(), type: NimiLinkType.TWITTER, title: '', content: data.username });
 
             closeModal();
           }}
@@ -369,7 +346,8 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
             if (!linktreeNimi) return;
 
             if (linktreeNimi.links && linktreeNimi.links.length > 0) {
-              setValue('links', [...linktreeNimi.links, ...links]);
+              //TODO: Add ids for each link
+              addLinkToStart(linktreeNimi.links);
             }
 
             // NFT avatar
