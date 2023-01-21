@@ -39,22 +39,14 @@ import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
 import { NimiPreview } from '../NimiPreview';
+import { PreviewMobileButton } from '../PreviewMobileButton';
 import { ProfileSettings } from '../ProfileSettings';
+import { PublishNimiButton } from '../PublishNimiButton';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
 import { NimiBlockchainField } from './partials/NimiBlockchainField';
-import { NimiPreviewCard } from './partials/NimiPreviewCard';
 import { PoapField } from './partials/PoapField';
-import {
-  BlockchainAddresses,
-  FormItem,
-  InnerWrapper,
-  MainContent,
-  PageSectionTitle,
-  PreviewContent,
-  PreviewMobile,
-  SaveAndDeployButton,
-} from './styled';
+import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
 import { themes } from './themes';
 
 const debug = createDebugger('Nimi:CreateNimi');
@@ -252,9 +244,8 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                 )}
 
                 <AddFieldsButton />
-                <SaveAndDeployButton type="submit">{t('publishSite')}</SaveAndDeployButton>
-
-                <PreviewMobile onClick={() => setShowPreviewMobile(true)}>PREVIEW PROFILE</PreviewMobile>
+                <PublishNimiButton />
+                <PreviewMobileButton onClick={() => setShowPreviewMobile(true)} />
               </FormWrapper>
             </CardBody>
           </Card>

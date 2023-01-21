@@ -80,19 +80,6 @@ export const SaveAndDeployButton = styled(Button)`
   width: 100%;
 `;
 
-export const PreviewMobile = styled.div`
-  display: none;
-  flex: 1;
-  ${NimiSignatureColor};
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  justify-content: center;
-  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
-    display: flex;
-  }
-`;
-
 export const StyledDots = styled.div`
   display: flex;
 `;
