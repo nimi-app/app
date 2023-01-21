@@ -92,22 +92,6 @@ export const PreviewMobile = styled.div`
     display: flex;
   }
 `;
-export const BackButton = styled.button`
-  display: none;
-  padding: 12px 16px;
-  color: #8e85e0;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 16px;
-  background-color: #ffffff;
-  box-shadow: 0px 18px 32px -48px rgba(52, 55, 100, 0.06);
-  border-radius: 90px;
-  border: 1px solid #ffffff;
-  margin: auto;
-  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
-    display: flex;
-  }
-`;
 
 export const StyledDots = styled.div`
   display: flex;
