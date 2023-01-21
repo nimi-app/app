@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { Button } from '../Button';
-import { DottedBorder } from '../Button/styled';
 import { CardBody } from '../Card';
 
 /**
@@ -80,16 +79,7 @@ export const SaveAndDeployButton = styled(Button)`
   letter-spacing: -0.02em;
   width: 100%;
 `;
-export const AddFieldsButton = styled.button`
-  ${DottedBorder}
-  width: 100%;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 10px 0;
-  cursor: pointer;
-`;
+
 export const PreviewMobile = styled.div`
   display: none;
   flex: 1;
