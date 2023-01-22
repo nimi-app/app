@@ -4,13 +4,13 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { LinksSection } from './LinksSection';
+import { StyledFlexList, StyledGridList } from './styled';
 import NftyChatLogo from '../../assets/svg/nftychat-logo.svg';
 import PoapLogo from '../../assets/svg/poap-logo.svg';
 import { ButtonGroup } from '../../components/form/Button';
 import { Modal, Content as ModalContentBase } from '../../components/Modal';
 import { renderSVG } from '../../utils';
-import { LinksSection } from './LinksSection';
-import { StyledFlexList, StyledGridList } from './styled';
 
 const SectionWrapper = styled.div`
   margin-bottom: 30px;

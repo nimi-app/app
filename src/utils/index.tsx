@@ -1,5 +1,6 @@
+import { NimiPOAPWidgetContext } from '@nimi.io/card';
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
-import { Nimi, NimiLinkType, NimiWidgetType } from '@nimi.io/card/types';
+import { Nimi, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
 import { FC, SVGProps } from 'react';
 
 export * from './explorer';
@@ -68,7 +69,7 @@ export function insertPoapWidgetIntoNimi(nimi: Nimi, hasPoaps: boolean, address?
   const hasPoapWidget = nimi.widgets.some(({ type }) => type === NimiWidgetType.POAP);
 
   if (!hasPoapWidget && hasPoaps && address) {
-    const widget = { type: NimiWidgetType.POAP, address };
+    const widget = { type: NimiWidgetType.POAP } as NimiWidget;
     nimiObject.widgets.push(widget);
   }
 
