@@ -39,15 +39,13 @@ export function NimiBlockchainField({ updateAddress, removeAddress, blockchain, 
             blockchain,
             address: targetValue,
           });
-          console.log('validation passed');
+
           setIsError(false);
         } else {
-          console.log('validation failed');
           setIsError(true);
         }
       })
       .catch((e) => {
-        console.log('validation failed catch block', e);
         setIsError(true);
       });
   };
