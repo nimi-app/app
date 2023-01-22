@@ -90,8 +90,9 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   const {
     fields: linkFields,
     prepend: addLinkToStart,
-    replace,
     remove,
+    replace,
+    update,
   } = useFieldArray({
     control: control,
     name: 'links',
@@ -201,7 +202,13 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                 {linkFields && (
                   <ReorderGroup values={linkFields} onReorder={(fields) => replace(fields)}>
                     {linkFields.map((field, index) => (
-                      <ReorderInput key={field.linkId} index={index} value={field} removeLink={remove} />
+                      <ReorderInput
+                        key={field.id}
+                        index={index}
+                        value={field}
+                        removeLink={remove}
+                        updateLink={update}
+                      />
                     ))}
                   </ReorderGroup>
                 )}

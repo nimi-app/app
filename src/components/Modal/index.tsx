@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
 import CloseSvg from '../../assets/svg/close-icon.svg';
+import { useUserInterface } from '../../services/useUserInterface';
 import { NimiSignatureColor } from '../../theme';
 
 // Export the three main modal elements
@@ -20,6 +21,7 @@ type ModalProps = {
   maxWidth?: string;
   maxHeight?: string;
   handleCloseModal: () => void;
+  isLoading?: boolean;
 };
 
 function ModalBase({
@@ -63,8 +65,11 @@ export function Modal({
   handleCloseModal,
   maxHeight,
   maxWidth,
+  isLoading = false,
 }: PropsWithChildren<ModalProps>) {
   const [modalContainer] = useState(() => document.createElement('div'));
+
+  const { setSpinner } = useUserInterface();
 
   useEffect(() => {
     modalContainer.classList.add('modal-root');
@@ -76,6 +81,10 @@ export function Modal({
       document.body.style.overflow = 'auto';
     };
   }, [modalContainer]);
+
+  useEffect(() => {
+    setSpinner(isLoading);
+  }, [isLoading, setSpinner]);
 
   return createPortal(
     <ModalBase
