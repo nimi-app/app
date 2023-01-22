@@ -6,18 +6,21 @@ import {
   Nimi,
   NimiBlockchainAddress,
   NimiImageType,
-  NimiLinkBaseDetails,
   NimiLinkType,
   NimiWidget,
   NimiWidgetType,
 } from '@nimi.io/card/types';
 import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
-import { KeyboardEventHandler, useMemo, useState } from 'react';
+import { KeyboardEventHandler, useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
+import { NimiBlockchainField } from './partials/NimiBlockchainField';
+import { PoapField } from './partials/PoapField';
+import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
+import { themes } from './themes';
 import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useRainbow } from '../../hooks/useRainbow';
@@ -44,10 +47,6 @@ import { ProfileSettings } from '../ProfileSettings';
 import { PublishNimiButton } from '../PublishNimiButton';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
-import { NimiBlockchainField } from './partials/NimiBlockchainField';
-import { PoapField } from './partials/PoapField';
-import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
-import { themes } from './themes';
 
 const debug = createDebugger('Nimi:CreateNimi');
 
@@ -90,8 +89,9 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   const {
     fields: linkFields,
     prepend: addLinkToStart,
-    replace,
-    remove,
+    remove: removeLink,
+    replace: replaceLink,
+    update: updateLink,
   } = useFieldArray({
     control: control,
     name: 'links',
@@ -199,9 +199,15 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                 </FormGroup>
 
                 {linkFields && (
-                  <ReorderGroup values={linkFields} onReorder={(fields) => replace(fields)}>
+                  <ReorderGroup values={linkFields} onReorder={(fields) => replaceLink(fields)}>
                     {linkFields.map((field, index) => (
-                      <ReorderInput key={field.linkId} index={index} value={field} removeLink={remove} />
+                      <ReorderInput
+                        key={field.id}
+                        index={index}
+                        value={field}
+                        removeLink={removeLink}
+                        updateLink={updateLink}
+                      />
                     ))}
                   </ReorderGroup>
                 )}
@@ -295,7 +301,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
             if (widget) {
               let newWidgets: NimiWidget[] = [];
               const currentWidgets = getValues('widgets');
-              newWidgets = [...currentWidgets, { type: widget }];
+              newWidgets = [...currentWidgets, { type: widget } as NimiWidget];
 
               setValue('widgets', newWidgets);
             }

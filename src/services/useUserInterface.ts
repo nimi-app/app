@@ -11,6 +11,7 @@ export function useUserInterface() {
 
   const showSpinner = () => setIsSpinnerShown(true);
   const hideSpinner = () => setIsSpinnerShown(false);
+  const setSpinner = (value: boolean) => setIsSpinnerShown(value);
 
   return {
     modalOpened,
@@ -20,5 +21,6 @@ export function useUserInterface() {
     isSpinnerShown,
     showSpinner,
     hideSpinner,
+    setSpinner,
   };
 }
