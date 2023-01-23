@@ -98,6 +98,18 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     keyName: 'linkId',
   });
 
+  const {
+    fields: blockchainAddressFields,
+    prepend: addBlockchainAddressToStart,
+    remove: removeBlockchainAddress,
+    replace: replaceBlockchainAddress,
+    update: updateBlockchainAddress,
+  } = useFieldArray({
+    control: control,
+    name: 'addresses',
+    keyName: 'blockchainAddressId',
+  });
+
   const formWatchPayload = watch();
 
   console.log('FWP', formWatchPayload);
@@ -212,27 +224,26 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                   </ReorderGroup>
                 )}
 
-                {formWatchPayload !== undefined &&
-                  'address' in formWatchPayload === true &&
-                  formWatchPayload.addresses !== undefined &&
-                  formWatchPayload?.addresses?.length > 0 && (
-                    <FormGroup>
-                      <FormItem>
-                        <Label>Addresses</Label>
-                        <BlockchainAddresses>
-                          {formWatchPayload.addresses.map(({ blockchain }, index) => {
-                            return (
-                              <NimiBlockchainField
-                                key={'blockchain-input-' + blockchain.toLowerCase()}
-                                index={index}
-                                blockchain={blockchain}
-                              />
-                            );
-                          })}
-                        </BlockchainAddresses>
-                      </FormItem>
-                    </FormGroup>
-                  )}
+                {blockchainAddressFields.length > 0 && (
+                  <FormGroup>
+                    <FormItem>
+                      <Label>Addresses</Label>
+                      <BlockchainAddresses>
+                        {blockchainAddressFields.map(({ blockchain }, index) => {
+                          return (
+                            <NimiBlockchainField
+                              key={'blockchain-input-' + blockchain.toLowerCase()}
+                              index={index}
+                              removeAddress={removeBlockchainAddress}
+                              updateAddress={updateBlockchainAddress}
+                              blockchain={blockchain}
+                            />
+                          );
+                        })}
+                      </BlockchainAddresses>
+                    </FormItem>
+                  </FormGroup>
+                )}
 
                 {getValues('widgets').some((el) => el.type === NimiWidgetType.POAP) && (
                   <PoapField
@@ -291,10 +302,10 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
             }
             //if address is submitted
             if (blockchainAddresse) {
-              let newAddressesArray: NimiBlockchainAddress[] = [];
-              const currentAddresses = getValues('addresses');
-              newAddressesArray = [...currentAddresses, { blockchain: blockchainAddresse, address: '' }];
-              setValue('addresses', newAddressesArray);
+              addBlockchainAddressToStart({
+                blockchain: blockchainAddresse,
+                address: '',
+              });
             }
 
             //if widget is submitted
