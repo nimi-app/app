@@ -2,14 +2,7 @@ import { ContractReceipt } from '@ethersproject/contracts';
 
 import { encodeContenthash, namehash as ensNameHash } from '@ensdomains/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Nimi,
-  NimiBlockchainAddress,
-  NimiImageType,
-  NimiLinkType,
-  NimiWidget,
-  NimiWidgetType,
-} from '@nimi.io/card/types';
+import { Nimi, NimiImageType, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
 import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
 import { KeyboardEventHandler, useState } from 'react';
@@ -102,7 +95,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     fields: blockchainAddressFields,
     prepend: addBlockchainAddressToStart,
     remove: removeBlockchainAddress,
-    replace: replaceBlockchainAddress,
     update: updateBlockchainAddress,
   } = useFieldArray({
     control: control,

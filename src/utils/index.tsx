@@ -1,4 +1,3 @@
-import { NimiPOAPWidgetContext } from '@nimi.io/card';
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { Nimi, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
 import { FC, SVGProps } from 'react';

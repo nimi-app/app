@@ -45,7 +45,7 @@ export function NimiBlockchainField({ updateAddress, removeAddress, blockchain, 
           setIsError(true);
         }
       })
-      .catch((e) => {
+      .catch(() => {
         setIsError(true);
       });
   };
