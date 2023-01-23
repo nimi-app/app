@@ -1,16 +1,9 @@
-import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts';
+import { ContractReceipt } from '@ethersproject/contracts';
 
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { Button } from '../../components/Button';
-import { Loader } from '../../components/Loader';
-import { Modal, Content as ModalContentBase, Footer as ModalFooterBase } from '../../components/Modal';
-import { getEtherscanExplorerLink } from '../../utils';
-
-const LoaderWrapper = styled.div`
-  margin-bottom: 32px;
-`;
+import { Modal, Content as ModalContentBase } from '../../components/Modal';
 
 const ModalContent = styled(ModalContentBase)`
   min-height: 200px;
@@ -28,15 +21,12 @@ const ModalContent = styled(ModalContentBase)`
 `;
 
 export interface PublishNimiModalProps {
-  cancel: () => void;
-  isPublishing: boolean;
+  onClose: () => void;
   isPublished: boolean;
   ensName: string;
   ipfsHash: string | undefined;
   publishError: Error | undefined;
-  setContentHashTransaction: ContractTransaction | undefined;
   setContentHashTransactionReceipt: ContractReceipt | undefined;
-  setContentHashTransactionChainId: number;
 }
 
 /**
@@ -44,14 +34,11 @@ export interface PublishNimiModalProps {
  * @returns
  */
 export function PublishNimiModal({
-  cancel,
+  onClose,
   ipfsHash,
-  isPublishing,
   ensName,
   publishError,
-  setContentHashTransaction,
   setContentHashTransactionReceipt,
-  setContentHashTransactionChainId,
   isPublished,
 }: PublishNimiModalProps) {
   const { t } = useTranslation(['common', 'nimi']);
@@ -83,31 +70,6 @@ export function PublishNimiModal({
       );
     }
 
-    if (isPublishing) {
-      return (
-        <>
-          <LoaderWrapper>
-            <Loader size={72} />
-          </LoaderWrapper>
-          {setContentHashTransaction && (
-            <p>
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href={getEtherscanExplorerLink(
-                  setContentHashTransactionChainId,
-                  setContentHashTransaction.hash,
-                  'transaction'
-                )}
-              >
-                {t('viewTransactionOnBlockExplorer')}
-              </a>
-            </p>
-          )}
-        </>
-      );
-    }
-
     if (publishError) {
       const errorMessage = publishError?.message?.includes('user rejected transaction') ? (
         <>User rejected transaction</>
@@ -120,13 +82,8 @@ export function PublishNimiModal({
   };
 
   return (
-    <Modal handleCloseModal={cancel} title={t('publishNimiModal.title', { ns: 'nimi' })!} maxWidth="560px">
+    <Modal handleCloseModal={onClose} title={t('publishNimiModal.title', { ns: 'nimi' })!} maxWidth="560px">
       <ModalContent>{modalContent()}</ModalContent>
-      <ModalFooterBase>
-        {(setContentHashTransactionReceipt || publishError || isPublished) && (
-          <Button onClick={cancel}>{t('close')}</Button>
-        )}
-      </ModalFooterBase>
     </Modal>
   );
 }

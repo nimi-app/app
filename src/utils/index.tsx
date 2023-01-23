@@ -1,5 +1,5 @@
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
-import { Nimi, NimiLinkType, NimiWidgetType } from '@nimi.io/card/types';
+import { Nimi, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
 import { FC, SVGProps } from 'react';
 
 export * from './explorer';
@@ -37,8 +37,8 @@ export function renderSVG(logo?: FC<SVGProps<SVGSVGElement>>, size = 20): JSX.El
  * Generates random Id based on timestamp
  * @returns
  */
-export function generateID(randomString?: string): string {
-  return 'id' + new Date().getTime() + randomString;
+export function generateID(): string {
+  return 'id' + new Date().getTime();
 }
 
 /**
@@ -68,7 +68,7 @@ export function insertPoapWidgetIntoNimi(nimi: Nimi, hasPoaps: boolean, address?
   const hasPoapWidget = nimi.widgets.some(({ type }) => type === NimiWidgetType.POAP);
 
   if (!hasPoapWidget && hasPoaps && address) {
-    const widget = { type: NimiWidgetType.POAP, address };
+    const widget = { type: NimiWidgetType.POAP } as NimiWidget;
     nimiObject.widgets.push(widget);
   }
 

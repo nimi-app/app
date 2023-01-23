@@ -7,7 +7,6 @@ import { useImportFromLinktree } from '../../api/RestAPI/hooks/useImportFromLink
 import Linktree from '../../assets/svg/linktree.svg';
 import { Button } from '../../components/Button';
 import { ErrorMessage } from '../../components/CreateNimi/styled';
-import { Loader, LoaderWrapper } from '../../components/Loader';
 import {
   Modal,
   Content as ModalContentBase,
@@ -26,31 +25,23 @@ export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: Nimi) =>
   });
 
   return (
-    <Modal maxWidth="462px" handleCloseModal={onClose}>
+    <Modal isLoading={isFetching} maxWidth="462px" handleCloseModal={onClose}>
       <ModalHeaderBase>
         <LinktreeLogo />
         <ModalTitle>{t('importFromLinktreeModal.title')}</ModalTitle>
       </ModalHeaderBase>
       <ModalContent>
-        {isFetching ? (
-          <LoaderWrapper>
-            <Loader />
-          </LoaderWrapper>
-        ) : (
-          <>
-            <ContentInput
-              inputInvalid={false}
-              border={'2px solid #E6E8EC'}
-              paddingLeft={'20px'}
-              type="text"
-              value={linktreeUsername}
-              onChange={(e) => setLinktreeUsername(e.target.value)}
-              placeholder={t('importFromLinktreeModal.inputPlaceholder') as string}
-            />
-            {isError && <ErrorMessage>{error.message}</ErrorMessage>}
-            <Button onClick={() => refetch()}>{t('importFromLinktreeModal.buttonLabel')}</Button>
-          </>
-        )}
+        <ContentInput
+          inputInvalid={false}
+          border={'2px solid #E6E8EC'}
+          paddingLeft={'20px'}
+          type="text"
+          value={linktreeUsername}
+          onChange={(e) => setLinktreeUsername(e.target.value)}
+          placeholder={t('importFromLinktreeModal.inputPlaceholder') as string}
+        />
+        {isError && <ErrorMessage>{error.message}</ErrorMessage>}
+        <Button onClick={() => refetch()}>{t('importFromLinktreeModal.buttonLabel')}</Button>
       </ModalContent>
     </Modal>
   );

@@ -1,14 +1,22 @@
+import { useFormContext } from 'react-hook-form';
+
 import { Modal } from '../../components/Modal';
 import { ThemeAssets } from '../../types';
 import { TemplateItem } from './TemplateItem';
 
 interface TemplatePickerModalProps {
   themes: ThemeAssets[];
-  handleThemeSelection: (theme: ThemeAssets) => void;
   closeModal: () => void;
 }
 
-export function TemplatePickerModal({ closeModal, handleThemeSelection, themes }: TemplatePickerModalProps) {
+export function TemplatePickerModal({ closeModal, themes }: TemplatePickerModalProps) {
+  const { setValue } = useFormContext();
+
+  const handleThemeSelection = (theme: ThemeAssets) => {
+    setValue('theme', { type: theme.type });
+    closeModal();
+  };
+
   return (
     <Modal
       title="Choose a Template"

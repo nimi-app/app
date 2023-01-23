@@ -12,17 +12,18 @@ import { ReorderItem } from '../ReorderItem';
 
 type ReorderInputProps = {
   key?: string;
+  index: number;
   value: NimiLinkBaseDetails;
-  updateLink: (linkId: string, key: string, value: string) => void;
-  removeLink: (linkId: string) => void;
+  removeLink: (index: number) => void;
+  updateLink: (index: number, value: NimiLinkBaseDetails) => void;
 };
 
-export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProps) {
+export function ReorderInput({ value, index, removeLink, updateLink }: ReorderInputProps) {
   const [isInvalidInput, setInvalidInput] = useState(false);
-  const { type, title, content } = value;
+  const { type, title, content, id } = value;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateLink(value.id!, 'content', event.target.value);
+    updateLink(index, { ...value, content: event.target.value });
     validateNimiLink({
       type,
       content: event.target.value,
@@ -41,14 +42,19 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
         <TitleInput
           id="title-input"
           value={title}
-          onChange={(event) => updateLink(value.id!, 'title', event.target.value)}
+          onChange={(event) =>
+            updateLink(index, {
+              ...value,
+              title: event.target.value,
+            })
+          }
           spellCheck={false}
           placeholder={type.replace(
             /(^\w)(\S*)/g,
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
-        {title && <ClearButton className="clear-button" onClick={() => updateLink(value.id!, 'title', '')} />}
+        {title && <ClearButton className="clear-button" onClick={() => updateLink(index, { ...value, title: '' })} />}
 
         <PenContainer className="pen-component">
           <PenPlaceholder>
@@ -63,10 +69,10 @@ export function ReorderInput({ value, updateLink, removeLink }: ReorderInputProp
         isInvalidInput={isInvalidInput}
         content={content}
         onChange={onChange}
-        onClearClick={() => updateLink(value.id!, 'content', '')}
-        onInputClick={() => removeLink(value.id!)}
+        onClearClick={() => updateLink(index, { ...value, content: '' })}
+        onInputClick={() => removeLink(index)}
         placeholder={''}
-        id={value.id || ''}
+        id={id! || ''}
       />
     </ReorderItem>
   );
