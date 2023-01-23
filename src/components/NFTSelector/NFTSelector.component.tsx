@@ -27,7 +27,7 @@ export function NFTSelector({ ensAddress, onChange }: NFTSelectorProps) {
 
     setIsFetchingMore(true);
     fetchAssets({
-      ensAddress,
+      address: ensAddress,
       cursor: nextCursor,
     }).then(({ assets, next }) => {
       unstable_batchedUpdates(() => {
@@ -53,7 +53,7 @@ export function NFTSelector({ ensAddress, onChange }: NFTSelectorProps) {
     });
 
     fetchAssets({
-      ensAddress,
+      address: ensAddress,
       cursor: nextCursor,
     }).then(({ assets, next }) => {
       unstable_batchedUpdates(() => {
