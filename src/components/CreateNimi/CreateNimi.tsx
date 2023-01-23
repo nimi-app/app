@@ -10,10 +10,6 @@ import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
-import { NimiBlockchainField } from './partials/NimiBlockchainField';
-import { PoapField } from './partials/PoapField';
-import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
-import { themes } from './themes';
 import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useRainbow } from '../../hooks/useRainbow';
@@ -40,6 +36,10 @@ import { ProfileSettings } from '../ProfileSettings';
 import { PublishNimiButton } from '../PublishNimiButton';
 import { ReorderGroup } from '../ReorderGroup';
 import { ReorderInput } from '../ReorderInput';
+import { NimiBlockchainField } from './partials/NimiBlockchainField';
+import { PoapField } from './partials/PoapField';
+import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
+import { themes } from './themes';
 
 const debug = createDebugger('Nimi:CreateNimi');
 
@@ -365,10 +365,10 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
             if (nftAsset) {
               setValue('image', {
                 type: NimiImageType.ERC721,
-                contract: nftAsset.assetContract.address,
-                tokenId: nftAsset.tokenId as any,
-                tokenUri: nftAsset.externalLink,
-                url: nftAsset.imageUrl,
+                contract: nftAsset.asset_contract.address,
+                tokenId: nftAsset.token_id as any,
+                tokenUri: nftAsset.external_link,
+                url: nftAsset.image_url,
               });
             }
 
