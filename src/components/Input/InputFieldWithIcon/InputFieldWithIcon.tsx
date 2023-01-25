@@ -4,10 +4,13 @@ import styled from 'styled-components';
 import XSVG from '../../../assets/svg/cross.svg';
 import { SharedInputStyles } from '../../../theme';
 import { renderSVG } from '../../../utils';
+import { ErrorMessage } from '../../CreateNimi/styled';
 import { InputButton } from '../../InputButton';
 
 export interface InputFieldWithIcon {
+  name?: string;
   inputLogo?: FC<SVGProps<SVGSVGElement>>;
+  errorMessage?: string;
   placeholder: string;
   content: string;
   onClearClick?: any;
@@ -17,12 +20,14 @@ export interface InputFieldWithIcon {
   id: string;
   isSimple?: boolean;
   style?: any;
+  ref?: any;
 }
 
 /**
  * Handles the input for the link type
  */
 export function InputFieldWithIcon({
+  name,
   inputLogo,
   isInvalidInput,
   content,
@@ -32,18 +37,22 @@ export function InputFieldWithIcon({
   id,
   isSimple,
   style,
+  ref,
 }: InputFieldWithIcon) {
   const [inputTouched, setInputTouched] = useState(false);
   return (
     <InputContainer style={style} id={id}>
       <LogoContainer>{renderSVG(inputLogo, 15)}</LogoContainer>
       <ContentInput
+        ref={ref}
+        name={name}
         inputInvalid={inputTouched && isInvalidInput}
         value={content}
         onChange={onChange}
         spellCheck={false}
         onBlur={setInputTouched.bind(null, true)}
       />
+
       {!isSimple && (
         <>
           {content && <ClearButton className="clear-button" right="57px" onClick={onClearClick} />}

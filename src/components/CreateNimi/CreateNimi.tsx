@@ -2,10 +2,10 @@ import { ContractReceipt } from '@ethersproject/contracts';
 
 import { encodeContenthash, namehash as ensNameHash } from '@ensdomains/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import { Nimi, NimiImageType, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
-import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
-import { KeyboardEventHandler, useState } from 'react';
+import { KeyboardEventHandler, useEffect, useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
@@ -40,6 +40,7 @@ import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { PoapField } from './partials/PoapField';
 import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
 import { themes } from './themes';
+import { nimiValidator } from '@nimi.io/card/validators';
 
 const debug = createDebugger('Nimi:CreateNimi');
 
@@ -75,9 +76,27 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     defaultValues: {
       ...initialNimi,
     },
+    mode: 'onChange',
   });
 
-  const { register, watch, handleSubmit, setValue, getValues, control } = useFormContext;
+  const {
+    register,
+    watch,
+    handleSubmit,
+    setValue,
+    getValues,
+    control,
+    formState: { errors },
+  } = useFormContext;
+  console.log('LinkErrors', errors.links);
+  useEffect(() => {
+    console.log('formstate', errors);
+    console.log('description', errors.description);
+    console.log('LinkErrors', errors.links);
+    console.log('LinkErrors2', errors.links?.message);
+    console.log('AddressErrors', errors.addresses);
+    console.log('FormState', errors.theme);
+  }, [errors]);
 
   const {
     fields: linkFields,
@@ -89,6 +108,12 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     control: control,
     name: 'links',
     keyName: 'linkId',
+    rules: {
+      validate: (value) => {
+        console.log('Value', value);
+        return true;
+      },
+    },
   });
 
   const {
@@ -108,7 +133,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
 
   const onSubmitValid = async (nimi: Nimi) => {
     showSpinner();
-
+    console.log('LinkErrors', errors.links);
     setPublishNimiError(undefined);
     setIsNimiPublished(false);
 
@@ -194,7 +219,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
                     <TextArea
                       onKeyDown={handleKeyDown}
-                      maxLength={300}
                       placeholder="Description"
                       id="description"
                       {...register('description')}

@@ -2,11 +2,13 @@ import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkBaseDetails } from '@nimi.io/card/types';
 import { validateNimiLink } from '@nimi.io/card/validators';
 import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 
 import XSVG from '../../assets/svg/cross.svg';
 import PenSVG from '../../assets/svg/pen.svg';
 import { SharedInputStyles } from '../../theme';
+import { ErrorMessage } from '../CreateNimi/styled';
 import { InputFieldWithIcon } from '../Input';
 import { ReorderItem } from '../ReorderItem';
 
@@ -20,6 +22,8 @@ type ReorderInputProps = {
 
 export function ReorderInput({ value, index, removeLink, updateLink }: ReorderInputProps) {
   const [isInvalidInput, setInvalidInput] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const { register } = useFormContext();
   const { type, title, content, id } = value;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,9 +33,11 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
       content: event.target.value,
     })
       .then((isValidLink) => {
+        setErrorMessage('');
         setInvalidInput(!isValidLink);
       })
-      .catch(() => {
+      .catch((e) => {
+        setErrorMessage(e.message);
         setInvalidInput(true);
       });
   };
@@ -65,6 +71,9 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
         </PenContainer>
       </InputContainer>
       <InputFieldWithIcon
+        name={`links[${index}].content`}
+        ref={register}
+        errorMessage={errorMessage}
         inputLogo={NIMI_LINK_DETAIL_EXTENDED[type].logo}
         isInvalidInput={isInvalidInput}
         content={content}
@@ -74,6 +83,7 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
         placeholder={''}
         id={id! || ''}
       />
+      {isInvalidInput && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </ReorderItem>
   );
 }
