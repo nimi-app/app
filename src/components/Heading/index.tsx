@@ -1,15 +1,15 @@
+import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
 import { NimiSignatureColor } from '../../theme';
 
 type HeadingProps = {
-  children: string;
   type?: 'main' | 'sub';
   color?: string;
   marginBottom?: string;
 };
 
-export function Heading({ children, type = 'main', color, marginBottom }: HeadingProps) {
+export function Heading({ children, type = 'main', color, marginBottom }: PropsWithChildren<HeadingProps>) {
   if (type === 'sub')
     return (
       <SubHeading color={color} marginBottom={marginBottom}>

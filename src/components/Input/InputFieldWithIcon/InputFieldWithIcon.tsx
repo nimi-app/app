@@ -1,58 +1,51 @@
-import { FC, SVGProps, useState } from 'react';
+import { FC, PropsWithChildren, SVGProps } from 'react';
 import styled from 'styled-components';
 
 import XSVG from '../../../assets/svg/cross.svg';
 import { SharedInputStyles } from '../../../theme';
 import { renderSVG } from '../../../utils';
-import { ErrorMessage } from '../../CreateNimi/styled';
 import { InputButton } from '../../InputButton';
 
 export interface InputFieldWithIcon {
-  name?: string;
   inputLogo?: FC<SVGProps<SVGSVGElement>>;
   errorMessage?: string;
-  placeholder: string;
   content: string;
   onClearClick?: any;
   onInputClick?: any;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  isInvalidInput: boolean;
   id: string;
   isSimple?: boolean;
   style?: any;
-  ref?: any;
 }
 
 /**
  * Handles the input for the link type
  */
 export function InputFieldWithIcon({
-  name,
   inputLogo,
-  isInvalidInput,
   content,
-  onChange,
   onClearClick,
   onInputClick,
   id,
   isSimple,
   style,
-  ref,
-}: InputFieldWithIcon) {
-  const [inputTouched, setInputTouched] = useState(false);
+  children,
+}: PropsWithChildren<InputFieldWithIcon>) {
+  // const [inputTouched, setInputTouched] = useState(false);
+  // const { register } = useFormContext();
   return (
     <InputContainer style={style} id={id}>
       <LogoContainer>{renderSVG(inputLogo, 15)}</LogoContainer>
-      <ContentInput
-        ref={ref}
-        name={name}
+      {/* <ContentInput
+        key={id}
+        // name={name}
         inputInvalid={inputTouched && isInvalidInput}
-        value={content}
-        onChange={onChange}
+        // value={content}
+        // onChange={onChange}
         spellCheck={false}
-        onBlur={setInputTouched.bind(null, true)}
-      />
-
+        // onBlur={setInputTouched.bind(null, true)}
+        {...register(name)}
+      /> */}
+      {children}
       {!isSimple && (
         <>
           {content && <ClearButton className="clear-button" right="57px" onClick={onClearClick} />}

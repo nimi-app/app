@@ -76,7 +76,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     defaultValues: {
       ...initialNimi,
     },
-    mode: 'onChange',
+    mode: 'onTouched',
   });
 
   const {
@@ -108,12 +108,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     control: control,
     name: 'links',
     keyName: 'linkId',
-    rules: {
-      validate: (value) => {
-        console.log('Value', value);
-        return true;
-      },
-    },
   });
 
   const {
@@ -245,14 +239,14 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                     <FormItem>
                       <Label>Addresses</Label>
                       <BlockchainAddresses>
-                        {blockchainAddressFields.map(({ blockchain }, index) => {
+                        {blockchainAddressFields.map((field, index) => {
                           return (
                             <NimiBlockchainField
-                              key={'blockchain-input-' + blockchain.toLowerCase()}
+                              key={'blockchain-input-' + field.blockchain.toLowerCase()}
                               index={index}
                               removeAddress={removeBlockchainAddress}
                               updateAddress={updateBlockchainAddress}
-                              blockchain={blockchain}
+                              fieldValue={field}
                             />
                           );
                         })}

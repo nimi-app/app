@@ -21,26 +21,32 @@ type ReorderInputProps = {
 };
 
 export function ReorderInput({ value, index, removeLink, updateLink }: ReorderInputProps) {
-  const [isInvalidInput, setInvalidInput] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const { register } = useFormContext();
+  // const [isInvalidInput, setInvalidInput] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState('');
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
   const { type, title, content, id } = value;
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateLink(index, { ...value, content: event.target.value });
-    validateNimiLink({
-      type,
-      content: event.target.value,
-    })
-      .then((isValidLink) => {
-        setErrorMessage('');
-        setInvalidInput(!isValidLink);
-      })
-      .catch((e) => {
-        setErrorMessage(e.message);
-        setInvalidInput(true);
-      });
-  };
+  // const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   updateLink(index, { ...value, content: event.target.value });
+  //   validateNimiLink({
+  //     type,
+  //     content: event.target.value,
+  //   })
+  //     .then((isValidLink) => {
+  //       setErrorMessage('');
+  //       setInvalidInput(!isValidLink);
+  //     })
+  //     .catch((e) => {
+  //       setErrorMessage(e.message);
+  //       setInvalidInput(true);
+  //     });
+  // };
+  console.log(`links[${index}].content`);
+  console.log('errors', errors);
+  console.log('extracted error', errors?.links?.[index]?.content?.message);
 
   return (
     <ReorderItem value={value}>
@@ -71,19 +77,15 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
         </PenContainer>
       </InputContainer>
       <InputFieldWithIcon
-        name={`links[${index}].content`}
-        ref={register}
-        errorMessage={errorMessage}
         inputLogo={NIMI_LINK_DETAIL_EXTENDED[type].logo}
-        isInvalidInput={isInvalidInput}
         content={content}
-        onChange={onChange}
         onClearClick={() => updateLink(index, { ...value, content: '' })}
         onInputClick={() => removeLink(index)}
-        placeholder={''}
         id={id! || ''}
-      />
-      {isInvalidInput && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      >
+        <ContentInput key={id} spellCheck={false} {...register(`links[${index}].content`)} />
+      </InputFieldWithIcon>
+      {errors.links?.[index]?.content.message && <ErrorMessage>{errors.links?.[index]?.content.message}</ErrorMessage>}
     </ReorderItem>
   );
 }
