@@ -2,14 +2,17 @@ import { ContractReceipt } from '@ethersproject/contracts';
 
 import { encodeContenthash, namehash as ensNameHash } from '@ensdomains/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import { Nimi, NimiImageType, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
+import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
-import { KeyboardEventHandler, useEffect, useState } from 'react';
+import { KeyboardEventHandler, useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
+import { PoapField } from './partials/PoapField';
+import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
+import { themes } from './themes';
 import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useRainbow } from '../../hooks/useRainbow';
@@ -30,17 +33,12 @@ import { AddFieldsButton } from '../AddFieldsButton';
 import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
+import { NimiBlockchainField, ReorderInput } from '../Input';
 import { NimiPreview } from '../NimiPreview';
 import { PreviewMobileButton } from '../PreviewMobileButton';
 import { ProfileSettings } from '../ProfileSettings';
 import { PublishNimiButton } from '../PublishNimiButton';
 import { ReorderGroup } from '../ReorderGroup';
-import { ReorderInput } from '../ReorderInput';
-import { NimiBlockchainField } from './partials/NimiBlockchainField';
-import { PoapField } from './partials/PoapField';
-import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
-import { themes } from './themes';
-import { nimiValidator } from '@nimi.io/card/validators';
 
 const debug = createDebugger('Nimi:CreateNimi');
 
@@ -79,24 +77,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     mode: 'onTouched',
   });
 
-  const {
-    register,
-    watch,
-    handleSubmit,
-    setValue,
-    getValues,
-    control,
-    formState: { errors },
-  } = useFormContext;
-  console.log('LinkErrors', errors.links);
-  useEffect(() => {
-    console.log('formstate', errors);
-    console.log('description', errors.description);
-    console.log('LinkErrors', errors.links);
-    console.log('LinkErrors2', errors.links?.message);
-    console.log('AddressErrors', errors.addresses);
-    console.log('FormState', errors.theme);
-  }, [errors]);
+  const { register, watch, handleSubmit, setValue, getValues, control } = useFormContext;
 
   const {
     fields: linkFields,
@@ -127,7 +108,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
 
   const onSubmitValid = async (nimi: Nimi) => {
     showSpinner();
-    console.log('LinkErrors', errors.links);
+
     setPublishNimiError(undefined);
     setIsNimiPublished(false);
 
@@ -242,7 +223,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                         {blockchainAddressFields.map((field, index) => {
                           return (
                             <NimiBlockchainField
-                              key={'blockchain-input-' + field.blockchain.toLowerCase()}
+                              key={field.blockchainAddressId}
                               index={index}
                               removeAddress={removeBlockchainAddress}
                               updateAddress={updateBlockchainAddress}

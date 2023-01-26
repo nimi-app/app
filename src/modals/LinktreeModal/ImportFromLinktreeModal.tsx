@@ -13,7 +13,7 @@ import {
   HeaderBase as ModalHeaderBase,
   Title as ModalTitle,
 } from '../../components/Modal';
-import { ContentInput } from '../../components/ReorderInput';
+import { ContentInput } from '../../components/Input/ReorderInput';
 
 export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: Nimi) => void }) {
   const { t } = useTranslation('nimi');

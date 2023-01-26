@@ -1,16 +1,14 @@
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkBaseDetails } from '@nimi.io/card/types';
-import { validateNimiLink } from '@nimi.io/card/validators';
-import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 
-import XSVG from '../../assets/svg/cross.svg';
-import PenSVG from '../../assets/svg/pen.svg';
-import { SharedInputStyles } from '../../theme';
-import { ErrorMessage } from '../CreateNimi/styled';
-import { InputFieldWithIcon } from '../Input';
-import { ReorderItem } from '../ReorderItem';
+import { ContentInput, InputFieldWithIcon } from '..';
+import XSVG from '../../../assets/svg/cross.svg';
+import PenSVG from '../../../assets/svg/pen.svg';
+import { SharedInputStyles } from '../../../theme';
+import { ErrorMessage } from '../../CreateNimi/styled';
+import { ReorderItem } from '../../ReorderItem';
 
 type ReorderInputProps = {
   key?: string;
@@ -21,45 +19,17 @@ type ReorderInputProps = {
 };
 
 export function ReorderInput({ value, index, removeLink, updateLink }: ReorderInputProps) {
-  // const [isInvalidInput, setInvalidInput] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState('');
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
+  const { register, formState } = useFormContext();
+  const { errors } = formState;
+  console.log('formState', formState);
   const { type, title, content, id } = value;
-
-  // const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   updateLink(index, { ...value, content: event.target.value });
-  //   validateNimiLink({
-  //     type,
-  //     content: event.target.value,
-  //   })
-  //     .then((isValidLink) => {
-  //       setErrorMessage('');
-  //       setInvalidInput(!isValidLink);
-  //     })
-  //     .catch((e) => {
-  //       setErrorMessage(e.message);
-  //       setInvalidInput(true);
-  //     });
-  // };
-  console.log(`links[${index}].content`);
-  console.log('errors', errors);
-  console.log('extracted error', errors?.links?.[index]?.content?.message);
 
   return (
     <ReorderItem value={value}>
       <InputContainer marginBottom="10px">
         <TitleInput
-          id="title-input"
-          value={title}
-          onChange={(event) =>
-            updateLink(index, {
-              ...value,
-              title: event.target.value,
-            })
-          }
+          key={id + 'title'}
+          {...register(`links[${index}].title`)}
           spellCheck={false}
           placeholder={type.replace(
             /(^\w)(\S*)/g,
@@ -83,7 +53,12 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
         onInputClick={() => removeLink(index)}
         id={id! || ''}
       >
-        <ContentInput key={id} spellCheck={false} {...register(`links[${index}].content`)} />
+        <ContentInput
+          inputInvalid={errors.links?.[index]?.content.message.length > 0}
+          key={id}
+          spellCheck={false}
+          {...register(`links[${index}].content`)}
+        />
       </InputFieldWithIcon>
       {errors.links?.[index]?.content.message && <ErrorMessage>{errors.links?.[index]?.content.message}</ErrorMessage>}
     </ReorderItem>
@@ -111,14 +86,6 @@ const TitleInput = styled.input`
   &:focus ~ .pen-component {
     display: none;
   }
-`;
-
-export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string; border?: string }>`
-  height: 50px;
-  padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
-  ${SharedInputStyles};
-  background-color: white;
-  ${({ border }) => border && `border:${border}`};
 `;
 
 const ClearButton = styled(XSVG)<{ right?: string }>`

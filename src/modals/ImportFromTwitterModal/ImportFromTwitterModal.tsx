@@ -13,7 +13,7 @@ import {
   HeaderBase as ModalHeaderBase,
   Title as ModalTitle,
 } from '../../components/Modal';
-import { ContentInput } from '../../components/ReorderInput';
+import { ContentInput } from '../../components/Input/ReorderInput';
 
 export interface ImportTwitterDataModalProps {
   onClose: () => void;

@@ -26,6 +26,7 @@ interface ButtonGroupProps {
   id?: string;
   onClick?: () => void;
   disabled?: boolean;
+  key?: string;
 }
 
 export const ButtonGroup = ({ id, children, onClick, disabled = false }: PropsWithChildren<ButtonGroupProps>) => {
