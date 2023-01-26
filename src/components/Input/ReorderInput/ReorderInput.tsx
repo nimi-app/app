@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@hookform/error-message';
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkBaseDetails } from '@nimi.io/card/types';
 import { useFormContext } from 'react-hook-form';
@@ -7,7 +8,6 @@ import { ContentInput, InputFieldWithIcon } from '..';
 import XSVG from '../../../assets/svg/cross.svg';
 import PenSVG from '../../../assets/svg/pen.svg';
 import { SharedInputStyles } from '../../../theme';
-import { ErrorMessage } from '../../CreateNimi/styled';
 import { ReorderItem } from '../../ReorderItem';
 
 type ReorderInputProps = {
@@ -60,7 +60,7 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
           {...register(`links[${index}].content`)}
         />
       </InputFieldWithIcon>
-      {errors.links?.[index]?.content.message && <ErrorMessage>{errors.links?.[index]?.content.message}</ErrorMessage>}
+      <ErrorMessage errors={errors} name={`links[${index}].content`} render={({ message }) => <p>{message}</p>} />
     </ReorderItem>
   );
 }

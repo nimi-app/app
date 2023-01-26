@@ -8,7 +8,7 @@ type ReorderItemProps = {
   value: any;
 };
 
-export function ReorderItem<T>({ value, children }: PropsWithChildren<ReorderItemProps>) {
+export function ReorderItem({ value, children }: PropsWithChildren<ReorderItemProps>) {
   return (
     <Reorder.Item
       value={value}

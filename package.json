@@ -7,6 +7,7 @@
   "dependencies": {
     "@ensdomains/ui": "^3.4.1",
     "@ethersproject/contracts": "^5.7.0",
+    "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^2.8.10",
     "@nimi.io/card": "file:.yalc/@nimi.io/card",
     "@rainbow-me/rainbowkit": "^0.8.0",
