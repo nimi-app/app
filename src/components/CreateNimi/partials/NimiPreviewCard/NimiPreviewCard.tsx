@@ -1,5 +1,5 @@
 import { Nimi, NimiLinkBaseDetails } from '@nimi.io/card/types';
-import { validateNimi, validateNimiLink } from '@nimi.io/card/validators';
+import { nimiLinkValidator, validateNimi, validateNimiLink } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
@@ -34,51 +34,63 @@ const PreviewFrame = styled(Frame)`
   border: 0;
 `;
 
-const debug = createDebugger('components:NimiPreviewCard');
+// const debug = createDebugger('components:NimiPreviewCard');
 
 export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
   const [previewNimi, setPreviewNimi] = useState<Nimi>();
 
-  const removeInvalidLinks = async (links: NimiLinkBaseDetails[]) => {
-    const result = await Promise.all(
-      links.map((link) =>
-        validateNimiLink({
-          type: link.type,
-          content: link.content,
-        })
-          .then((isLinkValid) => {
-            return isLinkValid;
-          })
-          .catch((error) => {
-            debug({
-              error,
-            });
-            return false;
-          })
-      )
+  console.log('NIMI PROP', nimi);
+
+  const removeInvalidLinks = (links: NimiLinkBaseDetails[]) => {
+    const result = links.map((link) =>
+      nimiLinkValidator.validateSync({
+        type: link.type,
+        content: link.content,
+      })
     );
+
+    console.log('RES', result);
+
+    // const result = Promise.all(
+    //   links.map((link) =>
+    //     validateNimiLink({
+    //       type: link.type,
+    //       content: link.content,
+    //     })
+    //       .then((isLinkValid) => {
+    //         return isLinkValid;
+    //       })
+    //       .catch((error) => {
+    //         debug({
+    //           error,
+    //         });
+    //         return false;
+    //       })
+    //   )
+    // );
 
     return links.filter((_, index) => result[index]);
   };
 
   useEffect(() => {
-    // Filter invalid links
-    const filterFunction = async () => {
-      // const filteredNimi = filterEmptyFields(nimi);
-      const filteredNimi = nimi;
+    const filterFunction = () => {
+      let filteredNimi = nimi;
 
-      const filteredLinks = await removeInvalidLinks(filteredNimi.links);
-
-      validateNimi({ ...filteredNimi, links: filteredLinks })
-        .then((validatedNimi) => {
-          setPreviewNimi(validatedNimi as Nimi);
-        })
-        .catch((error) => {
-          console.error(error);
+      try {
+        filteredNimi = validateNimi({
+          ...nimi,
+          links: removeInvalidLinks(nimi.links),
         });
+      } catch (error) {
+        console.log(error);
+      }
+
+      setPreviewNimi(filteredNimi as Nimi);
     };
     filterFunction();
   }, [nimi]);
+
+  console.log('PREVIEW', previewNimi);
 
   if (!previewNimi) {
     return (

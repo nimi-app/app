@@ -10,9 +10,6 @@ import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
-import { PoapField } from './partials/PoapField';
-import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
-import { themes } from './themes';
 import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useRainbow } from '../../hooks/useRainbow';
@@ -39,6 +36,9 @@ import { PreviewMobileButton } from '../PreviewMobileButton';
 import { ProfileSettings } from '../ProfileSettings';
 import { PublishNimiButton } from '../PublishNimiButton';
 import { ReorderGroup } from '../ReorderGroup';
+import { PoapField } from './partials/PoapField';
+import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
+import { themes } from './themes';
 
 const debug = createDebugger('Nimi:CreateNimi');
 
