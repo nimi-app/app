@@ -6,6 +6,7 @@ import { TwitterData, useImportFromTwitter } from '../../api/RestAPI/hooks/useIm
 import TwitterLogoBig from '../../assets/svg/twitter-big.svg';
 import { Button } from '../../components/Button';
 import { ErrorMessage } from '../../components/CreateNimi/styled';
+import { ContentInput } from '../../components/Input';
 import { Loader, LoaderWrapper } from '../../components/Loader';
 import {
   Modal,
@@ -13,7 +14,6 @@ import {
   HeaderBase as ModalHeaderBase,
   Title as ModalTitle,
 } from '../../components/Modal';
-import { ContentInput } from '../../components/Input/ReorderInput';
 
 export interface ImportTwitterDataModalProps {
   onClose: () => void;
