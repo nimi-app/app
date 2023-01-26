@@ -2,7 +2,6 @@ import { FC, PropsWithChildren, SVGProps } from 'react';
 import styled from 'styled-components';
 
 import XSVG from '../../../assets/svg/cross.svg';
-import { SharedInputStyles } from '../../../theme';
 import { renderSVG } from '../../../utils';
 import { InputButton } from '../../InputButton';
 
@@ -30,21 +29,9 @@ export function InputFieldWithIcon({
   style,
   children,
 }: PropsWithChildren<InputFieldWithIcon>) {
-  // const [inputTouched, setInputTouched] = useState(false);
-  // const { register } = useFormContext();
   return (
     <InputContainer style={style} id={id}>
       <LogoContainer>{renderSVG(inputLogo, 15)}</LogoContainer>
-      {/* <ContentInput
-        key={id}
-        // name={name}
-        inputInvalid={inputTouched && isInvalidInput}
-        // value={content}
-        // onChange={onChange}
-        spellCheck={false}
-        // onBlur={setInputTouched.bind(null, true)}
-        {...register(name)}
-      /> */}
       {children}
       {!isSimple && (
         <>
@@ -63,13 +50,7 @@ const InputContainer = styled.div<{ marginBottom?: string }>`
   height: 50px;
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 `;
-export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string; border?: string }>`
-  height: 50px;
-  padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
-  ${SharedInputStyles};
-  background-color: white;
-  ${({ border }) => border && `border:${border}`};
-`;
+
 const ClearButton = styled(XSVG)<{ right?: string }>`
   visibility: none;
   opacity: 0;
