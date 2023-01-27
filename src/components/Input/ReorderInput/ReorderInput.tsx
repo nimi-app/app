@@ -21,7 +21,7 @@ type ReorderInputProps = {
 export function ReorderInput({ value, index, removeLink, updateLink }: ReorderInputProps) {
   const { register, formState } = useFormContext();
   const { errors } = formState;
-  console.log('formState', formState);
+
   const { type, title, content, id } = value;
 
   return (
