@@ -33,30 +33,12 @@ const PreviewFrame = styled(Frame)`
 `;
 
 export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
-  const removeInvalidLinks = (links: NimiLinkBaseDetails[]) => {
-    const result = links.map((link) => {
-      try {
-        return nimiLinkValidator.validateSync({
-          type: link.type,
-          content: link.content,
-        });
-      } catch {
-        return false;
-      }
-    });
-
-    return links.filter((_, index) => result[index]);
-  };
-
   const filterNimi = () => {
     try {
-      const validatedNimi = validateNimi({
-        ...nimi,
-        links: removeInvalidLinks(nimi.links),
-      });
+      const validatedNimi = validateNimi(nimi);
 
       return validatedNimi;
-    } catch (error) {
+    } catch {
       return false;
     }
   };
