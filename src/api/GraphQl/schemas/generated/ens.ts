@@ -105,6 +105,7 @@ export type Account = {
   domains: Array<Domain>;
   id: Scalars['ID'];
   registrations?: Maybe<Array<Registration>>;
+  wrappedDomains?: Maybe<Array<WrappedDomain>>;
 };
 
 
@@ -125,6 +126,15 @@ export type AccountRegistrationsArgs = {
   where?: InputMaybe<Registration_Filter>;
 };
 
+
+export type AccountWrappedDomainsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<WrappedDomain_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<WrappedDomain_Filter>;
+};
+
 export type Account_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
@@ -138,12 +148,14 @@ export type Account_Filter = {
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   registrations_?: InputMaybe<Registration_Filter>;
+  wrappedDomains_?: InputMaybe<WrappedDomain_Filter>;
 };
 
 export enum Account_OrderBy {
   Domains = 'domains',
   Id = 'id',
-  Registrations = 'registrations'
+  Registrations = 'registrations',
+  WrappedDomains = 'wrappedDomains'
 }
 
 export type AddrChanged = ResolverEvent & {
@@ -433,11 +445,13 @@ export type Domain = {
   name?: Maybe<Scalars['String']>;
   owner: Account;
   parent?: Maybe<Domain>;
+  registration?: Maybe<Registration>;
   resolvedAddress?: Maybe<Account>;
   resolver?: Maybe<Resolver>;
   subdomainCount: Scalars['Int'];
   subdomains: Array<Domain>;
   ttl?: Maybe<Scalars['BigInt']>;
+  wrappedDomain?: Maybe<WrappedDomain>;
 };
 
 
@@ -640,6 +654,7 @@ export type Domain_Filter = {
   parent_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   parent_starts_with?: InputMaybe<Scalars['String']>;
   parent_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  registration_?: InputMaybe<Registration_Filter>;
   resolvedAddress?: InputMaybe<Scalars['String']>;
   resolvedAddress_?: InputMaybe<Account_Filter>;
   resolvedAddress_contains?: InputMaybe<Scalars['String']>;
@@ -699,6 +714,7 @@ export type Domain_Filter = {
   ttl_lte?: InputMaybe<Scalars['BigInt']>;
   ttl_not?: InputMaybe<Scalars['BigInt']>;
   ttl_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  wrappedDomain_?: InputMaybe<WrappedDomain_Filter>;
 };
 
 export enum Domain_OrderBy {
@@ -711,11 +727,100 @@ export enum Domain_OrderBy {
   Name = 'name',
   Owner = 'owner',
   Parent = 'parent',
+  Registration = 'registration',
   ResolvedAddress = 'resolvedAddress',
   Resolver = 'resolver',
   SubdomainCount = 'subdomainCount',
   Subdomains = 'subdomains',
-  Ttl = 'ttl'
+  Ttl = 'ttl',
+  WrappedDomain = 'wrappedDomain'
+}
+
+export type FusesSet = DomainEvent & {
+  __typename?: 'FusesSet';
+  blockNumber: Scalars['Int'];
+  domain: Domain;
+  expiry: Scalars['BigInt'];
+  fuses: Scalars['BigInt'];
+  id: Scalars['ID'];
+  transactionID: Scalars['Bytes'];
+};
+
+export type FusesSet_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  domain?: InputMaybe<Scalars['String']>;
+  domain_?: InputMaybe<Domain_Filter>;
+  domain_contains?: InputMaybe<Scalars['String']>;
+  domain_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_ends_with?: InputMaybe<Scalars['String']>;
+  domain_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_gt?: InputMaybe<Scalars['String']>;
+  domain_gte?: InputMaybe<Scalars['String']>;
+  domain_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_lt?: InputMaybe<Scalars['String']>;
+  domain_lte?: InputMaybe<Scalars['String']>;
+  domain_not?: InputMaybe<Scalars['String']>;
+  domain_not_contains?: InputMaybe<Scalars['String']>;
+  domain_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_not_starts_with?: InputMaybe<Scalars['String']>;
+  domain_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_starts_with?: InputMaybe<Scalars['String']>;
+  domain_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  expiry?: InputMaybe<Scalars['BigInt']>;
+  expiry_gt?: InputMaybe<Scalars['BigInt']>;
+  expiry_gte?: InputMaybe<Scalars['BigInt']>;
+  expiry_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  expiry_lt?: InputMaybe<Scalars['BigInt']>;
+  expiry_lte?: InputMaybe<Scalars['BigInt']>;
+  expiry_not?: InputMaybe<Scalars['BigInt']>;
+  expiry_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fuses?: InputMaybe<Scalars['BigInt']>;
+  fuses_gt?: InputMaybe<Scalars['BigInt']>;
+  fuses_gte?: InputMaybe<Scalars['BigInt']>;
+  fuses_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fuses_lt?: InputMaybe<Scalars['BigInt']>;
+  fuses_lte?: InputMaybe<Scalars['BigInt']>;
+  fuses_not?: InputMaybe<Scalars['BigInt']>;
+  fuses_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+};
+
+export enum FusesSet_OrderBy {
+  BlockNumber = 'blockNumber',
+  Domain = 'domain',
+  Expiry = 'expiry',
+  Fuses = 'fuses',
+  Id = 'id',
+  TransactionId = 'transactionID'
 }
 
 export type InterfaceChanged = ResolverEvent & {
@@ -1254,6 +1359,228 @@ export enum NameTransferred_OrderBy {
   TransactionId = 'transactionID'
 }
 
+export type NameUnwrapped = DomainEvent & {
+  __typename?: 'NameUnwrapped';
+  blockNumber: Scalars['Int'];
+  domain: Domain;
+  id: Scalars['ID'];
+  owner: Account;
+  transactionID: Scalars['Bytes'];
+};
+
+export type NameUnwrapped_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  domain?: InputMaybe<Scalars['String']>;
+  domain_?: InputMaybe<Domain_Filter>;
+  domain_contains?: InputMaybe<Scalars['String']>;
+  domain_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_ends_with?: InputMaybe<Scalars['String']>;
+  domain_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_gt?: InputMaybe<Scalars['String']>;
+  domain_gte?: InputMaybe<Scalars['String']>;
+  domain_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_lt?: InputMaybe<Scalars['String']>;
+  domain_lte?: InputMaybe<Scalars['String']>;
+  domain_not?: InputMaybe<Scalars['String']>;
+  domain_not_contains?: InputMaybe<Scalars['String']>;
+  domain_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_not_starts_with?: InputMaybe<Scalars['String']>;
+  domain_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_starts_with?: InputMaybe<Scalars['String']>;
+  domain_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<Account_Filter>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+};
+
+export enum NameUnwrapped_OrderBy {
+  BlockNumber = 'blockNumber',
+  Domain = 'domain',
+  Id = 'id',
+  Owner = 'owner',
+  TransactionId = 'transactionID'
+}
+
+export type NameWrapped = DomainEvent & {
+  __typename?: 'NameWrapped';
+  blockNumber: Scalars['Int'];
+  domain: Domain;
+  expiry: Scalars['BigInt'];
+  fuses: Scalars['BigInt'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  owner: Account;
+  transactionID: Scalars['Bytes'];
+};
+
+export type NameWrapped_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  domain?: InputMaybe<Scalars['String']>;
+  domain_?: InputMaybe<Domain_Filter>;
+  domain_contains?: InputMaybe<Scalars['String']>;
+  domain_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_ends_with?: InputMaybe<Scalars['String']>;
+  domain_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_gt?: InputMaybe<Scalars['String']>;
+  domain_gte?: InputMaybe<Scalars['String']>;
+  domain_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_lt?: InputMaybe<Scalars['String']>;
+  domain_lte?: InputMaybe<Scalars['String']>;
+  domain_not?: InputMaybe<Scalars['String']>;
+  domain_not_contains?: InputMaybe<Scalars['String']>;
+  domain_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_not_starts_with?: InputMaybe<Scalars['String']>;
+  domain_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_starts_with?: InputMaybe<Scalars['String']>;
+  domain_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  expiry?: InputMaybe<Scalars['BigInt']>;
+  expiry_gt?: InputMaybe<Scalars['BigInt']>;
+  expiry_gte?: InputMaybe<Scalars['BigInt']>;
+  expiry_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  expiry_lt?: InputMaybe<Scalars['BigInt']>;
+  expiry_lte?: InputMaybe<Scalars['BigInt']>;
+  expiry_not?: InputMaybe<Scalars['BigInt']>;
+  expiry_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fuses?: InputMaybe<Scalars['BigInt']>;
+  fuses_gt?: InputMaybe<Scalars['BigInt']>;
+  fuses_gte?: InputMaybe<Scalars['BigInt']>;
+  fuses_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fuses_lt?: InputMaybe<Scalars['BigInt']>;
+  fuses_lte?: InputMaybe<Scalars['BigInt']>;
+  fuses_not?: InputMaybe<Scalars['BigInt']>;
+  fuses_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  name?: InputMaybe<Scalars['String']>;
+  name_contains?: InputMaybe<Scalars['String']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']>;
+  name_ends_with?: InputMaybe<Scalars['String']>;
+  name_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  name_gt?: InputMaybe<Scalars['String']>;
+  name_gte?: InputMaybe<Scalars['String']>;
+  name_in?: InputMaybe<Array<Scalars['String']>>;
+  name_lt?: InputMaybe<Scalars['String']>;
+  name_lte?: InputMaybe<Scalars['String']>;
+  name_not?: InputMaybe<Scalars['String']>;
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  name_not_ends_with?: InputMaybe<Scalars['String']>;
+  name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  name_not_in?: InputMaybe<Array<Scalars['String']>>;
+  name_not_starts_with?: InputMaybe<Scalars['String']>;
+  name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  name_starts_with?: InputMaybe<Scalars['String']>;
+  name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<Account_Filter>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+};
+
+export enum NameWrapped_OrderBy {
+  BlockNumber = 'blockNumber',
+  Domain = 'domain',
+  Expiry = 'expiry',
+  Fuses = 'fuses',
+  Id = 'id',
+  Name = 'name',
+  Owner = 'owner',
+  TransactionId = 'transactionID'
+}
+
 export type NewOwner = DomainEvent & {
   __typename?: 'NewOwner';
   blockNumber: Scalars['Int'];
@@ -1649,6 +1976,8 @@ export type Query = {
   domainEvent?: Maybe<DomainEvent>;
   domainEvents: Array<DomainEvent>;
   domains: Array<Domain>;
+  fusesSet?: Maybe<FusesSet>;
+  fusesSets: Array<FusesSet>;
   interfaceChanged?: Maybe<InterfaceChanged>;
   interfaceChangeds: Array<InterfaceChanged>;
   multicoinAddrChanged?: Maybe<MulticoinAddrChanged>;
@@ -1661,6 +1990,10 @@ export type Query = {
   nameReneweds: Array<NameRenewed>;
   nameTransferred?: Maybe<NameTransferred>;
   nameTransferreds: Array<NameTransferred>;
+  nameUnwrapped?: Maybe<NameUnwrapped>;
+  nameUnwrappeds: Array<NameUnwrapped>;
+  nameWrapped?: Maybe<NameWrapped>;
+  nameWrappeds: Array<NameWrapped>;
   newOwner?: Maybe<NewOwner>;
   newOwners: Array<NewOwner>;
   newResolver?: Maybe<NewResolver>;
@@ -1681,6 +2014,12 @@ export type Query = {
   textChangeds: Array<TextChanged>;
   transfer?: Maybe<Transfer>;
   transfers: Array<Transfer>;
+  versionChanged?: Maybe<VersionChanged>;
+  versionChangeds: Array<VersionChanged>;
+  wrappedDomain?: Maybe<WrappedDomain>;
+  wrappedDomains: Array<WrappedDomain>;
+  wrappedTransfer?: Maybe<WrappedTransfer>;
+  wrappedTransfers: Array<WrappedTransfer>;
 };
 
 
@@ -1815,6 +2154,24 @@ export type QueryDomainsArgs = {
 };
 
 
+export type QueryFusesSetArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryFusesSetsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FusesSet_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FusesSet_Filter>;
+};
+
+
 export type QueryInterfaceChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -1920,6 +2277,42 @@ export type QueryNameTransferredsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<NameTransferred_Filter>;
+};
+
+
+export type QueryNameUnwrappedArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryNameUnwrappedsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameUnwrapped_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<NameUnwrapped_Filter>;
+};
+
+
+export type QueryNameWrappedArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryNameWrappedsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameWrapped_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<NameWrapped_Filter>;
 };
 
 
@@ -2102,10 +2495,64 @@ export type QueryTransfersArgs = {
   where?: InputMaybe<Transfer_Filter>;
 };
 
+
+export type QueryVersionChangedArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryVersionChangedsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<VersionChanged_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<VersionChanged_Filter>;
+};
+
+
+export type QueryWrappedDomainArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryWrappedDomainsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<WrappedDomain_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<WrappedDomain_Filter>;
+};
+
+
+export type QueryWrappedTransferArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryWrappedTransfersArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<WrappedTransfer_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<WrappedTransfer_Filter>;
+};
+
 export type Registration = {
   __typename?: 'Registration';
   cost?: Maybe<Scalars['BigInt']>;
-  domain?: Maybe<Domain>;
+  domain: Domain;
   events: Array<RegistrationEvent>;
   expiryDate: Scalars['BigInt'];
   id: Scalars['ID'];
@@ -2504,6 +2951,8 @@ export type Subscription = {
   domainEvent?: Maybe<DomainEvent>;
   domainEvents: Array<DomainEvent>;
   domains: Array<Domain>;
+  fusesSet?: Maybe<FusesSet>;
+  fusesSets: Array<FusesSet>;
   interfaceChanged?: Maybe<InterfaceChanged>;
   interfaceChangeds: Array<InterfaceChanged>;
   multicoinAddrChanged?: Maybe<MulticoinAddrChanged>;
@@ -2516,6 +2965,10 @@ export type Subscription = {
   nameReneweds: Array<NameRenewed>;
   nameTransferred?: Maybe<NameTransferred>;
   nameTransferreds: Array<NameTransferred>;
+  nameUnwrapped?: Maybe<NameUnwrapped>;
+  nameUnwrappeds: Array<NameUnwrapped>;
+  nameWrapped?: Maybe<NameWrapped>;
+  nameWrappeds: Array<NameWrapped>;
   newOwner?: Maybe<NewOwner>;
   newOwners: Array<NewOwner>;
   newResolver?: Maybe<NewResolver>;
@@ -2536,6 +2989,12 @@ export type Subscription = {
   textChangeds: Array<TextChanged>;
   transfer?: Maybe<Transfer>;
   transfers: Array<Transfer>;
+  versionChanged?: Maybe<VersionChanged>;
+  versionChangeds: Array<VersionChanged>;
+  wrappedDomain?: Maybe<WrappedDomain>;
+  wrappedDomains: Array<WrappedDomain>;
+  wrappedTransfer?: Maybe<WrappedTransfer>;
+  wrappedTransfers: Array<WrappedTransfer>;
 };
 
 
@@ -2670,6 +3129,24 @@ export type SubscriptionDomainsArgs = {
 };
 
 
+export type SubscriptionFusesSetArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionFusesSetsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<FusesSet_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<FusesSet_Filter>;
+};
+
+
 export type SubscriptionInterfaceChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -2775,6 +3252,42 @@ export type SubscriptionNameTransferredsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<NameTransferred_Filter>;
+};
+
+
+export type SubscriptionNameUnwrappedArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionNameUnwrappedsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameUnwrapped_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<NameUnwrapped_Filter>;
+};
+
+
+export type SubscriptionNameWrappedArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionNameWrappedsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameWrapped_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<NameWrapped_Filter>;
 };
 
 
@@ -2957,6 +3470,60 @@ export type SubscriptionTransfersArgs = {
   where?: InputMaybe<Transfer_Filter>;
 };
 
+
+export type SubscriptionVersionChangedArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionVersionChangedsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<VersionChanged_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<VersionChanged_Filter>;
+};
+
+
+export type SubscriptionWrappedDomainArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionWrappedDomainsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<WrappedDomain_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<WrappedDomain_Filter>;
+};
+
+
+export type SubscriptionWrappedTransferArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionWrappedTransfersArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<WrappedTransfer_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<WrappedTransfer_Filter>;
+};
+
 export type TextChanged = ResolverEvent & {
   __typename?: 'TextChanged';
   blockNumber: Scalars['Int'];
@@ -2964,6 +3531,7 @@ export type TextChanged = ResolverEvent & {
   key: Scalars['String'];
   resolver: Resolver;
   transactionID: Scalars['Bytes'];
+  value?: Maybe<Scalars['String']>;
 };
 
 export type TextChanged_Filter = {
@@ -3036,6 +3604,26 @@ export type TextChanged_Filter = {
   transactionID_not?: InputMaybe<Scalars['Bytes']>;
   transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
   transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  value?: InputMaybe<Scalars['String']>;
+  value_contains?: InputMaybe<Scalars['String']>;
+  value_contains_nocase?: InputMaybe<Scalars['String']>;
+  value_ends_with?: InputMaybe<Scalars['String']>;
+  value_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  value_gt?: InputMaybe<Scalars['String']>;
+  value_gte?: InputMaybe<Scalars['String']>;
+  value_in?: InputMaybe<Array<Scalars['String']>>;
+  value_lt?: InputMaybe<Scalars['String']>;
+  value_lte?: InputMaybe<Scalars['String']>;
+  value_not?: InputMaybe<Scalars['String']>;
+  value_not_contains?: InputMaybe<Scalars['String']>;
+  value_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  value_not_ends_with?: InputMaybe<Scalars['String']>;
+  value_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  value_not_in?: InputMaybe<Array<Scalars['String']>>;
+  value_not_starts_with?: InputMaybe<Scalars['String']>;
+  value_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  value_starts_with?: InputMaybe<Scalars['String']>;
+  value_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum TextChanged_OrderBy {
@@ -3043,7 +3631,8 @@ export enum TextChanged_OrderBy {
   Id = 'id',
   Key = 'key',
   Resolver = 'resolver',
-  TransactionId = 'transactionID'
+  TransactionId = 'transactionID',
+  Value = 'value'
 }
 
 export type Transfer = DomainEvent & {
@@ -3129,6 +3718,283 @@ export type Transfer_Filter = {
 };
 
 export enum Transfer_OrderBy {
+  BlockNumber = 'blockNumber',
+  Domain = 'domain',
+  Id = 'id',
+  Owner = 'owner',
+  TransactionId = 'transactionID'
+}
+
+export type VersionChanged = ResolverEvent & {
+  __typename?: 'VersionChanged';
+  blockNumber: Scalars['Int'];
+  id: Scalars['ID'];
+  resolver: Resolver;
+  transactionID: Scalars['Bytes'];
+  version: Scalars['BigInt'];
+};
+
+export type VersionChanged_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  resolver?: InputMaybe<Scalars['String']>;
+  resolver_?: InputMaybe<Resolver_Filter>;
+  resolver_contains?: InputMaybe<Scalars['String']>;
+  resolver_contains_nocase?: InputMaybe<Scalars['String']>;
+  resolver_ends_with?: InputMaybe<Scalars['String']>;
+  resolver_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  resolver_gt?: InputMaybe<Scalars['String']>;
+  resolver_gte?: InputMaybe<Scalars['String']>;
+  resolver_in?: InputMaybe<Array<Scalars['String']>>;
+  resolver_lt?: InputMaybe<Scalars['String']>;
+  resolver_lte?: InputMaybe<Scalars['String']>;
+  resolver_not?: InputMaybe<Scalars['String']>;
+  resolver_not_contains?: InputMaybe<Scalars['String']>;
+  resolver_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  resolver_not_ends_with?: InputMaybe<Scalars['String']>;
+  resolver_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  resolver_not_in?: InputMaybe<Array<Scalars['String']>>;
+  resolver_not_starts_with?: InputMaybe<Scalars['String']>;
+  resolver_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  resolver_starts_with?: InputMaybe<Scalars['String']>;
+  resolver_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  version?: InputMaybe<Scalars['BigInt']>;
+  version_gt?: InputMaybe<Scalars['BigInt']>;
+  version_gte?: InputMaybe<Scalars['BigInt']>;
+  version_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  version_lt?: InputMaybe<Scalars['BigInt']>;
+  version_lte?: InputMaybe<Scalars['BigInt']>;
+  version_not?: InputMaybe<Scalars['BigInt']>;
+  version_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
+export enum VersionChanged_OrderBy {
+  BlockNumber = 'blockNumber',
+  Id = 'id',
+  Resolver = 'resolver',
+  TransactionId = 'transactionID',
+  Version = 'version'
+}
+
+export type WrappedDomain = {
+  __typename?: 'WrappedDomain';
+  domain: Domain;
+  expiryDate: Scalars['BigInt'];
+  fuses: Scalars['BigInt'];
+  id: Scalars['ID'];
+  labelName?: Maybe<Scalars['String']>;
+  owner: Account;
+};
+
+export type WrappedDomain_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  domain?: InputMaybe<Scalars['String']>;
+  domain_?: InputMaybe<Domain_Filter>;
+  domain_contains?: InputMaybe<Scalars['String']>;
+  domain_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_ends_with?: InputMaybe<Scalars['String']>;
+  domain_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_gt?: InputMaybe<Scalars['String']>;
+  domain_gte?: InputMaybe<Scalars['String']>;
+  domain_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_lt?: InputMaybe<Scalars['String']>;
+  domain_lte?: InputMaybe<Scalars['String']>;
+  domain_not?: InputMaybe<Scalars['String']>;
+  domain_not_contains?: InputMaybe<Scalars['String']>;
+  domain_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_not_starts_with?: InputMaybe<Scalars['String']>;
+  domain_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_starts_with?: InputMaybe<Scalars['String']>;
+  domain_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  expiryDate?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_gt?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_gte?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  expiryDate_lt?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_lte?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_not?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fuses?: InputMaybe<Scalars['BigInt']>;
+  fuses_gt?: InputMaybe<Scalars['BigInt']>;
+  fuses_gte?: InputMaybe<Scalars['BigInt']>;
+  fuses_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fuses_lt?: InputMaybe<Scalars['BigInt']>;
+  fuses_lte?: InputMaybe<Scalars['BigInt']>;
+  fuses_not?: InputMaybe<Scalars['BigInt']>;
+  fuses_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  labelName?: InputMaybe<Scalars['String']>;
+  labelName_contains?: InputMaybe<Scalars['String']>;
+  labelName_contains_nocase?: InputMaybe<Scalars['String']>;
+  labelName_ends_with?: InputMaybe<Scalars['String']>;
+  labelName_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  labelName_gt?: InputMaybe<Scalars['String']>;
+  labelName_gte?: InputMaybe<Scalars['String']>;
+  labelName_in?: InputMaybe<Array<Scalars['String']>>;
+  labelName_lt?: InputMaybe<Scalars['String']>;
+  labelName_lte?: InputMaybe<Scalars['String']>;
+  labelName_not?: InputMaybe<Scalars['String']>;
+  labelName_not_contains?: InputMaybe<Scalars['String']>;
+  labelName_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  labelName_not_ends_with?: InputMaybe<Scalars['String']>;
+  labelName_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  labelName_not_in?: InputMaybe<Array<Scalars['String']>>;
+  labelName_not_starts_with?: InputMaybe<Scalars['String']>;
+  labelName_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  labelName_starts_with?: InputMaybe<Scalars['String']>;
+  labelName_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<Account_Filter>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum WrappedDomain_OrderBy {
+  Domain = 'domain',
+  ExpiryDate = 'expiryDate',
+  Fuses = 'fuses',
+  Id = 'id',
+  LabelName = 'labelName',
+  Owner = 'owner'
+}
+
+export type WrappedTransfer = DomainEvent & {
+  __typename?: 'WrappedTransfer';
+  blockNumber: Scalars['Int'];
+  domain: Domain;
+  id: Scalars['ID'];
+  owner: Account;
+  transactionID: Scalars['Bytes'];
+};
+
+export type WrappedTransfer_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  domain?: InputMaybe<Scalars['String']>;
+  domain_?: InputMaybe<Domain_Filter>;
+  domain_contains?: InputMaybe<Scalars['String']>;
+  domain_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_ends_with?: InputMaybe<Scalars['String']>;
+  domain_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_gt?: InputMaybe<Scalars['String']>;
+  domain_gte?: InputMaybe<Scalars['String']>;
+  domain_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_lt?: InputMaybe<Scalars['String']>;
+  domain_lte?: InputMaybe<Scalars['String']>;
+  domain_not?: InputMaybe<Scalars['String']>;
+  domain_not_contains?: InputMaybe<Scalars['String']>;
+  domain_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_not_starts_with?: InputMaybe<Scalars['String']>;
+  domain_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_starts_with?: InputMaybe<Scalars['String']>;
+  domain_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<Account_Filter>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+};
+
+export enum WrappedTransfer_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
   Id = 'id',

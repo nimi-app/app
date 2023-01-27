@@ -3,11 +3,11 @@ import { Reorder } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import TrashCanSVG from '../../../assets/svg/trash-can.svg';
 import { AnimatedSection } from './AnimatedSection';
 import { StaticPOAP } from './POAPs';
 import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { ReorderItem } from './ReorderItem';
+import TrashCanSVG from '../../../assets/svg/trash-can.svg';
 
 interface CustomizePOAPsProps {
   items: POAPToken[];
@@ -93,6 +93,17 @@ export const CustomizePOAPs = ({
             spellCheck={false}
           />
         </AvailablePOAPsTitleContainer>
+        <SelectedPOAPsInfo>
+          <NumberOfSelectedPOAPs>
+            {selectedItems.filter((item) => item !== null).length} out of 6 selected
+          </NumberOfSelectedPOAPs>
+          <ClearSelectionButton
+            anyItemSelected={!!selectedItems.filter((item) => item !== null).length}
+            onClick={clearSelectedItems}
+          >
+            Clear Selection
+          </ClearSelectionButton>
+        </SelectedPOAPsInfo>
         <AvailablePOAPsList>
           {getFilteredItems().length ? (
             getFilteredItems().map((poap) => (
@@ -112,17 +123,6 @@ export const CustomizePOAPs = ({
             <NoPOAPsText>No data matching the given filter criteria</NoPOAPsText>
           )}
         </AvailablePOAPsList>
-        <SelectedPOAPsInfo>
-          <NumberOfSelectedPOAPs>
-            {selectedItems.filter((item) => item !== null).length} out of 6 selected
-          </NumberOfSelectedPOAPs>
-          <ClearSelectionButton
-            anyItemSelected={!!selectedItems.filter((item) => item !== null).length}
-            onClick={clearSelectedItems}
-          >
-            Clear Selection
-          </ClearSelectionButton>
-        </SelectedPOAPsInfo>
       </AvailablePOAPsContainer>
     </AnimatedSection>
   );
@@ -150,6 +150,7 @@ const AvailablePOAPsTitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 36px;
+  margin-bottom: 16px;
 `;
 
 const AvailablePOAPsTitle = styled.h3`
@@ -177,6 +178,8 @@ const AvailablePOAPsList = styled.div`
   overflow-y: hidden;
   white-space: nowrap;
   padding: 24px 22px;
+
+  border: 1px solid rebeccapurple;
 `;
 
 const SelectedPOAPsInfo = styled.div`
