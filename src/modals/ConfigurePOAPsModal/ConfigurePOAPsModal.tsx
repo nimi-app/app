@@ -69,19 +69,24 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal, tokenIds }: Config
 
   const handleCloseModal = () => {
     const otherWidgets = getValues('widgets').filter((el: NimiWidget) => el.type !== NimiWidgetType.POAP);
-    const selectedTokens = selectedItems.filter((item) => item !== null);
 
-    setValue('widgets', [
-      ...otherWidgets,
-      {
-        type: NimiWidgetType.POAP,
-        ...(selectedTokens.length && {
-          context: {
-            tokenIds: selectedTokens.map((token) => token.tokenId),
-          },
-        }),
-      } as NimiWidget,
-    ]);
+    if (page === 'recent') {
+      setValue('widgets', [...otherWidgets, { type: NimiWidgetType.POAP } as NimiWidget]);
+    } else {
+      const selectedTokens = selectedItems.filter((item) => item !== null);
+
+      setValue('widgets', [
+        ...otherWidgets,
+        {
+          type: NimiWidgetType.POAP,
+          ...(selectedTokens.length && {
+            context: {
+              tokenIds: selectedTokens.map((token) => token.tokenId),
+            },
+          }),
+        } as NimiWidget,
+      ]);
+    }
 
     closeModal();
   };
