@@ -140,7 +140,7 @@ const AvailablePOAPsContainer = styled.div`
   width: 100%;
   background-color: #f1f2f5;
   border-radius: 12px;
-  padding: 36px 0;
+  padding: 36px 0 0;
   margin-top: 24px;
 `;
 
@@ -176,7 +176,7 @@ const AvailablePOAPsList = styled.div`
   position: relative;
   overflow-x: auto;
   overflow-y: auto;
-  padding: 0 36px 22px;
+  padding: 0 36px;
 `;
 
 const SelectedPOAPsInfo = styled.div`
