@@ -19,7 +19,7 @@ interface InitialNimiDataProps {
  * Returns default data to be displayed on CreateNimipage
  */
 export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps): UseInitialNimiData {
-  const defaultTheme = { type: NimiThemeType.NIMI };
+  const defaultTheme = { type: NimiThemeType.NIMI_OG };
 
   const {
     data: deployedNimi,

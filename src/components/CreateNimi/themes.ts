@@ -15,32 +15,32 @@ import raavePreview from '../../assets/theme/raave-preview.png';
 import { NimiCuratedTheme, ThemeAssets } from '../../types';
 
 export const themes: Record<NimiCuratedTheme, ThemeAssets> = {
-  [NimiThemeType.NIMI]: {
-    type: NimiThemeType.NIMI,
+  [NimiThemeType.NIMI_OG]: {
+    type: NimiThemeType.NIMI_OG,
     logoImage: nimiOGLogoImage.src,
     logoText: nimiOGLogoText.src,
     preview: nimiOGPreview.src,
   },
-  [NimiThemeType.DEVCON]: {
-    type: NimiThemeType.DEVCON,
+  [NimiThemeType.DEVCON_2023_BOGOTA]: {
+    type: NimiThemeType.DEVCON_2023_BOGOTA,
     logoImage: devconLogoImage.src,
     logoText: devconLogoText.src,
     preview: devconPreview.src,
   },
-  [NimiThemeType.RAAVE]: {
-    type: NimiThemeType.RAAVE,
+  [NimiThemeType.RAAVE_2023_BOGOTA]: {
+    type: NimiThemeType.RAAVE_2023_BOGOTA,
     logoImage: raaveLogoImage.src,
     logoText: raaveLogoText.src,
     preview: raavePreview.src,
   },
-  [NimiThemeType.DAIVINITY]: {
-    type: NimiThemeType.DAIVINITY,
+  [NimiThemeType.DAIVINITY_2023_BOGOTA]: {
+    type: NimiThemeType.DAIVINITY_2023_BOGOTA,
     logoImage: daivinityLogoImage.src,
     logoText: daivinityLogoText.src,
     preview: daivinityPreview.src,
   },
   // [NimiThemeType.INFINITE]: {
-  //   type: NimiThemeType.RAAVE,
+  //   type: NimiThemeType.RAAVE_2023_BOGOTA,
   //   logoImage: raaveLogoImage,
   //   logoText: raaveLogoText,
   //   preview: devconPreview,

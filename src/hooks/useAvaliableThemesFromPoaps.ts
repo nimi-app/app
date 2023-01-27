@@ -12,9 +12,9 @@ export interface UseAvaliableTheme {
 
 //Order determines precedent for default theme
 const themeToPoapMapping: { theme: NimiCuratedTheme; eventId: number[] }[] = [
-  { theme: NimiThemeType.DEVCON, eventId: [60695, 73449] },
-  { theme: NimiThemeType.RAAVE, eventId: [63182] },
-  { theme: NimiThemeType.DAIVINITY, eventId: [74051] },
+  { theme: NimiThemeType.DEVCON_2023_BOGOTA, eventId: [60695, 73449] },
+  { theme: NimiThemeType.RAAVE_2023_BOGOTA, eventId: [63182] },
+  { theme: NimiThemeType.DAIVINITY_2023_BOGOTA, eventId: [74051] },
 ];
 
 const debug = createDebugger('hooks:useAvaliableThemesFromPoaps');
@@ -26,7 +26,7 @@ export function useAvaliableThemesFromPoaps(account?: string): UseAvaliableTheme
   const { data, isLoading, isFetching } = usePoapsFromUser(account);
 
   function getAvaliableThemes(userPOAPList?: PoapData[]) {
-    const themes: NimiCuratedTheme[] = [NimiThemeType.NIMI];
+    const themes: NimiCuratedTheme[] = [NimiThemeType.NIMI_OG];
 
     if (userPOAPList) {
       for (const theme of themeToPoapMapping) {
