@@ -3,17 +3,18 @@ import { AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { getPOAPAPIClient } from '../../api/RestAPI/utils';
-import { Modal } from '../../components/Modal';
 import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
+import { getPOAPAPIClient } from '../../api/RestAPI/utils';
+import { Modal } from '../../components/Modal';
 
 type ConfigurePOAPsModalProps = {
   ensAddress?: string;
   closeModal: () => void;
+  tokenIds: undefined | string[];
 };
 
-export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsModalProps) {
+export function ConfigurePOAPsModal({ ensAddress, closeModal, tokenIds }: ConfigurePOAPsModalProps) {
   const { getValues, setValue } = useFormContext<Nimi>();
 
   // TODO: Implement react-query fetching here
@@ -35,6 +36,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
     removePOAPFromSelectedItems,
     clearSelectedItems,
     checkIfPOAPIsSelected,
+    setSelectedItems,
   } = useConfigurePOAPsModal();
 
   useEffect(() => {
@@ -52,6 +54,12 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
         console.error(error);
       } finally {
         setItems(tokens);
+
+        if (tokenIds) {
+          const selectedTokens = tokens.filter((token) => tokenIds.some((tokenId) => tokenId === token.tokenId));
+          setSelectedItems(selectedTokens);
+        }
+
         setFetchingItems(false);
       }
     }
