@@ -172,20 +172,18 @@ const FilterInput = styled.input`
 
 const AvailablePOAPsList = styled.div`
   width: 100%;
-  height: 162px;
+  max-height: 296px;
   position: relative;
   overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  padding: 24px 22px;
-
-  border: 1px solid rebeccapurple;
+  overflow-y: auto;
+  padding: 0 36px 22px;
 `;
 
 const SelectedPOAPsInfo = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 36px;
+  margin-bottom: 24px;
 `;
 
 const NumberOfSelectedPOAPs = styled.p`
@@ -209,10 +207,11 @@ const ClearSelectionButton = styled.a<{ anyItemSelected: boolean }>`
 `;
 
 const AvailablePOAPContainer = styled.div`
+  width: 25%;
   position: relative;
   display: inline-block;
   vertical-align: top;
-  margin-right: -16px;
+  margin-bottom: 16px;
 `;
 
 const SelectedInfo = styled.div`
