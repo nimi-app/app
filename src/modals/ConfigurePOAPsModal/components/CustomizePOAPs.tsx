@@ -3,11 +3,11 @@ import { Reorder } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import TrashCanSVG from '../../../assets/svg/trash-can.svg';
 import { AnimatedSection } from './AnimatedSection';
 import { StaticPOAP } from './POAPs';
 import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { ReorderItem } from './ReorderItem';
+import TrashCanSVG from '../../../assets/svg/trash-can.svg';
 
 interface CustomizePOAPsProps {
   items: POAPToken[];
@@ -93,6 +93,17 @@ export const CustomizePOAPs = ({
             spellCheck={false}
           />
         </AvailablePOAPsTitleContainer>
+        <SelectedPOAPsInfo>
+          <NumberOfSelectedPOAPs>
+            {selectedItems.filter((item) => item !== null).length} out of 6 selected
+          </NumberOfSelectedPOAPs>
+          <ClearSelectionButton
+            anyItemSelected={!!selectedItems.filter((item) => item !== null).length}
+            onClick={clearSelectedItems}
+          >
+            Clear Selection
+          </ClearSelectionButton>
+        </SelectedPOAPsInfo>
         <AvailablePOAPsList>
           {getFilteredItems().length ? (
             getFilteredItems().map((poap) => (
@@ -112,17 +123,6 @@ export const CustomizePOAPs = ({
             <NoPOAPsText>No data matching the given filter criteria</NoPOAPsText>
           )}
         </AvailablePOAPsList>
-        <SelectedPOAPsInfo>
-          <NumberOfSelectedPOAPs>
-            {selectedItems.filter((item) => item !== null).length} out of 6 selected
-          </NumberOfSelectedPOAPs>
-          <ClearSelectionButton
-            anyItemSelected={!!selectedItems.filter((item) => item !== null).length}
-            onClick={clearSelectedItems}
-          >
-            Clear Selection
-          </ClearSelectionButton>
-        </SelectedPOAPsInfo>
       </AvailablePOAPsContainer>
     </AnimatedSection>
   );
@@ -140,7 +140,7 @@ const AvailablePOAPsContainer = styled.div`
   width: 100%;
   background-color: #f1f2f5;
   border-radius: 12px;
-  padding: 36px 0;
+  padding: 36px 0 0;
   margin-top: 24px;
 `;
 
@@ -150,6 +150,7 @@ const AvailablePOAPsTitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 36px;
+  margin-bottom: 16px;
 `;
 
 const AvailablePOAPsTitle = styled.h3`
@@ -171,18 +172,18 @@ const FilterInput = styled.input`
 
 const AvailablePOAPsList = styled.div`
   width: 100%;
-  height: 162px;
+  max-height: 296px;
   position: relative;
   overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  padding: 24px 22px;
+  overflow-y: auto;
+  padding: 0 36px;
 `;
 
 const SelectedPOAPsInfo = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 36px;
+  margin-bottom: 24px;
 `;
 
 const NumberOfSelectedPOAPs = styled.p`
@@ -206,10 +207,11 @@ const ClearSelectionButton = styled.a<{ anyItemSelected: boolean }>`
 `;
 
 const AvailablePOAPContainer = styled.div`
+  width: 25%;
   position: relative;
   display: inline-block;
   vertical-align: top;
-  margin-right: -16px;
+  margin-bottom: 16px;
 `;
 
 const SelectedInfo = styled.div`
