@@ -180,18 +180,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     eventTarget.style.height = `${eventTarget.scrollHeight}px`;
   };
 
-  const getTokenIds = () => {
-    let tokenIds: undefined | string[];
-
-    const widgets = getValues('widgets').filter((el) => el.type === NimiWidgetType.POAP);
-
-    if (widgets.length && widgets[0].hasOwnProperty('context')) tokenIds = widgets[0].context?.tokenIds;
-
-    return tokenIds;
-  };
-
-  getTokenIds();
-
   return (
     <FormProvider {...useFormContext}>
       <InnerWrapper>
@@ -279,7 +267,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
       </InnerWrapper>
 
       {modalOpened === ModalTypes.CONFIGURE_POAPS && (
-        <ConfigurePOAPsModal ensAddress={ensAddress} tokenIds={getTokenIds()} closeModal={() => closeModal()} />
+        <ConfigurePOAPsModal ensAddress={ensAddress} closeModal={() => closeModal()} />
       )}
 
       {modalOpened === ModalTypes.TEMPLATE_PICKER && (

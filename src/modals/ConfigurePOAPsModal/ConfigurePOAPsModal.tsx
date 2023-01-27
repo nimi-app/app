@@ -11,12 +11,20 @@ import { Modal } from '../../components/Modal';
 type ConfigurePOAPsModalProps = {
   ensAddress?: string;
   closeModal: () => void;
-  tokenIds: undefined | string[];
 };
 
-export function ConfigurePOAPsModal({ ensAddress, closeModal, tokenIds }: ConfigurePOAPsModalProps) {
+export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsModalProps) {
   const { getValues, setValue } = useFormContext<Nimi>();
 
+  const getTokenIds = () => {
+    let tokenIds: undefined | string[];
+
+    const widgets = getValues('widgets').filter((el) => el.type === NimiWidgetType.POAP);
+
+    if (widgets.length && widgets[0].hasOwnProperty('context')) tokenIds = widgets[0].context?.tokenIds;
+
+    return tokenIds;
+  };
   // TODO: Implement react-query fetching here
   // const { data: poapData, isFetching } = usePoapsFromUser(ensAddress);
   // console.log('poapData', poapData);
@@ -54,7 +62,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal, tokenIds }: Config
         console.error(error);
       } finally {
         setItems(tokens);
-
+        const tokenIds = getTokenIds();
         if (tokenIds) {
           const selectedTokens = tokens.filter((token) => tokenIds.some((tokenId) => tokenId === token.tokenId));
           setSelectedItems(selectedTokens);
@@ -65,7 +73,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal, tokenIds }: Config
     }
 
     fetchPOAPs();
-  }, [ensAddress, setItems, setFetchingItems]);
+  }, [ensAddress, setItems, setFetchingItems, getTokenIds, setSelectedItems]);
 
   const handleCloseModal = () => {
     const otherWidgets = getValues('widgets').filter((el: NimiWidget) => el.type !== NimiWidgetType.POAP);
