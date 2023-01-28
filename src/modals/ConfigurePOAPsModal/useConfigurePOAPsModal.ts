@@ -48,5 +48,6 @@ export function useConfigurePOAPsModal() {
     removePOAPFromSelectedItems,
     clearSelectedItems,
     checkIfPOAPIsSelected,
+    setSelectedItems,
   };
 }
