@@ -13,19 +13,24 @@ import { ReorderItem } from '../../ReorderItem';
 type ReorderInputProps = {
   key?: string;
   index: number;
-  value: NimiLinkBaseDetails;
   removeLink: (index: number) => void;
-  updateLink: (index: number, value: NimiLinkBaseDetails) => void;
 };
 
-export function ReorderInput({ value, index, removeLink, updateLink }: ReorderInputProps) {
-  const { register, formState } = useFormContext();
-  const { errors } = formState;
+export function ReorderInput({ index, removeLink }: ReorderInputProps) {
+  const {
+    register,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
 
-  const { type, title, content, id } = value;
+  const link = getValues('links')[index];
+  const { type, title, content, id } = link;
+
+  // const { type, title, content, id } = value;
 
   return (
-    <ReorderItem value={value}>
+    <ReorderItem value={link}>
       <InputContainer marginBottom="10px">
         <TitleInput
           key={id + 'title'}
@@ -36,7 +41,10 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
-        {title && <ClearButton className="clear-button" onClick={() => updateLink(index, { ...value, title: '' })} />}
+        {title && (
+          // <ClearButton className="clear-button" onClick={() => updateLink(index, { type, content, id, title: '' })} />
+          <ClearButton className="clear-button" onClick={() => setValue(`links[${index}].title`, '')} />
+        )}
 
         <PenContainer className="pen-component">
           <PenPlaceholder>
@@ -49,7 +57,7 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
       <InputFieldWithIcon
         inputLogo={NIMI_LINK_DETAIL_EXTENDED[type].logo}
         content={content}
-        onClearClick={() => updateLink(index, { ...value, content: '' })}
+        onClearClick={() => setValue(`links[${index}].content`, '')}
         onInputClick={() => removeLink(index)}
         id={id! || ''}
       >

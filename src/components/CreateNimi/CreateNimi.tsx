@@ -84,7 +84,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     prepend: addLinkToStart,
     remove: removeLink,
     replace: replaceLink,
-    update: updateLink,
   } = useFieldArray({
     control: control,
     name: 'links',
@@ -95,7 +94,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     fields: blockchainAddressFields,
     prepend: addBlockchainAddressToStart,
     remove: removeBlockchainAddress,
-    update: updateBlockchainAddress,
   } = useFieldArray({
     control: control,
     name: 'addresses',
@@ -202,13 +200,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                 {linkFields && (
                   <ReorderGroup values={linkFields} onReorder={(fields) => replaceLink(fields)}>
                     {linkFields.map((field, index) => (
-                      <ReorderInput
-                        key={field.id}
-                        index={index}
-                        value={field}
-                        removeLink={removeLink}
-                        updateLink={updateLink}
-                      />
+                      <ReorderInput key={field.id} index={index} removeLink={removeLink} />
                     ))}
                   </ReorderGroup>
                 )}
@@ -224,8 +216,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                               key={field.blockchainAddressId}
                               index={index}
                               removeAddress={removeBlockchainAddress}
-                              updateAddress={updateBlockchainAddress}
-                              fieldValue={field}
                             />
                           );
                         })}
