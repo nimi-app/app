@@ -17,6 +17,7 @@ export function ReorderItem({ value, children }: PropsWithChildren<ReorderItemPr
         position: 'relative',
         width: '100%',
         display: 'flex',
+        height: '147px',
         flexDirection: 'column',
         padding: '15px 15px 15px 39px',
         borderRadius: '12px',
