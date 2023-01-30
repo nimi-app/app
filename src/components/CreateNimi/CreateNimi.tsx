@@ -77,10 +77,9 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     mode: 'onTouched',
   });
 
-  const { register, watch, handleSubmit, setValue, getValues, control } = useFormContext;
+  const { register, watch, handleSubmit, setValue, getValues, control, trigger } = useFormContext;
 
   const {
-    fields: linkFields,
     prepend: addLinkToStart,
     remove: removeLink,
     replace: replaceLink,
@@ -89,6 +88,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     name: 'links',
     keyName: 'linkId',
   });
+  const linkFields = watch('links');
 
   const {
     fields: blockchainAddressFields,
@@ -198,8 +198,15 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                   </FormItem>
                 </FormGroup>
 
-                {linkFields && (
-                  <ReorderGroup values={linkFields} onReorder={(fields) => replaceLink(fields)}>
+                {linkFields.length > 0 && (
+                  <ReorderGroup
+                    values={linkFields}
+                    onReorder={(fields) => {
+                      replaceLink(fields);
+                      //TRIGGER VALIDATION
+                      trigger('links');
+                    }}
+                  >
                     {linkFields.map((field, index) => (
                       <ReorderInput field={field} key={field.id} index={index} removeLink={removeLink} />
                     ))}

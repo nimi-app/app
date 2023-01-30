@@ -12,6 +12,7 @@ export function ReorderItem({ value, children }: PropsWithChildren<ReorderItemPr
   return (
     <Reorder.Item
       value={value}
+      key={value}
       as="div"
       style={{
         position: 'relative',

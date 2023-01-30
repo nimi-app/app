@@ -17,19 +17,14 @@ type ReorderInputProps = {
   field: NimiLinkBaseDetails;
 };
 
-export function ReorderInput({ index, removeLink, field }: ReorderInputProps) {
+export function ReorderInput({ index, removeLink, field, key }: ReorderInputProps) {
   const {
     register,
-    getValues,
     setValue,
     formState: { errors },
   } = useFormContext();
 
-  const link = getValues('links')[index];
-  const { type, title, content, id } = link;
-  console.log('content', content);
-
-  // const { type, title, content, id } = value;
+  const { type, title, content, id } = field;
 
   return (
     <ReorderItem value={field}>
@@ -43,10 +38,7 @@ export function ReorderInput({ index, removeLink, field }: ReorderInputProps) {
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
-        {title && (
-          // <ClearButton className="clear-button" onClick={() => updateLink(index, { type, content, id, title: '' })} />
-          <ClearButton className="clear-button" onClick={() => setValue(`links[${index}].title`, '')} />
-        )}
+        {title && <ClearButton className="clear-button" onClick={() => setValue(`links[${index}].title`, '')} />}
 
         <PenContainer className="pen-component">
           <PenPlaceholder>
@@ -65,7 +57,7 @@ export function ReorderInput({ index, removeLink, field }: ReorderInputProps) {
       >
         <ContentInput
           inputInvalid={errors.links?.[index]?.content.message.length > 0}
-          key={id}
+          key={key}
           spellCheck={false}
           {...register(`links[${index}].content`)}
         />
