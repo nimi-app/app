@@ -14,9 +14,10 @@ type ReorderInputProps = {
   key?: string;
   index: number;
   removeLink: (index: number) => void;
+  field: NimiLinkBaseDetails;
 };
 
-export function ReorderInput({ index, removeLink }: ReorderInputProps) {
+export function ReorderInput({ index, removeLink, field }: ReorderInputProps) {
   const {
     register,
     getValues,
@@ -26,11 +27,12 @@ export function ReorderInput({ index, removeLink }: ReorderInputProps) {
 
   const link = getValues('links')[index];
   const { type, title, content, id } = link;
+  console.log('content', content);
 
   // const { type, title, content, id } = value;
 
   return (
-    <ReorderItem value={link}>
+    <ReorderItem value={field}>
       <InputContainer marginBottom="10px">
         <TitleInput
           key={id + 'title'}
@@ -68,7 +70,11 @@ export function ReorderInput({ index, removeLink }: ReorderInputProps) {
           {...register(`links[${index}].content`)}
         />
       </InputFieldWithIcon>
-      <ErrorMessage errors={errors} name={`links[${index}].content`} render={({ message }) => <p>{message}</p>} />
+      <ErrorMessage
+        errors={errors}
+        name={`links[${index}].content`}
+        render={({ message }) => <StyledError>{message}</StyledError>}
+      />
     </ReorderItem>
   );
 }
@@ -78,6 +84,13 @@ const InputContainer = styled.div<{ marginBottom?: string }>`
   position: relative;
   background: #f0f3fb;
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
+`;
+
+export const StyledError = styled.p`
+  color: #eb5757;
+  font-size: 12px;
+  margin: 0;
+  margin-top: 5px;
 `;
 
 const TitleInput = styled.input`

@@ -3,7 +3,7 @@ import { NIMI_BLOCKCHAIN_LOGO_URL } from '@nimi.io/card/constants';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ContentInput, InputFieldWithIcon } from '..';
+import { ContentInput, InputFieldWithIcon, StyledError } from '..';
 
 export interface NimiBlockchainFieldProps {
   index: number;
@@ -42,7 +42,11 @@ export function NimiBlockchainField({ removeAddress, index, key }: NimiBlockchai
           {...register(`addresses[${index}].address`)}
         />
       </InputFieldWithIcon>
-      <ErrorMessage errors={errors} name={`addresses[${index}].address`} render={({ message }) => <p>{message}</p>} />
+      <ErrorMessage
+        errors={errors}
+        name={`addresses[${index}].address`}
+        render={({ message }) => <StyledError>{message}</StyledError>}
+      />
     </>
   );
 }
