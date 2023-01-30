@@ -41,12 +41,12 @@ export function NimiBlockchainField({ removeAddress, index, key }: NimiBlockchai
           placeholder={`${label} address`}
           {...register(`addresses[${index}].address`)}
         />
+        <ErrorMessage
+          errors={errors}
+          name={`addresses[${index}].address`}
+          render={({ message }) => <StyledError>{message}</StyledError>}
+        />
       </InputFieldWithIcon>
-      <ErrorMessage
-        errors={errors}
-        name={`addresses[${index}].address`}
-        render={({ message }) => <StyledError>{message}</StyledError>}
-      />
     </>
   );
 }

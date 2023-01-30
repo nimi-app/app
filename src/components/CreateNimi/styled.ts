@@ -126,7 +126,7 @@ export const FormItem = styled.div`
 `;
 export const BlockchainAddresses = styled.div`
   display: flex;
-  gap: 14px;
+  gap: 25px;
   flex-direction: column;
 `;
 
