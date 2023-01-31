@@ -1,6 +1,6 @@
+import { InnerPoapWrapper, PoapButton, PoapWrapper } from './styled';
 import POAPLogo from '../../../../assets/svg/poap-logo.svg';
 import { InputButton } from '../../../InputButton';
-import { InnerPoapWrapper, PoapButton, PoapWrapper } from './styled';
 
 type POAPFieldProps = {
   onConfigure: (event: MouseEvent) => void;

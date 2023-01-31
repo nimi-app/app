@@ -3,8 +3,8 @@ import { Reorder, useDragControls } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import DotsIcon from '../../../assets/svg/dots.svg';
 import { POAPPlaceholder, StaticPOAP } from './POAPs';
+import DotsIcon from '../../../assets/svg/dots.svg';
 
 interface ReorderItemProps {
   value: POAPToken;

@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
+import { useRainbow } from './useRainbow';
 import { getGraphQLClient, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import {
   GetDomainsOwnedOrControlledByQuery,
   useGetDomainsOwnedOrControlledByQuery,
 } from '../api/GraphQl/schemas/generated/ens';
 import { ENSDomain } from '../models';
-import { useRainbow } from './useRainbow';
 
 export interface UserENSDomains {
   data: ENSDomain[];

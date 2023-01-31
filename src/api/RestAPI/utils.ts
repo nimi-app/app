@@ -2,9 +2,9 @@ import { NimiLinkBaseDetails } from '@nimi.io/card';
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 
-import { generateID, guessLinkTypeBasedOnUrl } from '../../utils';
 import { ENSMetadata } from './hooks/useEnsMetadataImage';
 import { LinktreeData } from './hooks/useImportFromLinktree';
+import { generateID, guessLinkTypeBasedOnUrl } from '../../utils';
 /**
  * Returns the base URL for the Nimi API.
  * @returns {string} The base URL for the Nimi API.

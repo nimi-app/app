@@ -2,8 +2,8 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { StyledButtonBaseFrame } from '../Button/styled';
 import { Web3Avatar } from './Web3Avatar';
+import { StyledButtonBaseFrame } from '../Button/styled';
 
 export interface WrapperProps {
   isError: boolean;
