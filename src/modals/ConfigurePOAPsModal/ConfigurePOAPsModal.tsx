@@ -25,11 +25,6 @@ const getTokenIds = (getValues) => {
 export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsModalProps) {
   const { getValues, setValue } = useFormContext<Nimi>();
 
-  // TODO: Implement react-query fetching here
-  // const { data: poapData, isFetching } = usePoapsFromUser(ensAddress);
-  // console.log('poapData', poapData);
-  // console.log('isFetching', isFetching);
-
   const {
     page,
     openRecentPage,

@@ -3,8 +3,8 @@ import { ContractTransaction } from '@ethersproject/contracts';
 import { encodeContenthash, namehash } from '@ensdomains/ui';
 import { useMemo } from 'react';
 
-import { EnsPublicResolver } from '../generated/contracts';
 import { useENSPublicResolverContract } from './useENSPublicResolverContract';
+import { EnsPublicResolver } from '../generated/contracts';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);

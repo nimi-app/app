@@ -1,8 +1,8 @@
 import { useFormContext } from 'react-hook-form';
 
+import { TemplateItem } from './TemplateItem';
 import { Modal } from '../../components/Modal';
 import { ThemeAssets } from '../../types';
-import { TemplateItem } from './TemplateItem';
 
 interface TemplatePickerModalProps {
   themes: ThemeAssets[];
