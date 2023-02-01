@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import Cross from '../../assets/svg/cross.svg';
+import { SharedInputStyles } from '../../theme';
 
 export const StyledInputWrapper = styled.div<{ isError?: boolean; isSimple?: boolean }>`
   display: flex;
@@ -93,4 +94,12 @@ export const StyledCross = styled(Cross)`
       fill: #8c90a0;
     }
   }
+`;
+
+export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string; border?: string }>`
+  height: 50px;
+  padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
+  ${SharedInputStyles};
+  background-color: white;
+  ${({ border }) => border && `border:${border}`};
 `;

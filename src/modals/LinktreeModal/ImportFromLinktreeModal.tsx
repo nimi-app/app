@@ -7,13 +7,13 @@ import { useImportFromLinktree } from '../../api/RestAPI/hooks/useImportFromLink
 import Linktree from '../../assets/svg/linktree.svg';
 import { Button } from '../../components/Button';
 import { ErrorMessage } from '../../components/CreateNimi/styled';
+import { ContentInput } from '../../components/Input';
 import {
   Modal,
   Content as ModalContentBase,
   HeaderBase as ModalHeaderBase,
   Title as ModalTitle,
 } from '../../components/Modal';
-import { ContentInput } from '../../components/ReorderInput';
 
 export function ImportFromLinktreeModal({ onClose }: { onClose: (data?: Nimi) => void }) {
   const { t } = useTranslation('nimi');

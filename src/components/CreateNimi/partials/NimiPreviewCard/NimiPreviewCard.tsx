@@ -1,8 +1,6 @@
 import { Nimi, NimiLinkBaseDetails } from '@nimi.io/card/types';
-import { validateNimi, validateNimiLink } from '@nimi.io/card/validators';
-import createDebugger from 'debug';
+import { nimiLinkValidator, validateNimi } from '@nimi.io/card/validators';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import styled, { StyleSheetManager } from 'styled-components';
 
@@ -34,53 +32,20 @@ const PreviewFrame = styled(Frame)`
   border: 0;
 `;
 
-const debug = createDebugger('components:NimiPreviewCard');
-
 export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
-  const [previewNimi, setPreviewNimi] = useState<Nimi>();
+  const filterNimi = () => {
+    try {
+      const validatedNimi = validateNimi(nimi);
 
-  const removeInvalidLinks = async (links: NimiLinkBaseDetails[]) => {
-    const result = await Promise.all(
-      links.map((link) =>
-        validateNimiLink({
-          type: link.type,
-          content: link.content,
-        })
-          .then((isLinkValid) => {
-            return isLinkValid;
-          })
-          .catch((error) => {
-            debug({
-              error,
-            });
-            return false;
-          })
-      )
-    );
-
-    return links.filter((_, index) => result[index]);
+      return validatedNimi;
+    } catch {
+      return false;
+    }
   };
 
-  useEffect(() => {
-    // Filter invalid links
-    const filterFunction = async () => {
-      // const filteredNimi = filterEmptyFields(nimi);
-      const filteredNimi = nimi;
+  const filteredNimi = filterNimi();
 
-      const filteredLinks = await removeInvalidLinks(filteredNimi.links);
-
-      validateNimi({ ...filteredNimi, links: filteredLinks })
-        .then((validatedNimi) => {
-          setPreviewNimi(validatedNimi as Nimi);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-    filterFunction();
-  }, [nimi]);
-
-  if (!previewNimi) {
+  if (!nimi || !filteredNimi) {
     return (
       <div>
         <p>...</p>
@@ -100,7 +65,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 </style>
                 <FixedGlobalStyle />
                 <ThemeProvider>
-                  <NimiCardApp nimi={previewNimi} isApp={false} />
+                  <NimiCardApp nimi={filteredNimi} isApp={false} />
                 </ThemeProvider>
               </>
             </StyleSheetManager>

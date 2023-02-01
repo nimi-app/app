@@ -1,23 +1,24 @@
 import { Reorder } from 'framer-motion';
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 import DragDotsSVG from '../../assets/svg/dragdots.svg';
 
-type ReorderItemProps<T> = {
-  value: T;
-  children: ReactNode[];
+type ReorderItemProps = {
+  value: any;
 };
 
-export function ReorderItem<T>({ value, children }: ReorderItemProps<T>) {
+export function ReorderItem({ value, children }: PropsWithChildren<ReorderItemProps>) {
   return (
     <Reorder.Item
       value={value}
+      key={value}
       as="div"
       style={{
         position: 'relative',
         width: '100%',
         display: 'flex',
+        height: '147px',
         flexDirection: 'column',
         padding: '15px 15px 15px 39px',
         borderRadius: '12px',

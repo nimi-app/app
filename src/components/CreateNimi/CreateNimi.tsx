@@ -10,7 +10,6 @@ import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSignMessage } from 'wagmi';
 
-import { NimiBlockchainField } from './partials/NimiBlockchainField';
 import { PoapField } from './partials/PoapField';
 import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
 import { themes } from './themes';
@@ -34,12 +33,12 @@ import { AddFieldsButton } from '../AddFieldsButton';
 import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
+import { NimiBlockchainField, ReorderInput } from '../Input';
 import { NimiPreview } from '../NimiPreview';
 import { PreviewMobileButton } from '../PreviewMobileButton';
 import { ProfileSettings } from '../ProfileSettings';
 import { PublishNimiButton } from '../PublishNimiButton';
 import { ReorderGroup } from '../ReorderGroup';
-import { ReorderInput } from '../ReorderInput';
 
 const debug = createDebugger('Nimi:CreateNimi');
 
@@ -75,27 +74,26 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
     defaultValues: {
       ...initialNimi,
     },
+    mode: 'onTouched',
   });
 
-  const { register, watch, handleSubmit, setValue, getValues, control } = useFormContext;
+  const { register, watch, handleSubmit, setValue, getValues, control, trigger } = useFormContext;
 
   const {
-    fields: linkFields,
     prepend: addLinkToStart,
     remove: removeLink,
     replace: replaceLink,
-    update: updateLink,
   } = useFieldArray({
     control: control,
     name: 'links',
     keyName: 'linkId',
   });
+  const linkFields = watch('links');
 
   const {
     fields: blockchainAddressFields,
     prepend: addBlockchainAddressToStart,
     remove: removeBlockchainAddress,
-    update: updateBlockchainAddress,
   } = useFieldArray({
     control: control,
     name: 'addresses',
@@ -103,8 +101,7 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   });
 
   const formWatchPayload = watch();
-
-  console.log('FWP', formWatchPayload);
+  console.log('formWatchPayload', formWatchPayload);
 
   const onSubmitValid = async (nimi: Nimi) => {
     showSpinner();
@@ -194,7 +191,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                     <Label htmlFor="description">{t('formLabel.description')}</Label>
                     <TextArea
                       onKeyDown={handleKeyDown}
-                      maxLength={300}
                       placeholder="Description"
                       id="description"
                       {...register('description')}
@@ -202,16 +198,17 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                   </FormItem>
                 </FormGroup>
 
-                {linkFields && (
-                  <ReorderGroup values={linkFields} onReorder={(fields) => replaceLink(fields)}>
+                {linkFields.length > 0 && (
+                  <ReorderGroup
+                    values={linkFields}
+                    onReorder={(fields) => {
+                      replaceLink(fields);
+                      //TRIGGER VALIDATION
+                      trigger('links');
+                    }}
+                  >
                     {linkFields.map((field, index) => (
-                      <ReorderInput
-                        key={field.id}
-                        index={index}
-                        value={field}
-                        removeLink={removeLink}
-                        updateLink={updateLink}
-                      />
+                      <ReorderInput field={field} key={field.id} index={index} removeLink={removeLink} />
                     ))}
                   </ReorderGroup>
                 )}
@@ -221,14 +218,12 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
                     <FormItem>
                       <Label>Addresses</Label>
                       <BlockchainAddresses>
-                        {blockchainAddressFields.map(({ blockchain }, index) => {
+                        {blockchainAddressFields.map((field, index) => {
                           return (
                             <NimiBlockchainField
-                              key={'blockchain-input-' + blockchain.toLowerCase()}
+                              key={field.blockchainAddressId}
                               index={index}
                               removeAddress={removeBlockchainAddress}
-                              updateAddress={updateBlockchainAddress}
-                              blockchain={blockchain}
                             />
                           );
                         })}

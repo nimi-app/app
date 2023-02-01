@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import SearchIcon from '../../assets/svg/search-icon.svg';
 import { Heading } from '../Heading';
-import { InputFieldWithIcon } from '../Input';
+import { ContentInput, InputFieldWithIcon } from '../Input';
 
 type ControlBarProps = {
   value: string;
@@ -15,15 +15,19 @@ export function ControlBar({ value, searchTextChangedHandler }: ControlBarProps)
     <TopSection>
       <Heading>Your Identities</Heading>
       <StyledInput
-        id="domain-seach"
+        id="domain-search"
         isSimple={true}
         inputLogo={SearchIcon}
-        placeholder="Search"
         content={value}
-        onChange={searchTextChangedHandler}
         style={{ maxWidth: '200px', background: 'none' }}
-        isInvalidInput={false}
-      />
+      >
+        <ContentInput
+          id="domain-search-input"
+          isInvalidInput={false}
+          onChange={searchTextChangedHandler}
+          placeholder="Search"
+        />
+      </StyledInput>
     </TopSection>
   );
 }

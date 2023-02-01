@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
 
-import { Button } from '../Button';
-import { Loader, LoaderWrapper } from '../Loader';
 import { fetchAssets } from './api';
 import { isENSName, mapOpenSeaAssetToNFTAsset } from './api/utils';
 import { AssetListInnerWrapper, AssetListItem /* SearchBar */ } from './NFTSelector.styled';
 import { NFTAsset, NFTSelectorProps } from './NFTSelector.types';
 import { AssetCard } from './partials/AssetCard/AssetCard';
+import { Button } from '../Button';
+import { Loader, LoaderWrapper } from '../Loader';
 
 export function NFTSelector({ ensAddress, onChange }: NFTSelectorProps) {
   const [isFetching, setIsFetching] = useState(true);

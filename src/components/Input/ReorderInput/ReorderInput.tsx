@@ -1,60 +1,44 @@
+import { ErrorMessage } from '@hookform/error-message';
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkBaseDetails } from '@nimi.io/card/types';
-import { validateNimiLink } from '@nimi.io/card/validators';
-import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 
-import XSVG from '../../assets/svg/cross.svg';
-import PenSVG from '../../assets/svg/pen.svg';
-import { SharedInputStyles } from '../../theme';
-import { InputFieldWithIcon } from '../Input';
-import { ReorderItem } from '../ReorderItem';
+import { ContentInput, InputFieldWithIcon } from '..';
+import XSVG from '../../../assets/svg/cross.svg';
+import PenSVG from '../../../assets/svg/pen.svg';
+import { SharedInputStyles } from '../../../theme';
+import { ReorderItem } from '../../ReorderItem';
 
 type ReorderInputProps = {
   key?: string;
   index: number;
-  value: NimiLinkBaseDetails;
   removeLink: (index: number) => void;
-  updateLink: (index: number, value: NimiLinkBaseDetails) => void;
+  field: NimiLinkBaseDetails;
 };
 
-export function ReorderInput({ value, index, removeLink, updateLink }: ReorderInputProps) {
-  const [isInvalidInput, setInvalidInput] = useState(false);
-  const { type, title, content, id } = value;
+export function ReorderInput({ index, removeLink, field, key }: ReorderInputProps) {
+  const {
+    register,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateLink(index, { ...value, content: event.target.value });
-    validateNimiLink({
-      type,
-      content: event.target.value,
-    })
-      .then((isValidLink) => {
-        setInvalidInput(!isValidLink);
-      })
-      .catch(() => {
-        setInvalidInput(true);
-      });
-  };
+  const { type, title, content, id } = field;
 
   return (
-    <ReorderItem value={value}>
+    <ReorderItem value={field}>
       <InputContainer marginBottom="10px">
         <TitleInput
-          id="title-input"
-          value={title}
-          onChange={(event) =>
-            updateLink(index, {
-              ...value,
-              title: event.target.value,
-            })
-          }
+          key={id + 'title'}
+          {...register(`links[${index}].title`)}
           spellCheck={false}
           placeholder={type.replace(
             /(^\w)(\S*)/g,
             (_, firstLetter, restOfTheWord) => firstLetter + restOfTheWord.toLowerCase()
           )}
         />
-        {title && <ClearButton className="clear-button" onClick={() => updateLink(index, { ...value, title: '' })} />}
+        {title && <ClearButton className="clear-button" onClick={() => setValue(`links[${index}].title`, '')} />}
 
         <PenContainer className="pen-component">
           <PenPlaceholder>
@@ -66,13 +50,22 @@ export function ReorderInput({ value, index, removeLink, updateLink }: ReorderIn
       </InputContainer>
       <InputFieldWithIcon
         inputLogo={NIMI_LINK_DETAIL_EXTENDED[type].logo}
-        isInvalidInput={isInvalidInput}
         content={content}
-        onChange={onChange}
-        onClearClick={() => updateLink(index, { ...value, content: '' })}
+        onClearClick={() => setValue(`links[${index}].content`, '')}
         onInputClick={() => removeLink(index)}
-        placeholder={''}
         id={id! || ''}
+      >
+        <ContentInput
+          inputInvalid={errors.links?.[index]?.content.message.length > 0}
+          key={key}
+          spellCheck={false}
+          {...register(`links[${index}].content`)}
+        />
+      </InputFieldWithIcon>
+      <ErrorMessage
+        errors={errors}
+        name={`links[${index}].content`}
+        render={({ message }) => <StyledError>{message}</StyledError>}
       />
     </ReorderItem>
   );
@@ -83,6 +76,13 @@ const InputContainer = styled.div<{ marginBottom?: string }>`
   position: relative;
   background: #f0f3fb;
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
+`;
+
+export const StyledError = styled.p`
+  color: #eb5757;
+  font-size: 12px;
+  margin: 0;
+  margin-top: 5px;
 `;
 
 const TitleInput = styled.input`
@@ -99,14 +99,6 @@ const TitleInput = styled.input`
   &:focus ~ .pen-component {
     display: none;
   }
-`;
-
-export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string; border?: string }>`
-  height: 50px;
-  padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
-  ${SharedInputStyles};
-  background-color: white;
-  ${({ border }) => border && `border:${border}`};
 `;
 
 const ClearButton = styled(XSVG)<{ right?: string }>`
