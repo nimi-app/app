@@ -1,9 +1,9 @@
 import { Signer } from '@wagmi/core';
 import { useSigner } from 'wagmi';
 
+import { useRainbow } from './useRainbow';
 import { PUBLIC_RESOLVER_ADDRESSES } from '../constants';
 import { EnsPublicResolver, EnsPublicResolver__factory } from '../generated/contracts';
-import { useRainbow } from './useRainbow';
 
 /**
  * Returns a ENS Public Resolver contract instance

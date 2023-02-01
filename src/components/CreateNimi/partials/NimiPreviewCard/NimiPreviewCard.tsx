@@ -1,5 +1,5 @@
-import { Nimi, NimiLinkBaseDetails } from '@nimi.io/card/types';
-import { nimiLinkValidator, validateNimi } from '@nimi.io/card/validators';
+import { Nimi } from '@nimi.io/card/types';
+import { validateNimi } from '@nimi.io/card/validators';
 import dynamic from 'next/dynamic';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import styled, { StyleSheetManager } from 'styled-components';
