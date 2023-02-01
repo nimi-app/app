@@ -1,4 +1,4 @@
-import { NimiThemeType } from "@nimi.io/card";
+import { NimiThemeType } from "@nimi.io/card/types";
 
 export type NimiCuratedTheme = Exclude<NimiThemeType, NimiThemeType.INFINITE>;
 export interface ThemeAssets {
@@ -6,5 +6,5 @@ export interface ThemeAssets {
     logoImage: string;
     logoText: string;
     preview: string;
-  
+
 };

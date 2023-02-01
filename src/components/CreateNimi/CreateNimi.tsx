@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Nimi, NimiImageType, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
 import { nimiValidator } from '@nimi.io/card/validators';
 import createDebugger from 'debug';
+import dynamic from 'next/dynamic';
 import { KeyboardEventHandler, useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -34,13 +35,19 @@ import { Card, CardBody } from '../Card';
 import { FormGroup, Label, TextArea } from '../form';
 import { FormWrapper } from '../form/FormGroup';
 import { NimiBlockchainField, ReorderInput } from '../Input';
-import { NimiPreview } from '../NimiPreview';
 import { PreviewMobileButton } from '../PreviewMobileButton';
 import { ProfileSettings } from '../ProfileSettings';
 import { PublishNimiButton } from '../PublishNimiButton';
 import { ReorderGroup } from '../ReorderGroup';
 
 const debug = createDebugger('Nimi:CreateNimi');
+
+const NimiPreview = dynamic(
+  async () => {
+    return import('../NimiPreview').then((mod) => mod.NimiPreview);
+  },
+  { ssr: false }
+);
 
 export interface CreateNimiProps {
   ensAddress: string;

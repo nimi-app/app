@@ -1,21 +1,10 @@
-import { Nimi } from '@nimi.io/card/types';
+import { Nimi, NimiCard } from '@nimi.io/card';
 import { validateNimi } from '@nimi.io/card/validators';
-import dynamic from 'next/dynamic';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import styled, { StyleSheetManager } from 'styled-components';
 
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
 import { Card as CardBase } from '../../../Card';
-
-// document.body is undefined in SSR
-const NimiCardApp = dynamic(
-  async () => {
-    const NimiCardModule = await import('@nimi.io/card');
-
-    return NimiCardModule.NimiCard;
-  },
-  { ssr: false }
-);
 
 export interface NimiPreviewCardProps {
   nimi: Nimi;
@@ -65,7 +54,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 </style>
                 <FixedGlobalStyle />
                 <ThemeProvider>
-                  <NimiCardApp nimi={filteredNimi} isApp={false} />
+                  <NimiCard nimi={filteredNimi} isApp={false} />
                 </ThemeProvider>
               </>
             </StyleSheetManager>

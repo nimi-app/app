@@ -3,6 +3,7 @@ import { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { DottedBorder } from '../../components/Button/styled';
+import { Container } from '../../components/Container';
 import { DomainItem } from '../../components/DomainItem';
 import { ControlBar } from '../../components/domains/ControlBar';
 import { NoENSBanner } from '../../components/domains/NoENSBanner';
@@ -51,10 +52,6 @@ export default function DomainsHomePage() {
     </>
   );
 }
-
-const Container = styled.div`
-  width: 100%;
-`;
 
 const DomainsContainer = styled.div`
   display: flex;

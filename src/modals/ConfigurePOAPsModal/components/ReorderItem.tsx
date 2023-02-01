@@ -1,4 +1,4 @@
-import { POAPToken } from '@nimi.io/card';
+import { POAPToken } from '@nimi.io/card/types';
 import { Reorder, useDragControls } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';

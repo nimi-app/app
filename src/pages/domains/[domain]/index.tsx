@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { CreateNimi } from '../../../components/CreateNimi';
-import { Loader } from '../../../components/Loader';
+import { Loader, LoaderWrapper } from '../../../components/Loader';
 import { useAvaliableThemesFromPoaps } from '../../../hooks/useAvaliableThemesFromPoaps';
 import { useInitialtNimiData } from '../../../hooks/useDefaultNimiData';
 import { useRainbow } from '../../../hooks/useRainbow';
@@ -27,9 +27,11 @@ export default function CreateNimiPage() {
       <Head>
         <title>Create Nimi for {domain}</title>
       </Head>
-      <PageLayout>
+      <PageLayout flexContainer>
         {initialNimiLoading || initialNimi === undefined || isThemeLoading ? (
-          <Loader />
+          <LoaderWrapper>
+            <Loader />
+          </LoaderWrapper>
         ) : (
           <CreateNimi
             ensAddress={account as string}
