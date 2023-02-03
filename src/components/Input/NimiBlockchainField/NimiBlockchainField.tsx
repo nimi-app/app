@@ -1,5 +1,5 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { NIMI_BLOCKCHAIN_LOGO_URL } from '@nimi.io/card/constants';
+import { getNimiBlockchainLogoSVGElement } from '@nimi.io/card';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -29,7 +29,7 @@ export function NimiBlockchainField({ removeAddress, index, key }: NimiBlockchai
   return (
     <>
       <InputFieldWithIcon
-        inputLogo={NIMI_BLOCKCHAIN_LOGO_URL[blockchain]}
+        inputLogo={getNimiBlockchainLogoSVGElement(blockchain)}
         content={address}
         onClearClick={() => setValue(`addresses[${index}].address`, '')}
         onInputClick={() => removeAddress(index)}

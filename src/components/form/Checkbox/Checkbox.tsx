@@ -1,5 +1,5 @@
 import { FC, InputHTMLAttributes, PropsWithChildren } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 const StyledLabel = styled.label`
   position: relative;

@@ -27,7 +27,7 @@ export default function CreateNimiPage() {
       <Head>
         <title>Create Nimi for {domain}</title>
       </Head>
-      <PageLayout flexContainer>
+      <PageLayout flexContainer={true}>
         {initialNimiLoading || initialNimi === undefined || isThemeLoading ? (
           <LoaderWrapper>
             <Loader />

@@ -1,7 +1,7 @@
 import { Nimi } from '@nimi.io/card/types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useImportFromLinktree } from '../../api/RestAPI/hooks/useImportFromLinktree';
 import Linktree from '../../assets/svg/linktree.svg';

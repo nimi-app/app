@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { Button } from '../../components/Button';
 import { Modal, Content as ModalContentBase, Footer as ModalFooterBase } from '../../components/Modal';

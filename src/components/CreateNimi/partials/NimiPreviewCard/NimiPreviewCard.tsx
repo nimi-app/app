@@ -1,7 +1,7 @@
-import { Nimi, NimiCard } from '@nimi.io/card';
+import { Nimi, NimiPage, NimiPageProvider } from '@nimi.io/card';
 import { validateNimi } from '@nimi.io/card/validators';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
-import styled, { StyleSheetManager } from 'styled-components';
+import { styled, StyleSheetManager } from 'styled-components';
 
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
 import { Card as CardBase } from '../../../Card';
@@ -54,7 +54,9 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 </style>
                 <FixedGlobalStyle />
                 <ThemeProvider>
-                  <NimiCard nimi={filteredNimi} isApp={false} />
+                  <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY || ''}>
+                    <NimiPage nimi={filteredNimi} isApp={false} />
+                  </NimiPageProvider>
                 </ThemeProvider>
               </>
             </StyleSheetManager>

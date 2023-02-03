@@ -1,13 +1,5 @@
-import { POAPToken } from '@nimi.io/card/types';
+import { createPOAPClient, fetchUserPOAPs } from '@nimi.io/card/api';
 import { useQuery } from '@tanstack/react-query';
-
-import { getPOAPAPIClient } from '../utils';
-
-export async function fetchUserPOAPs(account: string) {
-  const poapClient = getPOAPAPIClient();
-  const { data } = await poapClient.get<POAPToken[]>(`/actions/scan/${account.toLowerCase()}`);
-  return data;
-}
 
 /**
  * Returns query for fetching poaps user owns
@@ -15,7 +7,7 @@ export async function fetchUserPOAPs(account: string) {
 export function useUserPOAPs(account?: string) {
   const getPoapsFromUser = async () => {
     if (!account) return [];
-    return fetchUserPOAPs(account);
+    return fetchUserPOAPs(createPOAPClient(process.env.NEXT_PUBLIC_POAP_API_KEY as string), account);
   };
 
   return useQuery(['fetchUserPoaps', account], getPoapsFromUser);

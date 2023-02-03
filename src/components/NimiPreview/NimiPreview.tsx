@@ -1,6 +1,6 @@
 import { Nimi } from '@nimi.io/card/types';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { MEDIA_WIDTHS } from '../../theme';
 import { NimiPreviewCard } from '../CreateNimi/partials/NimiPreviewCard';

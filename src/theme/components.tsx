@@ -1,5 +1,5 @@
 import React, { HTMLProps, useCallback } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { Colors } from './styled';
 

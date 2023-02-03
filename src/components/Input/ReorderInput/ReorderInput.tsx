@@ -2,7 +2,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkBaseDetails } from '@nimi.io/card/types';
 import { useFormContext } from 'react-hook-form';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ContentInput, InputFieldWithIcon } from '..';
 import XSVG from '../../../assets/svg/cross.svg';

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import SlidersSVG from '../../assets/svg/sliders.svg';
 import TrashCanSVG from '../../assets/svg/trashcan.svg';

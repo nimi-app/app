@@ -1,7 +1,7 @@
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
 import { motion } from 'framer-motion';
 import { PropsWithChildren } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const StyledButton = styled(motion.button)<{ disabled: boolean }>`
   display: flex;

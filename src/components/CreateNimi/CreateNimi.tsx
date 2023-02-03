@@ -108,7 +108,6 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   });
 
   const formWatchPayload = watch();
-  console.log('formWatchPayload', formWatchPayload);
 
   const onSubmitValid = async (nimi: Nimi) => {
     showSpinner();

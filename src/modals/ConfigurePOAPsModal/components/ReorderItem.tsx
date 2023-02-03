@@ -1,7 +1,7 @@
 import { POAPToken } from '@nimi.io/card/types';
 import { Reorder, useDragControls } from 'framer-motion';
 import { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { POAPPlaceholder, StaticPOAP } from './POAPs';
 import DotsIcon from '../../../assets/svg/dots.svg';

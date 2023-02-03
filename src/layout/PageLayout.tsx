@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
@@ -23,21 +23,27 @@ export function PageLayout({
     setIsNetworkSupported(ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number));
   }, [chainId]);
 
-  return (
-    <Container>
-      <Header />
-      <Content flexContainer={flexContainer}>
-        {isNetworkSupported ? (
-          children
-        ) : (
+  if (!isNetworkSupported) {
+    return (
+      <Container>
+        <Header />
+        <ContentFlex>
           <ErrorContainer>
             <Heading>{t('error.unsupportedNetwork')}</Heading>
             <Heading type="sub" color="#000">
               Please change your network by clicking the account button on the top right.
             </Heading>
           </ErrorContainer>
-        )}
-      </Content>
+        </ContentFlex>
+        <Footer />
+      </Container>
+    );
+  }
+
+  return (
+    <Container>
+      <Header />
+      {flexContainer ? <ContentFlex>{children}</ContentFlex> : <Content>{children}</Content>}
       <Footer />
     </Container>
   );
@@ -52,17 +58,17 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
-const Content = styled.main<{
-  flexContainer?: boolean;
-}>(
-  (props) => `
+const Content = styled.main`
   width: 100%;
   min-height: calc(100vh - (${HEADER_HEIGHT} + ${FOOTER_HEIGHT}));
   flex: 1; /* to fill the remaining space */
   margin: 0 auto;
-  ${props.flexContainer ? 'display: flex; flex-direction: column' : ''}
-`
-);
+`;
+
+const ContentFlex = styled(Content)`
+  display: flex;
+  flex-direction: column;
+`;
 
 const ErrorContainer = styled.div`
   width: 100%;

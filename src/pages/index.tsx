@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import '@rainbow-me/rainbowkit/styles.css';
 
 import backgroundImage from '../assets/images/nimi-header-background.jpeg';

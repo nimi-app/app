@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { ChangeEvent, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { DottedBorder } from '../../components/Button/styled';
 import { Container } from '../../components/Container';

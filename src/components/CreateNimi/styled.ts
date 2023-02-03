@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { MEDIA_WIDTHS, NimiModalStyles, NimiSignatureColor } from '../../theme';
 import { Button } from '../Button';

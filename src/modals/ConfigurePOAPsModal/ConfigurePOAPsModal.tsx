@@ -1,3 +1,4 @@
+import { createPOAPClient, fetchUserPOAPs } from '@nimi.io/card/api';
 import { Nimi, NimiWidget, NimiWidgetType, POAPToken } from '@nimi.io/card/types';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
@@ -5,7 +6,6 @@ import { useFormContext } from 'react-hook-form';
 
 import { BodyNavigation, CustomizePOAPs, NoPOAPs, PreloaderPOAPs, RecentPOAPs } from './components';
 import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
-import { getPOAPAPIClient } from '../../api/RestAPI/utils';
 import { Modal } from '../../components/Modal';
 
 type ConfigurePOAPsModalProps = {
@@ -49,9 +49,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
       let tokens: POAPToken[] = [];
 
       try {
-        const { data: tokensData } = await getPOAPAPIClient().get(`/actions/scan/${ensAddress}`);
-
-        tokens = tokensData;
+        tokens = await fetchUserPOAPs(createPOAPClient(process.env.POAP_API_KEY as string), ensAddress);
       } catch (error) {
         // TODO: HANDLE ERROR
         console.error(error);

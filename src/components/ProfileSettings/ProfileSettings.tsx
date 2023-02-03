@@ -1,10 +1,10 @@
 import { NimiImageType } from '@nimi.io/card/types';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useUploadImageToIPFS } from '../../api/RestAPI/hooks/useUploadImageToIPFS';
-import PlaceholderMini from '../../assets/images/nimi-placeholder.png';
+import defaultProfileImage from '../../assets/images/nimi-placeholder.png';
 import { supportedImageTypes } from '../../constants';
 import { useUserInterface } from '../../services/useUserInterface';
 import { MEDIA_WIDTHS, NimiModalStyles } from '../../theme';
@@ -71,7 +71,9 @@ export function ProfileSettings() {
       <ProfilePictureContainer>
         <Toplabel>Profile Picture</Toplabel>
         <ProfileImage
-          src={customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : PlaceholderMini}
+          src={
+            customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : defaultProfileImage.src
+          }
         />
         {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
         <ImportButton>

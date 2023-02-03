@@ -1,8 +1,8 @@
-import { NIMI_BLOCKCHAIN_LOGO_URL, NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
+import { getNimiBlockchainLogoSVGElement, getNimiLinkLogoSVGElement } from '@nimi.io/card';
 import { Nimi, NimiBlockchain, NimiLinkType, NimiWidgetType } from '@nimi.io/card/types';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { LinksSection } from './LinksSection';
 import { StyledFlexList, StyledGridList } from './styled';
@@ -106,7 +106,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
             {ContactsSectionLinks.map((link) => {
               const inputId = `modal-checkbox-${link}`;
               const i18nKey = `formLabel.${link.toLowerCase()}`;
-              const logo = NIMI_LINK_DETAIL_EXTENDED[link].logo;
+              const logo = getNimiLinkLogoSVGElement(link);
 
               return (
                 <ButtonGroup key={inputId} id={inputId} onClick={() => onLinksChange(link)}>
@@ -157,7 +157,7 @@ export function AddFieldsModal({ onChange, onClose, onSubmit }: AddFieldsModalPr
               .map((blockchain) => {
                 const inputId = `modal-checkbox-${blockchain}`;
                 const i18nKey = `formLabel.${blockchain.toLowerCase()}`;
-                const logo = NIMI_BLOCKCHAIN_LOGO_URL[blockchain];
+                const logo = getNimiBlockchainLogoSVGElement(blockchain);
                 const onChangeHandler = () => {
                   // Compute the new state and then batch it previous state for onChange have newest state
                   const newState = blockchain as NimiBlockchain;
