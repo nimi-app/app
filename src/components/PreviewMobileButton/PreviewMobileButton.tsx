@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { MEDIA_WIDTHS, NimiSignatureColor } from '../../theme';
 

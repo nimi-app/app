@@ -1,6 +1,6 @@
 import { Reorder } from 'framer-motion';
 import { PropsWithChildren } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import DragDotsSVG from '../../assets/svg/dragdots.svg';
 

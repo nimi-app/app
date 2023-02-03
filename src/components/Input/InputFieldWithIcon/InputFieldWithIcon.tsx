@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, SVGProps } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import XSVG from '../../../assets/svg/cross.svg';
 import { renderSVG } from '../../../utils';

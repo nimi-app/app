@@ -1,6 +1,6 @@
 import { NimiImageType } from '@nimi.io/card/types';
 import { useFormContext } from 'react-hook-form';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useLensDefaultProfileData } from '../../hooks/useLensDefaultProfileData';
 import { useUserInterface } from '../../services/useUserInterface';

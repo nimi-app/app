@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import Cross from '../../assets/svg/cross.svg';
 import { SharedInputStyles } from '../../theme';

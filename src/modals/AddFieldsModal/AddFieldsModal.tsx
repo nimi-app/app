@@ -2,7 +2,7 @@ import { NIMI_BLOCKCHAIN_LOGO_URL, NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/ca
 import { Nimi, NimiBlockchain, NimiLinkType, NimiWidgetType } from '@nimi.io/card/types';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { LinksSection } from './LinksSection';
 import { StyledFlexList, StyledGridList } from './styled';

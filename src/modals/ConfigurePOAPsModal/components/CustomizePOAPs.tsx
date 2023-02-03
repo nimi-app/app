@@ -1,7 +1,7 @@
 import { POAPToken } from '@nimi.io/card/types';
 import { Reorder } from 'framer-motion';
 import { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { AnimatedSection } from './AnimatedSection';
 import { StaticPOAP } from './POAPs';

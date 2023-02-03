@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import GitHubLogo from '../../assets/svg/github-logo.svg';
 import Twitter from '../../assets/svg/twitter-logo.svg';

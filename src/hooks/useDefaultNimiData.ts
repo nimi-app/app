@@ -1,11 +1,8 @@
 import { Nimi, NimiThemeType } from '@nimi.io/card/types';
-import createDebugger from 'debug';
 import { useMemo } from 'react';
 
 import { useDeployedPageData } from '../api/RestAPI/hooks/useDeployedPageData';
 import { useEnsGeneratedData } from '../api/RestAPI/hooks/useEnsGeneratedData';
-
-const debug = createDebugger('hooks:useDefaultNimiData');
 
 interface UseInitialNimiData {
   data: Nimi;
@@ -62,8 +59,6 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
     account,
     ensName,
   ]);
-
-  debug({ NimiObject: nimiObject });
 
   return {
     loading: isDepoyedLoading || isGeneratedFetching,

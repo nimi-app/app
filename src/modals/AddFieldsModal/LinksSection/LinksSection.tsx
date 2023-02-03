@@ -1,7 +1,7 @@
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkType } from '@nimi.io/card/types';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ButtonGroup } from '../../../components/form/Button';
 import { renderSVG } from '../../../utils';

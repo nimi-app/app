@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const AssetListInnerWrapper = styled.div`
   max-height: 500px;

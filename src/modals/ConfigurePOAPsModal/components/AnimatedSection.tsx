@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const AnimatedSection = ({ children }: { children: ReactNode }) => (
   <AnimatedContainer

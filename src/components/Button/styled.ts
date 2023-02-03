@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styled, { css } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import { NimiSignatureColor } from '../../theme';
 

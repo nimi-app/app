@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRef } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useDeployedPageData } from '../../api/RestAPI/hooks/useDeployedPageData';
 import { useEnsMetadataImage } from '../../api/RestAPI/hooks/useEnsMetadataImage';

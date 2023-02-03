@@ -1,5 +1,5 @@
 import { Property } from 'csstype';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { NimiSignatureColor } from '../../theme';
 

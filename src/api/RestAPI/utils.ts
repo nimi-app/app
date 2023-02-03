@@ -29,24 +29,6 @@ export const nimiClient = axios.create({
   baseURL: getAPIBaseURL(),
 });
 
-/**
- * Returns the POAP API client.
- * @returns
- */
-export function getPOAPAPIClient() {
-  if (!process.env.POAP_API_KEY) {
-    throw new Error('POAP_API_KEY is not set.');
-  }
-
-  return axios.create({
-    baseURL: 'https://api.poap.tech',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': process.env.POAP_API_KEY,
-    },
-  });
-}
-
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
 
 function isCID(hash: string) {
@@ -61,7 +43,6 @@ function isCID(hash: string) {
 }
 
 export function formatEnsMetadataImage(ensData: ENSMetadata) {
-  console.log('ensMeta', ensData);
   if ('image' in ensData && ensData.image) {
     let imageUrl: string | undefined;
     if (ensData.image.startsWith('ipfs://ipfs/')) {

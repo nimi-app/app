@@ -67,17 +67,14 @@ const nextConfig = {
     NIMI_API_DEV_BASE_URL: process.env.NIMI_API_DEV_BASE_URL,
     APP_ENV: process.env.APP_ENV,
     POAP_API_KEY: process.env.POAP_API_KEY,
-    ALCHEMY_API_KEY: process.env.ALCHEMY_API_KEY,
+    NEXT_PUBLIC_ALCHEMY_API_KEY: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
   },
   output: 'standalone',
   images: {
     domains: ['assets.coingecko.com', 'assets.coingecko.com', 'raw.githubusercontent.com'],
   },
   compiler: {
-    // Enables the styled-components SWC transform
-    styledComponents: {
-      ssr: false,
-    },
+    styledComponents: true,
   },
 };
 

@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import SearchIcon from '../../assets/svg/search-icon.svg';
 import { Heading } from '../Heading';

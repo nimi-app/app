@@ -1,7 +1,7 @@
 import { NimiImageType } from '@nimi.io/card/types';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useUploadImageToIPFS } from '../../api/RestAPI/hooks/useUploadImageToIPFS';
 import PlaceholderMini from '../../assets/images/nimi-placeholder.png';

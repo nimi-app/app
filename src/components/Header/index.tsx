@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import NimiLogo from '../../assets/svg/nimi-logo-text.svg';
 import { HEADER_HEIGHT, MEDIA_WIDTHS } from '../../theme';

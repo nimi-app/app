@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { NoPOAP } from './POAPs';
 import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';

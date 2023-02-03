@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { DottedBorder } from '../Button/styled';
 import { Heading } from '../Heading';

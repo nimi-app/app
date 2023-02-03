@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import LensLogoImage from '../../assets/svg/lens-logo.svg?url';
 import LinktreeLogoImage from '../../assets/svg/linktree.svg?url';
