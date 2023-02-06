@@ -23,11 +23,15 @@ const Container = styled.header`
 `;
 
 const Content = styled.div`
-  max-width: ${MEDIA_WIDTHS.upToMedium}px;
+  /* max-width: ${MEDIA_WIDTHS.upToMedium}px; */
   height: ${HEADER_HEIGHT};
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 40px;
   margin: 0 auto;
+  margin-bottom: 5rem;
+  @media (max-width: ${MEDIA_WIDTHS.upToMedium}px) {
+    padding: 0 20px;
+  }
 `;

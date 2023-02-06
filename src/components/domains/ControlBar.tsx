@@ -21,9 +21,9 @@ export function ControlBar({ value, searchTextChangedHandler }: ControlBarProps)
         content={value}
         style={{ maxWidth: '200px', background: 'none' }}
       >
-        <ContentInput
+        <StyledContentInput
+          inputInvalid={false}
           id="domain-search-input"
-          isInvalidInput={false}
           onChange={searchTextChangedHandler}
           placeholder="Search"
         />
@@ -43,4 +43,7 @@ const StyledInput = styled(InputFieldWithIcon)`
   max-width: 200px !important;
   display: flex !important;
   align-items: flex-start;
+`;
+const StyledContentInput = styled(ContentInput)`
+  padding: 8px 0px 8px 40px;
 `;
