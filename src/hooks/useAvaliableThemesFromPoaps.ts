@@ -14,6 +14,13 @@ const themeToPoapMapping: { theme: NimiCuratedTheme; eventId: number[] }[] = [
   { theme: NimiThemeType.DEVCON, eventId: [60695, 73449] },
   { theme: NimiThemeType.RAAVE, eventId: [63182] },
   { theme: NimiThemeType.DAIVINITY, eventId: [74051] },
+  {
+    theme: NimiThemeType.ETHTLV_2023,
+    eventId: [
+      63182, 98806, 98810, 98812, 98813, 99047, 98815, 98818, 99044, 99608, 99923, 98823, 98826, 99610, 98827, 99348,
+      99614, 99850, 97863, 98828, 98829, 98830, 98831, 98835, 99616, 98837, 98838, 98839, 99851,
+    ],
+  },
 ];
 
 /**

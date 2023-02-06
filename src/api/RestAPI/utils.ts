@@ -29,6 +29,23 @@ export const nimiClient = axios.create({
   baseURL: getAPIBaseURL(),
 });
 
+/**
+ * Returns the POAP API client.
+ * @returns
+ */
+export function getPOAPAPIClient() {
+  if (!process.env.NEXT_POAP_API_KEY) {
+    throw new Error('POAP_API_KEY is not set.');
+  }
+
+  return axios.create({
+    baseURL: 'https://api.poap.tech',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': process.env.NEXT_POAP_API_KEY,
+    },
+  });
+}
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
 
 function isCID(hash: string) {
