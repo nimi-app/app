@@ -66,7 +66,7 @@ const nextConfig = {
     NIMI_API_BASE_URL: process.env.NIMI_API_BASE_URL,
     NIMI_API_DEV_BASE_URL: process.env.NIMI_API_DEV_BASE_URL,
     APP_ENV: process.env.APP_ENV,
-    POAP_API_KEY: process.env.POAP_API_KEY,
+    NEXT_PUBLIC_POAP_API_KEY: process.env.NEXT_PUBLIC_POAP_API_KEY,
     NEXT_PUBLIC_ALCHEMY_API_KEY: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
   },
   output: 'standalone',

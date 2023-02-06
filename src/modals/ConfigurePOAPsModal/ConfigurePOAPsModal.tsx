@@ -49,7 +49,7 @@ export function ConfigurePOAPsModal({ ensAddress, closeModal }: ConfigurePOAPsMo
       let tokens: POAPToken[] = [];
 
       try {
-        tokens = await fetchUserPOAPs(createPOAPClient(process.env.POAP_API_KEY as string), ensAddress);
+        tokens = await fetchUserPOAPs(createPOAPClient(process.env.NEXT_PUBLIC_POAP_API_KEY as string), ensAddress);
       } catch (error) {
         // TODO: HANDLE ERROR
         console.error(error);
