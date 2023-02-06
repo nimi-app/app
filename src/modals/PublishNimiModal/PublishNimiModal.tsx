@@ -22,6 +22,7 @@ const ModalContent = styled(ModalContentBase)`
 
 export interface PublishNimiModalProps {
   onClose: () => void;
+  isPublishing: boolean;
   isPublished: boolean;
   ensName: string;
   ipfsHash: string | undefined;
