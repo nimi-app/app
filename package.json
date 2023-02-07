@@ -43,6 +43,7 @@
     "dev": "GENERATE_SOURCEMAP=false next dev",
     "build": "GENERATE_SOURCEMAP=false next build",
     "start": "next start",
+    "export": "next export",
     "lint": "eslint \"./src/**/*.{ts,tsx,js}\"",
     "lint:fix": "npm run lint -- --fix",
     "contracts:codegen": "typechain --target ethers-v5 --out-dir src/generated/contracts './src/abis/*.json'",

@@ -51,7 +51,11 @@ function Loading() {
     };
   });
 
-  return loading && <Spinner />;
+  if (loading) {
+    return <Spinner />;
+  }
+
+  return null;
 }
 
 export default function App({ Component, pageProps }: AppProps) {
