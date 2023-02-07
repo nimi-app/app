@@ -44,7 +44,7 @@ export const StyledButtonBase = styled(StyledButtonStaticBase)`
   }
 
   &:disabled {
-    background-color: ${({ theme }) => theme?.purple5};
+    background-color: ${({ theme }) => theme.purple5};
     cursor: not-allowed;
     box-shadow: none;
     outline: none;

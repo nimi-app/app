@@ -2,7 +2,7 @@ import { Nimi } from '@nimi.io/card/types';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import { formatLinktreeData, getNimiAPIClient } from '../utils';
+import { formatLinktreeData, nimiClient } from '../utils';
 
 interface ImportFromLinktree {
   linktreeUrl: string;
@@ -17,7 +17,7 @@ export type LinktreeData = {
 };
 
 export async function fetcher(linktreeURL: string) {
-  return getNimiAPIClient()
+  return nimiClient
     .get<{ data: Nimi }>('/nimi/import', {
       params: {
         url: linktreeURL,

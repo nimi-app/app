@@ -1,5 +1,5 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { getNimiLinkLogoSVGElement } from '@nimi.io/card';
+import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { NimiLinkBaseDetails } from '@nimi.io/card/types';
 import { useFormContext } from 'react-hook-form';
 import { styled } from 'styled-components';
@@ -49,7 +49,7 @@ export function ReorderInput({ index, removeLink, field, key }: ReorderInputProp
         </PenContainer>
       </InputContainer>
       <InputFieldWithIcon
-        inputLogo={getNimiLinkLogoSVGElement(type)}
+        inputLogo={NIMI_LINK_DETAIL_EXTENDED[type].logo}
         content={content}
         onClearClick={() => setValue(`links[${index}].content`, '')}
         onInputClick={() => removeLink(index)}

@@ -2,7 +2,7 @@ import { Nimi } from '@nimi.io/card/types';
 import { useQuery } from '@tanstack/react-query';
 
 import { useRainbow } from '../../../hooks/useRainbow';
-import { getNimiAPIClient } from '../utils';
+import { nimiClient } from '../utils';
 
 interface DeployedNimiPageType {
   publisher: string;
@@ -26,7 +26,7 @@ export function useDeployedPageData(ensName: string) {
       ens: ensName,
     };
 
-    const { data } = await getNimiAPIClient().get<{ data: DeployedNimiPageType[] }>(`/nimi/by`, { params });
+    const { data } = await nimiClient.get<{ data: DeployedNimiPageType[] }>(`/nimi/by`, { params });
     return data;
   };
 

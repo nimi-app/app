@@ -3,6 +3,26 @@ import { styled } from 'styled-components';
 
 import { Colors } from './styled';
 
+export const Button = styled.button.attrs<{ warning: boolean }, { backgroundColor: string }>(({ warning, theme }) => ({
+  backgroundColor: warning ? theme.red1 : theme.primary1,
+}))`
+  padding: 1rem 2rem 1rem 2rem;
+  border-radius: 3rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  color: ${({ theme }) => theme.white};
+  width: 100%;
+  :disabled {
+    background-color: ${({ theme }) => theme.bg1};
+    color: ${({ theme }) => theme.text4};
+    cursor: auto;
+  }
+`;
+
 const StyledLink = styled.a<{ color?: keyof Colors; underlined?: boolean }>`
   text-decoration: ${(props) => (props.underlined ? 'underline' : 'none')};
   cursor: pointer;

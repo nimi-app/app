@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { getNimiAPIClient } from '../utils';
+import { nimiClient } from '../utils';
 
 interface PublishNimiApiResponse {
   cidV1: string;
@@ -16,7 +16,7 @@ const uploadImage = async (file: File) => {
     },
   };
 
-  const { data } = await getNimiAPIClient().post<{
+  const { data } = await nimiClient.post<{
     data: PublishNimiApiResponse;
   }>('/nimi/assets', formData, config);
   return data.data;

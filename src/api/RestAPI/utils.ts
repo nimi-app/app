@@ -10,26 +10,24 @@ import { generateID, guessLinkTypeBasedOnUrl } from '../../utils';
  * @returns {string} The base URL for the Nimi API.
  */
 export function getAPIBaseURL() {
-  const prodkey = 'NEXT_PUBLIC_NIMI_API_BASE_URL';
-  const prodValue = process.env[prodkey];
-
-  if (!prodValue || prodValue === '') {
-    throw new Error(`${prodkey} is not set.`);
+  // If the NIMI_API_BASE_URL is not set, throw an error.
+  if (!process.env.NIMI_API_BASE_URL) {
+    throw new Error('NIMI_API_BASE_URL is not set.');
   }
 
-  const devKey = 'NEXT_PUBLIC_NIMI_API_DEV_BASE_URL';
-  if (process.env[devKey] && (process.env.NODE_ENV === 'development' || process.env.APP_ENV === 'development')) {
-    return process.env[devKey];
+  if (
+    process.env.NIMI_API_DEV_BASE_URL &&
+    (process.env.NODE_ENV === 'development' || process.env.APP_ENV === 'development')
+  ) {
+    return process.env.NIMI_API_DEV_BASE_URL;
   }
 
-  return prodValue;
+  return process.env.NIMI_API_BASE_URL as string;
 }
 
-export function getNimiAPIClient() {
-  return axios.create({
-    baseURL: getAPIBaseURL(),
-  });
-}
+export const nimiClient = axios.create({
+  baseURL: getAPIBaseURL(),
+});
 
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
 
