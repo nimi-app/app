@@ -9,7 +9,7 @@ import { useConfigurePOAPsModal } from './useConfigurePOAPsModal';
 import { Modal } from '../../components/Modal';
 
 type ConfigurePOAPsModalProps = {
-  ensAddress?: string;
+  ensAddress: string;
   closeModal: () => void;
 };
 const getTokenIds = (getValues) => {

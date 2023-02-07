@@ -1,8 +1,8 @@
 import { Nimi, NimiPage, NimiPageProvider } from '@nimi.io/card';
 import { validateNimi } from '@nimi.io/card/validators';
+import createDebug from 'debug';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import { styled, StyleSheetManager } from 'styled-components';
-import createDebug from 'debug';
 
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
 import { Card as CardBase } from '../../../Card';

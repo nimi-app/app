@@ -23,6 +23,8 @@ export function ControlBar({ value, searchTextChangedHandler }: ControlBarProps)
       >
         <ContentInput
           id="domain-search-input"
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           isInvalidInput={false}
           onChange={searchTextChangedHandler}
           placeholder="Search"
