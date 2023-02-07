@@ -1,8 +1,6 @@
-import { useAccountModal, useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
-import { useEffect, useState } from 'react';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useTranslation } from 'react-i18next';
 import { styled } from 'styled-components';
-import { useAccount, useClient, useConnect, useEnsAvatar, useEnsName, useNetwork } from 'wagmi';
 
 import { Web3Avatar } from './Web3Avatar';
 import { StyledButtonBaseFrame } from '../Button/styled';
@@ -37,92 +35,57 @@ const StyledTextContent = styled.span`
 
 export function Web3Status() {
   const { t } = useTranslation();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const { chain } = useNetwork();
-  const { address, connector, isConnected } = useAccount();
-  const ensNameQuery = useEnsName();
-  const ensAvatar = useEnsAvatar();
-  const { openConnectModal } = useConnectModal();
-  const { openChainModal } = useChainModal();
-  const { openAccountModal } = useAccountModal();
-  const { connectAsync, connectors } = useConnect();
-  const client = useClient();
-  const [isAutoConnecting, setIsAutoConnecting] = useState(false);
 
-  useEffect(() => {
-    if (isAutoConnecting) return;
-    if (isConnected) return;
-
-    setIsAutoConnecting(true);
-
-    const autoConnect = async () => {
-      const lastUsedConnector = client.storage?.getItem('wallet');
-
-      const sorted = lastUsedConnector
-        ? [...connectors].sort((x) => (x.id === lastUsedConnector ? -1 : 1))
-        : connectors;
-
-      for (const connector of sorted) {
-        if (!connector.ready || !connector.isAuthorized) continue;
-        const isAuthorized = await connector.isAuthorized();
-        if (!isAuthorized) continue;
-
-        await connectAsync({ connector });
-        break;
-      }
-    };
-
-    autoConnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsLoaded(true);
-    }
-
-    console.log({
-      address,
-      connector,
-      isConnected,
-    });
-  }, [address, connector, isConnected]);
-
-  if (!isLoaded) return null;
-
-  const displayName = ensNameQuery.data || address;
-
-  // Connected
-  if (isConnected) {
-    // Unsupported network
-    if (chain?.unsupported) {
-      return (
-        <StyledWrapper isError={true} onClick={openChainModal}>
-          <Web3Avatar url={ensAvatar.data as string} alt={displayName} />
-          <StyledInnerWrapper>
-            <StyledTextContent>{t('error.wrongNetwork')}</StyledTextContent>
-          </StyledInnerWrapper>
-        </StyledWrapper>
-      );
-    }
-
-    return (
-      <StyledWrapper isError={false} onClick={openAccountModal}>
-        <Web3Avatar url={ensAvatar.data as string} alt={displayName} />
-        <StyledInnerWrapper>
-          <StyledTextContent>{displayName}</StyledTextContent>
-        </StyledInnerWrapper>
-      </StyledWrapper>
-    );
-  }
-
-  // Not connected
   return (
-    <StyledWrapper isError={false} onClick={openConnectModal}>
-      <Web3Avatar />
-      <StyledInnerWrapper>
-        <StyledTextContent>{t('connect')}</StyledTextContent>
-      </StyledInnerWrapper>
-    </StyledWrapper>
+    <ConnectButton.Custom>
+      {({ account, chain, openChainModal, openAccountModal, openConnectModal, authenticationStatus, mounted }) => {
+        const ready = mounted && authenticationStatus !== 'loading';
+        const connected = ready && account && chain;
+        return (
+          <div
+            {...(!ready && {
+              'aria-hidden': true,
+              style: {
+                opacity: 0,
+                pointerEvents: 'none',
+                userSelect: 'none',
+              },
+            })}
+          >
+            {(() => {
+              if (!connected) {
+                return (
+                  <StyledWrapper isError={false} onClick={openConnectModal}>
+                    <Web3Avatar />
+                    <StyledInnerWrapper>
+                      <StyledTextContent>{t('connect')}</StyledTextContent>
+                    </StyledInnerWrapper>
+                  </StyledWrapper>
+                );
+              }
+              if (chain.unsupported) {
+                return (
+                  <StyledWrapper isError={chain.unsupported} onClick={openChainModal}>
+                    <Web3Avatar url={account.ensAvatar} alt={account.displayName} />
+
+                    <StyledInnerWrapper>
+                      <StyledTextContent>{t('error.wrongNetwork')}</StyledTextContent>
+                    </StyledInnerWrapper>
+                  </StyledWrapper>
+                );
+              }
+              return (
+                <StyledWrapper isError={false} onClick={openAccountModal}>
+                  <Web3Avatar url={account.ensAvatar} alt={account.displayName} />
+                  <StyledInnerWrapper>
+                    <StyledTextContent>{account.displayName}</StyledTextContent>
+                  </StyledInnerWrapper>
+                </StyledWrapper>
+              );
+            })()}
+          </div>
+        );
+      }}
+    </ConnectButton.Custom>
   );
 }

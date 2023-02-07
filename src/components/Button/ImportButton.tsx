@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { styled } from 'styled-components';
 
-import LensLogoImage from '../../assets/svg/lens-logo.svg?url';
-import LinktreeLogoImage from '../../assets/svg/linktree.svg?url';
-import NFTImage from '../../assets/svg/nft-logo.svg?url';
-import TwitterLogoImage from '../../assets/svg/twitter-logo.svg?url';
+import LensLogoImage from '../../assets/svg/lens-logo.svg';
+import LinktreeLogoImage from '../../assets/svg/linktree.svg';
+import NFTImage from '../../assets/svg/nft-logo.svg';
+import TwitterLogoImage from '../../assets/svg/twitter-logo.svg';
 
 interface ImportButtonProps {
   onClick: any;

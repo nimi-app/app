@@ -30,15 +30,15 @@ declare namespace NodeJS {
   }
 }
 
-declare module '*.svg?url' {
-  /**
-   * SVG images with `?url` suffix imported via next-image-loader
-   */
-  const content: {
-    src: string;
-    height: number;
-    width: number;
-  }
-
-  export default content
+declare module '*.svg' {
+  const content: any;
+  export default content;
+}
+declare module '*.png' {
+  const content: any;
+  export default content;
+}
+declare module '*.jpeg' {
+  const content: any;
+  export default content;
 }

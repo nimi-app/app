@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 import { useDeployedPageData } from '../../api/RestAPI/hooks/useDeployedPageData';
 import { useEnsMetadataImage } from '../../api/RestAPI/hooks/useEnsMetadataImage';
-import purpleCircleImage from '../../assets/svg/purpleCircle.svg?url';
+import purpleCircleImage from '../../assets/svg/purpleCircle.svg';
 import { ENSDomain } from '../../models';
 import { NimiSignatureColor } from '../../theme';
 import { StyledLink } from '../Button/styled';
