@@ -1,7 +1,6 @@
-import { NimiThemeType } from '@nimi.io/card';
+import { NimiThemeType, validateNimi } from '@nimi.io/card';
 import { createPOAPClient, fetchUserPOAPs } from '@nimi.io/card/api';
 import { Nimi, POAPToken } from '@nimi.io/card/types';
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -15,6 +14,15 @@ import { Loader, LoaderWrapper } from '../../../components/Loader';
 import { getAvailableThemesByPOAPs } from '../../../hooks/useAvaliableThemesFromPoaps';
 import { PageLayout } from '../../../layout';
 import { insertPoapWidgetIntoNimi } from '../../../utils';
+
+const validatedNimiSilent = (nimi: Nimi) => {
+  try {
+    const validatedNimi = validateNimi(nimi);
+    return validatedNimi;
+  } catch (error) {
+    return false;
+  }
+};
 
 interface CreateNimiPageProps {
   availableThemes: ReturnType<typeof getAvailableThemesByPOAPs>;
@@ -69,8 +77,13 @@ function CreateNimiContainer({ domain }: { domain: string }) {
         // Nimi Snapshot from the API
         const nimiIPNSSnapshot = await fetchNimiIPNS(nimiAPIClient, domain, mainnet.id);
 
+        // Ignore old snapshots
         // If the user has a Nimi IPNS, redirect to the Nimi page
-        if (nimiIPNSSnapshot.ipns && nimiIPNSSnapshot.nimi) {
+        if (
+          nimiIPNSSnapshot.ipns &&
+          nimiIPNSSnapshot.nimi &&
+          validatedNimiSilent(nimiIPNSSnapshot.nimi.nimi) !== false
+        ) {
           props = {
             ...props,
             ipnsKey: nimiIPNSSnapshot.ipns,
