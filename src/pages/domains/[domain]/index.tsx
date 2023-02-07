@@ -3,6 +3,7 @@ import { createPOAPClient, fetchUserPOAPs } from '@nimi.io/card/api';
 import { Nimi, POAPToken } from '@nimi.io/card/types';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import { mainnet } from 'wagmi';
 
 import { fetchNimiIPNS, generateNimiFromENS } from '../../../api/RestAPI/nimi';
 import { getNimiAPIClient } from '../../../api/RestAPI/utils';
@@ -54,7 +55,7 @@ export async function getServerSideProps(
     }
     const nimiAPIClient = getNimiAPIClient();
     // Nimi Snapshot from the API
-    const nimiIPNSSnapshot = await fetchNimiIPNS(nimiAPIClient, domain);
+    const nimiIPNSSnapshot = await fetchNimiIPNS(nimiAPIClient, domain, mainnet.id);
 
     // If the user has a Nimi IPNS, redirect to the Nimi page
     if (nimiIPNSSnapshot.ipns && nimiIPNSSnapshot.nimi) {
@@ -65,7 +66,7 @@ export async function getServerSideProps(
         initialNimi: nimiIPNSSnapshot.nimi.nimi,
       };
     } else {
-      props.initialNimi = await generateNimiFromENS(nimiAPIClient, domain);
+      props.initialNimi = await generateNimiFromENS(nimiAPIClient, domain, mainnet.id);
     }
 
     if (!props.initialNimi) {
@@ -101,10 +102,11 @@ export default function CreateNimiPage({
   poapList,
   availableThemes,
 }: Awaited<ReturnType<typeof getServerSideProps>>['props']) {
+  const title = `Create Nimi for ${domain}`;
   return (
     <>
       <Head>
-        <title>Create Nimi for {domain}</title>
+        <title>{title}</title>
       </Head>
       <PageLayout>
         <Container>

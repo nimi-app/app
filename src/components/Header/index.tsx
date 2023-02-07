@@ -12,7 +12,7 @@ export function Header() {
         <Link href="/domains">
           <NimiLogo width="100px" height="40px" />
         </Link>
-       <Web3Status />
+        <Web3Status />
       </Content>
     </Container>
   );
