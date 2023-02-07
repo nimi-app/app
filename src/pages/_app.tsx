@@ -5,10 +5,9 @@ import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useEffect, useState } from 'react';
 import '@rainbow-me/rainbowkit/styles.css';
 
-import { Loader, LoaderWrapper } from '../components/Loader';
+import { Spinner } from '../components/Spinner';
 import { useRainbow } from '../hooks/useRainbow';
 import { ReactQueryProvider, WagmiProvider } from '../providers';
-import { useUserInterface } from '../services/useUserInterface';
 import { FixedGlobalStyle, ThemedGlobalStyle, ThemeProvider } from '../theme';
 import { loadFathom } from '../utils';
 import '../i18n/config'; // This is not ideal, but next-i18next doesn't support ESM yet
@@ -35,13 +34,11 @@ const AppRoot: FC<PropsWithChildren> = ({ children }) => {
 function Loading() {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const handleStart = (url) => url !== router.asPath && setLoading(true);
-    const handleComplete = (url) =>
-      url === router.asPath &&
-      setTimeout(() => {
-        setLoading(false);
-      }, 5000);
+    const handleComplete = (url) => url === router.asPath && setLoading(false);
 
     router.events.on('routeChangeStart', handleStart);
     router.events.on('routeChangeComplete', handleComplete);
@@ -53,37 +50,17 @@ function Loading() {
       router.events.off('routeChangeError', handleComplete);
     };
   });
+
+  return loading && <Spinner />;
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { showSpinner, hideSpinner } = useUserInterface();
   useEffect(() => {
     // Load Fathom if it's set in .env
     if (process.env.FATHOM_SITE_ID) {
       loadFathom(process.env.FATHOM_SITE_ID);
     }
   }, []);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const handleStart = (url) => url !== router.asPath && showSpinner();
-    const handleComplete = (url) =>
-      url === router.asPath &&
-      setTimeout(() => {
-        hideSpinner();
-      }, 5000);
-
-    router.events.on('routeChangeStart', handleStart);
-    router.events.on('routeChangeComplete', handleComplete);
-    router.events.on('routeChangeError', handleComplete);
-
-    return () => {
-      router.events.off('routeChangeStart', handleStart);
-      router.events.off('routeChangeComplete', handleComplete);
-      router.events.off('routeChangeError', handleComplete);
-    };
-  });
 
   return (
     <>
@@ -110,7 +87,10 @@ export default function App({ Component, pageProps }: AppProps) {
           <AppRoot>
             <ThemeProvider>
               <ThemedGlobalStyle />
-              <Component {...pageProps} />
+              <>
+                <Loading />
+                <Component {...pageProps} />
+              </>
             </ThemeProvider>
           </AppRoot>
         </WagmiProvider>
