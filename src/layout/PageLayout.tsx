@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Navigate, Outlet } from 'react-router-dom';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
