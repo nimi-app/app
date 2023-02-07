@@ -1,6 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { styled } from 'styled-components';
 
 import { Content, Header, HeaderEyebrow, HeroLead, HeroText, PageWrapper } from './styled';
 import NimiLogoText from '../../assets/svg/nimi-logo-text.svg';
@@ -16,7 +17,7 @@ export function Landing() {
   return (
     <PageWrapper>
       <Header>
-        <NimiLogoText />
+        <img src={NimiLogoText} alt="Nimi Logo" />
       </Header>
       <Content>
         <Container>
