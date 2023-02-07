@@ -2,9 +2,8 @@ import { Nimi } from '@nimi.io/card';
 import { validateNimi } from '@nimi.io/card/validators';
 import { useQuery } from '@tanstack/react-query';
 
-import { ChainId } from '../../../constants';
 import { useRainbow } from '../../../hooks/useRainbow';
-import { formatEnsMetadataImage, getNimiAPIClient } from '../utils';
+import { getNimiAPIClient } from '../utils';
 
 export interface ENSMetadata {
   uri: string;
