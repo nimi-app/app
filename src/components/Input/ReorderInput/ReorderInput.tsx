@@ -5,8 +5,8 @@ import { useFormContext } from 'react-hook-form';
 import { styled } from 'styled-components';
 
 import { ContentInput, InputFieldWithIcon } from '..';
-import XSVG from '../../../assets/svg/cross.svg';
-import PenSVG from '../../../assets/svg/pen.svg';
+import { ReactComponent as XSVG } from '../../../assets/svg/cross.svg';
+import { ReactComponent as PenSVG } from '../../../assets/svg/pen.svg';
 import { SharedInputStyles } from '../../../theme';
 import { ReorderItem } from '../../ReorderItem';
 

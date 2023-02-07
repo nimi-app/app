@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { styled } from 'styled-components';
 
-import SearchIcon from '../../assets/svg/search-icon.svg';
+import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
 import { Heading } from '../Heading';
 import { ContentInput, InputFieldWithIcon } from '../Input';
 

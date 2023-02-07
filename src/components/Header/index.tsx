@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import NimiLogo from '../../assets/svg/nimi-logo-text.svg';
+import { ReactComponent as NimiLogo } from '../../assets/svg/nimi-logo-text.svg';
 import { HEADER_HEIGHT, MEDIA_WIDTHS } from '../../theme';
 import { Web3Status } from '../Web3Status';
 

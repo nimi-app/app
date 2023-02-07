@@ -25,9 +25,11 @@ export function DomainItem({ domain }: DomainItemProps) {
           alt={`${domain.name} Image`}
           src={domainData?.nimi?.image ? domainData.nimi.image.url : metadata ? metadata : purpleCircleImage}
           onError={(event) => {
-            let target = event.target as HTMLImageElement;
+            const target = event.target as HTMLImageElement;
 
-            if (target !== purpleCircleImage) target = purpleCircleImage;
+            if (target.src !== purpleCircleImage) {
+              target.src = purpleCircleImage;
+            }
           }}
         />
         <DomainName>{domain.name}</DomainName>
