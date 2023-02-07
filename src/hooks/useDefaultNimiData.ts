@@ -12,7 +12,7 @@ interface UseInitialNimiData {
 
 interface InitialNimiDataProps {
   ensName: string;
-  account: string;
+  account?: string;
 }
 /**
  * Returns default data to be displayed on CreateNimipage
@@ -38,7 +38,7 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
       ensName,
       displayName: ensName,
       addresses: [],
-      ensAddress: account,
+      ensAddress: account!,
       links: [],
       widgets: [],
     };
