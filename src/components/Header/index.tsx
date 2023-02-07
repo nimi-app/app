@@ -9,7 +9,7 @@ export function Header() {
   return (
     <Container>
       <Content>
-        <Link to="/domains">
+        <Link to="/domains/all">
           <NimiLogo width="100px" height="40px" />
         </Link>
         <Web3Status />

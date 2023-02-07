@@ -11,6 +11,7 @@ import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS } from '../theme';
 
 export function PageLayout() {
   const { chainId, isConnected } = useRainbow();
+
   const { t } = useTranslation(['common', 'landing']);
 
   return (
