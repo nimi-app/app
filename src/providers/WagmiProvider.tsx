@@ -8,7 +8,7 @@ import {
   rainbowWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
-import { ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
@@ -46,6 +46,6 @@ const wagmiClient = createClient({
   provider,
 });
 
-export function WagmiProvider({ children }: { children: ReactNode }) {
+export function WagmiProvider({ children }: PropsWithChildren) {
   return <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>;
 }

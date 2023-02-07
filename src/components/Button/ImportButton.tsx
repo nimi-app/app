@@ -22,10 +22,10 @@ export enum ImportButtonType {
 const Logos: {
   [key in ImportButtonType]: string;
 } = {
-  [ImportButtonType.Twitter]: TwitterLogoImage.src,
-  [ImportButtonType.Lens]: LensLogoImage.src,
-  [ImportButtonType.Nft]: NFTImage.src,
-  [ImportButtonType.Linktree]: LinktreeLogoImage.src,
+  [ImportButtonType.Twitter]: TwitterLogoImage,
+  [ImportButtonType.Lens]: LensLogoImage,
+  [ImportButtonType.Nft]: NFTImage,
+  [ImportButtonType.Linktree]: LinktreeLogoImage,
 };
 
 export function ImportButton({ onClick, type, disabled = false }: ImportButtonProps) {

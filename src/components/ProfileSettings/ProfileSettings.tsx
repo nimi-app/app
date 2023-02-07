@@ -71,9 +71,7 @@ export function ProfileSettings() {
       <ProfilePictureContainer>
         <Toplabel>Profile Picture</Toplabel>
         <ProfileImage
-          src={
-            customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : defaultProfileImage.src
-          }
+          src={customImg ? customImg : formWatchPayload.image?.url ? formWatchPayload.image.url : defaultProfileImage}
         />
         {imgErrorMessage && <ErrorMessage>{imgErrorMessage}</ErrorMessage>}
         <ImportButton>
