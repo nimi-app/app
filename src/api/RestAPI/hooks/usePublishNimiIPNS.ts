@@ -1,21 +1,31 @@
 import { Nimi } from '@nimi.io/card/types';
 import { useMutation } from '@tanstack/react-query';
 
-import { nimiClient } from '../utils';
+import { getNimiAPIClient } from '../utils';
 
-interface PublishNimiViaIPNSParams {
+export interface PublishNimiViaIPNSParams {
   chainId: number;
   nimi: Nimi;
-  signature: string;
 }
 
+type UpdateNimiViaIPNSParams = PublishNimiViaIPNSParams & {
+  signature: string;
+};
+
 interface PublishNimiIPNSResponse {
-  cidV1: string;
+  cid: string;
   ipns: string;
 }
 
-const postUserData = async (params: PublishNimiViaIPNSParams) => {
-  const { data } = await nimiClient.post<{
+const publishedNimiIPNS = async (params: PublishNimiViaIPNSParams) => {
+  const { data } = await getNimiAPIClient().post<{
+    data: PublishNimiIPNSResponse;
+  }>('/nimi/publish/ipns', params);
+  return data.data;
+};
+
+const updateNimiIPNS = async (params: UpdateNimiViaIPNSParams) => {
+  const { data } = await getNimiAPIClient().put<{
     data: PublishNimiIPNSResponse;
   }>('/nimi/publish/ipns', params);
   return data.data;
@@ -25,5 +35,12 @@ const postUserData = async (params: PublishNimiViaIPNSParams) => {
  * Returns mutation for getting IPNS hash
  */
 export function usePublishNimiIPNS() {
-  return useMutation(['publishNimiIPNS'], postUserData);
+  return useMutation(['publishNimiIPNS'], publishedNimiIPNS);
+}
+
+/**
+ * Returns mutation for getting IPNS hash
+ */
+export function useUpdateNimiIPNS() {
+  return useMutation(['updateNimiIPNS'], updateNimiIPNS);
 }

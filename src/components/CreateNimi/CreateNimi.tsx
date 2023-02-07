@@ -1,4 +1,4 @@
-import { ContractReceipt } from '@ethersproject/contracts';
+import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts';
 
 import { encodeContenthash, namehash as ensNameHash } from '@ensdomains/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,7 +14,7 @@ import { useSignMessage } from 'wagmi';
 import { PoapField } from './partials/PoapField';
 import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
 import { themes } from './themes';
-import { usePublishNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
+import { usePublishNimiIPNS, useUpdateNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
 import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
@@ -25,6 +25,7 @@ import {
   ImportFromTwitterModal,
   NFTSelectorModal,
   PublishNimiModal,
+  PublishNimiPageStep,
   TemplatePickerModal,
 } from '../../modals';
 import { useUserInterface } from '../../services/useUserInterface';
@@ -40,7 +41,7 @@ import { ProfileSettings } from '../ProfileSettings';
 import { PublishNimiButton } from '../PublishNimiButton';
 import { ReorderGroup } from '../ReorderGroup';
 
-const debug = createDebugger('Nimi:CreateNimi');
+const debug = createDebugger('components:CreateNimi');
 
 const NimiPreview = dynamic(
   async () => {
@@ -54,21 +55,23 @@ export interface CreateNimiProps {
   ensName: string;
   availableThemes: NimiCuratedTheme[];
   initialNimi: Nimi;
+  nimiIPNSKey?: string;
 }
 
-export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimiProps) {
+export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, nimiIPNSKey }: CreateNimiProps) {
+  const [stepsCompleted, setStepsCompleted] = useState<PublishNimiPageStep[]>([]);
+
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
-  const { account: ensAddress } = useRainbow();
-
   const { modalOpened, ModalTypes, openModal, closeModal, showSpinner, hideSpinner } = useUserInterface();
-
+  const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
+  const { mutateAsync: updateNimiAsync } = useUpdateNimiIPNS();
+  const [isPublishingNimi, setIsPublishingNimi] = useState(false);
   const [isNimiPublished, setIsNimiPublished] = useState(false);
   const [publishNimiError, setPublishNimiError] = useState<Error>();
   const [publishNimiResponseIpfsHash, setPublishNimiResponseIpfsHash] = useState<string>();
-  const [setContentHashTransactionReceipt, setSetContentHashTransactionReceipt] = useState<ContractReceipt>();
-
-  const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
-
+  const [setContentHashTransaction, setSetContentHashTransaction] = useState<ContractTransaction>();
+  const [setContentHashReceipt, setSetContentHashReceipt] = useState<ContractReceipt>();
+  const { chainId } = useRainbow();
   const { t } = useTranslation('nimi');
   const { signMessageAsync } = useSignMessage();
 
@@ -112,61 +115,81 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
   const onSubmitValid = async (nimi: Nimi) => {
     showSpinner();
 
+    // Resetting state
     setPublishNimiError(undefined);
     setIsNimiPublished(false);
+    setIsPublishingNimi(true);
+    setStepsCompleted([]);
+    setSetContentHashTransaction(undefined);
+    setSetContentHashReceipt(undefined);
+    openModal(ModalTypes.PUBLISH_NIMI);
 
     try {
       if (!publicResolverContract) {
         throw new Error('ENS Public Resolver contract is not available.');
       }
+      // Updating a current Nimi IPNS record
+      if (nimiIPNSKey) {
+        const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
+        const updateNimiResponse = await updateNimiAsync({
+          nimi,
+          chainId: 1, // always mainnet
+          signature,
+        });
+        if (!updateNimiResponse || !updateNimiResponse.cid) {
+          throw new Error('No response from updateNimiAsync');
+        }
+        setStepsCompleted((stepsCompleted) => [
+          ...stepsCompleted,
+          PublishNimiPageStep.BUNDLE_NIMI_PAGE,
+          PublishNimiPageStep.SET_CONTENT_HASH,
+        ]);
+        setPublishNimiResponseIpfsHash(updateNimiResponse.cid);
+        setSetContentHashReceipt({ status: 1 } as ContractReceipt);
+        setIsNimiPublished(true);
+        setIsPublishingNimi(false);
+        return;
+      }
 
-      const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
-
-      const { cidV1, ipns } = await publishNimiAsync({
+      // Publishing a new Nimi IPNS record
+      const { cid, ipns } = await publishNimiAsync({
         nimi,
-        signature,
-        chainId: 1,
+        chainId: chainId as number,
       });
 
-      if (!cidV1) {
+      if (!cid) {
         throw new Error('No CID returned from publishNimiViaIPNS');
       }
 
+      // Compare the current content hash with the new one
       const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
-
       const contentHash = `ipns://${ipns}`;
       const newContentHashEncoded = encodeContenthash(contentHash).encoded as unknown as string;
 
       if (currentContentHashEncoded === newContentHashEncoded) {
         setIsNimiPublished(true);
-        openModal(ModalTypes.PUBLISH_NIMI);
         hideSpinner();
-
         return;
       }
 
-      setPublishNimiResponseIpfsHash(cidV1);
+      setStepsCompleted([PublishNimiPageStep.BUNDLE_NIMI_PAGE]);
+      setPublishNimiResponseIpfsHash(cid);
 
-      const setContentHashTransaction = await setENSNameContentHash({
+      const setContentHashTx = await setENSNameContentHash({
         contract: publicResolverContract,
         name: nimi.ensName,
         contentHash,
       });
-
-      const setContentHashTransactionReceipt = await setContentHashTransaction.wait();
-
-      setSetContentHashTransactionReceipt(setContentHashTransactionReceipt);
+      setSetContentHashTransaction(setContentHashTx);
+      // Wait for the transaction to be mined
+      const setContentHashTxReceipt = await setContentHashTx.wait();
+      setSetContentHashReceipt(setContentHashTxReceipt);
+      setStepsCompleted((stepsCompleted) => [...stepsCompleted, PublishNimiPageStep.SET_CONTENT_HASH]);
       setIsNimiPublished(true);
       openModal(ModalTypes.PUBLISH_NIMI);
-      hideSpinner();
     } catch (error) {
-      debug({
-        error,
-      });
-
+      debug(error);
       setPublishNimiError(error);
-      openModal(ModalTypes.PUBLISH_NIMI);
-      hideSpinner();
     }
   };
 
@@ -330,11 +353,15 @@ export function CreateNimi({ ensName, availableThemes, initialNimi }: CreateNimi
 
       {modalOpened === ModalTypes.PUBLISH_NIMI && (
         <PublishNimiModal
+          setContentHashTransaction={setContentHashTransaction}
+          setContentHashReceipt={setContentHashReceipt}
+          chainId={chainId as number}
+          stepsCompleted={stepsCompleted}
           ensName={ensName}
           ipfsHash={publishNimiResponseIpfsHash}
+          isPublishing={isPublishingNimi}
           isPublished={isNimiPublished}
           publishError={publishNimiError}
-          setContentHashTransactionReceipt={setContentHashTransactionReceipt}
           onClose={closeModal}
         />
       )}

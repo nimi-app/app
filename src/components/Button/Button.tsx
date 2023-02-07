@@ -11,6 +11,8 @@ export function Button({ children, to, href, ...props }: ButtonProps) {
   /**  */
   if (href) {
     return (
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       <StyledButtonFrame as="a" href={href}>
         <StyledInnerWrapper>{children}</StyledInnerWrapper>
       </StyledButtonFrame>
@@ -30,6 +32,8 @@ export function Button({ children, to, href, ...props }: ButtonProps) {
 
   /** Default button */
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <StyledButtonFrame as="button" {...props}>
       <StyledInnerWrapper>{children}</StyledInnerWrapper>
     </StyledButtonFrame>

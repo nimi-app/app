@@ -1,10 +1,11 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { styled } from 'styled-components';
 import '@rainbow-me/rainbowkit/styles.css';
+import { useAccount, useClient, useConnect } from 'wagmi';
 
 import backgroundImage from '../assets/images/nimi-header-background.jpeg';
 import NimiLogoText from '../assets/svg/nimi-logo-text.svg';
@@ -16,54 +17,70 @@ import { NimiSignatureColor } from '../theme';
 export function ConnectWalletButton() {
   const { t } = useTranslation();
   const navigate = useRouter();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { openChainModal } = useChainModal();
+  const { isConnected, address } = useAccount();
+  const { openConnectModal } = useConnectModal();
+  const { connectAsync, connectors } = useConnect();
+  const client = useClient();
+  const [isAutoConnecting, setIsAutoConnecting] = useState(false);
 
-  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    if (isAutoConnecting) return;
+    if (isConnected) return;
+
+    setIsAutoConnecting(true);
+
+    const autoConnect = async () => {
+      const lastUsedConnector = client.storage?.getItem('wallet');
+
+      const sorted = lastUsedConnector
+        ? [...connectors].sort((x) => (x.id === lastUsedConnector ? -1 : 1))
+        : connectors;
+
+      for (const connector of sorted) {
+        if (!connector.ready || !connector.isAuthorized) continue;
+        const isAuthorized = await connector.isAuthorized();
+        if (!isAuthorized) continue;
+
+        await connectAsync({ connector });
+        break;
+      }
+    };
+
+    autoConnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setLoaded(true);
+      setIsLoaded(true);
     }
-  }, []);
 
-  if (!loaded) return null;
+    console.log({
+      address,
+      isConnected,
+    });
+
+    if (address && isConnected) {
+      navigate.push('/domains');
+    }
+  }, [isConnected, address, navigate]);
+
+  if (!isLoaded) return null;
 
   return (
-    <ConnectButton.Custom>
-      {({ account, chain, openConnectModal, openChainModal, authenticationStatus, mounted }) => {
-        const ready = mounted && authenticationStatus !== 'loading';
-        const connected = ready && account && chain;
-        return (
-          <div
-            {...(!ready && {
-              'aria-hidden': true,
-              style: {
-                opacity: 0,
-                pointerEvents: 'none',
-                userSelect: 'none',
-              },
-            })}
-          >
-            {(() => {
-              if (!connected || chain.unsupported) {
-                return (
-                  <Button
-                    onClick={() => {
-                      if (!connected) openConnectModal();
-                      else openChainModal();
-                    }}
-                  >
-                    <span>
-                      {chain?.unsupported ? t('error.wrongNetwork') : t('hero.buttonLabel', { ns: 'landing' })}
-                    </span>
-                  </Button>
-                );
-              }
-              navigate.push('/domains');
-            })()}
-          </div>
-        );
+    <Button
+      onClick={() => {
+        if (!isConnected) {
+          openConnectModal?.();
+        } else {
+          openChainModal?.();
+        }
       }}
-    </ConnectButton.Custom>
+    >
+      <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
+    </Button>
   );
 }
 
