@@ -3,6 +3,7 @@ import { createPOAPClient, fetchUserPOAPs } from '@nimi.io/card/api';
 import { Nimi, POAPToken } from '@nimi.io/card/types';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { mainnet } from 'wagmi';
 
@@ -131,24 +132,10 @@ function CreateNimiContainer({ domain }: { domain: string }) {
   );
 }
 
-// This is the page that will be server side rendered
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{
-    domain: string;
-  }>
-): Promise<{
-  props: {
-    domain: string;
-  };
-}> {
-  return {
-    props: {
-      domain: context?.params?.domain as string,
-    },
-  };
-}
+export default function CreateNimiPage() {
+  const router = useRouter();
+  const { domain } = router.query;
 
-export default function CreateNimiPage({ domain }: Awaited<ReturnType<typeof getServerSideProps>>['props']) {
   const title = `Create Nimi for ${domain}`;
   return (
     <>
@@ -157,7 +144,7 @@ export default function CreateNimiPage({ domain }: Awaited<ReturnType<typeof get
       </Head>
       <PageLayout>
         <Container>
-          <CreateNimiContainer domain={domain} />
+          <CreateNimiContainer domain={domain as string} />
         </Container>
       </PageLayout>
     </>
