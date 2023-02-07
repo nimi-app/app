@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-import Cross from '../../assets/svg/cross.svg';
+import { ReactComponent as Cross } from '../../assets/svg/cross.svg';
 import { SharedInputStyles } from '../../theme';
 
 export const StyledInputWrapper = styled.div<{ isError?: boolean; isSimple?: boolean }>`
