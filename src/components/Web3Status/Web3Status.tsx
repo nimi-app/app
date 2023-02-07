@@ -55,7 +55,7 @@ export function Web3Status() {
             {(() => {
               if (!connected) {
                 return (
-                  <StyledWrapper isError={false} onClick={openConnectModal}>
+                  <StyledWrapper as="button" isError={false} onClick={openConnectModal}>
                     <Web3Avatar />
                     <StyledInnerWrapper>
                       <StyledTextContent>{t('connect')}</StyledTextContent>
@@ -65,7 +65,7 @@ export function Web3Status() {
               }
               if (chain.unsupported) {
                 return (
-                  <StyledWrapper isError={chain.unsupported} onClick={openChainModal}>
+                  <StyledWrapper as="button" isError={chain.unsupported} onClick={openChainModal}>
                     <Web3Avatar url={account.ensAvatar} alt={account.displayName} />
 
                     <StyledInnerWrapper>
@@ -75,7 +75,7 @@ export function Web3Status() {
                 );
               }
               return (
-                <StyledWrapper isError={false} onClick={openAccountModal}>
+                <StyledWrapper as="button" isError={false} onClick={openAccountModal}>
                   <Web3Avatar url={account.ensAvatar} alt={account.displayName} />
                   <StyledInnerWrapper>
                     <StyledTextContent>{account.displayName}</StyledTextContent>
