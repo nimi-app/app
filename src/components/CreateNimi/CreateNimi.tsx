@@ -139,7 +139,13 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
         if (!updateNimiResponse || !updateNimiResponse.cid) {
           throw new Error('No response from updateNimiAsync');
         }
-        setStepsCompleted((stepsCompleted) => [...stepsCompleted, PublishNimiPageStep.BUNDLE_NIMI_PAGE]);
+        setStepsCompleted((stepsCompleted) => [
+          ...stepsCompleted,
+          PublishNimiPageStep.BUNDLE_NIMI_PAGE,
+          PublishNimiPageStep.SET_CONTENT_HASH,
+        ]);
+        setPublishNimiResponseIpfsHash(updateNimiResponse.cid);
+        setSetContentHashReceipt({ status: 1 } as ContractReceipt);
         setIsNimiPublished(true);
         setIsPublishingNimi(false);
         return;
