@@ -8,7 +8,12 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
+function fetcher<TData, TVariables>(
+  client: GraphQLClient,
+  query: string,
+  variables?: TVariables,
+  headers?: RequestInit['headers']
+) {
   return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
 }
 /** All built-in and custom scalars, mapped to their actual values */
@@ -231,7 +236,7 @@ export type ClaimHandleRequest = {
 export enum ClaimStatus {
   AlreadyClaimed = 'ALREADY_CLAIMED',
   ClaimFailed = 'CLAIM_FAILED',
-  NotClaimed = 'NOT_CLAIMED'
+  NotClaimed = 'NOT_CLAIMED',
 }
 
 export type ClaimableHandles = {
@@ -257,7 +262,14 @@ export type CollectConditionOutput = {
   thisPublication?: Maybe<Scalars['Boolean']>;
 };
 
-export type CollectModule = FeeCollectModuleSettings | FreeCollectModuleSettings | LimitedFeeCollectModuleSettings | LimitedTimedFeeCollectModuleSettings | RevertCollectModuleSettings | TimedFeeCollectModuleSettings | UnknownCollectModuleSettings;
+export type CollectModule =
+  | FeeCollectModuleSettings
+  | FreeCollectModuleSettings
+  | LimitedFeeCollectModuleSettings
+  | LimitedTimedFeeCollectModuleSettings
+  | RevertCollectModuleSettings
+  | TimedFeeCollectModuleSettings
+  | UnknownCollectModuleSettings;
 
 export type CollectModuleParams = {
   /** The collect fee collect module */
@@ -287,7 +299,7 @@ export enum CollectModules {
   MultirecipientFeeCollectModule = 'MultirecipientFeeCollectModule',
   RevertCollectModule = 'RevertCollectModule',
   TimedFeeCollectModule = 'TimedFeeCollectModule',
-  UnknownCollectModule = 'UnknownCollectModule'
+  UnknownCollectModule = 'UnknownCollectModule',
 }
 
 export type CollectProxyAction = {
@@ -347,12 +359,10 @@ export type Comment = {
   stats: PublicationStats;
 };
 
-
 /** The social comment */
 export type CommentCanCommentArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
-
 
 /** The social comment */
 export type CommentCanDecryptArgs = {
@@ -360,24 +370,20 @@ export type CommentCanDecryptArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
 
-
 /** The social comment */
 export type CommentCanMirrorArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
-
 
 /** The social comment */
 export type CommentHasCollectedByMeArgs = {
   isFinalisedOnChain?: InputMaybe<Scalars['Boolean']>;
 };
 
-
 /** The social comment */
 export type CommentMirrorsArgs = {
   by?: InputMaybe<Scalars['ProfileId']>;
 };
-
 
 /** The social comment */
 export type CommentReactionArgs = {
@@ -388,7 +394,7 @@ export type CommentReactionArgs = {
 export enum ContractType {
   Erc20 = 'ERC20',
   Erc721 = 'ERC721',
-  Erc1155 = 'ERC1155'
+  Erc1155 = 'ERC1155',
 }
 
 /** The create burn eip 712 typed data */
@@ -940,7 +946,7 @@ export type CurRequest = {
 
 /** The custom filters types */
 export enum CustomFiltersTypes {
-  Gardeners = 'GARDENERS'
+  Gardeners = 'GARDENERS',
 }
 
 /** The reason why a profile cannot decrypt a publication */
@@ -955,7 +961,7 @@ export enum DecryptFailReason {
   MissingEncryptionParams = 'MISSING_ENCRYPTION_PARAMS',
   ProfileDoesNotExist = 'PROFILE_DOES_NOT_EXIST',
   UnauthorizedAddress = 'UNAUTHORIZED_ADDRESS',
-  UnauthorizedBalance = 'UNAUTHORIZED_BALANCE'
+  UnauthorizedBalance = 'UNAUTHORIZED_BALANCE',
 }
 
 export type DefaultProfileRequest = {
@@ -1130,7 +1136,7 @@ export type EncryptionParamsOutput = {
 
 /** The gated publication encryption provider */
 export enum EncryptionProvider {
-  LitProtocol = 'LIT_PROTOCOL'
+  LitProtocol = 'LIT_PROTOCOL',
 }
 
 export type EnsOnChainIdentity = {
@@ -1294,7 +1300,7 @@ export enum FeedEventItemType {
   Mirror = 'MIRROR',
   Post = 'POST',
   ReactionComment = 'REACTION_COMMENT',
-  ReactionPost = 'REACTION_POST'
+  ReactionPost = 'REACTION_POST',
 }
 
 export type FeedHighlightsRequest = {
@@ -1352,7 +1358,11 @@ export type FollowConditionOutput = {
   profileId: Scalars['ProfileId'];
 };
 
-export type FollowModule = FeeFollowModuleSettings | ProfileFollowModuleSettings | RevertFollowModuleSettings | UnknownFollowModuleSettings;
+export type FollowModule =
+  | FeeFollowModuleSettings
+  | ProfileFollowModuleSettings
+  | RevertFollowModuleSettings
+  | UnknownFollowModuleSettings;
 
 export type FollowModuleParams = {
   /** The follower fee follower module */
@@ -1381,7 +1391,7 @@ export enum FollowModules {
   FeeFollowModule = 'FeeFollowModule',
   ProfileFollowModule = 'ProfileFollowModule',
   RevertFollowModule = 'RevertFollowModule',
-  UnknownFollowModule = 'UnknownFollowModule'
+  UnknownFollowModule = 'UnknownFollowModule',
 }
 
 export type FollowOnlyReferenceModuleSettings = {
@@ -1560,7 +1570,7 @@ export type IdKitPhoneVerifyWebhookRequest = {
 /** The verify webhook result status type */
 export enum IdKitPhoneVerifyWebhookResultStatusType {
   AlreadyVerified = 'ALREADY_VERIFIED',
-  Success = 'SUCCESS'
+  Success = 'SUCCESS',
 }
 
 export type IllegalReasonInputParams = {
@@ -1801,12 +1811,10 @@ export type Mirror = {
   stats: PublicationStats;
 };
 
-
 /** The social mirror */
 export type MirrorCanCommentArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
-
 
 /** The social mirror */
 export type MirrorCanDecryptArgs = {
@@ -1814,18 +1822,15 @@ export type MirrorCanDecryptArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
 
-
 /** The social mirror */
 export type MirrorCanMirrorArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
 
-
 /** The social mirror */
 export type MirrorHasCollectedByMeArgs = {
   isFinalisedOnChain?: InputMaybe<Scalars['Boolean']>;
 };
-
 
 /** The social mirror */
 export type MirrorReactionArgs = {
@@ -1901,185 +1906,151 @@ export type Mutation = {
   reportPublication?: Maybe<Scalars['Void']>;
 };
 
-
 export type MutationAchArgs = {
   request: AchRequest;
 };
-
 
 export type MutationAddProfileInterestsArgs = {
   request: AddProfileInterestsRequest;
 };
 
-
 export type MutationAddReactionArgs = {
   request: ReactionRequest;
 };
-
 
 export type MutationAuthenticateArgs = {
   request: SignedAuthChallenge;
 };
 
-
 export type MutationBroadcastArgs = {
   request: BroadcastRequest;
 };
-
 
 export type MutationClaimArgs = {
   request: ClaimHandleRequest;
 };
 
-
 export type MutationCreateAttachMediaDataArgs = {
   request: PublicMediaRequest;
 };
-
 
 export type MutationCreateBurnProfileTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: BurnProfileRequest;
 };
 
-
 export type MutationCreateCollectTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreateCollectRequest;
 };
-
 
 export type MutationCreateCommentTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreatePublicCommentRequest;
 };
 
-
 export type MutationCreateCommentViaDispatcherArgs = {
   request: CreatePublicCommentRequest;
 };
-
 
 export type MutationCreateFollowTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: FollowRequest;
 };
 
-
 export type MutationCreateMirrorTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreateMirrorRequest;
 };
 
-
 export type MutationCreateMirrorViaDispatcherArgs = {
   request: CreateMirrorRequest;
 };
-
 
 export type MutationCreatePostTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreatePublicPostRequest;
 };
 
-
 export type MutationCreatePostViaDispatcherArgs = {
   request: CreatePublicPostRequest;
 };
-
 
 export type MutationCreateSetDefaultProfileTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreateSetDefaultProfileRequest;
 };
 
-
 export type MutationCreateSetDispatcherTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: SetDispatcherRequest;
 };
-
 
 export type MutationCreateSetFollowModuleTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreateSetFollowModuleRequest;
 };
 
-
 export type MutationCreateSetFollowNftUriTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreateSetFollowNftUriRequest;
 };
-
 
 export type MutationCreateSetProfileImageUriTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: UpdateProfileImageRequest;
 };
 
-
 export type MutationCreateSetProfileImageUriViaDispatcherArgs = {
   request: UpdateProfileImageRequest;
 };
-
 
 export type MutationCreateSetProfileMetadataTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreatePublicSetProfileMetadataUriRequest;
 };
 
-
 export type MutationCreateSetProfileMetadataViaDispatcherArgs = {
   request: CreatePublicSetProfileMetadataUriRequest;
 };
-
 
 export type MutationCreateToggleFollowTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: CreateToggleFollowRequest;
 };
 
-
 export type MutationCreateUnfollowTypedDataArgs = {
   options?: InputMaybe<TypedDataOptions>;
   request: UnfollowRequest;
 };
 
-
 export type MutationHelArgs = {
   request: HelRequest;
 };
-
 
 export type MutationHidePublicationArgs = {
   request: HidePublicationRequest;
 };
 
-
 export type MutationIdKitPhoneVerifyWebhookArgs = {
   request: IdKitPhoneVerifyWebhookRequest;
 };
-
 
 export type MutationProxyActionArgs = {
   request: ProxyActionRequest;
 };
 
-
 export type MutationRefreshArgs = {
   request: RefreshRequest;
 };
-
 
 export type MutationRemoveProfileInterestsArgs = {
   request: RemoveProfileInterestsRequest;
 };
 
-
 export type MutationRemoveReactionArgs = {
   request: ReactionRequest;
 };
-
 
 export type MutationReportPublicationArgs = {
   request: ReportPublicationRequest;
@@ -2273,7 +2244,13 @@ export type NftOwnershipOutput = {
   tokenIds?: Maybe<Array<Scalars['TokenId']>>;
 };
 
-export type Notification = NewCollectNotification | NewCommentNotification | NewFollowerNotification | NewMentionNotification | NewMirrorNotification | NewReactionNotification;
+export type Notification =
+  | NewCollectNotification
+  | NewCommentNotification
+  | NewFollowerNotification
+  | NewMentionNotification
+  | NewMirrorNotification
+  | NewReactionNotification;
 
 export type NotificationRequest = {
   cursor?: InputMaybe<Scalars['Cursor']>;
@@ -2300,7 +2277,7 @@ export enum NotificationTypes {
   MirroredComment = 'MIRRORED_COMMENT',
   MirroredPost = 'MIRRORED_POST',
   ReactionComment = 'REACTION_COMMENT',
-  ReactionPost = 'REACTION_POST'
+  ReactionPost = 'REACTION_POST',
 }
 
 export type OnChainIdentity = {
@@ -2477,12 +2454,10 @@ export type Post = {
   stats: PublicationStats;
 };
 
-
 /** The social post */
 export type PostCanCommentArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
-
 
 /** The social post */
 export type PostCanDecryptArgs = {
@@ -2490,24 +2465,20 @@ export type PostCanDecryptArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
 
-
 /** The social post */
 export type PostCanMirrorArgs = {
   profileId?: InputMaybe<Scalars['ProfileId']>;
 };
-
 
 /** The social post */
 export type PostHasCollectedByMeArgs = {
   isFinalisedOnChain?: InputMaybe<Scalars['Boolean']>;
 };
 
-
 /** The social post */
 export type PostMirrorsArgs = {
   by?: InputMaybe<Scalars['ProfileId']>;
 };
-
 
 /** The social post */
 export type PostReactionArgs = {
@@ -2553,12 +2524,10 @@ export type Profile = {
   stats: ProfileStats;
 };
 
-
 /** The Profile */
 export type ProfileIsFollowedByMeArgs = {
   isFinalisedOnChain?: InputMaybe<Scalars['Boolean']>;
 };
-
 
 /** The Profile */
 export type ProfileIsFollowingArgs = {
@@ -2665,7 +2634,7 @@ export enum ProfileSortCriteria {
   MostFollowers = 'MOST_FOLLOWERS',
   MostMirrors = 'MOST_MIRRORS',
   MostPosts = 'MOST_POSTS',
-  MostPublication = 'MOST_PUBLICATION'
+  MostPublication = 'MOST_PUBLICATION',
 }
 
 /** The Profile Stats */
@@ -2692,24 +2661,20 @@ export type ProfileStats = {
   totalPublications: Scalars['Int'];
 };
 
-
 /** The Profile Stats */
 export type ProfileStatsCommentsTotalArgs = {
   forSources: Array<Scalars['Sources']>;
 };
-
 
 /** The Profile Stats */
 export type ProfileStatsMirrorsTotalArgs = {
   forSources: Array<Scalars['Sources']>;
 };
 
-
 /** The Profile Stats */
 export type ProfileStatsPostsTotalArgs = {
   forSources: Array<Scalars['Sources']>;
 };
-
 
 /** The Profile Stats */
 export type ProfileStatsPublicationsTotalArgs = {
@@ -2752,7 +2717,7 @@ export type ProxyActionStatusResultUnion = ProxyActionError | ProxyActionQueued 
 export enum ProxyActionStatusTypes {
   Complete = 'COMPLETE',
   Minting = 'MINTING',
-  Transferring = 'TRANSFERRING'
+  Transferring = 'TRANSFERRING',
 }
 
 export type PublicMediaRequest = {
@@ -2781,7 +2746,7 @@ export type Publication = Comment | Mirror | Post;
 export enum PublicationContentWarning {
   Nsfw = 'NSFW',
   Sensitive = 'SENSITIVE',
-  Spoiler = 'SPOILER'
+  Spoiler = 'SPOILER',
 }
 
 export type PublicationForSale = Comment | Post;
@@ -2794,12 +2759,12 @@ export enum PublicationMainFocus {
   Image = 'IMAGE',
   Link = 'LINK',
   TextOnly = 'TEXT_ONLY',
-  Video = 'VIDEO'
+  Video = 'VIDEO',
 }
 
 /** The source of the media */
 export enum PublicationMediaSource {
-  Lens = 'LENS'
+  Lens = 'LENS',
 }
 
 /** Publication metadata content waring filters */
@@ -2812,7 +2777,7 @@ export type PublicationMetadataContentWarningFilter = {
 export enum PublicationMetadataDisplayTypes {
   Date = 'date',
   Number = 'number',
-  String = 'string'
+  String = 'string',
 }
 
 /** Publication metadata filters */
@@ -2848,7 +2813,7 @@ export enum PublicationMetadataStatusType {
   MetadataValidationFailed = 'METADATA_VALIDATION_FAILED',
   NotFound = 'NOT_FOUND',
   Pending = 'PENDING',
-  Success = 'SUCCESS'
+  Success = 'SUCCESS',
 }
 
 /** Publication metadata tag filter */
@@ -2951,7 +2916,7 @@ export type PublicationQueryRequest = {
 /** Publication reporting fraud subreason */
 export enum PublicationReportingFraudSubreason {
   Impersonation = 'IMPERSONATION',
-  Scam = 'SCAM'
+  Scam = 'SCAM',
 }
 
 /** Publication reporting illegal subreason */
@@ -2960,7 +2925,7 @@ export enum PublicationReportingIllegalSubreason {
   DirectThreat = 'DIRECT_THREAT',
   HumanAbuse = 'HUMAN_ABUSE',
   ThreatIndividual = 'THREAT_INDIVIDUAL',
-  Violence = 'VIOLENCE'
+  Violence = 'VIOLENCE',
 }
 
 /** Publication reporting reason */
@@ -2968,13 +2933,13 @@ export enum PublicationReportingReason {
   Fraud = 'FRAUD',
   Illegal = 'ILLEGAL',
   Sensitive = 'SENSITIVE',
-  Spam = 'SPAM'
+  Spam = 'SPAM',
 }
 
 /** Publication reporting sensitive subreason */
 export enum PublicationReportingSensitiveSubreason {
   Nsfw = 'NSFW',
-  Offensive = 'OFFENSIVE'
+  Offensive = 'OFFENSIVE',
 }
 
 /** Publication reporting spam subreason */
@@ -2985,7 +2950,7 @@ export enum PublicationReportingSpamSubreason {
   MisuseHashtags = 'MISUSE_HASHTAGS',
   Repetitive = 'REPETITIVE',
   SomethingElse = 'SOMETHING_ELSE',
-  Unrelated = 'UNRELATED'
+  Unrelated = 'UNRELATED',
 }
 
 /** The social comment */
@@ -3020,7 +2985,7 @@ export enum PublicationSortCriteria {
   Latest = 'LATEST',
   TopCollected = 'TOP_COLLECTED',
   TopCommented = 'TOP_COMMENTED',
-  TopMirrored = 'TOP_MIRRORED'
+  TopMirrored = 'TOP_MIRRORED',
 }
 
 /** The publication stats */
@@ -3041,7 +3006,6 @@ export type PublicationStats = {
   totalUpvotes: Scalars['Int'];
 };
 
-
 /** The publication stats */
 export type PublicationStatsCommentsTotalArgs = {
   forSources: Array<Scalars['Sources']>;
@@ -3051,7 +3015,7 @@ export type PublicationStatsCommentsTotalArgs = {
 export enum PublicationTypes {
   Comment = 'COMMENT',
   Mirror = 'MIRROR',
-  Post = 'POST'
+  Post = 'POST',
 }
 
 export type PublicationValidateMetadataResult = {
@@ -3140,216 +3104,173 @@ export type Query = {
   whoReactedPublication: PaginatedWhoReactedResult;
 };
 
-
 export type QueryAllPublicationsTagsArgs = {
   request: AllPublicationsTagsRequest;
 };
-
 
 export type QueryApprovedModuleAllowanceAmountArgs = {
   request: ApprovedModuleAllowanceAmountRequest;
 };
 
-
 export type QueryChallengeArgs = {
   request: ChallengeRequest;
 };
-
 
 export type QueryCurArgs = {
   request: CurRequest;
 };
 
-
 export type QueryDefaultProfileArgs = {
   request: DefaultProfileRequest;
 };
-
 
 export type QueryDoesFollowArgs = {
   request: DoesFollowRequest;
 };
 
-
 export type QueryExploreProfilesArgs = {
   request: ExploreProfilesRequest;
 };
-
 
 export type QueryExplorePublicationsArgs = {
   request: ExplorePublicationRequest;
 };
 
-
 export type QueryFeedArgs = {
   request: FeedRequest;
 };
-
 
 export type QueryFeedHighlightsArgs = {
   request: FeedHighlightsRequest;
 };
 
-
 export type QueryFollowerNftOwnedTokenIdsArgs = {
   request: FollowerNftOwnedTokenIdsRequest;
 };
-
 
 export type QueryFollowersArgs = {
   request: FollowersRequest;
 };
 
-
 export type QueryFollowingArgs = {
   request: FollowingRequest;
 };
-
 
 export type QueryGenerateModuleCurrencyApprovalDataArgs = {
   request: GenerateModuleCurrencyApprovalDataRequest;
 };
 
-
 export type QueryGlobalProtocolStatsArgs = {
   request?: InputMaybe<GlobalProtocolStatsRequest>;
 };
-
 
 export type QueryHasTxHashBeenIndexedArgs = {
   request: HasTxHashBeenIndexedRequest;
 };
 
-
 export type QueryInternalPublicationFilterArgs = {
   request: InternalPublicationsFilterRequest;
 };
-
 
 export type QueryMutualFollowersProfilesArgs = {
   request: MutualFollowersProfilesQueryRequest;
 };
 
-
 export type QueryNftOwnershipChallengeArgs = {
   request: NftOwnershipChallengeRequest;
 };
-
 
 export type QueryNftsArgs = {
   request: NfTsRequest;
 };
 
-
 export type QueryNotificationsArgs = {
   request: NotificationRequest;
 };
-
 
 export type QueryPendingApprovalFollowsArgs = {
   request: PendingApprovalFollowsRequest;
 };
 
-
 export type QueryProfileArgs = {
   request: SingleProfileQueryRequest;
 };
-
 
 export type QueryProfileFollowModuleBeenRedeemedArgs = {
   request: ProfileFollowModuleBeenRedeemedRequest;
 };
 
-
 export type QueryProfileFollowRevenueArgs = {
   request: ProfileFollowRevenueQueryRequest;
 };
-
 
 export type QueryProfileOnChainIdentityArgs = {
   request: ProfileOnChainIdentityRequest;
 };
 
-
 export type QueryProfilePublicationRevenueArgs = {
   request: ProfilePublicationRevenueQueryRequest;
 };
-
 
 export type QueryProfilePublicationsForSaleArgs = {
   request: ProfilePublicationsForSaleRequest;
 };
 
-
 export type QueryProfilesArgs = {
   request: ProfileQueryRequest;
 };
-
 
 export type QueryProxyActionStatusArgs = {
   proxyActionId: Scalars['ProxyActionId'];
 };
 
-
 export type QueryPublicationArgs = {
   request: PublicationQueryRequest;
 };
-
 
 export type QueryPublicationMetadataStatusArgs = {
   request: GetPublicationMetadataStatusRequest;
 };
 
-
 export type QueryPublicationRevenueArgs = {
   request: PublicationRevenueQueryRequest;
 };
-
 
 export type QueryPublicationsArgs = {
   request: PublicationsQueryRequest;
 };
 
-
 export type QueryRecommendedProfilesArgs = {
   options?: InputMaybe<RecommendedProfileOptions>;
 };
-
 
 export type QueryRelArgs = {
   request: RelRequest;
 };
 
-
 export type QuerySearchArgs = {
   request: SearchQueryRequest;
 };
-
 
 export type QueryTimelineArgs = {
   request: TimelineRequest;
 };
 
-
 export type QueryTxIdToTxHashArgs = {
   txId: Scalars['TxId'];
 };
-
 
 export type QueryValidatePublicationMetadataArgs = {
   request: ValidatePublicationMetadataRequest;
 };
 
-
 export type QueryVerifyArgs = {
   request: VerifyRequest;
 };
 
-
 export type QueryWhoCollectedPublicationArgs = {
   request: WhoCollectedPublicationRequest;
 };
-
 
 export type QueryWhoReactedPublicationArgs = {
   request: WhoReactedPublicationRequest;
@@ -3379,7 +3300,7 @@ export type ReactionRequest = {
 /** Reaction types */
 export enum ReactionTypes {
   Downvote = 'DOWNVOTE',
-  Upvote = 'UPVOTE'
+  Upvote = 'UPVOTE',
 }
 
 export type RecommendedProfileOptions = {
@@ -3389,7 +3310,10 @@ export type RecommendedProfileOptions = {
   shuffle?: InputMaybe<Scalars['Boolean']>;
 };
 
-export type ReferenceModule = DegreesOfSeparationReferenceModuleSettings | FollowOnlyReferenceModuleSettings | UnknownReferenceModuleSettings;
+export type ReferenceModule =
+  | DegreesOfSeparationReferenceModuleSettings
+  | FollowOnlyReferenceModuleSettings
+  | UnknownReferenceModuleSettings;
 
 export type ReferenceModuleParams = {
   /** The degrees of seperation reference module */
@@ -3404,7 +3328,7 @@ export type ReferenceModuleParams = {
 export enum ReferenceModules {
   DegreesOfSeparationReferenceModule = 'DegreesOfSeparationReferenceModule',
   FollowerOnlyReferenceModule = 'FollowerOnlyReferenceModule',
-  UnknownReferenceModule = 'UnknownReferenceModule'
+  UnknownReferenceModule = 'UnknownReferenceModule',
 }
 
 /** The refresh request */
@@ -3429,7 +3353,7 @@ export enum RelayErrorReasons {
   HandleTaken = 'HANDLE_TAKEN',
   NotAllowed = 'NOT_ALLOWED',
   Rejected = 'REJECTED',
-  WrongWalletSigned = 'WRONG_WALLET_SIGNED'
+  WrongWalletSigned = 'WRONG_WALLET_SIGNED',
 }
 
 export type RelayResult = RelayError | RelayerResult;
@@ -3498,7 +3422,7 @@ export enum ScalarOperator {
   GreaterThanOrEqual = 'GREATER_THAN_OR_EQUAL',
   LessThan = 'LESS_THAN',
   LessThanOrEqual = 'LESS_THAN_OR_EQUAL',
-  NotEqual = 'NOT_EQUAL'
+  NotEqual = 'NOT_EQUAL',
 }
 
 export type SearchQueryRequest = {
@@ -3515,7 +3439,7 @@ export type SearchQueryRequest = {
 /** Search request types */
 export enum SearchRequestTypes {
   Profile = 'PROFILE',
-  Publication = 'PUBLICATION'
+  Publication = 'PUBLICATION',
 }
 
 export type SearchResult = ProfileSearchResult | PublicationSearchResult;
@@ -3620,7 +3544,7 @@ export type TagResult = {
 /** The publications tags sort criteria */
 export enum TagSortCriteria {
   Alphabetical = 'ALPHABETICAL',
-  MostPopular = 'MOST_POPULAR'
+  MostPopular = 'MOST_POPULAR',
 }
 
 export type TimedFeeCollectModuleParams = {
@@ -3669,7 +3593,7 @@ export enum TimelineType {
   CollectPost = 'COLLECT_POST',
   Comment = 'COMMENT',
   Mirror = 'MIRROR',
-  Post = 'POST'
+  Post = 'POST',
 }
 
 export type TransactionError = {
@@ -3680,7 +3604,7 @@ export type TransactionError = {
 
 /** Transaction error reason */
 export enum TransactionErrorReasons {
-  Reverted = 'REVERTED'
+  Reverted = 'REVERTED',
 }
 
 export type TransactionIndexedResult = {
@@ -3841,7 +3765,7 @@ export type WorldcoinIdentity = {
 /** The worldcoin signal type */
 export enum WorldcoinPhoneVerifyType {
   Orb = 'ORB',
-  Phone = 'PHONE'
+  Phone = 'PHONE',
 }
 
 export type WorldcoinPhoneVerifyWebhookRequest = {
@@ -3854,9 +3778,18 @@ export type GetDefaultLensProfileQueryVariables = Exact<{
   account: Scalars['EthereumAddress'];
 }>;
 
-
-export type GetDefaultLensProfileQuery = { __typename?: 'Query', defaultProfile?: { __typename?: 'Profile', name?: string | null, bio?: string | null, picture?: { __typename?: 'MediaSet', original: { __typename?: 'Media', url: any } } | { __typename?: 'NftImage', uri: any } | null } | null };
-
+export type GetDefaultLensProfileQuery = {
+  __typename?: 'Query';
+  defaultProfile?: {
+    __typename?: 'Profile';
+    name?: string | null;
+    bio?: string | null;
+    picture?:
+      | { __typename?: 'MediaSet'; original: { __typename?: 'Media'; url: any } }
+      | { __typename?: 'NftImage'; uri: any }
+      | null;
+  } | null;
+};
 
 export const GetDefaultLensProfileDocument = `
     query getDefaultLensProfile($account: EthereumAddress!) {
@@ -3876,22 +3809,35 @@ export const GetDefaultLensProfileDocument = `
   }
 }
     `;
-export const useGetDefaultLensProfileQuery = <
-      TData = GetDefaultLensProfileQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient,
-      variables: GetDefaultLensProfileQueryVariables,
-      options?: UseQueryOptions<GetDefaultLensProfileQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) =>
-    useQuery<GetDefaultLensProfileQuery, TError, TData>(
-      ['getDefaultLensProfile', variables],
-      fetcher<GetDefaultLensProfileQuery, GetDefaultLensProfileQueryVariables>(client, GetDefaultLensProfileDocument, variables, headers),
-      options
-    );
+export const useGetDefaultLensProfileQuery = <TData = GetDefaultLensProfileQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables: GetDefaultLensProfileQueryVariables,
+  options?: UseQueryOptions<GetDefaultLensProfileQuery, TError, TData>,
+  headers?: RequestInit['headers']
+) =>
+  useQuery<GetDefaultLensProfileQuery, TError, TData>(
+    ['getDefaultLensProfile', variables],
+    fetcher<GetDefaultLensProfileQuery, GetDefaultLensProfileQueryVariables>(
+      client,
+      GetDefaultLensProfileDocument,
+      variables,
+      headers
+    ),
+    options
+  );
 
-useGetDefaultLensProfileQuery.getKey = (variables: GetDefaultLensProfileQueryVariables) => ['getDefaultLensProfile', variables];
-;
-
-useGetDefaultLensProfileQuery.fetcher = (client: GraphQLClient, variables: GetDefaultLensProfileQueryVariables, headers?: RequestInit['headers']) => fetcher<GetDefaultLensProfileQuery, GetDefaultLensProfileQueryVariables>(client, GetDefaultLensProfileDocument, variables, headers);
+useGetDefaultLensProfileQuery.getKey = (variables: GetDefaultLensProfileQueryVariables) => [
+  'getDefaultLensProfile',
+  variables,
+];
+useGetDefaultLensProfileQuery.fetcher = (
+  client: GraphQLClient,
+  variables: GetDefaultLensProfileQueryVariables,
+  headers?: RequestInit['headers']
+) =>
+  fetcher<GetDefaultLensProfileQuery, GetDefaultLensProfileQueryVariables>(
+    client,
+    GetDefaultLensProfileDocument,
+    variables,
+    headers
+  );

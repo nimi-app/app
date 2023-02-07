@@ -1,57 +1,42 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { styled } from 'styled-components';
+import { Navigate, Outlet } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { Heading } from '../components/Heading';
 import { ENV_SUPPORTED_CHAIN_IDS } from '../constants';
 import { useRainbow } from '../hooks/useRainbow';
-import { FOOTER_HEIGHT, HEADER_HEIGHT } from '../theme';
+import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA_WIDTHS } from '../theme';
 
-export function PageLayout({
-  children,
-  flexContainer,
-}: PropsWithChildren<{
-  flexContainer?: boolean;
-}>) {
-  const { chainId } = useRainbow();
+export function PageLayout() {
+  const { chainId, isConnected } = useRainbow();
   const { t } = useTranslation(['common', 'landing']);
-  const [isNetworkSupported, setIsNetworkSupported] = useState(false);
-
-  useEffect(() => {
-    setIsNetworkSupported(ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number));
-  }, [chainId]);
-
-  if (!isNetworkSupported) {
-    return (
-      <Container>
-        <Header />
-        <ContentFlex>
-          <ErrorContainer>
-            <Heading>{t('error.unsupportedNetwork')}</Heading>
-            <Heading type="sub" color="#000">
-              Please change your network by clicking the account button on the top right.
-            </Heading>
-          </ErrorContainer>
-        </ContentFlex>
-        <Footer />
-      </Container>
-    );
-  }
 
   return (
     <Container>
       <Header />
-      {flexContainer ? <ContentFlex>{children}</ContentFlex> : <Content>{children}</Content>}
+      <Content>
+        {(() => {
+          if (!isConnected) return <Navigate to="/" />;
+          if (!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number))
+            return (
+              <ErrorContainer>
+                <Heading>{t('error.unsupportedNetwork')}</Heading>
+                <Heading type="sub" color="#000">
+                  Please change your network by clicking the account button on the top right.
+                </Heading>
+              </ErrorContainer>
+            );
+          return <Outlet />;
+        })()}
+      </Content>
       <Footer />
     </Container>
   );
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
   width: 100%;
   background-color: ${({ theme }) => theme.mainBackgoround};
@@ -59,15 +44,11 @@ const Container = styled.div`
 `;
 
 const Content = styled.main`
+  max-width: ${MEDIA_WIDTHS.upToMedium}px;
   width: 100%;
   min-height: calc(100vh - (${HEADER_HEIGHT} + ${FOOTER_HEIGHT}));
-  flex: 1; /* to fill the remaining space */
+  padding: 40px 20px 0;
   margin: 0 auto;
-`;
-
-const ContentFlex = styled(Content)`
-  display: flex;
-  flex-direction: column;
 `;
 
 const ErrorContainer = styled.div`

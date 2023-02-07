@@ -2,7 +2,7 @@ import createDebugger from 'debug';
 import { Dispatch, SetStateAction } from 'react';
 import { styled } from 'styled-components';
 
-import Arrow from '../../assets/svg/arrow.svg';
+import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
 
 interface PaginationProps {
   page: number;

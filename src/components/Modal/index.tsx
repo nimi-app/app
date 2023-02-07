@@ -3,7 +3,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { styled } from 'styled-components';
 
-import CloseSvg from '../../assets/svg/close-icon.svg';
+import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
 import { useUserInterface } from '../../services/useUserInterface';
 import { NimiSignatureColor } from '../../theme';
 
@@ -32,7 +32,7 @@ function ModalBase({
   maxWidth = '620px',
   maxHeight = '100%',
 }: PropsWithChildren<ModalProps>) {
-  const onClose = (event: React.MouseEvent<HTMLDivElement>) => {
+  const onClose = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
       event.stopPropagation();
       handleCloseModal();

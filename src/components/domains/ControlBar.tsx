@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { styled } from 'styled-components';
 
-import SearchIcon from '../../assets/svg/search-icon.svg';
+import { ReactComponent as SearchIcon } from '../../assets/svg/search-icon.svg';
 import { Heading } from '../Heading';
 import { ContentInput, InputFieldWithIcon } from '../Input';
 
@@ -21,14 +21,7 @@ export function ControlBar({ value, searchTextChangedHandler }: ControlBarProps)
         content={value}
         style={{ maxWidth: '200px', background: 'none' }}
       >
-        <ContentInput
-          id="domain-search-input"
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          isInvalidInput={false}
-          onChange={searchTextChangedHandler}
-          placeholder="Search"
-        />
+        <ContentInput inputInvalid={false} onChange={searchTextChangedHandler} placeholder="Search" />
       </StyledInput>
     </TopSection>
   );

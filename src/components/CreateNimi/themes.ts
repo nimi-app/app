@@ -1,52 +1,52 @@
 import { NimiThemeType } from '@nimi.io/card/types';
 
 import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
-import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg?url';
+import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
 import daivinityPreview from '../../assets/theme/daivinity-preview.png';
-import devconLogoImage from '../../assets/theme/devcon-logo-image.svg?url';
-import devconLogoText from '../../assets/theme/devcon-logo-text.svg?url';
+import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
+import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
 import devconPreview from '../../assets/theme/devcon-preview.png';
 import ethTLVImage from '../../assets/theme/ethtlv-logo.png';
 import ethTlvPreview from '../../assets/theme/ethtlv-preview.png';
-import ethTlVText from '../../assets/theme/ethtlv-text.svg?url';
+import ethTlVText from '../../assets/theme/ethtlv-text.svg';
 import nimiOGLogoImage from '../../assets/theme/nimi-og-logo-image.png';
-import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg?url';
+import nimiOGLogoText from '../../assets/theme/nimi-og-logo-text.svg';
 import nimiOGPreview from '../../assets/theme/nimi-og-preview.png';
 import raaveLogoImage from '../../assets/theme/raave-logo-image.png';
-import raaveLogoText from '../../assets/theme/raave-logo-text.svg?url';
+import raaveLogoText from '../../assets/theme/raave-logo-text.svg';
 import raavePreview from '../../assets/theme/raave-preview.png';
 import { NimiCuratedTheme, ThemeAssets } from '../../types';
 
 export const themes: Record<NimiCuratedTheme, ThemeAssets> = {
   [NimiThemeType.NIMI]: {
     type: NimiThemeType.NIMI,
-    logoImage: nimiOGLogoImage.src,
-    logoText: nimiOGLogoText.src,
-    preview: nimiOGPreview.src,
+    logoImage: nimiOGLogoImage,
+    logoText: nimiOGLogoText,
+    preview: nimiOGPreview,
   },
   [NimiThemeType.DEVCON]: {
     type: NimiThemeType.DEVCON,
-    logoImage: devconLogoImage.src,
-    logoText: devconLogoText.src,
-    preview: devconPreview.src,
+    logoImage: devconLogoImage,
+    logoText: devconLogoText,
+    preview: devconPreview,
   },
   [NimiThemeType.RAAVE]: {
     type: NimiThemeType.RAAVE,
-    logoImage: raaveLogoImage.src,
-    logoText: raaveLogoText.src,
-    preview: raavePreview.src,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
+    preview: raavePreview,
   },
   [NimiThemeType.DAIVINITY]: {
     type: NimiThemeType.DAIVINITY,
-    logoImage: daivinityLogoImage.src,
-    logoText: daivinityLogoText.src,
-    preview: daivinityPreview.src,
+    logoImage: daivinityLogoImage,
+    logoText: daivinityLogoText,
+    preview: daivinityPreview,
   },
   [NimiThemeType.ETHTLV_2023]: {
     type: NimiThemeType.ETHTLV_2023,
-    logoImage: ethTLVImage.src,
-    logoText: ethTlVText.src,
-    preview: ethTlvPreview.src,
+    logoImage: ethTLVImage,
+    logoText: ethTlVText,
+    preview: ethTlvPreview,
   },
   // [NimiThemeType.INFINITE]: {
   //   type: NimiThemeType.RAAVE,

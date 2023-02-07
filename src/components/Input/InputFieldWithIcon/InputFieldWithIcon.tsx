@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren, SVGProps } from 'react';
 import { styled } from 'styled-components';
 
-import XSVG from '../../../assets/svg/cross.svg';
+import { ReactComponent as XSVG } from '../../../assets/svg/cross.svg';
 import { renderSVG } from '../../../utils';
 import { InputButton } from '../../InputButton';
 

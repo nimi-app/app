@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { styled } from 'styled-components';
 
-import LensLogoImage from '../../assets/svg/lens-logo.svg?url';
-import LinktreeLogoImage from '../../assets/svg/linktree.svg?url';
-import NFTImage from '../../assets/svg/nft-logo.svg?url';
-import TwitterLogoImage from '../../assets/svg/twitter-logo.svg?url';
+import LensLogoImage from '../../assets/svg/lens-logo.svg';
+import LinktreeLogoImage from '../../assets/svg/linktree.svg';
+import NFTImage from '../../assets/svg/nft-logo.svg';
+import TwitterLogoImage from '../../assets/svg/twitter-logo.svg';
 
 interface ImportButtonProps {
   onClick: any;
@@ -22,10 +22,10 @@ export enum ImportButtonType {
 const Logos: {
   [key in ImportButtonType]: string;
 } = {
-  [ImportButtonType.Twitter]: TwitterLogoImage.src,
-  [ImportButtonType.Lens]: LensLogoImage.src,
-  [ImportButtonType.Nft]: NFTImage.src,
-  [ImportButtonType.Linktree]: LinktreeLogoImage.src,
+  [ImportButtonType.Twitter]: TwitterLogoImage,
+  [ImportButtonType.Lens]: LensLogoImage,
+  [ImportButtonType.Nft]: NFTImage,
+  [ImportButtonType.Linktree]: LinktreeLogoImage,
 };
 
 export function ImportButton({ onClick, type, disabled = false }: ImportButtonProps) {

@@ -13,10 +13,10 @@ export function Footer() {
         </Paragraph>
         <Navigation>
           <ExternalLink title="Nimi on Twitter" href="https://twitter.com/0xNimi">
-            <Twitter />
+            <img src={Twitter} alt="Twitter Logo" />
           </ExternalLink>
           <ExternalLink title="Nimi on GitHub" href="https://github.com/nimi-app">
-            <GitHubLogo fill="#1F3E4F" />
+            <StyledImg src={GitHubLogo} />
           </ExternalLink>
         </Navigation>
       </Content>
@@ -26,6 +26,9 @@ export function Footer() {
 
 const Container = styled.footer`
   width: 100%;
+`;
+const StyledImg = styled.img`
+  fill: #1f3e4f;
 `;
 
 const Content = styled.div`

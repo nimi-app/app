@@ -1,12 +1,12 @@
-import Link from 'next/link';
 import { useRef } from 'react';
 import { styled } from 'styled-components';
 
 import { useDeployedPageData } from '../../api/RestAPI/hooks/useDeployedPageData';
 import { useEnsMetadataImage } from '../../api/RestAPI/hooks/useEnsMetadataImage';
-import purpleCircleImage from '../../assets/svg/purpleCircle.svg?url';
+import purpleCircleImage from '../../assets/svg/purpleCircle.svg';
 import { ENSDomain } from '../../models';
 import { NimiSignatureColor } from '../../theme';
+import { StyledLink } from '../Button/styled';
 
 type DomainItemProps = {
   domain: ENSDomain;
@@ -19,20 +19,22 @@ export function DomainItem({ domain }: DomainItemProps) {
   const { data: domainData } = useDeployedPageData(domain?.name);
 
   return (
-    <Link ref={ref} href={`/domains/${domain.name}`}>
+    <StyledLink ref={ref} to={`/domains/${domain.name}`}>
       <Container>
         <DomainProfilePhoto
           alt={`${domain.name} Image`}
-          src={domainData?.nimi?.image ? domainData.nimi.image.url : metadata ? metadata : purpleCircleImage.src}
+          src={domainData?.nimi?.image ? domainData.nimi.image.url : metadata ? metadata : purpleCircleImage}
           onError={(event) => {
             const target = event.target as HTMLImageElement;
 
-            if (target.src !== purpleCircleImage.src) target.src = purpleCircleImage.src;
+            if (target.src !== purpleCircleImage) {
+              target.src = purpleCircleImage;
+            }
           }}
         />
         <DomainName>{domain.name}</DomainName>
       </Container>
-    </Link>
+    </StyledLink>
   );
 }
 
