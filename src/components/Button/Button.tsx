@@ -22,7 +22,7 @@ export function Button({ children, to, href, ...props }: ButtonProps) {
   /** Internal React Router links */
   if (to) {
     return (
-      <StyledLink href={to}>
+      <StyledLink to={to}>
         <StyledButtonFrame>
           <StyledInnerWrapper>{children}</StyledInnerWrapper>
         </StyledButtonFrame>
