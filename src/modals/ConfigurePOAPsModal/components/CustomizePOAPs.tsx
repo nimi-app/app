@@ -7,7 +7,7 @@ import { AnimatedSection } from './AnimatedSection';
 import { StaticPOAP } from './POAPs';
 import { PresentedPOAPsContainer } from './PresentedPOAPsContainer';
 import { ReorderItem } from './ReorderItem';
-import TrashCanSVG from '../../../assets/svg/trash-can.svg';
+import { ReactComponent as TrashCanSVG } from '../../../assets/svg/trash-can.svg';
 
 interface CustomizePOAPsProps {
   items: POAPToken[];

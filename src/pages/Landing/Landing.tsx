@@ -1,10 +1,9 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 import { Content, Header, HeaderEyebrow, HeroLead, HeroText, PageWrapper } from './styled';
-import NimiLogoText from '../../assets/svg/nimi-logo-text.svg';
+import { ReactComponent as NimiLogoText } from '../../assets/svg/nimi-logo-text.svg';
 import { Button } from '../../components/Button';
 import { Container } from '../../components/Container';
 import { Footer } from '../../components/Footer';
@@ -13,11 +12,11 @@ import '@rainbow-me/rainbowkit/styles.css';
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
-
+  console.log('here');
   return (
     <PageWrapper>
       <Header>
-        <img src={NimiLogoText} alt="Nimi Logo" />
+        <NimiLogoText height="60px" />
       </Header>
       <Content>
         <Container>

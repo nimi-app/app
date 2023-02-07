@@ -1,5 +1,5 @@
 import { InnerPoapWrapper, PoapButton, PoapWrapper } from './styled';
-import POAPLogo from '../../../../assets/svg/poap-logo.svg';
+import { ReactComponent as POAPLogo } from '../../../../assets/svg/poap-logo.svg';
 import { InputButton } from '../../../InputButton';
 
 type POAPFieldProps = {

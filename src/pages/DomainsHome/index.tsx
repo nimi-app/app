@@ -14,7 +14,7 @@ import { useRainbow } from '../../hooks/useRainbow';
 export default function DomainsHomePage() {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
-
+  console.log('here');
   const { account } = useRainbow();
 
   const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(account as string, page, searchText);
@@ -23,25 +23,23 @@ export default function DomainsHomePage() {
   const searchTextChangedHandler = (event: ChangeEvent<HTMLInputElement>) => setSearchText(event.target.value);
 
   return (
-    <>
-      <Container>
-        <ControlBar value={searchText} searchTextChangedHandler={searchTextChangedHandler} />
-        {(() => {
-          if (loading) return <Loader />;
-          if (domainList?.length === 0) return <NoENSBanner openENSWebsiteHandler={openENSWebsiteHandler} />;
+    <Container>
+      <ControlBar value={searchText} searchTextChangedHandler={searchTextChangedHandler} />
+      {(() => {
+        if (loading) return <Loader />;
+        if (domainList?.length === 0) return <NoENSBanner openENSWebsiteHandler={openENSWebsiteHandler} />;
 
-          return (
-            <DomainsContainer>
-              {domainList?.map((domain) => (
-                <DomainItem key={domain.id} domain={domain} />
-              ))}
-              <AddDomain onClick={openENSWebsiteHandler}>Buy an ENS</AddDomain>
-            </DomainsContainer>
-          );
-        })()}
-        <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
-      </Container>
-    </>
+        return (
+          <DomainsContainer>
+            {domainList?.map((domain) => (
+              <DomainItem key={domain.id} domain={domain} />
+            ))}
+            <AddDomain onClick={openENSWebsiteHandler}>Buy an ENS</AddDomain>
+          </DomainsContainer>
+        );
+      })()}
+      <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
+    </Container>
   );
 }
 
