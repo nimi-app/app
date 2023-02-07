@@ -12,7 +12,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
-  console.log('here');
+
   return (
     <PageWrapper>
       <Header>

@@ -20,6 +20,6 @@ interface Window {
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    APP_ENV: 'development' | 'production';
+    REACT_APP_ENV: 'development' | 'production';
   }
 }

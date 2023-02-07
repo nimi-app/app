@@ -101,11 +101,11 @@ export function getChainLabel(chainId: ChainId): string {
  * List of chain IDs that are supported in the current environment: production or development.
  */
 export const ENV_SUPPORTED_CHAIN_IDS =
-  process.env.APP_ENV === 'production' ? [ChainId.MAINNET] : [ChainId.MAINNET, ChainId.GOERLI];
+  process.env.REACT_APP_ENV === 'production' ? [ChainId.MAINNET] : [ChainId.MAINNET, ChainId.GOERLI];
 
 /**
  * Parse through and pick the chains from SUPPORTABLE_WAGMI_CHAINS based on the list from ENV_SUPPORTED_CHAIN_IDS;
  */
-export const SUPPORT_CHAINS_RAINBOW_KIT = process.env.APP_ENV === 'production' ? [mainnet] : [mainnet, goerli];
+export const SUPPORT_CHAINS_RAINBOW_KIT = process.env.REACT_APP_ENV === 'production' ? [mainnet] : [mainnet, goerli];
 
 export const supportedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/gif'];
