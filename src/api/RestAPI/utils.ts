@@ -10,14 +10,14 @@ import { generateID, guessLinkTypeBasedOnUrl } from '../../utils';
  * @returns {string} The base URL for the Nimi API.
  */
 export function getAPIBaseURL() {
-  const prodkey = 'NEXT_PUBLIC_NIMI_API_BASE_URL';
+  const prodkey = 'REACT_APP_NIMI_API_BASE_URL';
   const prodValue = process.env[prodkey];
 
   if (!prodValue || prodValue === '') {
     throw new Error(`${prodkey} is not set.`);
   }
 
-  const devKey = 'NEXT_PUBLIC_NIMI_API_DEV_BASE_URL';
+  const devKey = 'REACT_APP_NIMI_API_DEV_BASE_URL';
   if (process.env[devKey] && (process.env.NODE_ENV === 'development' || process.env.APP_ENV === 'development')) {
     return process.env[devKey];
   }

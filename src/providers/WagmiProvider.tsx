@@ -15,12 +15,13 @@ import { publicProvider } from 'wagmi/providers/public';
 
 import { SUPPORT_CHAINS_RAINBOW_KIT } from '../constants';
 
-if (!process.env.NEXT_PUBLIC_ALCHEMY_API_KEY) {
-  throw new Error('Missing NEXT_PUBLIC_ALCHEMY_API_KEY env var');
+if (!process.env.REACT_APP_ALCHEMY_API_KEY) {
+  console.log('proceess.env', process.env.APP_ENV);
+  throw new Error('Missing REACT_APP_ALCHEMY_API_KEY env var');
 }
 
 export const { chains, provider } = configureChains(SUPPORT_CHAINS_RAINBOW_KIT, [
-  alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
+  alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_API_KEY as string }),
   publicProvider(),
 ]);
 

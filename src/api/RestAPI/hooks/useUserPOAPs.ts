@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 export function useUserPOAPs(account?: string) {
   const getPoapsFromUser = async () => {
     if (!account) return [];
-    return fetchUserPOAPs(createPOAPClient(process.env.NEXT_PUBLIC_POAP_API_KEY as string), account);
+    return fetchUserPOAPs(createPOAPClient(process.env.REACT_APP_POAP_API_KEY as string), account);
   };
 
   return useQuery(['fetchUserPoaps', account], getPoapsFromUser);

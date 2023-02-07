@@ -220,7 +220,7 @@ p {
 }
 
 /** Full-width and height */
-body, html, #root, #__next {
+body, html, #root{
   min-height:100vh;
   width: 100%;
 }
