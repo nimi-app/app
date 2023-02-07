@@ -5,9 +5,11 @@ import { useDeployedPageData } from '../api/RestAPI/hooks/useDeployedPageData';
 import { useEnsGeneratedData } from '../api/RestAPI/hooks/useEnsGeneratedData';
 
 interface UseInitialNimiData {
-  data: Nimi;
+  data?: Nimi;
+  ipns?: string;
   loading: boolean;
 }
+
 interface InitialNimiDataProps {
   ensName: string;
   account: string;
@@ -41,12 +43,16 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
       widgets: [],
     };
 
-    if (!nimi.theme) nimi.theme = defaultTheme;
+    if (isDeployedSuccess && deployedNimi?.nimi && !isDepoyedLoading) {
+      nimi = deployedNimi.nimi;
+    } else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) {
+      nimi = generatedNimi;
+    }
 
-    if (isDeployedSuccess && deployedNimi && !isDepoyedLoading) nimi = deployedNimi.nimi;
-    else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) nimi = generatedNimi;
-
-    return nimi;
+    if (!(isDepoyedLoading || isGeneratedFetching)) {
+      if (!nimi.theme) nimi.theme = defaultTheme;
+      return nimi;
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
