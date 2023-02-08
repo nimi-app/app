@@ -52,7 +52,10 @@ const DomainsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
-  justify-content: start;
+  justify-content: center;
+  @media (min-width: 768px) {
+    justify-content: start;
+  }
 `;
 
 const AddDomain = styled.button`

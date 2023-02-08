@@ -48,7 +48,6 @@ const Content = styled.main`
   max-width: ${MEDIA_WIDTHS.upToMedium}px;
   width: 100%;
   min-height: calc(100vh - (${HEADER_HEIGHT} + ${FOOTER_HEIGHT}));
-  padding: 40px 20px 0;
   margin: 0 auto;
 `;
 
