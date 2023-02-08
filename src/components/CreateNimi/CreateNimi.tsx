@@ -122,9 +122,8 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
         throw new Error('ENS Public Resolver contract is not available.');
       }
       // Updating a current Nimi IPNS record
-
       if (nimiIPNSKey) {
-        console.log('IPNS KEY PRESENT ', nimiIPNSKey);
+        debug(`Updating Nimi IPNS record ${nimiIPNSKey}`);
         const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
         const updateNimiResponse = await updateNimiAsync({
           nimi,

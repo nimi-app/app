@@ -56,9 +56,7 @@ export function Landing() {
                             else openChainModal();
                           }}
                         >
-                          <span>
-                            {chain?.unsupported ? t('error.wrongNetwork') : t('hero.buttonLabel', { ns: 'landing' })}
-                          </span>
+                          <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
                         </Button>
                       );
                     }
