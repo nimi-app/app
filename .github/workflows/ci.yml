@@ -15,11 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-            persist-credentials: false
+          persist-credentials: false
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm ci
-      - run: npm run build
+      - name: Install dependencies
+        run: npm ci
+      - name: Codegen
+        run: npm run contracts:codegen
+      - name: Build
+        run: npm run build
