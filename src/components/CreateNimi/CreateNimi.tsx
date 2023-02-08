@@ -123,6 +123,7 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
       }
       // Updating a current Nimi IPNS record
       if (nimiIPNSKey) {
+        debug(`Updating Nimi IPNS record ${nimiIPNSKey}`);
         const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
         const updateNimiResponse = await updateNimiAsync({
           nimi,

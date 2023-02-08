@@ -1,4 +1,4 @@
-import { Nimi } from '@nimi.io/card';
+import { Nimi } from '@nimi.io/card/types';
 import { validateNimi } from '@nimi.io/card/validators';
 import { useQuery } from '@tanstack/react-query';
 
@@ -48,9 +48,7 @@ export function useIPNSData(ensName: string) {
     select: (data) => {
       if (data.ipns && data.nimi && validatedNimiSilent(data.nimi.nimi) !== false) {
         return data;
-      } else {
-        return undefined;
-      }
+      } else return undefined;
     },
   });
 }

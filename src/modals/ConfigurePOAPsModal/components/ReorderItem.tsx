@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import { POAPPlaceholder, StaticPOAP } from './POAPs';
-import DotsIcon from '../../../assets/svg/dots.svg';
+import { ReactComponent as DotsIcon } from '../../../assets/svg/dots.svg';
 
 interface ReorderItemProps {
   value: POAPToken;

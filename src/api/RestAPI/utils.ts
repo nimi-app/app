@@ -18,7 +18,7 @@ export function getAPIBaseURL() {
   }
 
   const devKey = 'REACT_APP_NIMI_API_DEV_BASE_URL';
-  if (process.env[devKey] && (process.env.NODE_ENV === 'development' || process.env.APP_ENV === 'development')) {
+  if (process.env[devKey] && process.env.REACT_APP_ENV === 'development') {
     return process.env[devKey];
   }
 

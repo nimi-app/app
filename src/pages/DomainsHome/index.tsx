@@ -6,7 +6,7 @@ import { Container } from '../../components/Container';
 import { DomainItem } from '../../components/DomainItem';
 import { ControlBar } from '../../components/domains/ControlBar';
 import { NoENSBanner } from '../../components/domains/NoENSBanner';
-import { Loader } from '../../components/Loader';
+import { Loader, LoaderWrapper } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination/';
 import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress';
 import { useRainbow } from '../../hooks/useRainbow';
@@ -14,7 +14,7 @@ import { useRainbow } from '../../hooks/useRainbow';
 export default function DomainsHomePage() {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(0);
-  console.log('here');
+
   const { account } = useRainbow();
 
   const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(account as string, page, searchText);
@@ -26,7 +26,12 @@ export default function DomainsHomePage() {
     <Container>
       <ControlBar value={searchText} searchTextChangedHandler={searchTextChangedHandler} />
       {(() => {
-        if (loading) return <Loader />;
+        if (loading)
+          return (
+            <LoaderWrapper>
+              <Loader />
+            </LoaderWrapper>
+          );
         if (domainList?.length === 0) return <NoENSBanner openENSWebsiteHandler={openENSWebsiteHandler} />;
 
         return (
@@ -47,7 +52,10 @@ const DomainsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
-  justify-content: start;
+  justify-content: center;
+  @media (min-width: 768px) {
+    justify-content: start;
+  }
 `;
 
 const AddDomain = styled.button`

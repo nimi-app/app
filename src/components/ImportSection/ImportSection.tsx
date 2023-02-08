@@ -18,12 +18,15 @@ export function ImportSection() {
   const handleImportLensProfile = () => {
     if (!lensProfile) return;
 
-    setValue('displayName', lensProfile.name);
-    setValue('description', lensProfile.description);
-    setValue('image', {
-      type: NimiImageType.URL,
-      url: lensProfile?.pictureUrl,
-    });
+    const { description, pictureUrl } = lensProfile;
+
+    if (description && lensProfile.description.length > 0) setValue('description', lensProfile.description);
+    if (pictureUrl && pictureUrl.length > 0) {
+      setValue('image', {
+        type: NimiImageType.URL,
+        url: pictureUrl,
+      });
+    }
   };
 
   return (

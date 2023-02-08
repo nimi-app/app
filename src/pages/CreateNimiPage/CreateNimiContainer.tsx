@@ -1,7 +1,7 @@
 import { useIPNSData } from '../../api/RestAPI/hooks/useIPNSData';
 import { Container } from '../../components/Container';
 import { CreateNimi } from '../../components/CreateNimi';
-import { Loader } from '../../components/Loader';
+import { Spinner } from '../../components/Spinner';
 import { useAvaliableThemesFromPoaps } from '../../hooks/useAvaliableThemesFromPoaps';
 import { useInitialtNimiData } from '../../hooks/useDefaultNimiData';
 import { useRainbow } from '../../hooks/useRainbow';
@@ -26,7 +26,7 @@ export function CreateNimiContainer({ ensName }: CreateNimiContainerProps) {
   const { data: IPNSDATA, isLoading: IPNSLOADING } = useIPNSData(ensName);
 
   if (initialNimiLoading || initialNimi === undefined || isThemeLoading || IPNSLOADING) {
-    return <Loader />;
+    return <Spinner />;
   }
 
   return (

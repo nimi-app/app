@@ -12,7 +12,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 export function Landing() {
   const { t } = useTranslation(['common', 'landing']);
   const navigate = useNavigate();
-  console.log('here');
+
   return (
     <PageWrapper>
       <Header>
@@ -56,9 +56,7 @@ export function Landing() {
                             else openChainModal();
                           }}
                         >
-                          <span>
-                            {chain?.unsupported ? t('error.wrongNetwork') : t('hero.buttonLabel', { ns: 'landing' })}
-                          </span>
+                          <span>{t('hero.buttonLabel', { ns: 'landing' })}</span>
                         </Button>
                       );
                     }
