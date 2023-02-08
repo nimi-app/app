@@ -15,22 +15,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-            persist-credentials: false
-      - name: Debugging with ssh
-        uses: lhotari/action-upterm@v1
+          persist-credentials: false
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Setup SSH
-        run: |
-          chmod +x ./.github/workflows/setup-ssh.sh
-          ./.github/workflows/setup-ssh.sh
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
-        shell: bash
       - name: Install dependencies
         run: npm ci
       - name: Codegen
