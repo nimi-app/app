@@ -18,7 +18,7 @@ const uploadImage = async (file: File) => {
 
   const { data } = await getNimiAPIClient().post<{
     data: PublishNimiApiResponse;
-  }>('/nimi/assets', formData, config);
+  }>('/assets', formData, config);
   return data.data;
 };
 
