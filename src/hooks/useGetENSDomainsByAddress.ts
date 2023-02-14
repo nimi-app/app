@@ -1,21 +1,15 @@
 import { useMemo } from 'react';
 
-import { GRAPH_ENDPOINT, GraphQlClientDynamic } from '../api/GraphQl/graphClient';
+import { useRainbow } from './useRainbow';
+import { getGraphQLClient, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import {
   GetDomainsOwnedOrControlledByQuery,
   useGetDomainsOwnedOrControlledByQuery,
 } from '../api/GraphQl/schemas/generated/ens';
-import { useRainbow } from './useRainbow';
+import { ENSDomain } from '../models';
 
-export type DataModified = {
-  id: string;
-  labelName: string;
-  labelHash: string;
-  name: string;
-  parent: { name: string };
-};
 export interface UserENSDomains {
-  data: DataModified[] | undefined;
+  data: ENSDomain[];
   loading: boolean;
   hasNextPage?: boolean;
 }
@@ -44,7 +38,7 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
 
     const uniqueDomains = allUserDomains.reduce((acc, domain) => {
       // If the domain is already in the array, we don't want to add it again
-      const isDomainDuplicate = acc.find((d) => d?.id === domain?.id);
+      const isDomainDuplicate = acc.find((d: any) => d?.id === domain?.id);
       if (isDomainDuplicate) return acc;
 
       const isNameEncrypted = domain?.name?.includes('[');
@@ -85,18 +79,19 @@ export function useGetENSDomainsByAddress(address: string, page = 0, searchStrin
   }
 
   const { isLoading, data, isError, isSuccess, isFetching } = useGetDomainsOwnedOrControlledByQuery(
-    GraphQlClientDynamic(chainId, GRAPH_ENDPOINT.ENS),
+    getGraphQLClient(GRAPH_ENDPOINT.ENS, chainId),
     {
-      addressID: address.toLowerCase(),
+      addressID: address?.toLowerCase(),
       searchString: searchString,
-      addressString: address.toLowerCase(),
+      addressString: address?.toLowerCase(),
       skip: page * numberOfItemsPerPage,
       first: numberOfItemsPerPage + 1,
       chainId,
     },
     { keepPreviousData: true, select: domainOrdering }
   );
-  const waitedForData: DataModified[] = useMemo(() => {
+
+  const waitedForData: ENSDomain[] = useMemo(() => {
     if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps

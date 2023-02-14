@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
 
-import { Button } from '../Button';
-import { Loader, LoaderWrapper } from '../Loader';
 import { fetchAssets } from './api';
 import { isENSName, mapOpenSeaAssetToNFTAsset } from './api/utils';
 import { AssetListInnerWrapper, AssetListItem /* SearchBar */ } from './NFTSelector.styled';
 import { NFTAsset, NFTSelectorProps } from './NFTSelector.types';
 import { AssetCard } from './partials/AssetCard/AssetCard';
+import { Button } from '../Button';
+import { Loader, LoaderWrapper } from '../Loader';
 
-export function NFTSelector({ address, onChange }: NFTSelectorProps) {
+export function NFTSelector({ ensAddress, onChange }: NFTSelectorProps) {
   const [isFetching, setIsFetching] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
@@ -27,13 +27,17 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
 
     setIsFetchingMore(true);
     fetchAssets({
-      address,
+      address: ensAddress,
       cursor: nextCursor,
     }).then(({ assets, next }) => {
       unstable_batchedUpdates(() => {
         const appendedAssets = assets.map(mapOpenSeaAssetToNFTAsset).filter((asset) => !isENSName(asset));
         setAssetList((prev) => [...prev, ...appendedAssets]);
-        setNextCursor(next);
+
+        if (next !== null) {
+          setNextCursor(next);
+        }
+
         setIsFetchingMore(false);
       });
     });
@@ -49,18 +53,20 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
     });
 
     fetchAssets({
-      address,
+      address: ensAddress,
       cursor: nextCursor,
     }).then(({ assets, next }) => {
       unstable_batchedUpdates(() => {
         const appendedAssets = assets.map(mapOpenSeaAssetToNFTAsset).filter((asset) => !isENSName(asset));
         setAssetList(appendedAssets);
         setIsFetching(false);
-        setNextCursor(next);
+        if (next !== null) {
+          setNextCursor(next);
+        }
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address]);
+  }, [ensAddress]);
 
   if (isFetching) {
     return (
@@ -99,7 +105,7 @@ export function NFTSelector({ address, onChange }: NFTSelectorProps) {
       </AssetListInnerWrapper>
       {nextCursor && (
         <Button onClick={fetchMoreOpenSeaAssets} disabled={isFetchingMore}>
-          Load more
+          {isFetchingMore ? <Loader /> : 'Load more'}
         </Button>
       )}
     </>

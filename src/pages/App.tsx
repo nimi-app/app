@@ -1,12 +1,12 @@
 import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
+import { CreateNimiPage } from './CreateNimiPage/CreateNimiPage';
+import DomainsHomePage from './DomainsHome';
+import { Landing } from './Landing/Landing';
 import { useRainbow } from '../hooks/useRainbow';
-import { CreateNimiPage } from './CreateNimiPage';
-import { DomainsHome } from './DomainsHome';
-import { Landing } from './Landing';
-
 import '@rainbow-me/rainbowkit/styles.css';
+import { PageLayout } from '../layout';
 
 const router = createBrowserRouter([
   {
@@ -14,12 +14,18 @@ const router = createBrowserRouter([
     element: <Landing />,
   },
   {
-    path: 'domains/:ensName',
-    element: <CreateNimiPage />,
-  },
-  {
     path: 'domains',
-    element: <DomainsHome />,
+    element: <PageLayout />,
+    children: [
+      {
+        path: 'all',
+        element: <DomainsHomePage />,
+      },
+      {
+        path: ':ensName',
+        element: <CreateNimiPage />,
+      },
+    ],
   },
   {
     path: '*',

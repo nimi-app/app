@@ -1,11 +1,48 @@
-import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import { styled } from 'styled-components';
 
-import Lens from '../../assets/svg/lens-logo.svg';
-import Linktree from '../../assets/svg/linktree.svg';
-import Nft from '../../assets/svg/nft-logo.svg';
-import Twitter from '../../assets/svg/twitter-logo.svg';
+import LensLogoImage from '../../assets/svg/lens-logo.svg';
+import LinktreeLogoImage from '../../assets/svg/linktree.svg';
+import NFTImage from '../../assets/svg/nft-logo.svg';
+import TwitterLogoImage from '../../assets/svg/twitter-logo.svg';
 
-const Button = styled.button`
+interface ImportButtonProps {
+  onClick: any;
+  type: ImportButtonType;
+  disabled?: boolean;
+}
+
+export enum ImportButtonType {
+  Twitter = 'Twitter',
+  Lens = 'Lens',
+  Nft = 'Nft',
+  Linktree = 'Linktree',
+}
+
+const Logos: {
+  [key in ImportButtonType]: string;
+} = {
+  [ImportButtonType.Twitter]: TwitterLogoImage,
+  [ImportButtonType.Lens]: LensLogoImage,
+  [ImportButtonType.Nft]: NFTImage,
+  [ImportButtonType.Linktree]: LinktreeLogoImage,
+};
+
+export function ImportButton({ onClick, type, disabled = false }: ImportButtonProps) {
+  return (
+    <Button
+      initial={false}
+      whileHover={{ scale: 1.1, transition: { duration: 0.05 } }}
+      whileTap={{ scale: 0.9 }}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <StyledImg src={Logos[type]} />
+    </Button>
+  );
+}
+
+const Button = styled(motion.button)`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -22,28 +59,8 @@ const Button = styled.button`
     margin-left: -13px;
   }
 `;
+
 const StyledImg = styled.img`
   width: 20px;
   height: 20px;
 `;
-
-interface ImportButtonProps {
-  onClick: any;
-  type: string;
-  disabled?: boolean;
-}
-
-const Logos = {
-  Twitter: Twitter,
-  Lens: Lens,
-  Nft: Nft,
-  Linktree: Linktree,
-};
-
-export function ImporButton({ onClick, type, disabled = false }: ImportButtonProps) {
-  return (
-    <Button disabled={disabled} onClick={onClick}>
-      <StyledImg src={Logos[type]} />
-    </Button>
-  );
-}

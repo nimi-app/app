@@ -1,48 +1,33 @@
+import { NimiLinkBaseDetails } from '@nimi.io/card/types';
 import axios from 'axios';
 import { CID } from 'multiformats/cid';
 
-import { generateID, guessLinkTypeBasedOnUrl } from '../../utils';
 import { ENSMetadata } from './hooks/useEnsMetadataImage';
 import { LinktreeData } from './hooks/useImportFromLinktree';
+import { generateID, guessLinkTypeBasedOnUrl } from '../../utils';
 /**
  * Returns the base URL for the Nimi API.
  * @returns {string} The base URL for the Nimi API.
  */
 export function getAPIBaseURL() {
-  // If the REACT_APP_NIMI_API_BASE_URL is not set, throw an error.
-  if (!process.env.REACT_APP_NIMI_API_BASE_URL) {
-    throw new Error('REACT_APP_NIMI_API_BASE_URL is not set.');
+  const prodkey = 'REACT_APP_NIMI_API_BASE_URL';
+  const prodValue = process.env[prodkey];
+
+  if (!prodValue || prodValue === '') {
+    throw new Error(`${prodkey} is not set.`);
   }
 
-  if (
-    process.env.REACT_APP_NIMI_API_DEV_BASE_URL &&
-    (process.env.NODE_ENV === 'development' || process.env.REACT_APP_ENV === 'development')
-  ) {
-    return process.env.REACT_APP_NIMI_API_DEV_BASE_URL;
+  const devKey = 'REACT_APP_NIMI_API_DEV_BASE_URL';
+  if (process.env[devKey] && process.env.REACT_APP_ENV === 'development') {
+    return process.env[devKey];
   }
 
-  return process.env.REACT_APP_NIMI_API_BASE_URL as string;
+  return prodValue;
 }
 
-export const nimiClient = axios.create({
-  baseURL: getAPIBaseURL(),
-});
-
-/**
- * Returns the POAP API client.
- * @returns
- */
-export function getPOAPAPIClient() {
-  if (!process.env.REACT_APP_POAP_API_KEY) {
-    throw new Error('REACT_APP_POAP_API_KEY is not set.');
-  }
-
+export function getNimiAPIClient() {
   return axios.create({
-    baseURL: 'https://api.poap.tech',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': process.env.REACT_APP_POAP_API_KEY,
-    },
+    baseURL: getAPIBaseURL(),
   });
 }
 
@@ -60,7 +45,6 @@ function isCID(hash: string) {
 }
 
 export function formatEnsMetadataImage(ensData: ENSMetadata) {
-  console.log('ensMeta', ensData);
   if ('image' in ensData && ensData.image) {
     let imageUrl: string | undefined;
     if (ensData.image.startsWith('ipfs://ipfs/')) {
@@ -81,6 +65,6 @@ export function formatEnsMetadataImage(ensData: ENSMetadata) {
 export function formatLinktreeData(data: LinktreeData[]) {
   return data.map(({ content, title }) => {
     const guessLinkType = guessLinkTypeBasedOnUrl(content);
-    return { type: guessLinkType, title, content, id: generateID() };
+    return { type: guessLinkType, title, content, id: generateID() } as NimiLinkBaseDetails;
   });
 }

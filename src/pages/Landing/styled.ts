@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import backgroundImageUrl from '../../assets/images/nimi-header-background.jpeg';
 import { NimiSignatureColor } from '../../theme';
@@ -18,7 +18,6 @@ export const PageWrapper = styled.div`
 export const Header = styled.header`
   width: 100%;
   display: flex;
-
   margin-top: 60px;
   flex-grow: 0;
   -webkit-box-pack: center;
@@ -64,6 +63,5 @@ export const HeaderEyebrow = styled.div`
   text-align: center;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-
   color: #556de7;
 `;

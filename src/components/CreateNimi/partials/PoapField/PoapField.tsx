@@ -1,6 +1,6 @@
-import { ReactComponent as PoapLogo } from '../../../../assets/svg/poap-logo.svg';
-import { InputButton } from '../../../InputButton';
 import { InnerPoapWrapper, PoapButton, PoapWrapper } from './styled';
+import { ReactComponent as POAPLogo } from '../../../../assets/svg/poap-logo.svg';
+import { InputButton } from '../../../InputButton';
 
 type POAPFieldProps = {
   onConfigure: (event: MouseEvent) => void;
@@ -12,7 +12,7 @@ export function PoapField({ onConfigure, onRemove }: POAPFieldProps) {
     <PoapWrapper>
       <InnerPoapWrapper>
         <PoapButton>
-          <PoapLogo />
+          <POAPLogo />
           POAPs
         </PoapButton>
         <InputButton displayInlineFlex={true} variant="sliders" marginRight="4px" onClick={onConfigure} />

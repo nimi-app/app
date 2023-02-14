@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export interface CardProps {
   variant?: 'default' | 'blurred';
@@ -22,10 +22,4 @@ export const CardBody = styled.div`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     padding:14px;
   `};
-`;
-
-export const CardTitle = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 12px;
 `;

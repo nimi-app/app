@@ -1,11 +1,13 @@
-import { filterEmptyFields, Nimi, NimiCard, nimiLinkValidator, validateNimi } from '@nimi.io/card';
-import createDebugger from 'debug';
-import { useEffect, useState } from 'react';
+import { Nimi, NimiPage, NimiPageProvider } from '@nimi.io/card';
+import { validateNimi } from '@nimi.io/card/validators';
+import createDebug from 'debug';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
-import styled, { StyleSheetManager } from 'styled-components';
+import { styled, StyleSheetManager } from 'styled-components';
 
 import { FixedGlobalStyle, ThemeProvider } from '../../../../theme';
 import { Card as CardBase } from '../../../Card';
+
+const debug = createDebug('components:NimiPreviewCard');
 
 export interface NimiPreviewCardProps {
   nimi: Nimi;
@@ -22,58 +24,21 @@ const PreviewFrame = styled(Frame)`
   border: 0;
 `;
 
-const debug = createDebugger('components:NimiPreviewCard');
-
 export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
-  const [previewNimi, setPreviewNimi] = useState<Nimi>();
-
-  const removeInvalidLinks = async (links) => {
-    const result = await Promise.all(
-      links.map((link) =>
-        nimiLinkValidator
-          .isValid({
-            type: link.type,
-            content: link.content,
-          })
-          .then((isLinkValid) => {
-            return isLinkValid;
-          })
-          .catch((error) => {
-            debug({
-              error,
-            });
-            return false;
-          })
-      )
-    );
-
-    return links.filter((_, index) => result[index]);
+  const filterNimi = () => {
+    try {
+      const validatedNimi = validateNimi(nimi);
+      return validatedNimi;
+    } catch (error) {
+      debug('Nimi is not valid', error.message, nimi);
+      return false;
+    }
   };
 
-  useEffect(() => {
-    // Filter invalid links
-    const filterFunction = async () => {
-      const filteredNimi = filterEmptyFields(nimi);
-
-      const filteredLinks = await removeInvalidLinks(filteredNimi.links);
-
-      validateNimi({ ...filteredNimi, links: filteredLinks })
-        .then((validatedNimi) => {
-          setPreviewNimi(validatedNimi as Nimi);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-    filterFunction();
-  }, [nimi]);
-
-  if (!previewNimi) {
-    return (
-      <div>
-        <p>...</p>
-      </div>
-    );
+  const filteredNimi = filterNimi();
+  debug('filteredNimi', filteredNimi);
+  if (!nimi || !filteredNimi) {
+    return <div></div>;
   }
 
   return (
@@ -88,7 +53,9 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 </style>
                 <FixedGlobalStyle />
                 <ThemeProvider>
-                  <NimiCard nimi={previewNimi} isApp={false} />
+                  <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY || ''}>
+                    <NimiPage nimi={filteredNimi} isApp={false} />
+                  </NimiPageProvider>
                 </ThemeProvider>
               </>
             </StyleSheetManager>

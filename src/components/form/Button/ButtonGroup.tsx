@@ -1,7 +1,9 @@
-import { NIMI_CARDS_WIDTH } from '@nimi.io/card';
-import styled from 'styled-components';
+import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
+import { motion } from 'framer-motion';
+import { PropsWithChildren } from 'react';
+import { styled } from 'styled-components';
 
-export const StyledButton = styled.button<{ disabled: boolean }>`
+export const StyledButton = styled(motion.button)<{ disabled: boolean }>`
   display: flex;
   height: 42px;
   border-color: transparent;
@@ -20,10 +22,27 @@ export const StyledButton = styled.button<{ disabled: boolean }>`
     gap: none;
   }
 `;
+interface ButtonGroupProps {
+  id?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  key?: string;
+}
 
-export const ButtonGroup = ({ id, children, onClick, disabled = false }) => {
+export const ButtonGroup = ({ id, children, onClick, disabled = false }: PropsWithChildren<ButtonGroupProps>) => {
   return (
-    <StyledButton disabled={disabled} id={id} onClick={onClick}>
+    <StyledButton
+      //set because of ssr rendering
+      initial={false}
+      whileHover={{
+        scale: 1.1,
+        transition: { duration: 0.2 },
+      }}
+      whileTap={{ scale: 0.9 }}
+      disabled={disabled}
+      id={id}
+      onClick={onClick}
+    >
       {children}
     </StyledButton>
   );

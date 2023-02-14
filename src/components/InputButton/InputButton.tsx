@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { ReactComponent as SlidersSVG } from '../../assets/svg/sliders.svg';
 import { ReactComponent as TrashCanSVG } from '../../assets/svg/trashcan.svg';

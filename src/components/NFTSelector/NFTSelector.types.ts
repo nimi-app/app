@@ -1,25 +1,13 @@
-import type { OpenSeaAsset } from 'opensea-js/lib/types';
+import type { OpenSeaAsset } from './api';
 
 export type NFTAsset = OpenSeaAsset & {
   value: string;
 };
 
 export interface BaseCommonProps<Option = NFTAsset> {
-  /**
-   * Address of the wallet to fetch NFTs from
-   */
-  address: string;
-  /**
-   * Select selection to one or multiple
-   */
+  ensAddress: string;
   isMulti?: boolean;
-  /**
-   * Callback when NFTs are selected
-   */
   onChange?: (newValue?: Option) => void;
-  /**
-   * Initial selected NFT
-   */
   initialValue?: string;
 }
 

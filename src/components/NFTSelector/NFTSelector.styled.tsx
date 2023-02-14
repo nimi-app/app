@@ -1,10 +1,9 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const AssetListInnerWrapper = styled.div`
   max-height: 500px;
   width: 100%;
   overflow: auto;
-
   /** Layout for 2 columns */
   display: grid;
   grid-template-columns: repeat(2, 1fr);

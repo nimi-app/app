@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { NFTAsset } from '../../NFTSelector.types';
 
@@ -29,21 +29,9 @@ const StyledCardImage = styled.img`
 `;
 
 export function AssetCard({ onClick, asset, isSelected }: AssetCardProps) {
-  // const [isLoading, setIsLoading] = useState(false);
-  // useEffect(() => {
-  //   const image = new Image();
-
-  //   image.onload = () => {
-  //     setIsLoading(false);
-  //   };
-
-  //   image.src = asset.imageUrl;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   return (
     <StyledAssetCard onClick={onClick} isSelected={isSelected}>
-      <StyledCardImage src={asset.imagePreviewUrl} alt={asset.name} />
+      <StyledCardImage src={asset.image_preview_url} alt={asset.name} />
       <StyledInnerWrapper>
         <h3>{asset.name}</h3>
       </StyledInnerWrapper>

@@ -1,19 +1,16 @@
-import { FC, SVGProps, useState } from 'react';
-import styled from 'styled-components';
+import { FC, PropsWithChildren, SVGProps } from 'react';
+import { styled } from 'styled-components';
 
 import { ReactComponent as XSVG } from '../../../assets/svg/cross.svg';
-import { SharedInputStyles } from '../../../theme';
 import { renderSVG } from '../../../utils';
 import { InputButton } from '../../InputButton';
 
 export interface InputFieldWithIcon {
   inputLogo?: FC<SVGProps<SVGSVGElement>>;
-  placeholder: string;
+  errorMessage?: string;
   content: string;
   onClearClick?: any;
   onInputClick?: any;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  isInvalidInput: boolean;
   id: string;
   isSimple?: boolean;
   style?: any;
@@ -24,26 +21,18 @@ export interface InputFieldWithIcon {
  */
 export function InputFieldWithIcon({
   inputLogo,
-  isInvalidInput,
   content,
-  onChange,
   onClearClick,
   onInputClick,
   id,
   isSimple,
   style,
-}: InputFieldWithIcon) {
-  const [inputTouched, setInputTouched] = useState(false);
+  children,
+}: PropsWithChildren<InputFieldWithIcon>) {
   return (
     <InputContainer style={style} id={id}>
-      <Logo logo={renderSVG(inputLogo, 15)} />
-      <ContentInput
-        inputInvalid={inputTouched && isInvalidInput}
-        value={content}
-        onChange={onChange}
-        spellCheck={false}
-        onBlur={setInputTouched.bind(null, true)}
-      />
+      <LogoContainer>{renderSVG(inputLogo, 15)}</LogoContainer>
+      {children}
       {!isSimple && (
         <>
           {content && <ClearButton className="clear-button" right="57px" onClick={onClearClick} />}
@@ -61,12 +50,7 @@ const InputContainer = styled.div<{ marginBottom?: string }>`
   height: 50px;
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 `;
-export const ContentInput = styled.input<{ inputInvalid: boolean; paddingLeft?: string }>`
-  height: 50px;
-  padding: 8px 80px 8px ${({ paddingLeft }) => (paddingLeft ? paddingLeft : '40px')};
-  ${SharedInputStyles};
-  background-color: white;
-`;
+
 const ClearButton = styled(XSVG)<{ right?: string }>`
   visibility: none;
   opacity: 0;
@@ -91,5 +75,3 @@ const LogoContainer = styled.div`
   left: 18px;
   transform: translate(0, -50%);
 `;
-
-const Logo = ({ logo }) => <LogoContainer>{logo}</LogoContainer>;

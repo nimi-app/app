@@ -1,18 +1,8 @@
-import { getAddress } from '@ethersproject/address';
-
-import { Nimi, nimiLinkDetailsExtended, NimiLinkType, NimiWidgetType } from '@nimi.io/card';
+import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
+import { Nimi, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
 import { FC, SVGProps } from 'react';
 
 export * from './explorer';
-
-// shorten the checksummed version of the input address to have 0x + 4 characters at start and end
-export function shortenAddress(address: string, charsBefore = 4, charsAfter = 4): string {
-  const parsed = getAddress(address);
-  if (!parsed) {
-    throw Error(`Invalid 'address' parameter '${address}'.`);
-  }
-  return `${parsed.substring(0, charsBefore + 2)}...${parsed.substring(42 - charsAfter)}`;
-}
 
 /**
  * Loads a Fathom instance into the page
@@ -47,8 +37,8 @@ export function renderSVG(logo?: FC<SVGProps<SVGSVGElement>>, size = 20): JSX.El
  * Generates random Id based on timestamp
  * @returns
  */
-export function generateID(randomString?: string): string {
-  return 'id' + new Date().getTime() + randomString;
+export function generateID(): string {
+  return 'id' + new Date().getTime();
 }
 
 /**
@@ -56,13 +46,13 @@ export function generateID(randomString?: string): string {
  * @param url string url that should be evaluated
  * @returns NimiLinkType
  */
-export function guessLinkTypeBasedOnUrl(url: string): string {
+export function guessLinkTypeBasedOnUrl(url: string): NimiLinkType {
   //loops through prepend urls and check if some of them contain url from linkree
-  const linkSearch = Object.entries(nimiLinkDetailsExtended).find(
+  const linkSearch = Object.entries(NIMI_LINK_DETAIL_EXTENDED).find(
     (item) => item[1].prepend && url.includes(item[1].prepend.substring(8))
   );
 
-  return linkSearch ? linkSearch[0] : NimiLinkType.URL;
+  return linkSearch ? (linkSearch[0] as NimiLinkType) : NimiLinkType.URL;
 }
 
 /**
@@ -78,7 +68,7 @@ export function insertPoapWidgetIntoNimi(nimi: Nimi, hasPoaps: boolean, address?
   const hasPoapWidget = nimi.widgets.some(({ type }) => type === NimiWidgetType.POAP);
 
   if (!hasPoapWidget && hasPoaps && address) {
-    const widget = { type: NimiWidgetType.POAP, address };
+    const widget = { type: NimiWidgetType.POAP } as NimiWidget;
     nimiObject.widgets.push(widget);
   }
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import { NimiSignatureColor } from '../../theme';
 
@@ -44,7 +44,7 @@ export const StyledButtonBase = styled(StyledButtonStaticBase)`
   }
 
   &:disabled {
-    background-color: ${({ theme }) => theme.purple5};
+    background-color: ${({ theme }) => theme?.purple5};
     cursor: not-allowed;
     box-shadow: none;
     outline: none;
@@ -76,10 +76,12 @@ export const StyledInnerWrapper = styled.div`
   gap: 10px;
 `;
 
-export const DottedButtonBase = styled.button`
-  cursor: pointer;
-  line-height: 24px;
+export const DottedBorder = css`
+  line-height: 32px;
+  font-size: 24px;
+  font-weight: 400;
   letter-spacing: 0.1em;
   ${NimiSignatureColor};
-  border: 2px dotted rgba(67, 104, 234, 1);
+  border: 2px dotted #4368ea;
+  border-radius: 16px;
 `;

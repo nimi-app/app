@@ -1,5 +1,5 @@
-import { NimiLinkType } from '@nimi.io/card';
-import { CSSProperties } from 'styled-components';
+import { NimiLinkType } from '@nimi.io/card/types';
+import { CSSProp } from 'styled-components';
 import { goerli, mainnet } from 'wagmi';
 
 export interface NetworkDetails {
@@ -26,7 +26,7 @@ export enum Fields {
 export interface FieldType {
   name: string;
   dataType: string;
-  styleOverride?: CSSProperties;
+  styleOverride?: CSSProp;
   placeholder: string;
   logo?: string;
 }

@@ -1,10 +1,10 @@
-import nameHash from '@ensdomains/eth-ens-namehash';
-import { encodeContenthash } from '@ensdomains/ui';
-import { ContractTransaction } from 'ethers';
+import { ContractTransaction } from '@ethersproject/contracts';
+
+import { encodeContenthash, namehash } from '@ensdomains/ui';
 import { useMemo } from 'react';
 
-import { EnsPublicResolver } from '../generated/contracts';
 import { useENSPublicResolverContract } from './useENSPublicResolverContract';
+import { EnsPublicResolver } from '../generated/contracts';
 
 export interface UseSetContentHash {
   setContentHash: null | (() => Promise<ContractTransaction>);
@@ -20,7 +20,7 @@ export interface SetENSNameContentParams {
  * Direct call to the ENS public resolver contract to set the content hash of a name
  */
 export function setENSNameContentHash(params: SetENSNameContentParams) {
-  const ensNode = nameHash.hash(params.name);
+  const ensNode = namehash(params.name);
   const { encoded, error } = encodeContenthash(params.contentHash);
 
   if (error) {
