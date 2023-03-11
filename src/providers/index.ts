@@ -1,2 +1,2 @@
 export * from './ReactQueryProvider';
-export * from './WagmiProvider';
+export * from './Wagmi/WagmiProvider';
