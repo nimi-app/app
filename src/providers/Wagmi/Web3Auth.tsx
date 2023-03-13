@@ -5,7 +5,7 @@ import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plu
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector';
 
 const name = 'Web3 Auth';
-const iconUrl = 'https://web3auth.io/docs/contents/logo-ethereum.png';
+const iconUrl = 'https://images.toruswallet.io/web3auth-logo-white.svg';
 
 export const rainbowWeb3AuthConnector = ({ chains }) => {
   // Create Web3Auth Instance
@@ -65,7 +65,7 @@ export const rainbowWeb3AuthConnector = ({ chains }) => {
     id: 'web3auth',
     name,
     iconUrl,
-    iconBackground: '#fff',
+    iconBackground: '#0364ff',
     createConnector: () => {
       const connector = new Web3AuthConnector({
         chains: chains,
