@@ -48,6 +48,19 @@ export const themes: Record<NimiCuratedTheme, ThemeAssets> = {
     logoText: ethTlVText,
     preview: ethTlvPreview,
   },
+  [NimiThemeType.ETH_RIO_2023]: {
+    type: NimiThemeType.ETH_RIO_2023,
+    logoImage: ethTLVImage,
+    logoText: ethTlVText,
+    preview: ethTlvPreview,
+  },
+  [NimiThemeType.ETH_DENVER_2023]: {
+    type: NimiThemeType.ETH_DENVER_2023,
+    logoImage: ethTLVImage,
+    logoText: ethTlVText,
+
+    preview: ethTlvPreview,
+  },
   // [NimiThemeType.INFINITE]: {
   //   type: NimiThemeType.RAAVE,
   //   logoImage: raaveLogoImage,
