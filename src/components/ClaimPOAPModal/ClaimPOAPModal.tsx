@@ -10,6 +10,7 @@ import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
 export enum ClaimModalStates {
   INITIAL,
   CLAIMING,
+  SUCCESS,
   CLAIMED,
   ERROR,
 }
@@ -100,6 +101,50 @@ export function ClaimPOAPModal({
           )}
         </>
       )}
+      {claimStep === ClaimModalStates.SUCCESS && (
+        <>
+          <Header>
+            <div></div>
+            <CloseIcon onClick={closeModal}>
+              <CloseSvg />
+            </CloseIcon>
+          </Header>
+          <SuccessBody>
+            <img
+              width={'124px'}
+              height={'124px'}
+              src="https://assets.poap.xyz/raave-devcon-bogota-2022-logo-1664886515532.png?size=small"
+            />
+            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
+              Succesfully Claimed
+            </Heading>
+            <SucessDescription dark={dark}>POAP was succesfully claimed</SucessDescription>
+          </SuccessBody>
+        </>
+      )}
+      {claimStep === ClaimModalStates.CLAIMED && (
+        <>
+          <Header>
+            <div></div>
+            <CloseIcon onClick={closeModal}>
+              <CloseSvg />
+            </CloseIcon>
+          </Header>
+          <SuccessBody>
+            <img
+              width={'124px'}
+              height={'124px'}
+              src="https://assets.poap.xyz/raave-devcon-bogota-2022-logo-1664886515532.png?size=small"
+            />
+            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
+              POAP Already Claimed
+            </Heading>
+            <SucessDescription dark={dark}>
+              This POAP was already claimed by <span style={{ fontWeight: '700' }}>zeasdsadsadsadtt.eth</span>
+            </SucessDescription>
+          </SuccessBody>
+        </>
+      )}
     </Modal>
   );
 }
@@ -129,6 +174,13 @@ const Modal = styled(motion.div)<ModalProps>`
     border: 4px solid white;
     background-color: #f0f3fb;
   `}
+`;
+
+const SuccessBody = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Header = styled.header`
@@ -183,6 +235,12 @@ const Description = styled.h2<ModalProps>`
   margin-bottom: 16px;
 
   ${({ dark }) => `color: ${dark ? '#C3CAD2' : '#8a97aa'};`}
+`;
+
+const SucessDescription = styled(Description)`
+  text-align: center;
+  margin-bottom: 0%;
+  line-height: 20px;
 `;
 
 const InputGroup = styled.div`
