@@ -1,5 +1,5 @@
 import { Chain, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { createBrowserRouter, Navigate, RouterProvider, useParams } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { CreateNimiPage } from './CreateNimiPage/CreateNimiPage';
 import DomainsHomePage from './DomainsHome';
