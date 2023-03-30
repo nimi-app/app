@@ -1,7 +1,9 @@
 import { NimiPage as NimiPageRender } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
+import { AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { styled } from 'styled-components';
 
 import { ClaimModalStates, ClaimPOAPModal } from '../components/ClaimPOAPModal';
 import { Spinner } from '../components/Spinner';
@@ -16,7 +18,7 @@ export default function NimiPage() {
 
   const [searchParams] = useSearchParams();
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
-  const [claimStep, setClaimStep] = useState(ClaimModalStates.ERROR);
+  const [claimStep, setClaimStep] = useState(ClaimModalStates.INITIAL);
 
   const [poapReciever, setPoapReciever] = useState('');
 
@@ -38,19 +40,34 @@ export default function NimiPage() {
 
   return (
     <>
-      {iykCode && isClaimModalOpen && (
-        <ClaimPOAPModal
-          setReciever={setPoapReciever}
-          reciever={poapReciever}
-          onClaimClick={handleClaimClick}
-          claimStep={claimStep}
-          // dark={initialNimi.theme.type === NimiThemeType.RAAVE}
-          dark={false}
-          closeModal={() => setIsClaimModalOpen(false)}
-        />
-      )}
+      <AnimatePresence initial={false}>
+        {iykCode && isClaimModalOpen && (
+          <ClaimPOAPModal
+            setReciever={setPoapReciever}
+            reciever={poapReciever}
+            onClaimClick={handleClaimClick}
+            claimStep={claimStep}
+            dark={initialNimi.theme.type === NimiThemeType.RAAVE}
+            closeModal={() => setIsClaimModalOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+      <ButtonList onClick={(event) => event.stopPropagation()}>
+        <button onClick={() => setClaimStep(ClaimModalStates.INITIAL)}>Initial</button>
+        <button onClick={() => setClaimStep(ClaimModalStates.CLAIMING)}>Claiming</button>
+        <button onClick={() => setClaimStep(ClaimModalStates.SUCCESS)}>Success</button>
+        <button onClick={() => setClaimStep(ClaimModalStates.CLAIMED)}>Claimed</button>
+        <button onClick={() => setClaimStep(ClaimModalStates.ERROR)}>Error</button>
+      </ButtonList>
 
       <NimiPageRender nimi={initialNimi} isApp={true} />
     </>
   );
 }
+
+const ButtonList = styled.div`
+  position: absolute;
+  left: 0;
+  top: 10;
+  z-index: 3;
+`;

@@ -1,10 +1,12 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import { ClaimPOAPButton } from './ClaimPOAPButton';
 import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
+import { AnimatedSection } from '../../modals/ConfigurePOAPsModal/components/AnimatedSection';
+
 // import { ReactComponent as CogSVG } from '../../../assets/cog.svg';
 
 export enum ClaimModalStates {
@@ -45,16 +47,9 @@ export function ClaimPOAPModal({
 }: ClaimPOAPModalProps) {
   const [showBody, setShowBody] = useState(true);
   return (
-    <Modal
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      key="claimModal"
-      dark={dark}
-      onClick={(event) => event.stopPropagation()}
-    >
+    <Modal key="claimModal" dark={dark} onClick={(event) => event.stopPropagation()}>
       {claimStep === ClaimModalStates.INITIAL && (
-        <>
+        <AnimatedSection>
           <Header>
             <Heading dark={dark}>You have met {name}</Heading>
             <CloseIcon onClick={closeModal}>
@@ -73,10 +68,10 @@ export function ClaimPOAPModal({
           <Footer>
             <ClaimPOAPButton onClick={onClaimClick} />
           </Footer>
-        </>
+        </AnimatedSection>
       )}
       {claimStep === ClaimModalStates.CLAIMING && (
-        <>
+        <AnimatedSection>
           <Header>
             <Heading dark={dark}>Claiming...</Heading>
             <CloseIcon
@@ -99,17 +94,23 @@ export function ClaimPOAPModal({
               </InputGroup>
             </Body>
           )}
-        </>
+        </AnimatedSection>
       )}
       {claimStep === ClaimModalStates.SUCCESS && (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <Header>
             <div></div>
             <CloseIcon onClick={closeModal}>
               <CloseSvg />
             </CloseIcon>
           </Header>
-          <SuccessBody>
+          <SuccessBody
+            transition={{ duration: 0.3 }}
+            variants={bodyVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+          >
             <img
               width={'124px'}
               height={'124px'}
@@ -120,17 +121,23 @@ export function ClaimPOAPModal({
             </Heading>
             <SucessDescription dark={dark}>POAP was succesfully claimed</SucessDescription>
           </SuccessBody>
-        </>
+        </motion.div>
       )}
       {claimStep === ClaimModalStates.CLAIMED && (
-        <>
+        <motion.div>
           <Header>
             <div></div>
             <CloseIcon onClick={closeModal}>
               <CloseSvg />
             </CloseIcon>
           </Header>
-          <SuccessBody>
+          <SuccessBody
+            transition={{ duration: 0.3 }}
+            variants={bodyVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+          >
             <img
               width={'124px'}
               height={'124px'}
@@ -143,17 +150,23 @@ export function ClaimPOAPModal({
               This POAP was already claimed by <span style={{ fontWeight: '700' }}>zeasdsadsadsadtt.eth</span>
             </SucessDescription>
           </SuccessBody>
-        </>
+        </motion.div>
       )}
       {claimStep === ClaimModalStates.ERROR && (
-        <>
+        <motion.div>
           <Header>
             <div></div>
             <CloseIcon onClick={closeModal}>
               <CloseSvg />
             </CloseIcon>
           </Header>
-          <SuccessBody>
+          <SuccessBody
+            transition={{ duration: 0.3 }}
+            variants={bodyVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+          >
             <img
               width={'124px'}
               height={'124px'}
@@ -165,7 +178,7 @@ export function ClaimPOAPModal({
           <Footer>
             <ClaimPOAPButton text={'Try again'} onClick={() => console.log('Try again click')} />
           </Footer>
-        </>
+        </motion.div>
       )}
     </Modal>
   );
@@ -181,7 +194,7 @@ const Modal = styled(motion.div)<ModalProps>`
   position: absolute;
   bottom: 10%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   padding: 22px;
   box-sizing: border-box;
   border-radius: 12px;
