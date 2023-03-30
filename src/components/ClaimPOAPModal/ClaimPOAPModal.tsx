@@ -145,6 +145,28 @@ export function ClaimPOAPModal({
           </SuccessBody>
         </>
       )}
+      {claimStep === ClaimModalStates.ERROR && (
+        <>
+          <Header>
+            <div></div>
+            <CloseIcon onClick={closeModal}>
+              <CloseSvg />
+            </CloseIcon>
+          </Header>
+          <SuccessBody>
+            <img
+              width={'124px'}
+              height={'124px'}
+              src="https://assets.poap.xyz/raave-devcon-bogota-2022-logo-1664886515532.png?size=small"
+            />
+            <ErrorText>Failed to claim</ErrorText>
+          </SuccessBody>
+
+          <Footer>
+            <ClaimPOAPButton text={'Try again'} onClick={() => console.log('Try again click')} />
+          </Footer>
+        </>
+      )}
     </Modal>
   );
 }
@@ -188,6 +210,19 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const ErrorText = styled.div`
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+  color: #f05252;
+  margin-top: 14px;
+  margin-bottom: 24px;
+  /* identical to box height */
+
+  text-align: center;
 `;
 
 const Heading = styled.h1<ModalProps>`

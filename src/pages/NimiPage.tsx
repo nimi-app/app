@@ -16,7 +16,7 @@ export default function NimiPage() {
 
   const [searchParams] = useSearchParams();
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
-  const [claimStep, setClaimStep] = useState(ClaimModalStates.CLAIMED);
+  const [claimStep, setClaimStep] = useState(ClaimModalStates.ERROR);
 
   const [poapReciever, setPoapReciever] = useState('');
 

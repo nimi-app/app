@@ -4,12 +4,13 @@ type ClaimPOAPButtonProps = {
   variant?: 'medium' | 'big';
   marginBottom?: string;
   onClick?: () => void;
+  text?: string;
 };
 
-export function ClaimPOAPButton({ variant = 'big', marginBottom, onClick }: ClaimPOAPButtonProps) {
+export function ClaimPOAPButton({ variant = 'big', marginBottom, onClick, text = 'Claim POAP' }: ClaimPOAPButtonProps) {
   return (
     <StyledButton variant={variant} marginBottom={marginBottom} onClick={onClick}>
-      Claim POAP
+      {text}
     </StyledButton>
   );
 }
