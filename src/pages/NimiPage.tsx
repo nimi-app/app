@@ -1,8 +1,9 @@
 import { NimiPage as NimiPageRender } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
+import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { ClaimPOAPModal } from '../components/ClaimPOAPModal';
+import { ClaimModalStates, ClaimPOAPModal } from '../components/ClaimPOAPModal';
 import { Spinner } from '../components/Spinner';
 import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
 
@@ -12,11 +13,17 @@ import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
  */
 export default function NimiPage() {
   const { nimiUsername } = useParams();
-  console.log('nimiusername', nimiUsername);
+
   const [searchParams] = useSearchParams();
+  const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
+  const [claimStep, setClaimStep] = useState(ClaimModalStates.INITIAL);
+
+  const [poapReciever, setPoapReciever] = useState('');
+
   const iykCode = searchParams.get('iykClaimCode');
 
   const handleClaimClick = () => {
+    setClaimStep(ClaimModalStates.CLAIMING);
     console.log('claim', iykCode);
   };
 
@@ -28,16 +35,22 @@ export default function NimiPage() {
   if (initialNimiLoading || !initialNimi) {
     return <Spinner />;
   }
-  console.log('initialNimi', initialNimi.theme);
 
   return (
     <>
+      {iykCode && isClaimModalOpen && (
+        <ClaimPOAPModal
+          setReciever={setPoapReciever}
+          reciever={poapReciever}
+          onClaimClick={handleClaimClick}
+          claimStep={claimStep}
+          // dark={initialNimi.theme.type === NimiThemeType.RAAVE}
+          dark={false}
+          closeModal={() => setIsClaimModalOpen(false)}
+        />
+      )}
+
       <NimiPageRender nimi={initialNimi} isApp={true} />
-      <ClaimPOAPModal
-        onClaimClick={handleClaimClick}
-        dark={initialNimi.theme.type === NimiThemeType.RAAVE}
-        closeModal={() => console.log('close')}
-      />
     </>
   );
 }

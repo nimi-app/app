@@ -1,56 +1,114 @@
+import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import { ClaimPOAPButton } from './ClaimPOAPButton';
+import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
 // import { ReactComponent as CogSVG } from '../../../assets/cog.svg';
+
+export enum ClaimModalStates {
+  INITIAL,
+  CLAIMING,
+  CLAIMED,
+  ERROR,
+}
 
 type ClaimPOAPModalProps = {
   dark?: boolean;
   name?: string;
   onClaimClick: () => void;
   closeModal: () => void;
+  claimStep?: ClaimModalStates;
+  setReciever: (value: string) => void;
+  reciever?: string;
 };
 
-export function ClaimPOAPModal({ dark = true, name = 'mialn', closeModal, onClaimClick }: ClaimPOAPModalProps) {
+const iconVariants = {
+  open: { rotate: 180 },
+  closed: { rotate: 0 },
+};
+const bodyVariants = {
+  open: { opacity: 1, scale: 1 },
+  closed: { opacity: 0, scale: 0.8 },
+};
+
+export function ClaimPOAPModal({
+  dark = true,
+  name = 'mialn',
+  closeModal,
+  onClaimClick,
+  claimStep,
+  reciever,
+  setReciever,
+}: ClaimPOAPModalProps) {
+  const [showBody, setShowBody] = useState(true);
   return (
-    <Modal dark={dark} onClick={(event) => event.stopPropagation()}>
-      <Header>
-        <Heading dark={dark}>You have met {name}</Heading>
-        <CloseIcon onClick={closeModal}>
-          <CloseSvg />
-        </CloseIcon>
-      </Header>
-      <Body>
-        <Description dark={dark}>Claim POAP that proves you met {name}.</Description>
-        <InputGroup>
-          <Input dark={dark} />
-          {/* <CogButton>
+    <Modal
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      key="claimModal"
+      dark={dark}
+      onClick={(event) => event.stopPropagation()}
+    >
+      {claimStep === ClaimModalStates.INITIAL && (
+        <>
+          <Header>
+            <Heading dark={dark}>You have met {name}</Heading>
+            <CloseIcon onClick={closeModal}>
+              <CloseSvg />
+            </CloseIcon>
+          </Header>
+          <Body>
+            <Description dark={dark}>Claim POAP that proves you met {name}.</Description>
+            <InputGroup>
+              <Input value={reciever} onChange={(e) => setReciever(e.target.value)} dark={dark} />
+              {/* <CogButton>
               <CogSVG />
             </CogButton> */}
-        </InputGroup>
-      </Body>
-      <Footer>
-        <ClaimPOAPButton onClick={onClaimClick} />
-      </Footer>
+            </InputGroup>
+          </Body>
+          <Footer>
+            <ClaimPOAPButton onClick={onClaimClick} />
+          </Footer>
+        </>
+      )}
+      {claimStep === ClaimModalStates.CLAIMING && (
+        <>
+          <Header>
+            <Heading dark={dark}>Claiming...</Heading>
+            <CloseIcon
+              variants={iconVariants}
+              initial="closed"
+              animate={showBody ? 'open' : 'closed'}
+              onClick={() => setShowBody(!showBody)}
+            >
+              <ArrowDown />
+            </CloseIcon>
+          </Header>
+          {showBody && (
+            <Body transition={{ duration: 0.3 }} variants={bodyVariants} initial="closed" animate="open" exit="closed">
+              <Description dark={dark}>POAP is being claimed to</Description>
+              <InputGroup>
+                <Input value={reciever} disabled={true} dark={dark} />
+                {/* <CogButton>
+              <CogSVG />
+            </CogButton> */}
+              </InputGroup>
+            </Body>
+          )}
+        </>
+      )}
     </Modal>
   );
 }
-
-const Backdrop = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 2;
-`;
 
 type ModalProps = {
   dark: boolean;
 };
 
-const Modal = styled.div<ModalProps>`
+const Modal = styled(motion.div)<ModalProps>`
   width: 348px;
   z-index: 2;
   position: absolute;
@@ -99,7 +157,7 @@ const Heading = styled.h1<ModalProps>`
   `}
 `;
 
-const CloseIcon = styled.button`
+const CloseIcon = styled(motion.button)`
   width: 20px;
   height: 20px;
   display: flex;
@@ -114,7 +172,7 @@ const CloseIcon = styled.button`
   }
 `;
 
-const Body = styled.main`
+const Body = styled(motion.div)`
   padding: 10px 0 16px;
 `;
 
