@@ -40,6 +40,8 @@ export default function NimiPage() {
     account: AddressZero, // TODO: get account from the generated NimiPage
   });
 
+  console.log('initialNimi', initialNimi);
+
   return (
     <AnimatePresence initial={false}>
       {initialNimiLoading || !initialNimi || isLoading ? (

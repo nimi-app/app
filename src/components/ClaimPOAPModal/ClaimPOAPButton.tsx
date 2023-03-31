@@ -5,11 +5,18 @@ type ClaimPOAPButtonProps = {
   marginBottom?: string;
   onClick?: () => void;
   text?: string;
+  disabled?: boolean;
 };
 
-export function ClaimPOAPButton({ variant = 'big', marginBottom, onClick, text = 'Claim POAP' }: ClaimPOAPButtonProps) {
+export function ClaimPOAPButton({
+  variant = 'big',
+  marginBottom,
+  onClick,
+  text = 'Claim POAP',
+  disabled = false,
+}: ClaimPOAPButtonProps) {
   return (
-    <StyledButton variant={variant} marginBottom={marginBottom} onClick={onClick}>
+    <StyledButton disabled={disabled} variant={variant} marginBottom={marginBottom} onClick={onClick}>
       {text}
     </StyledButton>
   );
@@ -30,6 +37,10 @@ const StyledButton = styled.button<StyledButtonProps>`
   color: white;
   cursor: pointer;
   margin: 0 auto;
+
+  &:disabled {
+    opacity: 0.5;
+  }
 
   ${({ variant }) => {
     switch (variant) {

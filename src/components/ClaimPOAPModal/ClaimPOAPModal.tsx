@@ -1,10 +1,13 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { styled } from 'styled-components';
+import { isAddressOrEns } from 'utils';
 
 import { ClaimPOAPButton } from './ClaimPOAPButton';
 import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
+import { ReactComponent as Checkmark } from '../../assets/svg/checkmark.svg';
 import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
+import { ReactComponent as Cross } from '../../assets/svg/cross.svg';
 import { AnimatedSection } from '../../modals/ConfigurePOAPsModal/components/AnimatedSection';
 
 // import { ReactComponent as CogSVG } from '../../../assets/cog.svg';
@@ -52,6 +55,8 @@ export function ClaimPOAPModal({
   setReciever,
 }: ClaimPOAPModalProps) {
   const [showBody, setShowBody] = useState(false);
+
+  const isRecipientValid = isAddressOrEns(reciever || '');
   return (
     <Modal key="claimModal" dark={dark} onClick={(event) => event.stopPropagation()}>
       {claimStep === ClaimModalState.INITIAL && (
@@ -66,13 +71,22 @@ export function ClaimPOAPModal({
             <Description dark={dark}>Claim POAP that proves you met {name}</Description>
             <InputGroup>
               <Input value={reciever} onChange={(e) => setReciever(e.target.value)} dark={dark} />
+              <InputIcons>
+                {isRecipientValid ? (
+                  <StyledCheckmark />
+                ) : reciever?.length ? (
+                  <StyledCross onClick={() => setReciever('')} />
+                ) : (
+                  ''
+                )}
+              </InputIcons>
               {/* <CogButton>
               <CogSVG />
             </CogButton> */}
             </InputGroup>
           </Body>
           <Footer>
-            <ClaimPOAPButton onClick={onClaimClick} />
+            <ClaimPOAPButton disabled={!isRecipientValid} onClick={onClaimClick} />
           </Footer>
         </AnimatedSection>
       )}
@@ -251,6 +265,23 @@ const ErrorText = styled.div`
   text-align: center;
 `;
 
+const InputIcons = styled.div`
+  position: absolute;
+  right: 36px;
+  top: 97px;
+`;
+const StyledCheckmark = styled(Checkmark)`
+  path {
+    fill: #057a55;
+  }
+`;
+const StyledCross = styled(Cross)`
+  cursor: pointer;
+  &:hover path {
+    fill: #8c90a0;
+  }
+`;
+
 const Heading = styled.h1<ModalProps>`
   line-height: 20px;
   font-size: 18px;
@@ -310,13 +341,14 @@ const InputGroup = styled.div`
 
 const Input = styled.input.attrs({
   type: 'text',
-  placeholder: 'Enter your ENS or Email to claim',
+  placeholder: 'Enter your ENS or Ethereum address',
   spellCheck: false,
 })<ModalProps>`
   height: 44px;
   width: 100%;
   border-radius: 8px;
   padding: 12px 16px;
+  padding-right: 33px;
   outline: none;
 
   ${({ dark }) =>
