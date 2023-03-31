@@ -51,7 +51,7 @@ export function ClaimPOAPModal({
   reciever,
   setReciever,
 }: ClaimPOAPModalProps) {
-  const [showBody, setShowBody] = useState(true);
+  const [showBody, setShowBody] = useState(false);
   return (
     <Modal key="claimModal" dark={dark} onClick={(event) => event.stopPropagation()}>
       {claimStep === ClaimModalState.INITIAL && (
@@ -205,9 +205,9 @@ const Modal = styled(motion.div)<ModalProps>`
   width: 348px;
   z-index: 2;
   position: absolute;
-  bottom: 10%;
+  bottom: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
   padding: 22px;
   box-sizing: border-box;
   border-radius: 12px;

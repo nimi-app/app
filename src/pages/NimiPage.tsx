@@ -27,6 +27,8 @@ export default function NimiPage() {
 
   const { data: iykResponse, isLoading } = useIykHook({ code: iykRef });
 
+  console.log('iykResponse', iykResponse);
+
   const [poapReciever, setPoapReciever] = useState('');
 
   const handleClaimClick = () => {
@@ -48,7 +50,7 @@ export default function NimiPage() {
         </OpacityMotion>
       ) : (
         <OpacityMotion key="nimi-page-content">
-          {iykResponse?.data.isValidRef && isClaimModalOpen ? (
+          {isClaimModalOpen ? (
             <ClaimPOAPModal
               setReciever={setPoapReciever}
               reciever={poapReciever}
