@@ -21,7 +21,8 @@
     "jsx": "preserve",
     "noImplicitAny": false,
     "useUnknownInCatchVariables": false,
-    "incremental": true
+    "incremental": true,
+    "baseUrl": "src",
   },
   "include": [ "**/*.ts", "**/*.tsx"],
   "exclude": [
