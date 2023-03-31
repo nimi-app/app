@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants';
 
-import { NimiPage as NimiPageRender } from '@nimi.io/card';
+import { NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
 import { useIykHook } from 'api/RestAPI/hooks/useIykHook';
 import { Loader, LoaderWrapper } from 'components/Loader';
@@ -68,7 +68,9 @@ export default function NimiPage() {
             <button onClick={() => setClaimStep(ClaimModalState.CLAIMED)}>Claimed</button>
             <button onClick={() => setClaimStep(ClaimModalState.ERROR)}>Error</button>
           </ButtonList>
-          <NimiPageRender nimi={initialNimi} isApp={true} />
+          <ToastProvider>
+            <NimiPageRender nimi={initialNimi} isApp={true} />
+          </ToastProvider>
         </OpacityMotion>
       )}
     </AnimatePresence>
