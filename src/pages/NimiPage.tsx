@@ -2,11 +2,11 @@ import { AddressZero } from '@ethersproject/constants';
 
 import { NimiPage as NimiPageRender } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
-import { getIYKRefData } from 'api/iyk';
+import { useIykHook } from 'api/RestAPI/hooks/useIykHook';
 import { Loader, LoaderWrapper } from 'components/Loader';
 import { OpacityMotion } from 'components/motion';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -23,23 +23,11 @@ export default function NimiPage() {
   const [searchParams] = useSearchParams();
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
   const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
-  const [ikyRefData, setIkyRefData] = useState<Awaited<ReturnType<typeof getIYKRefData>>>();
-  const [poapReciever, setPoapReciever] = useState('');
-  const iykRef = searchParams.get('iykRef'); // from IYK documentation
+  const iykRef = searchParams.get('iykRef');
 
-  // Fetch the IYK ref data
-  useEffect(() => {
-    if (!iykRef) {
-      return;
-    }
-    getIYKRefData(iykRef)
-      .then((data) => {
-        setIkyRefData(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [iykRef]);
+  const { data: iykResponse, isLoading } = useIykHook({ code: iykRef });
+
+  const [poapReciever, setPoapReciever] = useState('');
 
   const handleClaimClick = () => {
     setClaimStep(ClaimModalState.CLAIMING);
@@ -52,7 +40,7 @@ export default function NimiPage() {
 
   return (
     <AnimatePresence initial={false}>
-      {initialNimiLoading || !initialNimi ? (
+      {initialNimiLoading || !initialNimi || isLoading ? (
         <OpacityMotion key="nimi-page-loader">
           <LoaderWrapper $fullPage={true}>
             <Loader />
@@ -60,7 +48,7 @@ export default function NimiPage() {
         </OpacityMotion>
       ) : (
         <OpacityMotion key="nimi-page-content">
-          {ikyRefData?.isValidRef && isClaimModalOpen ? (
+          {iykResponse?.data.isValidRef && isClaimModalOpen ? (
             <ClaimPOAPModal
               setReciever={setPoapReciever}
               reciever={poapReciever}

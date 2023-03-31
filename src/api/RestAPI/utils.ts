@@ -31,6 +31,12 @@ export function getNimiAPIClient() {
   });
 }
 
+export function getCustomClient(baseURL: string) {
+  return axios.create({
+    baseURL,
+  });
+}
+
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
 
 function isCID(hash: string) {
