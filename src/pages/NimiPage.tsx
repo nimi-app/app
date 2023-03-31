@@ -55,6 +55,7 @@ export default function NimiPage() {
               setReciever={setPoapReciever}
               reciever={poapReciever}
               onClaimClick={handleClaimClick}
+              name={nimiUsername}
               claimStep={claimStep}
               dark={initialNimi.theme.type === NimiThemeType.RAAVE}
               closeModal={() => setIsClaimModalOpen(false)}
