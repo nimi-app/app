@@ -1,12 +1,16 @@
+import { AddressZero } from '@ethersproject/constants';
+
 import { NimiPage as NimiPageRender } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
+import { getIYKRefData } from 'api/iyk';
+import { Loader, LoaderWrapper } from 'components/Loader';
+import { OpacityMotion } from 'components/motion';
 import { AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import { ClaimModalStates, ClaimPOAPModal } from '../components/ClaimPOAPModal';
-import { Spinner } from '../components/Spinner';
+import { ClaimModalState, ClaimPOAPModal } from '../components/ClaimPOAPModal';
 import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
 
 /**
@@ -18,50 +22,65 @@ export default function NimiPage() {
 
   const [searchParams] = useSearchParams();
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
-  const [claimStep, setClaimStep] = useState(ClaimModalStates.INITIAL);
-
+  const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
+  const [ikyRefData, setIkyRefData] = useState<Awaited<ReturnType<typeof getIYKRefData>>>();
   const [poapReciever, setPoapReciever] = useState('');
+  const iykRef = searchParams.get('iykRef'); // from IYK documentation
 
-  const iykCode = searchParams.get('iykClaimCode');
+  // Fetch the IYK ref data
+  useEffect(() => {
+    if (!iykRef) {
+      return;
+    }
+    getIYKRefData(iykRef)
+      .then((data) => {
+        setIkyRefData(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [iykRef]);
 
   const handleClaimClick = () => {
-    setClaimStep(ClaimModalStates.CLAIMING);
-    console.log('claim', iykCode);
+    setClaimStep(ClaimModalState.CLAIMING);
   };
 
   const { data: initialNimi, loading: initialNimiLoading } = useInitialtNimiData({
     ensName: nimiUsername!,
-    account: '0x26358E62C2eDEd350e311bfde51588b8383A9315',
+    account: AddressZero, // TODO: get account from the generated NimiPage
   });
 
-  if (initialNimiLoading || !initialNimi) {
-    return <Spinner />;
-  }
-
   return (
-    <>
-      <AnimatePresence initial={false}>
-        {iykCode && isClaimModalOpen && (
-          <ClaimPOAPModal
-            setReciever={setPoapReciever}
-            reciever={poapReciever}
-            onClaimClick={handleClaimClick}
-            claimStep={claimStep}
-            dark={initialNimi.theme.type === NimiThemeType.RAAVE}
-            closeModal={() => setIsClaimModalOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-      <ButtonList onClick={(event) => event.stopPropagation()}>
-        <button onClick={() => setClaimStep(ClaimModalStates.INITIAL)}>Initial</button>
-        <button onClick={() => setClaimStep(ClaimModalStates.CLAIMING)}>Claiming</button>
-        <button onClick={() => setClaimStep(ClaimModalStates.SUCCESS)}>Success</button>
-        <button onClick={() => setClaimStep(ClaimModalStates.CLAIMED)}>Claimed</button>
-        <button onClick={() => setClaimStep(ClaimModalStates.ERROR)}>Error</button>
-      </ButtonList>
-
-      <NimiPageRender nimi={initialNimi} isApp={true} />
-    </>
+    <AnimatePresence initial={false}>
+      {initialNimiLoading || !initialNimi ? (
+        <OpacityMotion key="nimi-page-loader">
+          <LoaderWrapper $fullPage={true}>
+            <Loader />
+          </LoaderWrapper>
+        </OpacityMotion>
+      ) : (
+        <OpacityMotion key="nimi-page-content">
+          {ikyRefData?.isValidRef && isClaimModalOpen ? (
+            <ClaimPOAPModal
+              setReciever={setPoapReciever}
+              reciever={poapReciever}
+              onClaimClick={handleClaimClick}
+              claimStep={claimStep}
+              dark={initialNimi.theme.type === NimiThemeType.RAAVE}
+              closeModal={() => setIsClaimModalOpen(false)}
+            />
+          ) : null}
+          <ButtonList onClick={(event) => event.stopPropagation()}>
+            <button onClick={() => setClaimStep(ClaimModalState.INITIAL)}>Initial</button>
+            <button onClick={() => setClaimStep(ClaimModalState.CLAIMING)}>Claiming</button>
+            <button onClick={() => setClaimStep(ClaimModalState.SUCCESS)}>Success</button>
+            <button onClick={() => setClaimStep(ClaimModalState.CLAIMED)}>Claimed</button>
+            <button onClick={() => setClaimStep(ClaimModalState.ERROR)}>Error</button>
+          </ButtonList>
+          <NimiPageRender nimi={initialNimi} isApp={true} />
+        </OpacityMotion>
+      )}
+    </AnimatePresence>
   );
 }
 

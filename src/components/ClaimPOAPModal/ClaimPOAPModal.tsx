@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -9,7 +9,7 @@ import { AnimatedSection } from '../../modals/ConfigurePOAPsModal/components/Ani
 
 // import { ReactComponent as CogSVG } from '../../../assets/cog.svg';
 
-export enum ClaimModalStates {
+export enum ClaimModalState {
   INITIAL,
   CLAIMING,
   SUCCESS,
@@ -22,7 +22,7 @@ type ClaimPOAPModalProps = {
   name?: string;
   onClaimClick: () => void;
   closeModal: () => void;
-  claimStep?: ClaimModalStates;
+  claimStep?: ClaimModalState;
   setReciever: (value: string) => void;
   reciever?: string;
 };
@@ -48,7 +48,7 @@ export function ClaimPOAPModal({
   const [showBody, setShowBody] = useState(true);
   return (
     <Modal key="claimModal" dark={dark} onClick={(event) => event.stopPropagation()}>
-      {claimStep === ClaimModalStates.INITIAL && (
+      {claimStep === ClaimModalState.INITIAL && (
         <AnimatedSection>
           <Header>
             <Heading dark={dark}>You have met {name}</Heading>
@@ -70,7 +70,7 @@ export function ClaimPOAPModal({
           </Footer>
         </AnimatedSection>
       )}
-      {claimStep === ClaimModalStates.CLAIMING && (
+      {claimStep === ClaimModalState.CLAIMING && (
         <AnimatedSection>
           <Header>
             <Heading dark={dark}>Claiming...</Heading>
@@ -96,7 +96,7 @@ export function ClaimPOAPModal({
           )}
         </AnimatedSection>
       )}
-      {claimStep === ClaimModalStates.SUCCESS && (
+      {claimStep === ClaimModalState.SUCCESS && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <Header>
             <div></div>
@@ -123,7 +123,7 @@ export function ClaimPOAPModal({
           </SuccessBody>
         </motion.div>
       )}
-      {claimStep === ClaimModalStates.CLAIMED && (
+      {claimStep === ClaimModalState.CLAIMED && (
         <motion.div>
           <Header>
             <div></div>
@@ -152,7 +152,7 @@ export function ClaimPOAPModal({
           </SuccessBody>
         </motion.div>
       )}
-      {claimStep === ClaimModalStates.ERROR && (
+      {claimStep === ClaimModalState.ERROR && (
         <motion.div>
           <Header>
             <div></div>
@@ -281,7 +281,6 @@ const Description = styled.h2<ModalProps>`
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 16px;
-
   ${({ dark }) => `color: ${dark ? '#C3CAD2' : '#8a97aa'};`}
 `;
 
