@@ -63,7 +63,7 @@ export function ClaimPOAPModal({
             </CloseIcon>
           </Header>
           <Body>
-            <Description dark={dark}>Claim POAP that proves you met {name}.</Description>
+            <Description dark={dark}>Claim POAP that proves you met {name}</Description>
             <InputGroup>
               <Input value={reciever} onChange={(e) => setReciever(e.target.value)} dark={dark} />
               {/* <CogButton>
