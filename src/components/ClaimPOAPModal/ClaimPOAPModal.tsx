@@ -32,8 +32,14 @@ const iconVariants = {
   closed: { rotate: 0 },
 };
 const bodyVariants = {
-  open: { opacity: 1, scale: 1 },
-  closed: { opacity: 0, scale: 0.8 },
+  open: {
+    scaleY: 1,
+    opacity: 1,
+  },
+  closed: {
+    scaleY: 0,
+    opacity: 0,
+  },
 };
 
 export function ClaimPOAPModal({
@@ -84,7 +90,14 @@ export function ClaimPOAPModal({
             </CloseIcon>
           </Header>
           {showBody && (
-            <Body transition={{ duration: 0.3 }} variants={bodyVariants} initial="closed" animate="open" exit="closed">
+            <Body
+              style={{ originY: '100%' }}
+              transition={{ duration: 0.3 }}
+              variants={bodyVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+            >
               <Description dark={dark}>POAP is being claimed to</Description>
               <InputGroup>
                 <Input value={reciever} disabled={true} dark={dark} />
