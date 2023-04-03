@@ -31,9 +31,10 @@ export function getNimiAPIClient() {
   });
 }
 
-export function getCustomClient(baseURL: string) {
+export function getCustomClient(baseURL: string, headers?: any) {
   return axios.create({
     baseURL,
+    headers,
   });
 }
 

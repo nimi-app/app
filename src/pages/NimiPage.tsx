@@ -1,8 +1,8 @@
 import { AddressZero } from '@ethersproject/constants';
 
-import { NimiImageType, NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
+import { NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
-import { useIykHook } from 'api/RestAPI/hooks/useIykHook';
+import { useIykRefCheck } from 'api/RestAPI/hooks/useIykHooks';
 import { Loader, LoaderWrapper } from 'components/Loader';
 import { OpacityMotion } from 'components/motion';
 import { AnimatePresence } from 'framer-motion';
@@ -25,7 +25,7 @@ export default function NimiPage() {
   const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
   const iykRef = searchParams.get('iykRef');
 
-  const { data: iykResponse, isLoading } = useIykHook({ code: iykRef });
+  const { data: iykResponse, isLoading } = useIykRefCheck({ code: iykRef });
 
   console.log('iykResponse', iykResponse);
   console.log('isLoading', isLoading);
