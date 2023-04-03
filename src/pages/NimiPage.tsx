@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants';
 
-import { NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
+import { NimiImageType, NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
 import { useIykHook } from 'api/RestAPI/hooks/useIykHook';
 import { Loader, LoaderWrapper } from 'components/Loader';
@@ -28,6 +28,7 @@ export default function NimiPage() {
   const { data: iykResponse, isLoading } = useIykHook({ code: iykRef });
 
   console.log('iykResponse', iykResponse);
+  console.log('isLoading', isLoading);
 
   const [poapReciever, setPoapReciever] = useState('');
 
@@ -35,16 +36,15 @@ export default function NimiPage() {
     setClaimStep(ClaimModalState.CLAIMING);
   };
 
-  const { data: initialNimi, loading: initialNimiLoading } = useInitialtNimiData({
+  const { data: initialNimi } = useInitialtNimiData({
     ensName: nimiUsername!,
     account: AddressZero, // TODO: get account from the generated NimiPage
   });
 
   console.log('initialNimi', initialNimi);
-
   return (
     <AnimatePresence initial={false}>
-      {initialNimiLoading || !initialNimi || isLoading ? (
+      {!initialNimi ? (
         <OpacityMotion key="nimi-page-loader">
           <LoaderWrapper $fullPage={true}>
             <Loader />

@@ -16,7 +16,8 @@ export function useEnsGeneratedData(ensName: string, enabled = true) {
 
   const getEnsGenratedData = async () => {
     const params = {
-      ensName,
+      name: ensName,
+
       chainId: chainId || 1,
     };
     const { data } = await getNimiAPIClient().get<{ data: EnsGeneratedDataType }>(`/nimi/generate`, { params });

@@ -26,5 +26,7 @@ export function useIykHook({ code }: IykProps) {
     return data;
   };
 
-  return useQuery(['fetchIykData', code], getIykData);
+  return useQuery(['fetchIykData', code], getIykData, {
+    enabled: !!code,
+  });
 }
