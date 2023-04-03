@@ -1,3 +1,4 @@
+import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { styled } from 'styled-components';
@@ -218,8 +219,8 @@ type ModalProps = {
 const Modal = styled(motion.div)<ModalProps>`
   width: 348px;
   z-index: 2;
-  position: absolute;
-  bottom: 0;
+  position: fixed;
+  bottom: 22px;
   left: 50%;
   transform: translate(-50%, 0);
   padding: 22px;
@@ -236,6 +237,10 @@ const Modal = styled(motion.div)<ModalProps>`
     border: 4px solid white;
     background-color: #f0f3fb;
   `}
+
+  @media (max-width: ${NIMI_CARDS_WIDTH}px) {
+    width: calc(100% - 36px);
+  }
 `;
 
 const SuccessBody = styled(motion.div)`
