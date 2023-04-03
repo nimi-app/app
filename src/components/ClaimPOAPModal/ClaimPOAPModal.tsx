@@ -32,8 +32,8 @@ type ClaimPOAPModalProps = {
 };
 
 const iconVariants = {
-  open: { rotate: 180 },
-  closed: { rotate: 0 },
+  open: { rotate: 0 },
+  closed: { rotate: 180 },
 };
 const bodyVariants = {
   open: {
