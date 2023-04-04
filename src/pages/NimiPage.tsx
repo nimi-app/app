@@ -2,11 +2,12 @@ import { AddressZero } from '@ethersproject/constants';
 
 import { NimiPageProvider, NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
-import { useIykRefCheck, useMintIykPoapToken } from 'api/RestAPI/hooks/useIykHooks';
-import { useCheckIfUserHasPaopEvent, usePoapTokens } from 'api/RestAPI/hooks/useUserPOAPs';
+import { useIYKRefQuery, useMintIYKPOAPToken } from 'api/RestAPI/hooks/useIykHooks';
+import { usePOAPEventQuery, useUserHasPOAPQuery } from 'api/RestAPI/hooks/useUserPOAPs';
 import { Loader, LoaderWrapper } from 'components/Loader';
 import { OpacityMotion } from 'components/motion';
 import { AnimatePresence } from 'framer-motion';
+import { useDebounce } from 'hooks/useDebounce';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -20,59 +21,63 @@ import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
  */
 export default function NimiPage() {
   const { nimiUsername } = useParams();
+  // Read stored reciever address from local storage
+  const poapRecieverLocalStorage = localStorage.getItem('nimiPOAPReciever');
 
-  const [poapReciever, setPoapReciever] = useState('');
-  const [searchParams] = useSearchParams();
+  // Set reciever address to local storage value or empty string
+  const [poapReciever, setPoapReciever] = useState(poapRecieverLocalStorage || '');
+  const debouncedPOAPReciever = useDebounce(poapReciever, 500);
+
+  // Local state for the claim modal
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
-
   const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
-  const iykRef = searchParams.get('iykRef');
 
+  // Fetch the Nimi data for the ENS name
   const { data: initialNimi } = useInitialtNimiData({
     ensName: nimiUsername!,
-    account: AddressZero, // TODO: get account from the generated NimiPage
+    account: AddressZero,
   });
 
-  const { data: iykResponse, isLoading } = useIykRefCheck({ code: iykRef });
-  console.log(' iykResponse', iykResponse);
-  console.log('isLoading', isLoading);
+  // Retrieve the IYK reference from the URL and fetch its data
+  const [searchParams] = useSearchParams();
+  const iykRef = searchParams.get('iykRef');
+  const { data: iykResponse, isLoading } = useIYKRefQuery(iykRef);
 
-  const { mutateAsync } = useMintIykPoapToken();
-
-  const { data: poapData } = usePoapTokens(iykResponse?.poapEvents[0].poapEventId);
-
-  const { refetch: checkIfUserHasPoapAsync, error } = useCheckIfUserHasPaopEvent({
+  // Retrieve the POAP event data and check if the user has already claimed the POAP
+  const { data: poapEvent } = usePOAPEventQuery(iykResponse?.poapEvents[0].poapEventId);
+  const { error: userHasPOAPError, data: userHasPOAPData } = useUserHasPOAPQuery({
     eventId: iykResponse?.poapEvents[0].poapEventId,
-    account: poapReciever,
-    enabled: false,
+    account: debouncedPOAPReciever,
+    enabled: !!debouncedPOAPReciever,
+  });
+  // Mint the POAP token
+  const { mutateAsync: mintIYKPOAPToken } = useMintIYKPOAPToken();
+
+  // Debugging
+  console.log({
+    userHasPOAPError,
+    userHasPOAPData,
   });
 
-  console.log('HasntPoapError', error);
   const handleClaimClick = async () => {
     setClaimStep(ClaimModalState.CLAIMING);
-    const checkIfUserHasPoap = await checkIfUserHasPoapAsync();
-    console.log('response', checkIfUserHasPoap);
-    if (checkIfUserHasPoap?.data) {
-      console.log('claimedBy', checkIfUserHasPoap?.data.owner);
 
-      setClaimStep(ClaimModalState.CLAIMED);
-      return;
-    } else {
-      const data = await mutateAsync({
-        otpCode: iykResponse?.poapEvents[0].otp,
-        recipient: poapReciever,
-        poapEventId: iykResponse?.poapEvents[0].poapEventId,
-      });
-      console.log('DATA IM LOOKNОР FOR', data);
-      if (data.success) {
-        setClaimStep(ClaimModalState.SUCCESS);
-      } else {
-        setClaimStep(ClaimModalState.ERROR);
-      }
-
-      console.log('data', data);
-      return;
+    // User has already claimed the POAP
+    if (userHasPOAPData?.owner) {
+      return setClaimStep(ClaimModalState.CLAIMED);
     }
+
+    const mintResponse = await mintIYKPOAPToken({
+      otpCode: iykResponse?.poapEvents[0].otp,
+      recipient: poapReciever,
+      poapEventId: iykResponse?.poapEvents[0].poapEventId,
+    });
+
+    console.log({ mintResponse });
+
+    setClaimStep(mintResponse.success ? ClaimModalState.SUCCESS : ClaimModalState.ERROR);
+
+    return;
   };
 
   console.log('initialNimi', initialNimi);
@@ -88,7 +93,7 @@ export default function NimiPage() {
         <OpacityMotion key="nimi-page-content">
           {isClaimModalOpen && iykResponse?.isValidRef ? (
             <ClaimPOAPModal
-              poapUrl={poapData?.data.image_url}
+              poapImageURL={poapEvent?.image_url}
               setReciever={setPoapReciever}
               reciever={poapReciever}
               onClaimClick={handleClaimClick}

@@ -13,36 +13,31 @@ export function useUserPOAPs(account?: string) {
   return useQuery(['fetchUserPoaps', account], getPoapsFromUser);
 }
 
-export function usePoapTokens(eventId?: string) {
+/**
+ * Fetches POAP event data
+ * @param eventId
+ * @returns
+ */
+export function usePOAPEventQuery(eventId?: string) {
   const getPoapsFromUser = async () => {
     if (!eventId) return undefined;
     const data = await createPOAPClient(process.env.REACT_APP_POAP_API_KEY as string).get<{ image_url: string }>(
       `/events/id/${eventId}`
     );
-
-    return data;
+    return data.data;
   };
 
-  return useQuery(['fetchPoaps', eventId], getPoapsFromUser, {
+  return useQuery(['fetchPOAPEvent', eventId], getPoapsFromUser, {
     enabled: !!eventId,
   });
 }
 
-export function useCheckIfUserHasPaopEvent({
-  account,
-  eventId,
-  enabled,
-}: {
-  account?: string;
-  eventId?: string;
-  enabled;
-}) {
+export function useUserHasPOAPQuery({ account, eventId, enabled }: { account?: string; eventId?: string; enabled }) {
   const getPoapsFromUser = async () => {
     if (!account || !eventId) return undefined;
     const { data } = await createPOAPClient(process.env.REACT_APP_POAP_API_KEY as string).get<{ owner: string }>(
       `actions/scan/${account}/${eventId}`
     );
-    console.log('data', data);
     return data;
   };
 
@@ -50,7 +45,6 @@ export function useCheckIfUserHasPaopEvent({
     onError: (error) => {
       console.log('error', error);
     },
-
     enabled,
     retry: false,
   });

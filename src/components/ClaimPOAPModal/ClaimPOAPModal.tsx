@@ -1,6 +1,6 @@
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { isAddressOrEns } from 'utils';
 
@@ -29,7 +29,7 @@ type ClaimPOAPModalProps = {
   claimStep?: ClaimModalState;
   setReciever: (value: string) => void;
   reciever?: string;
-  poapUrl?: string | undefined;
+  poapImageURL?: string | undefined;
 };
 
 const iconVariants = {
@@ -55,11 +55,14 @@ export function ClaimPOAPModal({
   claimStep,
   reciever,
   setReciever,
-  poapUrl,
+  poapImageURL,
 }: ClaimPOAPModalProps) {
   const [showBody, setShowBody] = useState(false);
 
-  const isRecipientValid = isAddressOrEns(reciever || '');
+  const isRecipientValid = useMemo(() => {
+    return isAddressOrEns(reciever || '');
+  }, [reciever]);
+
   return (
     <Modal key="claimModal" dark={dark} onClick={(event) => event.stopPropagation()}>
       {claimStep === ClaimModalState.INITIAL && (
@@ -118,9 +121,6 @@ export function ClaimPOAPModal({
               <Description dark={dark}>POAP is being claimed to</Description>
               <InputGroup>
                 <Input value={reciever} disabled={true} dark={dark} />
-                {/* <CogButton>
-              <CogSVG />
-            </CogButton> */}
               </InputGroup>
             </Body>
           )}
@@ -141,7 +141,7 @@ export function ClaimPOAPModal({
             animate="open"
             exit="closed"
           >
-            <img width={'124px'} height={'124px'} src={poapUrl} />
+            <img width={'124px'} height={'124px'} src={poapImageURL} />
             <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
               Succesfully Claimed
             </Heading>
@@ -164,7 +164,7 @@ export function ClaimPOAPModal({
             animate="open"
             exit="closed"
           >
-            <img width={'124px'} height={'124px'} src={poapUrl} />
+            <img width={'124px'} height={'124px'} src={poapImageURL} />
             <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
               POAP Already Claimed
             </Heading>
@@ -266,8 +266,14 @@ const ErrorText = styled.div`
 
 const InputIcons = styled.div`
   position: absolute;
-  right: 36px;
-  top: 97px;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
 `;
 const StyledCheckmark = styled(Checkmark)`
   path {
@@ -336,6 +342,8 @@ const SucessDescription = styled(Description)`
 const InputGroup = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+  position: relative;
 `;
 
 const Input = styled.input.attrs({
