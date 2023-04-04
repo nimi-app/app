@@ -26,8 +26,11 @@ export function useEnsGeneratedData(ensName: string, enabled = true) {
 
   return useQuery(['fetchEnsGeneratedData', ensName, chainId], getEnsGenratedData, {
     select: ({ data }) => {
-      if (data.nimi) return data.nimi;
-      else return undefined;
+      if (data.nimi) {
+        const nimiObject = data.nimi;
+        nimiObject.addresses = [];
+        return nimiObject;
+      } else return undefined;
     },
     enabled,
   });
