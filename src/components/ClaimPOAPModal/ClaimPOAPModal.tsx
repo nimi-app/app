@@ -30,6 +30,7 @@ type ClaimPOAPModalProps = {
   setReciever: (value: string) => void;
   reciever?: string;
   poapImageURL?: string | undefined;
+  resetAllFields: () => void;
 };
 
 const iconVariants = {
@@ -56,6 +57,7 @@ export function ClaimPOAPModal({
   reciever,
   setReciever,
   poapImageURL,
+  resetAllFields,
 }: ClaimPOAPModalProps) {
   const [showBody, setShowBody] = useState(false);
 
@@ -200,7 +202,7 @@ export function ClaimPOAPModal({
           </SuccessBody>
 
           <Footer>
-            <ClaimPOAPButton text={'Try again'} onClick={() => console.log('Try again click')} />
+            <ClaimPOAPButton text={'Try again'} onClick={() => resetAllFields()} />
           </Footer>
         </motion.div>
       )}

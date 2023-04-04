@@ -88,6 +88,12 @@ export default function NimiPage() {
     return;
   };
 
+  const resetAllFields = () => {
+    setClaimStep(ClaimModalState.INITIAL);
+    setPoapReciever('');
+    setIsClaimModalOpen(true);
+  };
+
   return (
     <AnimatePresence initial={false}>
       {!initialNimi || isLoading ? (
@@ -100,6 +106,7 @@ export default function NimiPage() {
         <OpacityMotion key="nimi-page-content">
           {isClaimModalOpen && iykResponse?.isValidRef ? (
             <ClaimPOAPModal
+              resetAllFields={resetAllFields}
               poapImageURL={poapEvent?.image_url}
               setReciever={setPoapReciever}
               reciever={poapReciever}
