@@ -1,4 +1,5 @@
 import { isAddress as isEVMAddress } from '@ethersproject/address';
+import { isValidName } from '@ethersproject/hash';
 
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { Nimi, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
@@ -83,8 +84,10 @@ export function insertPoapWidgetIntoNimi(nimi: Nimi, hasPoaps: boolean, address?
  * @returns boolean
  */
 export function isAddressOrEns(address: string): boolean {
-  const isEns = address.includes('.eth');
+  address = address.trim().toLocaleUpperCase();
+
+  const isENS = isValidName(address) && (address.endsWith('.eth') || address.endsWith('lens.xyz'));
   const isAddress = isEVMAddress(address);
 
-  return isEns || isAddress;
+  return isENS || isAddress;
 }

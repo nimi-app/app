@@ -2,10 +2,6 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { getCustomClient } from '../utils';
 
-interface IykProps {
-  code: string | null;
-}
-
 interface LinkedToken {
   contractAddress: string;
   chainId: number;
@@ -24,17 +20,19 @@ interface IYKRefStruct {
   ];
 }
 
+const httpClient = getCustomClient(`https://api.iyk.app/`, {});
+
 /**
  * Returns query for fetching twitter data
  */
-export function useIykRefCheck({ code }: IykProps) {
+export function useIYKRefQuery(ref: string | null) {
   const getIykData = async () => {
-    const { data } = await getCustomClient(`https://api.iyk.app/`, {}).get<IYKRefStruct>(`/refs/${code}`);
+    const { data } = await httpClient.get<IYKRefStruct>(`/refs/${ref}`);
     return data;
   };
 
-  return useQuery(['fetchIykData', code], getIykData, {
-    enabled: !!code,
+  return useQuery(['fetchIYKRefData', ref], getIykData, {
+    enabled: !!ref,
     retry: false,
   });
 }
@@ -46,9 +44,10 @@ interface MintIykPoapTokenProps {
   deviceId?: string | null;
 }
 
-export function useMintIykPoapToken() {
+export function useMintIYKPOAPToken() {
   const getIykData = async ({ otpCode, recipient, deviceId, poapEventId }: MintIykPoapTokenProps) => {
     if (!otpCode || !recipient || !poapEventId) return undefined;
+
     const headers = {
       'Content-Type': 'application/json',
       'x-iyk-code': otpCode,
@@ -58,7 +57,10 @@ export function useMintIykPoapToken() {
       recipient,
       deviceId,
     };
-    const { data } = await getCustomClient(`https://api.iyk.app/`, headers).post<any>(`poap-events/mint`, params);
+
+    const { data } = await httpClient.post<any>(`poap-events/mint`, params, {
+      headers,
+    });
     return data;
   };
 

@@ -1,3 +1,5 @@
+import { AddressZero } from '@ethersproject/constants';
+
 import { Nimi, NimiThemeType } from '@nimi.io/card/types';
 import { useMemo } from 'react';
 
@@ -38,7 +40,7 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
       ensName,
       displayName: ensName,
       addresses: [],
-      ensAddress: account!,
+      ensAddress: AddressZero,
       links: [],
       widgets: [],
     };
