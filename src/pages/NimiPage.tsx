@@ -73,16 +73,17 @@ export default function NimiPage() {
     if (userHasPOAPData?.owner) {
       return setClaimStep(ClaimModalState.CLAIMED);
     }
-
-    const mintResponse = await mintIYKPOAPToken({
-      otpCode: iykResponse?.poapEvents[0].otp,
-      recipient: poapReciever,
-      poapEventId: iykResponse?.poapEvents[0].poapEventId,
-    });
-
-    console.log({ mintResponse });
-
-    setClaimStep(mintResponse.success ? ClaimModalState.SUCCESS : ClaimModalState.ERROR);
+    try {
+      const mintResponse = await mintIYKPOAPToken({
+        otpCode: iykResponse?.poapEvents[0].otp,
+        recipient: poapReciever,
+        poapEventId: iykResponse?.poapEvents[0].poapEventId,
+      });
+      console.log({ mintResponse });
+      setClaimStep(mintResponse.success ? ClaimModalState.SUCCESS : ClaimModalState.ERROR);
+    } catch {
+      setClaimStep(ClaimModalState.ERROR);
+    }
 
     return;
   };
