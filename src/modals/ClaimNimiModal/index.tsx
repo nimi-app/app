@@ -1,18 +1,20 @@
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
 import { ClaimPOAPButton, StyledButton } from 'components/ClaimPOAPModal/ClaimPOAPButton';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { NimiSignatureColor } from 'theme';
 
-export function ClaimNimiModal({ hasPoap }: { hasPoap: boolean }) {
+export function ClaimNimiModal({ hasPoap, ensName }: { hasPoap: boolean; ensName?: string }) {
+  const navigate = useNavigate();
   return (
     <Modal hasPoap={hasPoap}>
       <BackgroundWrapper hasPoap={hasPoap}>
         <Header>Claim your Nimi Profile!</Header>
         <Body>Semper in cursus magna et eu varius nunc adipiscing. Elementum justo, laoreet.</Body>
-        <ClaimPOAPButton text={'Claim Profile'} />
+        <ClaimPOAPButton onClick={() => navigate(`/domains/${ensName}`)} text={'Claim Profile'} />
       </BackgroundWrapper>
-      <ClaimProfile hasPoap={hasPoap} variant="big">
+      <ClaimProfile onClick={() => navigate(`/domains/${ensName}`)} hasPoap={hasPoap} variant="big">
         Claim Profile
       </ClaimProfile>
     </Modal>
@@ -36,7 +38,6 @@ const Modal = styled(motion.div)<{ hasPoap: boolean }>`
     transform: translate(-50%, 0);
     top: unset;
     bottom: 22px;
-    ${({ hasPoap }) => hasPoap && `bottom: 10%`}
   }
 `;
 const ClaimProfile = styled(StyledButton)<{ hasPoap: boolean }>`

@@ -1,6 +1,12 @@
 import { AddressZero } from '@ethersproject/constants';
 
-import { NimiPageProvider, NimiPage as NimiPageRender, NimiWidgetType, ToastProvider } from '@nimi.io/card';
+import {
+  NIMI_CARDS_WIDTH,
+  NimiPageProvider,
+  NimiPage as NimiPageRender,
+  NimiWidgetType,
+  ToastProvider,
+} from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
 import { useIYKRefQuery, useMintIYKPOAPToken } from 'api/RestAPI/hooks/useIykHooks';
 import { usePOAPEventQuery, useUserHasPOAPQuery } from 'api/RestAPI/hooks/useUserPOAPs';
@@ -21,7 +27,7 @@ import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
  * Example: https://nimi.io/dvve.eth will attempt to render the Nimi page for the ENS name dvve.eth
  */
 export default function NimiPage() {
-  const { nimiUsername } = useParams();
+  const { nimiUsername: ensName } = useParams();
   // Read stored reciever address from local storage
   const poapRecieverLocalStorage = localStorage.getItem('nimiPOAPReciever');
 
@@ -35,7 +41,7 @@ export default function NimiPage() {
 
   // Fetch the Nimi data for the ENS name
   const { data: initialNimi, isGenerated } = useInitialtNimiData({
-    ensName: nimiUsername!,
+    ensName: ensName!,
     account: AddressZero,
   });
 
@@ -81,7 +87,6 @@ export default function NimiPage() {
     return;
   };
 
-  console.log('initialNimi', initialNimi);
   return (
     <AnimatePresence initial={false}>
       {!initialNimi || isLoading ? (
@@ -98,13 +103,16 @@ export default function NimiPage() {
               setReciever={setPoapReciever}
               reciever={poapReciever}
               onClaimClick={handleClaimClick}
-              name={nimiUsername}
+              name={ensName}
               claimStep={claimStep}
               dark={initialNimi.theme.type === NimiThemeType.RAAVE}
               closeModal={() => setIsClaimModalOpen(false)}
             />
           ) : !iykResponse?.isValidRef && isGenerated ? (
-            <ClaimNimiModal hasPoap={initialNimi.widgets.some((widget) => widget.type === NimiWidgetType.POAP)} />
+            <ClaimNimiModal
+              ensName={ensName}
+              hasPoap={initialNimi.widgets.some((widget) => widget.type === NimiWidgetType.POAP)}
+            />
           ) : null}
           <ButtonList onClick={(event) => event.stopPropagation()}>
             <button onClick={() => setClaimStep(ClaimModalState.INITIAL)}>Initial</button>
@@ -115,7 +123,9 @@ export default function NimiPage() {
           </ButtonList>
           <ToastProvider>
             <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY as string}>
-              <NimiPageRender nimi={initialNimi} mode={'app'} />
+              <OverlayBackground isActive={!iykResponse?.isValidRef && isGenerated}>
+                <NimiPageRender nimi={initialNimi} mode={'app'} />
+              </OverlayBackground>
             </NimiPageProvider>
           </ToastProvider>
         </OpacityMotion>
@@ -123,6 +133,12 @@ export default function NimiPage() {
     </AnimatePresence>
   );
 }
+
+const OverlayBackground = styled.div<{ isActive: boolean }>`
+  @media (max-width: ${NIMI_CARDS_WIDTH}px) {
+    background: ${(props) => props.isActive && `linear-gradient(180deg, #f9fcff 57.38%, #cae4ff 80.08%);`};
+  }
+`;
 
 const ButtonList = styled.div`
   position: absolute;
