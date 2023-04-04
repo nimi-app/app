@@ -28,16 +28,12 @@ interface IYKRefStruct {
  */
 export function useIykRefCheck({ code }: IykProps) {
   const getIykData = async () => {
-    const { data } = await getCustomClient(`https://api.iyk.app/`).get<{ data: IYKRefStruct }>(`/refs/${code}`);
+    const { data } = await getCustomClient(`https://api.iyk.app/`, {}).get<IYKRefStruct>(`/refs/${code}`);
     return data;
   };
 
   return useQuery(['fetchIykData', code], getIykData, {
     enabled: !!code,
-    select: ({ data }) => {
-      if (data) return data;
-      else return undefined;
-    },
   });
 }
 

@@ -24,8 +24,10 @@ export default function NimiPage() {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
   const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
   const iykRef = searchParams.get('iykRef');
+  console.log('iykRef', iykRef);
 
   const { data: iykResponse, isLoading } = useIykRefCheck({ code: iykRef });
+  console.log('IykResponse', iykResponse);
 
   console.log('iykResponse', iykResponse);
   console.log('isLoading', isLoading);
