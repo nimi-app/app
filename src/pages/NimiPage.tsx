@@ -112,7 +112,7 @@ export default function NimiPage() {
           </ButtonList>
           <ToastProvider>
             <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY as string}>
-              <NimiPageRender nimi={initialNimi} isApp={true} />
+              <NimiPageRender nimi={initialNimi} mode={'app'} />
             </NimiPageProvider>
           </ToastProvider>
         </OpacityMotion>
