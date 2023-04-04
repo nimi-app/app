@@ -3,6 +3,7 @@ import { AddressZero } from '@ethersproject/constants';
 import { NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
 import { useIykRefCheck } from 'api/RestAPI/hooks/useIykHooks';
+import { useCheckIfUserHasPaopEvent, usePoapTokens } from 'api/RestAPI/hooks/useUserPOAPs';
 import { Loader, LoaderWrapper } from 'components/Loader';
 import { OpacityMotion } from 'components/motion';
 import { AnimatePresence } from 'framer-motion';
@@ -27,13 +28,22 @@ export default function NimiPage() {
   console.log('iykRef', iykRef);
 
   const { data: iykResponse, isLoading } = useIykRefCheck({ code: iykRef });
+
+  const { data: poapData, isLoading: isLoadingPoapData } = usePoapTokens(iykResponse?.poapEvents[0].poapEventId);
+
+  console.log('paopData', poapData);
+
   console.log('IykResponse', iykResponse);
 
   console.log('iykResponse', iykResponse);
-  console.log('isLoading', isLoading);
 
   const [poapReciever, setPoapReciever] = useState('');
 
+  const { data: checkIfUserHasPoap, isLoading: isLoadingCheckIfUserHasPoap } = useCheckIfUserHasPaopEvent({
+    eventId: iykResponse?.poapEvents[0].poapEventId,
+    account: poapReciever && claimStep === ClaimModalState.CLAIMING ? poapReciever : undefined,
+  });
+  console.log('checkIfUserHasPoap', checkIfUserHasPoap);
   const handleClaimClick = () => {
     setClaimStep(ClaimModalState.CLAIMING);
   };

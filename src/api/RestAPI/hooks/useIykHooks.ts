@@ -19,6 +19,7 @@ interface IYKRefStruct {
     {
       id: number;
       otp: string;
+      poapEventId: string;
     }
   ];
 }
