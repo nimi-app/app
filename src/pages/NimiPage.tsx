@@ -2,7 +2,7 @@ import { AddressZero } from '@ethersproject/constants';
 
 import { NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
-import { useIykRefCheck } from 'api/RestAPI/hooks/useIykHooks';
+import { useIykRefCheck, useMintIykPoapToken } from 'api/RestAPI/hooks/useIykHooks';
 import { useCheckIfUserHasPaopEvent, usePoapTokens } from 'api/RestAPI/hooks/useUserPOAPs';
 import { Loader, LoaderWrapper } from 'components/Loader';
 import { OpacityMotion } from 'components/motion';
@@ -21,6 +21,7 @@ import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
 export default function NimiPage() {
   const { nimiUsername } = useParams();
 
+  const [poapReciever, setPoapReciever] = useState('');
   const [searchParams] = useSearchParams();
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
   const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
@@ -28,6 +29,8 @@ export default function NimiPage() {
   console.log('iykRef', iykRef);
 
   const { data: iykResponse, isLoading } = useIykRefCheck({ code: iykRef });
+
+  const { isLoading: isLoadingMutate, mutateAsync } = useMintIykPoapToken();
 
   const { data: poapData, isLoading: isLoadingPoapData } = usePoapTokens(iykResponse?.poapEvents[0].poapEventId);
 
@@ -37,15 +40,19 @@ export default function NimiPage() {
 
   console.log('iykResponse', iykResponse);
 
-  const [poapReciever, setPoapReciever] = useState('');
-
   const { data: checkIfUserHasPoap, isLoading: isLoadingCheckIfUserHasPoap } = useCheckIfUserHasPaopEvent({
     eventId: iykResponse?.poapEvents[0].poapEventId,
     account: poapReciever && claimStep === ClaimModalState.CLAIMING ? poapReciever : undefined,
   });
   console.log('checkIfUserHasPoap', checkIfUserHasPoap);
-  const handleClaimClick = () => {
+  const handleClaimClick = async () => {
     setClaimStep(ClaimModalState.CLAIMING);
+    const data = await mutateAsync({
+      otpCode: iykResponse?.poapEvents[0].otp,
+      recipient: poapReciever,
+      poapEventId: iykResponse?.poapEvents[0].poapEventId,
+    });
+    console.log('data', data);
   };
 
   const { data: initialNimi } = useInitialtNimiData({
@@ -56,7 +63,7 @@ export default function NimiPage() {
   console.log('initialNimi', initialNimi);
   return (
     <AnimatePresence initial={false}>
-      {!initialNimi ? (
+      {!initialNimi || isLoading ? (
         <OpacityMotion key="nimi-page-loader">
           <LoaderWrapper $fullPage={true}>
             <Loader />

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { getCustomClient } from '../utils';
 
@@ -35,18 +35,20 @@ export function useIykRefCheck({ code }: IykProps) {
 
   return useQuery(['fetchIykData', code], getIykData, {
     enabled: !!code,
+    retry: false,
   });
 }
 
 interface MintIykPoapTokenProps {
-  otpCode: string | null;
-  recipient: string | null;
-  poapEventId: number | null;
-  deviceId: string | null;
+  otpCode?: string | null;
+  recipient?: string | null;
+  poapEventId?: string | null;
+  deviceId?: string | null;
 }
 
-export function useMintIykPoapToken({ otpCode, recipient, deviceId, poapEventId }: MintIykPoapTokenProps) {
-  const getIykData = async () => {
+export function useMintIykPoapToken() {
+  const getIykData = async ({ otpCode, recipient, deviceId, poapEventId }: MintIykPoapTokenProps) => {
+    if (!otpCode || !recipient || !poapEventId) return undefined;
     const headers = {
       'Content-Type': 'application/json',
       'x-iyk-code': otpCode,
@@ -63,11 +65,5 @@ export function useMintIykPoapToken({ otpCode, recipient, deviceId, poapEventId 
     return data;
   };
 
-  return useQuery(['fetchIykData', otpCode, recipient, deviceId], getIykData, {
-    enabled: !!otpCode && !!recipient && !!deviceId,
-    select: ({ data }) => {
-      if (data) return data;
-      else return undefined;
-    },
-  });
+  return useMutation(['fetchIykData'], getIykData);
 }
