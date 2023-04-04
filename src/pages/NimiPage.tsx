@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants';
 
-import { NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
+import { NimiPageProvider, NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
 import { useIykRefCheck, useMintIykPoapToken } from 'api/RestAPI/hooks/useIykHooks';
 import { useCheckIfUserHasPaopEvent, usePoapTokens } from 'api/RestAPI/hooks/useUserPOAPs';
@@ -90,7 +90,9 @@ export default function NimiPage() {
             <button onClick={() => setClaimStep(ClaimModalState.ERROR)}>Error</button>
           </ButtonList>
           <ToastProvider>
-            <NimiPageRender nimi={initialNimi} isApp={true} />
+            <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY as string}>
+              <NimiPageRender nimi={initialNimi} isApp={true} />
+            </NimiPageProvider>
           </ToastProvider>
         </OpacityMotion>
       )}
