@@ -10,6 +10,7 @@ interface UseInitialNimiData {
   data?: Nimi;
   ipns?: string;
   loading: boolean;
+  isGenerated: boolean;
 }
 
 interface InitialNimiDataProps {
@@ -71,5 +72,6 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
   return {
     loading: isDepoyedLoading || isGeneratedFetching,
     data: nimiObject,
+    isGenerated: shouldRunSecondQuery,
   };
 }

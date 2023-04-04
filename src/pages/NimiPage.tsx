@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants';
 
-import { NimiPageProvider, NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
+import { NimiPageProvider, NimiPage as NimiPageRender, NimiWidgetType, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
 import { useIYKRefQuery, useMintIYKPOAPToken } from 'api/RestAPI/hooks/useIykHooks';
 import { usePOAPEventQuery, useUserHasPOAPQuery } from 'api/RestAPI/hooks/useUserPOAPs';
@@ -8,6 +8,7 @@ import { Loader, LoaderWrapper } from 'components/Loader';
 import { OpacityMotion } from 'components/motion';
 import { AnimatePresence } from 'framer-motion';
 import { useDebounce } from 'hooks/useDebounce';
+import { ClaimNimiModal } from 'modals/ClaimNimiModal';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -33,7 +34,7 @@ export default function NimiPage() {
   const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
 
   // Fetch the Nimi data for the ENS name
-  const { data: initialNimi } = useInitialtNimiData({
+  const { data: initialNimi, isGenerated } = useInitialtNimiData({
     ensName: nimiUsername!,
     account: AddressZero,
   });
@@ -102,6 +103,8 @@ export default function NimiPage() {
               dark={initialNimi.theme.type === NimiThemeType.RAAVE}
               closeModal={() => setIsClaimModalOpen(false)}
             />
+          ) : !iykResponse?.isValidRef && isGenerated ? (
+            <ClaimNimiModal hasPoap={initialNimi.widgets.some((widget) => widget.type === NimiWidgetType.POAP)} />
           ) : null}
           <ButtonList onClick={(event) => event.stopPropagation()}>
             <button onClick={() => setClaimStep(ClaimModalState.INITIAL)}>Initial</button>

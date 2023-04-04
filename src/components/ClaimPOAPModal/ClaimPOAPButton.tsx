@@ -27,12 +27,12 @@ type StyledButtonProps = {
   marginBottom?: string;
 };
 
-const StyledButton = styled.button<StyledButtonProps>`
+export const StyledButton = styled.button<StyledButtonProps>`
   border: none;
   padding: 0 12px;
   line-height: 15px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
   color: white;
   cursor: pointer;
@@ -53,8 +53,8 @@ const StyledButton = styled.button<StyledButtonProps>`
       case 'big':
         return css`
           width: 100%;
-          height: 48px;
-          border-radius: 16px;
+          height: 56px;
+          border-radius: 24px;
         `;
       default:
         return '';
