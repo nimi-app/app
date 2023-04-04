@@ -84,7 +84,7 @@ export function insertPoapWidgetIntoNimi(nimi: Nimi, hasPoaps: boolean, address?
  * @returns boolean
  */
 export function isAddressOrEns(address: string): boolean {
-  address = address.trim().toLocaleUpperCase();
+  address = address.trim().toLocaleLowerCase();
 
   const isENS = isValidName(address) && (address.endsWith('.eth') || address.endsWith('lens.xyz'));
   const isAddress = isEVMAddress(address);

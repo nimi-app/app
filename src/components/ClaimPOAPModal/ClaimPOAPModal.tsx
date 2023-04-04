@@ -60,7 +60,9 @@ export function ClaimPOAPModal({
   const [showBody, setShowBody] = useState(false);
 
   const isRecipientValid = useMemo(() => {
-    return isAddressOrEns(reciever || '');
+    if (!reciever) return false;
+
+    return isAddressOrEns(reciever);
   }, [reciever]);
 
   return (
