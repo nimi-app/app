@@ -114,13 +114,6 @@ export default function NimiPage() {
               hasPoap={initialNimi.widgets.some((widget) => widget.type === NimiWidgetType.POAP)}
             />
           ) : null}
-          <ButtonList onClick={(event) => event.stopPropagation()}>
-            <button onClick={() => setClaimStep(ClaimModalState.INITIAL)}>Initial</button>
-            <button onClick={() => setClaimStep(ClaimModalState.CLAIMING)}>Claiming</button>
-            <button onClick={() => setClaimStep(ClaimModalState.SUCCESS)}>Success</button>
-            <button onClick={() => setClaimStep(ClaimModalState.CLAIMED)}>Claimed</button>
-            <button onClick={() => setClaimStep(ClaimModalState.ERROR)}>Error</button>
-          </ButtonList>
           <ToastProvider>
             <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY as string}>
               <OverlayBackground isActive={!iykResponse?.isValidRef && isGenerated}>
@@ -138,11 +131,4 @@ const OverlayBackground = styled.div<{ isActive: boolean }>`
   @media (max-width: ${NIMI_CARDS_WIDTH}px) {
     background: ${(props) => props.isActive && `linear-gradient(180deg, #f9fcff 57.38%, #cae4ff 80.08%);`};
   }
-`;
-
-const ButtonList = styled.div`
-  position: absolute;
-  left: 0;
-  top: 10;
-  z-index: 3;
 `;
