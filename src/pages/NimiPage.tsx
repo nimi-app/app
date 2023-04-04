@@ -61,8 +61,11 @@ export default function NimiPage() {
         recipient: poapReciever,
         poapEventId: iykResponse?.poapEvents[0].poapEventId,
       });
-      if (data) {
-        setClaimStep(ClaimModalState.CLAIMED);
+      console.log('DATA IM LOOKNОР FOR', data);
+      if (data.success) {
+        setClaimStep(ClaimModalState.SUCCESS);
+      } else {
+        setClaimStep(ClaimModalState.ERROR);
       }
 
       console.log('data', data);
