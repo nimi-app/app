@@ -34,6 +34,8 @@ export default function NimiPage() {
   });
 
   const { data: iykResponse, isLoading } = useIykRefCheck({ code: iykRef });
+  console.log(' iykResponse', iykResponse);
+  console.log('isLoading', isLoading);
 
   const { mutateAsync } = useMintIykPoapToken();
 
