@@ -16,7 +16,9 @@ export function useUserPOAPs(account?: string) {
 export function usePoapTokens(eventId?: string) {
   const getPoapsFromUser = async () => {
     if (!eventId) return undefined;
-    const data = await createPOAPClient(process.env.REACT_APP_POAP_API_KEY as string).get(`/events/id/${eventId}`);
+    const data = await createPOAPClient(process.env.REACT_APP_POAP_API_KEY as string).get<{ image_url: string }>(
+      `/events/id/${eventId}`
+    );
 
     return data;
   };
@@ -26,10 +28,18 @@ export function usePoapTokens(eventId?: string) {
   });
 }
 
-export function useCheckIfUserHasPaopEvent({ account, eventId }: { account?: string; eventId?: string }) {
+export function useCheckIfUserHasPaopEvent({
+  account,
+  eventId,
+  enabled,
+}: {
+  account?: string;
+  eventId?: string;
+  enabled;
+}) {
   const getPoapsFromUser = async () => {
     if (!account || !eventId) return undefined;
-    const data = await createPOAPClient(process.env.REACT_APP_POAP_API_KEY as string).get(
+    const { data } = await createPOAPClient(process.env.REACT_APP_POAP_API_KEY as string).get<{ owner: string }>(
       `actions/scan/${account}/${eventId}`
     );
     console.log('data', data);
@@ -37,6 +47,11 @@ export function useCheckIfUserHasPaopEvent({ account, eventId }: { account?: str
   };
 
   return useQuery(['fetchIfUserHasPoap', account, eventId], getPoapsFromUser, {
-    enabled: !!account && !!eventId,
+    onError: (error) => {
+      console.log('error', error);
+    },
+
+    enabled,
+    retry: false,
   });
 }

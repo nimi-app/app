@@ -29,6 +29,7 @@ type ClaimPOAPModalProps = {
   claimStep?: ClaimModalState;
   setReciever: (value: string) => void;
   reciever?: string;
+  poapUrl?: string | undefined;
 };
 
 const iconVariants = {
@@ -54,6 +55,7 @@ export function ClaimPOAPModal({
   claimStep,
   reciever,
   setReciever,
+  poapUrl,
 }: ClaimPOAPModalProps) {
   const [showBody, setShowBody] = useState(false);
 
@@ -139,11 +141,7 @@ export function ClaimPOAPModal({
             animate="open"
             exit="closed"
           >
-            <img
-              width={'124px'}
-              height={'124px'}
-              src="https://assets.poap.xyz/raave-devcon-bogota-2022-logo-1664886515532.png?size=small"
-            />
+            <img width={'124px'} height={'124px'} src={poapUrl} />
             <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
               Succesfully Claimed
             </Heading>
@@ -166,16 +164,12 @@ export function ClaimPOAPModal({
             animate="open"
             exit="closed"
           >
-            <img
-              width={'124px'}
-              height={'124px'}
-              src="https://assets.poap.xyz/raave-devcon-bogota-2022-logo-1664886515532.png?size=small"
-            />
+            <img width={'124px'} height={'124px'} src={poapUrl} />
             <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
               POAP Already Claimed
             </Heading>
             <SucessDescription dark={dark}>
-              This POAP was already claimed by <span style={{ fontWeight: '700' }}>zeasdsadsadsadtt.eth</span>
+              This POAP was already claimed by <span style={{ fontWeight: '700' }}>{reciever}</span>
             </SucessDescription>
           </SuccessBody>
         </motion.div>

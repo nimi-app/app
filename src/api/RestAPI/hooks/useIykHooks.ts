@@ -58,10 +58,7 @@ export function useMintIykPoapToken() {
       recipient,
       deviceId,
     };
-    const { data } = await getCustomClient(`https://api.iyk.app/`, headers).post<{ data: IYKRefStruct }>(
-      `poap-events/mint`,
-      params
-    );
+    const { data } = await getCustomClient(`https://api.iyk.app/`, headers).post<any>(`poap-events/mint`, params);
     return data;
   };
 
