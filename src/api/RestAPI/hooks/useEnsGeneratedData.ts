@@ -32,6 +32,7 @@ export function useEnsGeneratedData(ensName: string, enabled = true) {
         return nimiObject;
       } else return undefined;
     },
+    retry: false,
     enabled,
   });
 }

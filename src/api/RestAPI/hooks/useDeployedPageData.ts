@@ -35,5 +35,6 @@ export function useDeployedPageData(ensName: string) {
       if (data.length) return data[0];
       else return undefined;
     },
+    retry: false,
   });
 }
