@@ -91,9 +91,7 @@ export default function NimiPage() {
       if (mintResponse.success) {
         setClaimStep(ClaimModalState.SUCCESS);
         // If the user wants to auto claim the POAP, save the reciever address to local storage
-        if (autoClaimPOAP) {
-          setAutoClaimPOAPRecentReciever(debouncedPOAPReciever);
-        }
+        setAutoClaimPOAPRecentReciever(debouncedPOAPReciever);
       } else {
         setClaimStep(ClaimModalState.ERROR);
       }
@@ -122,8 +120,7 @@ export default function NimiPage() {
     } else {
       setIsMounted(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoClaimPOAP, refData, isRefDataLoading, isUserHasPOAPLoading, userHasPOAPData]);
+  }, [isMounted, autoClaimPOAP, refData, isRefDataLoading, isUserHasPOAPLoading, userHasPOAPData]);
 
   const resetAllFields = () => {
     setClaimStep(ClaimModalState.INITIAL);
