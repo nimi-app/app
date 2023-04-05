@@ -1,12 +1,6 @@
 import { AddressZero } from '@ethersproject/constants';
 
-import {
-  NIMI_CARDS_WIDTH,
-  NimiPageProvider,
-  NimiPage as NimiPageRender,
-  NimiWidgetType,
-  ToastProvider,
-} from '@nimi.io/card';
+import { NimiPageProvider, NimiPage as NimiPageRender, ToastProvider } from '@nimi.io/card';
 import { NimiThemeType } from '@nimi.io/card/types';
 import { useIYKRefQuery, useMintIYKPOAPToken } from 'api/RestAPI/hooks/useIykHooks';
 import { usePOAPEventQuery, useUserHasPOAPQuery } from 'api/RestAPI/hooks/useUserPOAPs';
@@ -16,10 +10,8 @@ import { OpacityMotion } from 'components/motion';
 import { AnimatePresence } from 'framer-motion';
 import { useDebounce } from 'hooks/useDebounce';
 import { useAtom } from 'jotai';
-import { ClaimNimiModal } from 'modals/ClaimNimiModal';
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { isAddressOrEns } from 'utils';
 
 import { ClaimModalState, ClaimPOAPModal } from '../components/ClaimPOAPModal';
@@ -156,17 +148,10 @@ export default function NimiPage() {
               autoClaimPOAP={autoClaimPOAP}
               setAutoClaimPOAP={setAutoClaimPOAP}
             />
-          ) : !refData?.isValidRef && isGenerated ? (
-            <ClaimNimiModal
-              ensName={ensName}
-              hasPoap={initialNimi.widgets.some((widget) => widget.type === NimiWidgetType.POAP)}
-            />
           ) : null}
           <ToastProvider>
             <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY as string}>
-              <OverlayBackground isActive={!refData?.isValidRef && isGenerated}>
-                <NimiPageRender nimi={initialNimi} mode={'app'} />
-              </OverlayBackground>
+              <NimiPageRender nimi={initialNimi} showClaimModal={!refData?.isValidRef && isGenerated} mode={'app'} />
             </NimiPageProvider>
           </ToastProvider>
         </OpacityMotion>
@@ -174,9 +159,3 @@ export default function NimiPage() {
     </AnimatePresence>
   );
 }
-
-const OverlayBackground = styled.div<{ isActive: boolean }>`
-  @media (max-width: ${NIMI_CARDS_WIDTH}px) {
-    background: ${(props) => props.isActive && `linear-gradient(180deg, #f9fcff 57.38%, #cae4ff 80.08%);`};
-  }
-`;
