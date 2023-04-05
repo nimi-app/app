@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { isAddressOrEns } from 'utils';
 
 import { ClaimPOAPButton } from './ClaimPOAPButton';
+import { ReceiverInput } from './ReceiverInput';
 import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 import { ReactComponent as Checkmark } from '../../assets/svg/checkmark.svg';
 import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
@@ -81,7 +82,8 @@ export function ClaimPOAPModal({
             <Description dark={dark}>Claim POAP that proves you met {name}</Description>
             <InputGroup>
               <Input value={reciever} onChange={(e) => setReciever(e.target.value)} dark={dark} />
-              <InputIcons>
+              <ReceiverInput onChange={(nextValue) => setReciever(nextValue)} />
+              {/* <InputIcons>
                 {isRecipientValid ? (
                   <StyledCheckmark />
                 ) : reciever?.length ? (
@@ -89,7 +91,7 @@ export function ClaimPOAPModal({
                 ) : (
                   ''
                 )}
-              </InputIcons>
+              </InputIcons> */}
               {/* <CogButton>
               <CogSVG />
             </CogButton> */}
