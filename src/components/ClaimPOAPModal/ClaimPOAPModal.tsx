@@ -203,7 +203,6 @@ export function ClaimPOAPModal({
               <CloseSvg />
             </CloseIcon>
           </Header>
-
           <SuccessBody
             transition={{ duration: 0.3 }}
             variants={bodyVariants}
@@ -218,9 +217,11 @@ export function ClaimPOAPModal({
               height={124}
               width={124}
             />
-            <ErrorText>Failed to claim</ErrorText>
+            <Heading style={{ marginBottom: '10px' }} dark={dark}>
+              Failed to claim
+            </Heading>
+            <SucessDescription dark={dark}>POAP couldn’t be claimed. Please try again.</SucessDescription>
           </SuccessBody>
-
           <Footer>
             <ClaimPOAPButton text={'Try again'} onClick={() => resetAllFields()} />
           </Footer>
@@ -359,7 +360,7 @@ const Description = styled.h2<ModalProps>`
 
 const SucessDescription = styled(Description)`
   text-align: center;
-  margin-bottom: 0%;
+  margin-bottom: 10px;
   line-height: 20px;
 `;
 
