@@ -6,7 +6,6 @@ import { styled } from 'styled-components';
 import { isAddressOrEns } from 'utils';
 
 import { ClaimPOAPButton } from './ClaimPOAPButton';
-import { ReceiverInput } from './ReceiverInput';
 import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 import { ReactComponent as Checkmark } from '../../assets/svg/checkmark.svg';
 import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
@@ -106,14 +105,14 @@ export function ClaimPOAPModal({
           <InputGroup>
             <ClaimPOAPButton disabled={!isRecipientValid} onClick={onClaimClick} />
           </InputGroup>
-          <InputGroup>
+          <AutoClaimWrapper>
             <Toggle
               id="autoClaimPOAP"
               checked={autoClaimPOAP}
               onChange={(nextChecked) => setAutoClaimPOAP(nextChecked)}
               label="Auto Claim"
             />
-          </InputGroup>
+          </AutoClaimWrapper>
         </AnimatedSection>
       )}
       {claimStep === ClaimModalState.CLAIMING && (
@@ -229,6 +228,8 @@ export function ClaimPOAPModal({
 type ModalProps = {
   dark: boolean;
 };
+
+const AutoClaimWrapper = styled.div``;
 
 const Modal = styled(motion.div)<ModalProps>`
   width: 348px;

@@ -120,10 +120,10 @@ export default function NimiPage() {
       setClaimStep(ClaimModalState.CLAIMED);
       return;
     }
-    // User has auto claim enabled and the ref is valid
-    if (autoClaimPOAP && iykResponse.isValidRef === true) {
-      claimHandler().finally(() => setIsMounted(true));
-    }
+    // // User has auto claim enabled and the ref is valid
+    // if (autoClaimPOAP && iykResponse.isValidRef === true) {
+    //   claimHandler().finally(() => setIsMounted(true));
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoClaimPOAP, iykResponse, userHasPOAPData]);
 
