@@ -348,7 +348,7 @@ const CloseIcon = styled(motion.button)`
 `;
 
 const Body = styled(motion.div)`
-  padding: 10px 0 16px;
+  padding-top: 10px;
 `;
 
 const Description = styled.h2<ModalProps>`
