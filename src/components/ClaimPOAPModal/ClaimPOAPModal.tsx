@@ -1,12 +1,13 @@
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
 import { Toggle } from 'components/form/Toggle';
 import { motion } from 'framer-motion';
+import Lottie from 'lottie-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { isAddressOrEns } from 'utils';
 
+import claimErrorLottie from './claimErrorLottie.json';
 import { ClaimPOAPButton } from './ClaimPOAPButton';
-import { ReceiverInput } from './ReceiverInput';
 import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 import { ReactComponent as Checkmark } from '../../assets/svg/checkmark.svg';
 import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
@@ -202,6 +203,7 @@ export function ClaimPOAPModal({
               <CloseSvg />
             </CloseIcon>
           </Header>
+
           <SuccessBody
             transition={{ duration: 0.3 }}
             variants={bodyVariants}
@@ -209,10 +211,12 @@ export function ClaimPOAPModal({
             animate="open"
             exit="closed"
           >
-            <img
-              width={'124px'}
-              height={'124px'}
-              src="https://assets.poap.xyz/raave-devcon-bogota-2022-logo-1664886515532.png?size=small"
+            <Lottie
+              animationData={claimErrorLottie}
+              loop={false}
+              rendererSettings={{ preserveAspectRatio: 'xMidYMid slice' }}
+              height={124}
+              width={124}
             />
             <ErrorText>Failed to claim</ErrorText>
           </SuccessBody>
