@@ -278,19 +278,6 @@ const Header = styled.header`
   align-items: center;
 `;
 
-const ErrorText = styled.div`
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
-  color: #f05252;
-  margin-top: 14px;
-  margin-bottom: 24px;
-  /* identical to box height */
-
-  text-align: center;
-`;
-
 const InputIcons = styled.div`
   position: absolute;
   bottom: 0;

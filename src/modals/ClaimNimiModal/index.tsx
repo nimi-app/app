@@ -12,7 +12,7 @@ export function ClaimNimiModal({ hasPoap, ensName }: { hasPoap: boolean; ensName
       <BackgroundWrapper hasPoap={hasPoap}>
         <Header>Claim your Nimi Profile!</Header>
         <Body>Semper in cursus magna et eu varius nunc adipiscing. Elementum justo, laoreet.</Body>
-        <ClaimPOAPButton onClick={() => navigate(`/domains/${ensName}`)} text={'Claim Profile'} />
+        <ClaimPOAPButton text={'Claim Profile'} />
       </BackgroundWrapper>
       <ClaimProfile onClick={() => navigate(`/domains/${ensName}`)} hasPoap={hasPoap} variant="big">
         Claim Profile

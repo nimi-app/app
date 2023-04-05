@@ -1,5 +1,3 @@
-import { AddressZero } from '@ethersproject/constants';
-
 import { Nimi, NimiThemeType } from '@nimi.io/card/types';
 import { useMemo } from 'react';
 import { useEnsAddress } from 'wagmi';
