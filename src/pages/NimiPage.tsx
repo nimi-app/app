@@ -54,12 +54,12 @@ export default function NimiPage() {
   // Retrieve the IYK reference from the URL and fetch its data
   const [searchParams] = useSearchParams();
   const iykRef = searchParams.get('iykRef');
-  const { data: iykResponse, isLoading } = useIYKRefQuery(iykRef);
+  const { data: refData, isLoading: isRefDataLoading } = useIYKRefQuery(iykRef);
 
   // Retrieve the POAP event data and check if the user has already claimed the POAP
-  const { data: poapEvent } = usePOAPEventQuery(iykResponse?.poapEvents[0].poapEventId);
+  const { data: poapEvent } = usePOAPEventQuery(refData?.poapEvents[0].poapEventId);
   const { error: userHasPOAPError, data: userHasPOAPData } = useUserHasPOAPQuery({
-    eventId: iykResponse?.poapEvents[0].poapEventId,
+    eventId: refData?.poapEvents[0].poapEventId,
     account: debouncedPOAPReciever,
     enabled: !!debouncedPOAPReciever,
   });
@@ -83,9 +83,9 @@ export default function NimiPage() {
     }
     try {
       const mintResponse = await mintIYKPOAPToken({
-        otpCode: iykResponse?.poapEvents[0].otp,
+        otpCode: refData?.poapEvents[0].otp,
         recipient: debouncedPOAPReciever,
-        poapEventId: iykResponse?.poapEvents[0].poapEventId,
+        poapEventId: refData?.poapEvents[0].poapEventId,
       });
       console.log({ mintResponse });
 
@@ -109,23 +109,22 @@ export default function NimiPage() {
   // On first render, attempt to claim the POAP if the user has auto claim enabled
   useEffect(() => {
     // Wait for the data to be fetched
-    if (isLoading) return;
-    // Ref is not valid
-    if (!iykResponse?.isValidRef) return;
     // Component is already mounted
-    if (isMounted) return;
+    if (isRefDataLoading === true || isMounted === true) return;
     // POAP already claimed
     if (userHasPOAPData?.owner) {
       setIsMounted(true);
       setClaimStep(ClaimModalState.CLAIMED);
       return;
     }
-    // // User has auto claim enabled and the ref is valid
-    // if (autoClaimPOAP && iykResponse.isValidRef === true) {
-    //   claimHandler().finally(() => setIsMounted(true));
-    // }
+    // User has a valid ref, auto claim is enabled
+    if (isAddressOrEns(autoClaimPOAPRecentReceiver) && autoClaimPOAP === true && refData?.isValidRef === true) {
+      claimHandler().finally(() => setIsMounted(true));
+    } else {
+      setIsMounted(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoClaimPOAP, iykResponse, userHasPOAPData]);
+  }, [autoClaimPOAP, refData, isRefDataLoading, userHasPOAPData]);
 
   const resetAllFields = () => {
     setClaimStep(ClaimModalState.INITIAL);
@@ -135,7 +134,7 @@ export default function NimiPage() {
 
   return (
     <AnimatePresence initial={false}>
-      {!initialNimi || isLoading ? (
+      {!initialNimi || isRefDataLoading ? (
         <OpacityMotion key="nimi-page-loader">
           <LoaderWrapper $fullPage={true}>
             <Loader />
@@ -143,7 +142,7 @@ export default function NimiPage() {
         </OpacityMotion>
       ) : (
         <OpacityMotion key="nimi-page-content">
-          {isClaimModalOpen && iykResponse?.isValidRef ? (
+          {isClaimModalOpen && refData?.isValidRef ? (
             <ClaimPOAPModal
               resetAllFields={resetAllFields}
               poapImageURL={poapEvent?.image_url}
@@ -157,7 +156,7 @@ export default function NimiPage() {
               autoClaimPOAP={autoClaimPOAP}
               setAutoClaimPOAP={setAutoClaimPOAP}
             />
-          ) : !iykResponse?.isValidRef && isGenerated ? (
+          ) : !refData?.isValidRef && isGenerated ? (
             <ClaimNimiModal
               ensName={ensName}
               hasPoap={initialNimi.widgets.some((widget) => widget.type === NimiWidgetType.POAP)}
@@ -165,7 +164,7 @@ export default function NimiPage() {
           ) : null}
           <ToastProvider>
             <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY as string}>
-              <OverlayBackground isActive={!iykResponse?.isValidRef && isGenerated}>
+              <OverlayBackground isActive={!refData?.isValidRef && isGenerated}>
                 <NimiPageRender nimi={initialNimi} mode={'app'} />
               </OverlayBackground>
             </NimiPageProvider>
