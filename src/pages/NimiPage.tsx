@@ -50,7 +50,12 @@ export default function NimiPage() {
 
   // Retrieve the POAP event data and check if the user has already claimed the POAP
   const { data: poapEvent } = usePOAPEventQuery(refData?.poapEvents[0].poapEventId);
-  const { error: userHasPOAPError, data: userHasPOAPData } = useUserHasPOAPQuery({
+  const {
+    isLoading: isUserHasPOAPLoading,
+
+    error: userHasPOAPError,
+    data: userHasPOAPData,
+  } = useUserHasPOAPQuery({
     eventId: refData?.poapEvents[0].poapEventId,
     account: debouncedPOAPReciever,
     enabled: !!debouncedPOAPReciever,
@@ -102,9 +107,9 @@ export default function NimiPage() {
   useEffect(() => {
     // Wait for the data to be fetched
     // Component is already mounted
-    if (isRefDataLoading === true || isMounted === true) return;
+    if (isRefDataLoading === true || isMounted === true || isUserHasPOAPLoading === true) return;
     // POAP already claimed
-    if (userHasPOAPData?.owner) {
+    if (userHasPOAPData && userHasPOAPData?.owner.trim() !== '') {
       setIsMounted(true);
       setClaimStep(ClaimModalState.CLAIMED);
       return;
@@ -116,7 +121,7 @@ export default function NimiPage() {
       setIsMounted(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoClaimPOAP, refData, isRefDataLoading, userHasPOAPData]);
+  }, [autoClaimPOAP, refData, isRefDataLoading, isUserHasPOAPLoading, userHasPOAPData]);
 
   const resetAllFields = () => {
     setClaimStep(ClaimModalState.INITIAL);
