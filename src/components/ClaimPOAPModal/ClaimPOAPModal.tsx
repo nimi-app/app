@@ -107,14 +107,14 @@ export function ClaimPOAPModal({
           <InputGroup>
             <ClaimPOAPButton disabled={!isRecipientValid} onClick={onClaimClick} />
           </InputGroup>
-          <InputGroup>
+          <AutoClaimWrapper>
             <Toggle
               id="autoClaimPOAP"
               checked={autoClaimPOAP}
               onChange={(nextChecked) => setAutoClaimPOAP(nextChecked)}
               label="Auto Claim"
             />
-          </InputGroup>
+          </AutoClaimWrapper>
         </AnimatedSection>
       )}
       {claimStep === ClaimModalState.CLAIMING && (
@@ -235,6 +235,8 @@ type ModalProps = {
   dark: boolean;
 };
 
+const AutoClaimWrapper = styled.div``;
+
 const Modal = styled(motion.div)<ModalProps>`
   width: 348px;
   z-index: 2;
@@ -347,7 +349,7 @@ const CloseIcon = styled(motion.button)`
 `;
 
 const Body = styled(motion.div)`
-  padding: 10px 0 16px;
+  padding-top: 10px;
 `;
 
 const Description = styled.h2<ModalProps>`
