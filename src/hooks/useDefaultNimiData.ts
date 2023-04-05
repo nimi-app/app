@@ -2,6 +2,7 @@ import { AddressZero } from '@ethersproject/constants';
 
 import { Nimi, NimiThemeType } from '@nimi.io/card/types';
 import { useMemo } from 'react';
+import { useEnsAddress } from 'wagmi';
 
 import { useDeployedPageData } from '../api/RestAPI/hooks/useDeployedPageData';
 import { useEnsGeneratedData } from '../api/RestAPI/hooks/useEnsGeneratedData';
@@ -16,12 +17,17 @@ interface UseInitialNimiData {
 interface InitialNimiDataProps {
   ensName: string;
   account?: string;
+  injectedTheme?: NimiThemeType;
 }
 /**
  * Returns default data to be displayed on CreateNimipage
  */
-export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps): UseInitialNimiData {
-  const defaultTheme = { type: NimiThemeType.NIMI };
+export function useInitialtNimiData({
+  ensName,
+  account,
+  injectedTheme = undefined,
+}: InitialNimiDataProps): UseInitialNimiData {
+  const defaultTheme = { type: injectedTheme ? injectedTheme : NimiThemeType.NIMI };
 
   const {
     data: deployedNimi,
@@ -36,12 +42,18 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
     isFetching: isGeneratedFetching,
   } = useEnsGeneratedData(ensName, shouldRunSecondQuery);
 
+  const data = useEnsAddress({
+    name: ensName,
+  });
+  console.log('wagmiEns', data);
+  console.log('ensName', data);
+
   const nimiObject = useMemo(() => {
     let nimi: Nimi = {
       ensName,
       displayName: ensName,
       addresses: [],
-      ensAddress: AddressZero,
+      ensAddress: data.data as '0x${string}',
       links: [],
       widgets: [],
     };
@@ -49,6 +61,7 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
     if (isDeployedSuccess && deployedNimi?.nimi && !isDepoyedLoading) {
       nimi = deployedNimi.nimi;
     } else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) {
+      if (injectedTheme) generatedNimi.theme = defaultTheme;
       nimi = generatedNimi;
     }
 
@@ -66,6 +79,7 @@ export function useInitialtNimiData({ ensName, account }: InitialNimiDataProps):
     isGeneratedFetching,
     isDeployedSuccess,
     account,
+    data,
     ensName,
   ]);
 

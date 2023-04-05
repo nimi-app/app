@@ -27,13 +27,13 @@ const httpClient = getCustomClient(`https://api.iyk.app/`, {});
  */
 export function useIYKRefQuery(ref: string | null) {
   const getIykData = async () => {
-    if (!ref) return undefined;
     const { data } = await httpClient.get<IYKRefStruct>(`/refs/${ref}`);
     return data;
   };
 
   return useQuery(['fetchIYKRefData', ref], getIykData, {
     retry: false,
+    enabled: !!ref,
   });
 }
 

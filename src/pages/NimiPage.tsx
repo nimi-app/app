@@ -37,22 +37,24 @@ export default function NimiPage() {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
   const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
 
+  // Retrieve the IYK reference from the URL and fetch its data
+  const [searchParams] = useSearchParams();
+  const iykRef = searchParams.get('iykRef');
+  const { data: refData, isFetching: isRefDataLoading } = useIYKRefQuery(iykRef);
+
+  // Retrieve the POAP event data and check if the user has already claimed the POAP
+  const { data: poapEvent, isFetching: isPoapEventLoading } = usePOAPEventQuery(refData?.poapEvents[0].poapEventId);
+  console.log('poapEvent', poapEvent);
+
   // Fetch the Nimi data for the ENS name
   const { data: initialNimi, isGenerated } = useInitialtNimiData({
     ensName: ensName!,
     account: AddressZero,
+    injectedTheme: poapEvent?.theme,
   });
 
-  // Retrieve the IYK reference from the URL and fetch its data
-  const [searchParams] = useSearchParams();
-  const iykRef = searchParams.get('iykRef');
-  const { data: refData, isLoading: isRefDataLoading } = useIYKRefQuery(iykRef);
-
-  // Retrieve the POAP event data and check if the user has already claimed the POAP
-  const { data: poapEvent } = usePOAPEventQuery(refData?.poapEvents[0].poapEventId);
   const {
-    isLoading: isUserHasPOAPLoading,
-
+    isFetching: isUserHasPOAPLoading,
     error: userHasPOAPError,
     data: userHasPOAPData,
   } = useUserHasPOAPQuery({
@@ -128,10 +130,12 @@ export default function NimiPage() {
     setPoapReciever('');
     setIsClaimModalOpen(true);
   };
+  console.log('isRefDataLoading', isRefDataLoading);
+  console.log('isPoapEventLoading', isPoapEventLoading);
 
   return (
     <AnimatePresence initial={false}>
-      {!initialNimi || isRefDataLoading ? (
+      {!initialNimi || isRefDataLoading || isPoapEventLoading ? (
         <OpacityMotion key="nimi-page-loader">
           <LoaderWrapper $fullPage={true}>
             <Loader />
