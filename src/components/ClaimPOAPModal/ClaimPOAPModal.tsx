@@ -1,4 +1,5 @@
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
+import { Toggle } from 'components/form/Toggle';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
@@ -26,6 +27,8 @@ type ClaimPOAPModalProps = {
   dark?: boolean;
   name?: string;
   onClaimClick: () => void;
+  autoClaimPOAP: boolean;
+  setAutoClaimPOAP: (value: boolean) => void;
   closeModal: () => void;
   claimStep?: ClaimModalState;
   setReciever: (value: string) => void;
@@ -54,6 +57,8 @@ export function ClaimPOAPModal({
   name = 'mialn',
   closeModal,
   onClaimClick,
+  autoClaimPOAP,
+  setAutoClaimPOAP,
   claimStep,
   reciever,
   setReciever,
@@ -82,8 +87,7 @@ export function ClaimPOAPModal({
             <Description dark={dark}>Claim POAP that proves you met {name}</Description>
             <InputGroup>
               <Input value={reciever} onChange={(e) => setReciever(e.target.value)} dark={dark} />
-              <ReceiverInput onChange={(nextValue) => setReciever(nextValue)} />
-              {/* <InputIcons>
+              <InputIcons>
                 {isRecipientValid ? (
                   <StyledCheckmark />
                 ) : reciever?.length ? (
@@ -91,15 +95,25 @@ export function ClaimPOAPModal({
                 ) : (
                   ''
                 )}
-              </InputIcons> */}
-              {/* <CogButton>
-              <CogSVG />
-            </CogButton> */}
+              </InputIcons>
             </InputGroup>
+            {/*
+              @TODO: work on this later
+            <InputGroup>
+              <ReceiverInput onChange={(nextValue) => setReciever(nextValue)} />
+            </InputGroup> */}
           </Body>
-          <Footer>
+          <InputGroup>
             <ClaimPOAPButton disabled={!isRecipientValid} onClick={onClaimClick} />
-          </Footer>
+          </InputGroup>
+          <InputGroup>
+            <Toggle
+              id="autoClaimPOAP"
+              checked={autoClaimPOAP}
+              onChange={(nextChecked) => setAutoClaimPOAP(nextChecked)}
+              label="Auto Claim"
+            />
+          </InputGroup>
         </AnimatedSection>
       )}
       {claimStep === ClaimModalState.CLAIMING && (
@@ -350,6 +364,7 @@ const InputGroup = styled.div`
   justify-content: space-between;
   flex-direction: column;
   position: relative;
+  margin-bottom: 16px;
 `;
 
 const Input = styled.input.attrs({

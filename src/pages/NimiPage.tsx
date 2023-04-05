@@ -10,14 +10,17 @@ import {
 import { NimiThemeType } from '@nimi.io/card/types';
 import { useIYKRefQuery, useMintIYKPOAPToken } from 'api/RestAPI/hooks/useIykHooks';
 import { usePOAPEventQuery, useUserHasPOAPQuery } from 'api/RestAPI/hooks/useUserPOAPs';
+import { autoClaimPOAPAtom, autoClaimPOAPRecentReceiverAtom } from 'components/ClaimPOAPModal/ReceiverInput';
 import { Loader, LoaderWrapper } from 'components/Loader';
 import { OpacityMotion } from 'components/motion';
 import { AnimatePresence } from 'framer-motion';
 import { useDebounce } from 'hooks/useDebounce';
+import { useAtom } from 'jotai';
 import { ClaimNimiModal } from 'modals/ClaimNimiModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { isAddressOrEns } from 'utils';
 
 import { ClaimModalState, ClaimPOAPModal } from '../components/ClaimPOAPModal';
 import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
@@ -28,11 +31,14 @@ import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
  */
 export default function NimiPage() {
   const { nimiUsername: ensName } = useParams();
-  // Read stored reciever address from local storage
-  const poapRecieverLocalStorage = localStorage.getItem('nimiPOAPReciever');
-
-  // Set reciever address to local storage value or empty string
-  const [poapReciever, setPoapReciever] = useState(poapRecieverLocalStorage || '');
+  const [isMounted, setIsMounted] = useState(false);
+  // const [autoClaimPOAPLocalStorage, setAutoClaimPOAPLocalStorage] = useAtom(autoClaimPOAPAtom);
+  const [autoClaimPOAP, setAutoClaimPOAP] = useAtom(autoClaimPOAPAtom);
+  const [autoClaimPOAPRecentReceiver, setAutoClaimPOAPRecentReciever] = useAtom(autoClaimPOAPRecentReceiverAtom);
+  // Hydrate the local state with the recent receiver address
+  const [poapReciever, setPoapReciever] = useState(
+    isAddressOrEns(autoClaimPOAPRecentReceiver) ? autoClaimPOAPRecentReceiver : ''
+  );
   const debouncedPOAPReciever = useDebounce(poapReciever, 500);
 
   // Local state for the claim modal
@@ -48,12 +54,12 @@ export default function NimiPage() {
   // Retrieve the IYK reference from the URL and fetch its data
   const [searchParams] = useSearchParams();
   const iykRef = searchParams.get('iykRef');
-  const { data: iykResponse, isLoading } = useIYKRefQuery(iykRef);
+  const { data: refData, isLoading: isRefDataLoading } = useIYKRefQuery(iykRef);
 
   // Retrieve the POAP event data and check if the user has already claimed the POAP
-  const { data: poapEvent } = usePOAPEventQuery(iykResponse?.poapEvents[0].poapEventId);
+  const { data: poapEvent } = usePOAPEventQuery(refData?.poapEvents[0].poapEventId);
   const { error: userHasPOAPError, data: userHasPOAPData } = useUserHasPOAPQuery({
-    eventId: iykResponse?.poapEvents[0].poapEventId,
+    eventId: refData?.poapEvents[0].poapEventId,
     account: debouncedPOAPReciever,
     enabled: !!debouncedPOAPReciever,
   });
@@ -66,27 +72,59 @@ export default function NimiPage() {
     userHasPOAPData,
   });
 
-  const handleClaimClick = async () => {
+  const claimHandler = async () => {
     setClaimStep(ClaimModalState.CLAIMING);
 
     // User has already claimed the POAP
     if (userHasPOAPData?.owner) {
-      return setClaimStep(ClaimModalState.CLAIMED);
+      setAutoClaimPOAPRecentReciever(debouncedPOAPReciever);
+      setClaimStep(ClaimModalState.CLAIMED);
+      return;
     }
     try {
       const mintResponse = await mintIYKPOAPToken({
-        otpCode: iykResponse?.poapEvents[0].otp,
-        recipient: poapReciever,
-        poapEventId: iykResponse?.poapEvents[0].poapEventId,
+        otpCode: refData?.poapEvents[0].otp,
+        recipient: debouncedPOAPReciever,
+        poapEventId: refData?.poapEvents[0].poapEventId,
       });
       console.log({ mintResponse });
-      setClaimStep(mintResponse.success ? ClaimModalState.SUCCESS : ClaimModalState.ERROR);
-    } catch {
+
+      if (mintResponse.success) {
+        setClaimStep(ClaimModalState.SUCCESS);
+        // If the user wants to auto claim the POAP, save the reciever address to local storage
+        if (autoClaimPOAP) {
+          setAutoClaimPOAPRecentReciever(debouncedPOAPReciever);
+        }
+      } else {
+        setClaimStep(ClaimModalState.ERROR);
+      }
+    } catch (error) {
+      console.error(error);
       setClaimStep(ClaimModalState.ERROR);
     }
 
     return;
   };
+
+  // On first render, attempt to claim the POAP if the user has auto claim enabled
+  useEffect(() => {
+    // Wait for the data to be fetched
+    // Component is already mounted
+    if (isRefDataLoading === true || isMounted === true) return;
+    // POAP already claimed
+    if (userHasPOAPData?.owner) {
+      setIsMounted(true);
+      setClaimStep(ClaimModalState.CLAIMED);
+      return;
+    }
+    // User has a valid ref, auto claim is enabled
+    if (isAddressOrEns(autoClaimPOAPRecentReceiver) && autoClaimPOAP === true && refData?.isValidRef === true) {
+      claimHandler().finally(() => setIsMounted(true));
+    } else {
+      setIsMounted(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoClaimPOAP, refData, isRefDataLoading, userHasPOAPData]);
 
   const resetAllFields = () => {
     setClaimStep(ClaimModalState.INITIAL);
@@ -96,7 +134,7 @@ export default function NimiPage() {
 
   return (
     <AnimatePresence initial={false}>
-      {!initialNimi || isLoading ? (
+      {!initialNimi || isRefDataLoading ? (
         <OpacityMotion key="nimi-page-loader">
           <LoaderWrapper $fullPage={true}>
             <Loader />
@@ -104,19 +142,21 @@ export default function NimiPage() {
         </OpacityMotion>
       ) : (
         <OpacityMotion key="nimi-page-content">
-          {isClaimModalOpen && iykResponse?.isValidRef ? (
+          {isClaimModalOpen && refData?.isValidRef ? (
             <ClaimPOAPModal
               resetAllFields={resetAllFields}
               poapImageURL={poapEvent?.image_url}
               setReciever={setPoapReciever}
               reciever={poapReciever}
-              onClaimClick={handleClaimClick}
+              onClaimClick={claimHandler}
               name={ensName}
               claimStep={claimStep}
               dark={initialNimi.theme.type === NimiThemeType.RAAVE}
               closeModal={() => setIsClaimModalOpen(false)}
+              autoClaimPOAP={autoClaimPOAP}
+              setAutoClaimPOAP={setAutoClaimPOAP}
             />
-          ) : !iykResponse?.isValidRef && isGenerated ? (
+          ) : !refData?.isValidRef && isGenerated ? (
             <ClaimNimiModal
               ensName={ensName}
               hasPoap={initialNimi.widgets.some((widget) => widget.type === NimiWidgetType.POAP)}
@@ -124,7 +164,7 @@ export default function NimiPage() {
           ) : null}
           <ToastProvider>
             <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY as string}>
-              <OverlayBackground isActive={!iykResponse?.isValidRef && isGenerated}>
+              <OverlayBackground isActive={!refData?.isValidRef && isGenerated}>
                 <NimiPageRender nimi={initialNimi} mode={'app'} />
               </OverlayBackground>
             </NimiPageProvider>

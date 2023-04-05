@@ -1,5 +1,19 @@
+import { atomWithStorage } from 'jotai/utils';
 import { useState } from 'react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
+
+/**
+ * Holds the auto claim setting in local storage
+ */
+export const autoClaimPOAPAtom = atomWithStorage<boolean>('nimiPOAPAutoClaim', false);
+/**
+ * Holds the recent receiver address in local storage
+ */
+export const autoClaimPOAPRecentReceiverAtom = atomWithStorage<string>('nimiPOAPRecentReceiver', '');
+/**
+ * Holds the list of recievers in local storage
+ */
+export const autoClaimPOAPRecentReceiverListAtom = atomWithStorage<ReceiverOption[]>('nimiPOAPRecentReceiverList', []);
 
 interface ReceiverOption {
   readonly label: string;
@@ -29,6 +43,23 @@ function setLocalStorageOptionList(options: ReceiverOption[]) {
   localStorage.setItem(localStorageKey, JSON.stringify(options));
 }
 
+/**
+ * Saves the value to local storage
+ * @param value
+ */
+export function saveOptionValueToLocalStorage(value: string) {
+  const nextOption = createOption(value);
+  const nextOptionFound = getLocalStorageOptionList().find((option) => option.value === nextOption.value);
+
+  // If the option is already in the list, do nothing
+  if (nextOptionFound) {
+    return;
+  }
+
+  const nextOptions = [nextOption, ...getLocalStorageOptionList()]; // recent first
+  setLocalStorageOptionList(nextOptions);
+}
+
 interface ReceiverInputProps {
   onChange: (value: string) => void;
   dark?: boolean;
@@ -47,9 +78,10 @@ function createOption(name: string) {
  *
  */
 export function ReceiverInput({ onChange, dark }: ReceiverInputProps) {
-  const [options, setOptions] = useState(getLocalStorageOptionList());
-
   const [isLoading, setIsLoading] = useState(false);
+
+  const [inputValue, setInputValue] = useState('');
+  const [options, setOptions] = useState(getLocalStorageOptionList());
   const [value, setValue] = useState<ReceiverOption | null>(options.length > 0 ? options[0] : null);
 
   const handleCreate = (inputValue: string) => {
@@ -58,6 +90,7 @@ export function ReceiverInput({ onChange, dark }: ReceiverInputProps) {
 
     if (nextOptionFound) {
       setValue(nextOptionFound);
+      return;
     }
 
     setIsLoading(true);
@@ -96,8 +129,21 @@ export function ReceiverInput({ onChange, dark }: ReceiverInputProps) {
       isLoading={isLoading}
       onChange={(newValue) => {
         setValue(newValue);
+        setInputValue(newValue?.value || '');
+        // Notify parent
         onChange(newValue?.value || '');
       }}
+      onInputChange={(inputValue, { action }) => {
+        if (action === 'menu-close' || action === 'input-blur' || action === 'set-value') {
+          return;
+        } else {
+          // this.setState({ searchValue: e });
+          console.log({ inputValue });
+          onChange(inputValue);
+          setInputValue(inputValue);
+        }
+      }}
+      inputValue={inputValue}
       defaultOptions={options}
       options={options}
       onCreateOption={handleCreate}
