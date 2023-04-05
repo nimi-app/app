@@ -1,3 +1,6 @@
+import { isAddress as isEVMAddress } from '@ethersproject/address';
+import { isValidName } from '@ethersproject/hash';
+
 import { NIMI_LINK_DETAIL_EXTENDED } from '@nimi.io/card/constants';
 import { Nimi, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
 import { FC, SVGProps } from 'react';
@@ -73,4 +76,18 @@ export function insertPoapWidgetIntoNimi(nimi: Nimi, hasPoaps: boolean, address?
   }
 
   return nimiObject;
+}
+
+/**
+ * Check if string is ethereum address or ens name
+ * @param address string to check
+ * @returns boolean
+ */
+export function isAddressOrEns(address: string): boolean {
+  address = address.trim().toLocaleLowerCase();
+
+  const isENS = isValidName(address) && (address.endsWith('.eth') || address.endsWith('lens.xyz'));
+  const isAddress = isEVMAddress(address);
+
+  return isENS || isAddress;
 }

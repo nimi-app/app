@@ -16,8 +16,9 @@ export function useEnsGeneratedData(ensName: string, enabled = true) {
 
   const getEnsGenratedData = async () => {
     const params = {
-      ensName,
-      chainId: chainId || 1,
+      name: ensName,
+
+      chainId: 1,
     };
     const { data } = await getNimiAPIClient().get<{ data: EnsGeneratedDataType }>(`/nimi/generate`, { params });
     return data;
@@ -25,9 +26,13 @@ export function useEnsGeneratedData(ensName: string, enabled = true) {
 
   return useQuery(['fetchEnsGeneratedData', ensName, chainId], getEnsGenratedData, {
     select: ({ data }) => {
-      if (data.nimi) return data.nimi;
-      else return undefined;
+      if (data.nimi) {
+        const nimiObject = data.nimi;
+        nimiObject.addresses = [];
+        return nimiObject;
+      } else return undefined;
     },
+    retry: false,
     enabled,
   });
 }

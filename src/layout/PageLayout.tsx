@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { Footer } from '../components/Footer';
@@ -18,7 +18,15 @@ export function PageLayout() {
       <Header />
       <Content>
         {(() => {
-          if (!isConnected) return <Navigate to="/" />;
+          if (!isConnected)
+            return (
+              <ErrorContainer>
+                <Heading>WalletNotConnected</Heading>
+                <Heading type="sub" color="#000">
+                  Please connect your wallet by clicking the account button on the top right.
+                </Heading>
+              </ErrorContainer>
+            );
           if (!ENV_SUPPORTED_CHAIN_IDS.includes(chainId as number))
             return (
               <ErrorContainer>
@@ -45,6 +53,9 @@ const Container = styled.div`
 
 const Content = styled.main`
   max-width: ${MEDIA_WIDTHS.upToMedium}px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
   width: 100%;
   min-height: calc(100vh - (${HEADER_HEIGHT} + ${FOOTER_HEIGHT}));
   margin: 0 auto;

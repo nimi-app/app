@@ -54,7 +54,7 @@ export function NimiPreviewCard({ nimi }: NimiPreviewCardProps) {
                 <FixedGlobalStyle />
                 <ThemeProvider>
                   <NimiPageProvider poapAPIKey={process.env.REACT_APP_POAP_API_KEY || ''}>
-                    <NimiPage nimi={filteredNimi} isApp={false} />
+                    <NimiPage nimi={filteredNimi} mode={'widget'} />
                   </NimiPageProvider>
                 </ThemeProvider>
               </>
