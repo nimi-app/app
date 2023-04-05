@@ -117,7 +117,7 @@ export default function NimiPage() {
     // Component is already mounted
     if (isRefDataLoading === true || isMounted === true || isUserHasPOAPLoading === true) return;
     // POAP already claimed
-    if (userHasPOAPData && userHasPOAPData?.owner.trim() !== '') {
+    if (userHasPOAPData && userHasPOAPData?.owner) {
       setIsMounted(true);
       setClaimStep(ClaimModalState.CLAIMED);
       return;
