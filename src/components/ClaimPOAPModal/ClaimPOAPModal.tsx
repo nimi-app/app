@@ -14,18 +14,18 @@ import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
 import { ReactComponent as Cross } from '../../assets/svg/cross.svg';
 import { AnimatedSection } from '../../modals/ConfigurePOAPsModal/components/AnimatedSection';
 
-// import { ReactComponent as CogSVG } from '../../../assets/cog.svg';
-
 export enum ClaimModalState {
   INITIAL,
   CLAIMING,
   SUCCESS,
   CLAIMED,
   ERROR,
+  LOADING,
 }
 
 type ClaimPOAPModalProps = {
   dark?: boolean;
+
   name?: string;
   onClaimClick: () => void;
   autoClaimPOAP: boolean;
@@ -192,6 +192,19 @@ export function ClaimPOAPModal({
             <SucessDescription dark={dark}>
               This POAP was already claimed by <span style={{ fontWeight: '700' }}>{reciever}</span>
             </SucessDescription>
+            <AutoClaimWrapper>
+              <Toggle
+                id="autoClaimPOAP"
+                checked={autoClaimPOAP}
+                onChange={(nextChecked) => {
+                  if (!nextChecked) {
+                    resetAllFields();
+                  }
+                  setAutoClaimPOAP(nextChecked);
+                }}
+                label="Auto Claim"
+              />
+            </AutoClaimWrapper>
           </SuccessBody>
         </motion.div>
       )}

@@ -17,6 +17,10 @@ import { isAddressOrEns } from 'utils';
 import { ClaimModalState, ClaimPOAPModal } from '../components/ClaimPOAPModal';
 import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
 
+const eventUrlToThemeMapping = {
+  ['daotokyo-tokyo-23']: NimiThemeType.RAAVE,
+};
+
 /**
  * Renders any valid ENS name nimi page on the path /:nimiUsername.
  * Example: https://nimi.io/dvve.eth will attempt to render the Nimi page for the ENS name dvve.eth
@@ -29,7 +33,7 @@ export default function NimiPage() {
   const [autoClaimPOAPRecentReceiver, setAutoClaimPOAPRecentReciever] = useAtom(autoClaimPOAPRecentReceiverAtom);
   // Hydrate the local state with the recent receiver address
   const [poapReciever, setPoapReciever] = useState(
-    isAddressOrEns(autoClaimPOAPRecentReceiver) ? autoClaimPOAPRecentReceiver : ''
+    isAddressOrEns(autoClaimPOAPRecentReceiver) && autoClaimPOAP ? autoClaimPOAPRecentReceiver : ''
   );
   const debouncedPOAPReciever = useDebounce(poapReciever, 500);
 
@@ -40,6 +44,7 @@ export default function NimiPage() {
   // Retrieve the IYK reference from the URL and fetch its data
   const [searchParams] = useSearchParams();
   const iykRef = searchParams.get('iykRef');
+  const event = searchParams.get('event');
   const { data: refData, isFetching: isRefDataLoading } = useIYKRefQuery(iykRef);
 
   // Retrieve the POAP event data and check if the user has already claimed the POAP
@@ -50,7 +55,7 @@ export default function NimiPage() {
   const { data: initialNimi, isGenerated } = useInitialtNimiData({
     ensName: ensName!,
     account: AddressZero,
-    injectedTheme: poapEvent?.theme,
+    injectedTheme: event && eventUrlToThemeMapping[event],
   });
 
   const {
@@ -102,37 +107,42 @@ export default function NimiPage() {
 
     return;
   };
-
-  // On first render, attempt to claim the POAP if the user has auto claim enabled
   useEffect(() => {
-    // Wait for the data to be fetched
-    // Component is already mounted
-    if (isRefDataLoading === true || isMounted === true || isUserHasPOAPLoading === true) return;
-    // POAP already claimed
-    if (userHasPOAPData && userHasPOAPData?.owner) {
-      setIsMounted(true);
-      setClaimStep(ClaimModalState.CLAIMED);
-      return;
-    }
-    // User has a valid ref, auto claim is enabled
-    if (isAddressOrEns(autoClaimPOAPRecentReceiver) && autoClaimPOAP === true && refData?.isValidRef === true) {
-      claimHandler().finally(() => setIsMounted(true));
-    } else {
-      setIsMounted(true);
-    }
-  }, [isMounted, autoClaimPOAP, refData, isRefDataLoading, isUserHasPOAPLoading, userHasPOAPData]);
+    // On first render, attempt to claim the POAP if the user has auto claim enabled
+    const attemptClaim = async () => {
+      if (isRefDataLoading || isMounted || isUserHasPOAPLoading) return;
+      if (userHasPOAPData && userHasPOAPData?.owner) {
+        setIsMounted(true);
+        setClaimStep(ClaimModalState.CLAIMED);
+        return;
+      }
+      if (isAddressOrEns(autoClaimPOAPRecentReceiver) && autoClaimPOAP && refData?.isValidRef) {
+        await claimHandler();
+        setIsMounted(true);
+      }
+    };
+
+    attemptClaim();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    isMounted,
+    autoClaimPOAP,
+    refData,
+    isRefDataLoading,
+    isUserHasPOAPLoading,
+    userHasPOAPData,
+    autoClaimPOAPRecentReceiver,
+  ]);
 
   const resetAllFields = () => {
     setClaimStep(ClaimModalState.INITIAL);
     setPoapReciever('');
     setIsClaimModalOpen(true);
   };
-  console.log('isRefDataLoading', isRefDataLoading);
-  console.log('isPoapEventLoading', isPoapEventLoading);
 
   return (
     <AnimatePresence initial={false}>
-      {!initialNimi || isRefDataLoading || isPoapEventLoading ? (
+      {!initialNimi || isRefDataLoading || isPoapEventLoading || (isUserHasPOAPLoading && !isMounted) ? (
         <OpacityMotion key="nimi-page-loader">
           <LoaderWrapper $fullPage={true}>
             <Loader />

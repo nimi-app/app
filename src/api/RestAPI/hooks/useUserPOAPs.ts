@@ -1,4 +1,4 @@
-import { NimiThemeType, POAPEvent } from '@nimi.io/card';
+import { POAPEvent } from '@nimi.io/card';
 import { createPOAPClient, fetchUserPOAPs } from '@nimi.io/card/api';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,10 +13,6 @@ export function useUserPOAPs(account?: string) {
 
   return useQuery(['fetchUserPoaps', account], getPoapsFromUser);
 }
-
-const eventUrlToThemeMapping = {
-  ['https://nimi.io/']: NimiThemeType.RAAVE,
-};
 
 /**
  * Fetches POAP event data
@@ -36,14 +32,10 @@ export function usePOAPEventQuery(eventId?: string) {
     enabled: !!eventId,
     select: (data) => {
       if (data) {
-        const { image_url, event_url, expiry_date } = data;
-        const theme = eventUrlToThemeMapping[event_url];
-        const isExpired = new Date(expiry_date).getTime() < new Date().getTime();
+        const { image_url } = data;
 
         return {
           image_url,
-          theme,
-          isExpired,
         };
       } else return undefined;
     },

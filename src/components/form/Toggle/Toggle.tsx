@@ -16,8 +16,8 @@ export function Toggle({ id, checked, label, onChange }: ToggleProps) {
     <OutterWrapper>
       <Switch htmlFor={id}>
         <input id={id} checked={checked} onChange={(e) => onChange(e.target.checked)} type="checkbox" />
-        <div className="slider round"></div>
-        {label ? <div>{label}</div> : null}
+        <div className="slider round" />
+        {label ? <StyledLabel>{label}</StyledLabel> : null}
       </Switch>
     </OutterWrapper>
   );
@@ -29,6 +29,9 @@ const OutterWrapper = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
+`;
+const StyledLabel = styled.div`
+  color: #c3cad2;
 `;
 
 const Switch = styled.label`

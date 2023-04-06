@@ -16,6 +16,7 @@ interface IYKRefStruct {
       id: number;
       otp: string;
       poapEventId: string;
+      status: 'active' | 'expired' | 'pending-approval' | 'future' | 'rejected';
     }
   ];
 }
