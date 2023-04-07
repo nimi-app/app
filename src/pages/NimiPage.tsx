@@ -63,7 +63,7 @@ export default function NimiPage() {
     error: userHasPOAPError,
     data: userHasPOAPData,
   } = useUserHasPOAPQuery({
-    eventId: refData?.poapEvents[0].poapEventId,
+    eventId: refData?.poapEvents[0]?.poapEventId,
     account: debouncedPOAPReciever,
     enabled: !!debouncedPOAPReciever,
   });
