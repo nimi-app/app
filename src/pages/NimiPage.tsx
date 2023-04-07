@@ -48,7 +48,7 @@ export default function NimiPage() {
   const { data: refData, isFetching: isRefDataLoading } = useIYKRefQuery(iykRef);
 
   // Retrieve the POAP event data and check if the user has already claimed the POAP
-  const { data: poapEvent, isFetching: isPoapEventLoading } = usePOAPEventQuery(refData?.poapEvents[0].poapEventId);
+  const { data: poapEvent, isFetching: isPoapEventLoading } = usePOAPEventQuery(refData?.poapEvents?.[0]?.poapEventId);
   console.log('poapEvent', poapEvent);
 
   // Fetch the Nimi data for the ENS name
