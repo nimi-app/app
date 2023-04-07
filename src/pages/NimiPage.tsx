@@ -46,9 +46,10 @@ export default function NimiPage() {
   const iykRef = searchParams.get('iykRef');
   const event = searchParams.get('event');
   const { data: refData, isFetching: isRefDataLoading } = useIYKRefQuery(iykRef);
+  const poapEventId = refData?.poapEvents?.[0]?.poapEventId;
 
   // Retrieve the POAP event data and check if the user has already claimed the POAP
-  const { data: poapEvent, isFetching: isPoapEventLoading } = usePOAPEventQuery(refData?.poapEvents?.[0]?.poapEventId);
+  const { data: poapEvent, isFetching: isPoapEventLoading } = usePOAPEventQuery(poapEventId);
   console.log('poapEvent', poapEvent);
 
   // Fetch the Nimi data for the ENS name
@@ -63,7 +64,7 @@ export default function NimiPage() {
     error: userHasPOAPError,
     data: userHasPOAPData,
   } = useUserHasPOAPQuery({
-    eventId: refData?.poapEvents[0].poapEventId,
+    eventId: poapEventId,
     account: debouncedPOAPReciever,
     enabled: !!debouncedPOAPReciever,
   });
@@ -89,7 +90,7 @@ export default function NimiPage() {
       const mintResponse = await mintIYKPOAPToken({
         otpCode: refData?.poapEvents[0].otp,
         recipient: debouncedPOAPReciever,
-        poapEventId: refData?.poapEvents[0].poapEventId,
+        poapEventId: poapEventId!,
       });
       console.log({ mintResponse });
 
