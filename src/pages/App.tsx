@@ -31,7 +31,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/:nimiUsername',
-    errorElement: <ErrorBoundary />,
+    // errorElement: <ErrorBoundary />,
     element: <NimiPage />,
   },
 ]);

@@ -117,8 +117,24 @@ export default function NimiPage() {
         setClaimStep(ClaimModalState.CLAIMED);
         return;
       }
-      if (isAddressOrEns(autoClaimPOAPRecentReceiver) && autoClaimPOAP && refData?.isValidRef) {
+      if (
+        isAddressOrEns(autoClaimPOAPRecentReceiver) &&
+        autoClaimPOAP &&
+        refData?.isValidRef &&
+        refData?.poapEvents[0]?.status === 'active'
+      ) {
         await claimHandler();
+        setIsMounted(true);
+      }
+      console.log('refData?.poapEvents[0]?.status', refData?.poapEvents[0]?.status);
+      if (refData?.poapEvents[0]?.status !== 'active') {
+        if (refData?.poapEvents[0]?.status === 'expired') {
+          setClaimStep(ClaimModalState.EXPIRED);
+        } else if (refData?.poapEvents[0]?.status === 'future') {
+          setClaimStep(ClaimModalState.FUTURE);
+        } else if (refData?.poapEvents[0]?.status === 'pending-approval') {
+          setClaimStep(ClaimModalState.PENDING);
+        }
         setIsMounted(true);
       }
     };

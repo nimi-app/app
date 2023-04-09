@@ -8,6 +8,7 @@ import { isAddressOrEns } from 'utils';
 
 import claimErrorLottie from './claimErrorLottie.json';
 import { ClaimPOAPButton } from './ClaimPOAPButton';
+import sadFaceLottie from './sad-face.json';
 import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 import { ReactComponent as Checkmark } from '../../assets/svg/checkmark.svg';
 import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
@@ -21,6 +22,9 @@ export enum ClaimModalState {
   CLAIMED,
   ERROR,
   LOADING,
+  FUTURE,
+  EXPIRED,
+  PENDING,
 }
 
 type ClaimPOAPModalProps = {
@@ -240,6 +244,49 @@ export function ClaimPOAPModal({
           </Footer>
         </motion.div>
       )}
+      {claimStep === ClaimModalState.EXPIRED && (
+        <motion.div>
+          <Header>
+            <div></div>
+            <CloseIcon onClick={closeModal}>
+              <CloseSvg />
+            </CloseIcon>
+          </Header>
+          <SuccessBody
+            transition={{ duration: 0.3 }}
+            variants={bodyVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+          >
+            <LottieStyle>
+              <Lottie
+                animationData={sadFaceLottie}
+                loop={false}
+                rendererSettings={{ preserveAspectRatio: 'xMidYMid slice' }}
+              />
+            </LottieStyle>
+
+            <Heading style={{ marginBottom: '10px', marginTop: '16px;' }} dark={dark}>
+              POAP Event Ended
+            </Heading>
+            <SucessDescription dark={dark}>
+              User run out of POAPs or Event ended. The owner of the card can add a new POAP event.{' '}
+            </SucessDescription>
+          </SuccessBody>
+          <Footer>
+            <ClaimPOAPButton
+              text={'Add a POAP'}
+              onClick={() =>
+                window.open(
+                  'https://iyk.notion.site/IYK-Devices-How-to-Upload-POAPs-to-Your-Device-14f83269daea49a5836b80326a6fa761'
+                )
+              }
+            />
+          </Footer>
+        </motion.div>
+      )}
+      {claimStep === ClaimModalState.FUTURE && <motion.div>Future</motion.div>}
     </Modal>
   );
 }
@@ -249,7 +296,10 @@ type ModalProps = {
 };
 
 const AutoClaimWrapper = styled.div``;
-
+const LottieStyle = styled.div`
+  width: 94px;
+  height: 94px;
+`;
 const Modal = styled(motion.div)<ModalProps>`
   width: 348px;
   z-index: 2;

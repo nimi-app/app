@@ -34,6 +34,14 @@ export function useIYKRefQuery(ref: string | null) {
 
   return useQuery(['fetchIYKRefData', ref], getIykData, {
     retry: false,
+    select: (data) => {
+      if (data) {
+        const { isValidRef, linkedToken, poapEvents } = data;
+        poapEvents[0].status = 'expired';
+        console.log('poapEvents', poapEvents);
+        return { isValidRef, linkedToken, poapEvents };
+      } else return undefined;
+    },
     enabled: !!ref,
   });
 }
