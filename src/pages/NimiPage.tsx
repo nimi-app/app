@@ -161,7 +161,7 @@ export default function NimiPage() {
 
   return (
     <AnimatePresence initial={false}>
-      {!initialNimi || isRefDataLoading || isPoapEventLoading || (isUserHasPOAPLoading && !isMounted) ? (
+      {!initialNimi || isRefDataLoading || isPoapEventLoading ? (
         <OpacityMotion key="nimi-page-loader">
           <LoaderWrapper $fullPage={true}>
             <Loader />
