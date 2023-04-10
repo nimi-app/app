@@ -44,10 +44,10 @@ interface CountdownProps {
 }
 export const Countdown = ({ targetDate, dark }: CountdownProps) => {
   const [countdown, setCountdown] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
+    days: '00',
+    hours: '00',
+    minutes: '00',
+    seconds: '00',
   });
 
   useEffect(() => {
@@ -68,10 +68,10 @@ export const Countdown = ({ targetDate, dark }: CountdownProps) => {
     const days = Math.floor(hours / 24);
 
     return {
-      days,
-      hours: hours % 24,
-      minutes: minutes % 60,
-      seconds: seconds % 60,
+      days: String(days).padStart(2, '0'),
+      hours: String(hours % 24).padStart(2, '0'),
+      minutes: String(minutes % 60).padStart(2, '0'),
+      seconds: String(seconds % 60).padStart(2, '0'),
     };
   };
 
@@ -79,19 +79,19 @@ export const Countdown = ({ targetDate, dark }: CountdownProps) => {
     <CountdownWrapper>
       <CountdownItem>
         <CountdownValue>{countdown.days}</CountdownValue>
-        <CountdownLabel dark={dark}>Days</CountdownLabel>
+        <CountdownLabel dark={dark}>DAYS</CountdownLabel>
       </CountdownItem>
       <CountdownItem>
         <CountdownValue>{countdown.hours}</CountdownValue>
-        <CountdownLabel dark={dark}>Hours</CountdownLabel>
+        <CountdownLabel dark={dark}>HOURS</CountdownLabel>
       </CountdownItem>
       <CountdownItem>
         <CountdownValue>{countdown.minutes}</CountdownValue>
-        <CountdownLabel dark={dark}>Minutes</CountdownLabel>
+        <CountdownLabel dark={dark}>MIN</CountdownLabel>
       </CountdownItem>
       <CountdownItem>
         <CountdownValue>{countdown.seconds}</CountdownValue>
-        <CountdownLabel dark={dark}>Seconds</CountdownLabel>
+        <CountdownLabel dark={dark}>SEC</CountdownLabel>
       </CountdownItem>
     </CountdownWrapper>
   );

@@ -131,7 +131,7 @@ export default function NimiPage() {
         if (refData?.poapEvents[0]?.status === 'expired') {
           setClaimStep(ClaimModalState.EXPIRED);
         } else if (refData?.poapEvents[0]?.status === 'future') {
-          setClaimStep(ClaimModalState.INITIAL);
+          setClaimStep(ClaimModalState.FUTURE);
         } else if (refData?.poapEvents[0]?.status === 'pending-approval') {
           setClaimStep(ClaimModalState.PENDING);
         }
