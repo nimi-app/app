@@ -39,7 +39,7 @@ export default function NimiPage() {
 
   // Local state for the claim modal
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(true);
-  const [claimStep, setClaimStep] = useState(ClaimModalState.CLAIMING);
+  const [claimStep, setClaimStep] = useState(ClaimModalState.INITIAL);
 
   // Retrieve the IYK reference from the URL and fetch its data
   const [searchParams] = useSearchParams();
@@ -126,16 +126,18 @@ export default function NimiPage() {
         await claimHandler();
         setIsMounted(true);
       }
-      console.log('refData?.poapEvents[0]?.status', refData?.poapEvents[0]?.status);
+
       if (refData?.poapEvents[0]?.status !== 'active') {
         if (refData?.poapEvents[0]?.status === 'expired') {
           setClaimStep(ClaimModalState.EXPIRED);
+          setIsMounted(true);
         } else if (refData?.poapEvents[0]?.status === 'future') {
           setClaimStep(ClaimModalState.FUTURE);
+          setIsMounted(true);
         } else if (refData?.poapEvents[0]?.status === 'pending-approval') {
           setClaimStep(ClaimModalState.PENDING);
+          setIsMounted(true);
         }
-        setIsMounted(true);
       }
     };
 

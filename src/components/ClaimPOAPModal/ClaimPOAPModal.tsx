@@ -297,7 +297,7 @@ export function ClaimPOAPModal({
             <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
               POAP Event starts in
             </Heading>
-            {poapEvent?.end_date && <Countdown dark={dark} targetDate={poapEvent?.end_date} />}
+            {poapEvent?.end_date && <Countdown dark={dark} targetDate={poapEvent?.start_date} />}
           </SuccessBody>
         </motion.div>
       )}

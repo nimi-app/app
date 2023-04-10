@@ -37,7 +37,7 @@ export function useIYKRefQuery(ref: string | null) {
     select: (data) => {
       if (data) {
         const { isValidRef, linkedToken, poapEvents } = data;
-        poapEvents[0].status = 'future';
+        // poapEvents[0].status = 'future';
         // console.log('poapEvents', poapEvents);
         return { isValidRef, linkedToken, poapEvents };
       } else return undefined;
