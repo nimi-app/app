@@ -55,21 +55,17 @@ export function useInitialtNimiData({
       links: [],
       widgets: [],
     };
-    console.log('isDeployedSuccess', isDeployedSuccess);
-    console.log('deployedNimi', deployedNimi?.nimi);
-    console.log('isLaoding', isDepoyedLoading);
+    console.log('deployedNimi', deployedNimi?.nimi.theme.type);
     if (isDeployedSuccess && deployedNimi?.nimi && !isDepoyedLoading) {
       nimi = deployedNimi.nimi;
-      console.log('deployed NImi', deployedNimi.nimi);
     } else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) {
-      console.log('elleleleelelle');
       if (injectedTheme) generatedNimi.theme = defaultTheme;
       nimi = generatedNimi;
     }
 
     if (!(isDepoyedLoading || isGeneratedFetching)) {
-      console.log('nimi', nimi);
       if (!nimi.theme) nimi.theme = defaultTheme;
+      console.log('final', nimi.theme.type);
       return nimi;
     }
 
