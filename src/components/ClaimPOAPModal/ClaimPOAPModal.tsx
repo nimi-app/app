@@ -1,4 +1,6 @@
+import { POAPEvent } from '@nimi.io/card';
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
+import { Countdown } from 'components/Countdown';
 import { Toggle } from 'components/form/Toggle';
 import { motion } from 'framer-motion';
 import Lottie from 'lottie-react';
@@ -8,6 +10,7 @@ import { isAddressOrEns } from 'utils';
 
 import claimErrorLottie from './claimErrorLottie.json';
 import { ClaimPOAPButton } from './ClaimPOAPButton';
+import sadFaceLottie from './sad-face.json';
 import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 import { ReactComponent as Checkmark } from '../../assets/svg/checkmark.svg';
 import { ReactComponent as CloseSvg } from '../../assets/svg/close-icon.svg';
@@ -21,11 +24,14 @@ export enum ClaimModalState {
   CLAIMED,
   ERROR,
   LOADING,
+  FUTURE,
+  EXPIRED,
+  PENDING,
 }
 
 type ClaimPOAPModalProps = {
   dark?: boolean;
-
+  poapEvent?: POAPEvent;
   name?: string;
   onClaimClick: () => void;
   autoClaimPOAP: boolean;
@@ -56,6 +62,7 @@ const bodyVariants = {
 export function ClaimPOAPModal({
   dark = true,
   name = 'mialn',
+  poapEvent,
   closeModal,
   onClaimClick,
   autoClaimPOAP,
@@ -66,6 +73,7 @@ export function ClaimPOAPModal({
   poapImageURL,
   resetAllFields,
 }: ClaimPOAPModalProps) {
+  console.log('poapEvent?.start_date', poapEvent?.start_date);
   const [showBody, setShowBody] = useState(false);
 
   const isRecipientValid = useMemo(() => {
@@ -80,9 +88,9 @@ export function ClaimPOAPModal({
         <AnimatedSection>
           <Header>
             <Heading dark={dark}>You have met {name}</Heading>
-            <CloseIcon onClick={closeModal}>
+            <ArowDownIcon onClick={closeModal}>
               <CloseSvg />
-            </CloseIcon>
+            </ArowDownIcon>
           </Header>
           <Body>
             <Description dark={dark}>Claim POAP that proves you met {name}</Description>
@@ -121,14 +129,14 @@ export function ClaimPOAPModal({
         <AnimatedSection>
           <Header>
             <Heading dark={dark}>Claiming...</Heading>
-            <CloseIcon
+            <ArowDownIcon
               variants={iconVariants}
               initial="closed"
               animate={showBody ? 'open' : 'closed'}
               onClick={() => setShowBody(!showBody)}
             >
               <ArrowDown />
-            </CloseIcon>
+            </ArowDownIcon>
           </Header>
           {showBody && (
             <Body
@@ -149,12 +157,9 @@ export function ClaimPOAPModal({
       )}
       {claimStep === ClaimModalState.SUCCESS && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <Header>
-            <div></div>
-            <CloseIcon onClick={closeModal}>
-              <CloseSvg />
-            </CloseIcon>
-          </Header>
+          <CloseIcon onClick={closeModal}>
+            <CloseSvg />
+          </CloseIcon>
           <SuccessBody
             transition={{ duration: 0.3 }}
             variants={bodyVariants}
@@ -172,12 +177,9 @@ export function ClaimPOAPModal({
       )}
       {claimStep === ClaimModalState.CLAIMED && (
         <motion.div>
-          <Header>
-            <div></div>
-            <CloseIcon onClick={closeModal}>
-              <CloseSvg />
-            </CloseIcon>
-          </Header>
+          <CloseIcon onClick={closeModal}>
+            <CloseSvg />
+          </CloseIcon>
           <SuccessBody
             transition={{ duration: 0.3 }}
             variants={bodyVariants}
@@ -210,12 +212,10 @@ export function ClaimPOAPModal({
       )}
       {claimStep === ClaimModalState.ERROR && (
         <motion.div>
-          <Header>
-            <div></div>
-            <CloseIcon onClick={closeModal}>
-              <CloseSvg />
-            </CloseIcon>
-          </Header>
+          <CloseIcon onClick={closeModal}>
+            <CloseSvg />
+          </CloseIcon>
+
           <SuccessBody
             transition={{ duration: 0.3 }}
             variants={bodyVariants}
@@ -240,6 +240,66 @@ export function ClaimPOAPModal({
           </Footer>
         </motion.div>
       )}
+      {claimStep === ClaimModalState.EXPIRED && (
+        <motion.div>
+          <CloseIcon onClick={closeModal}>
+            <CloseSvg />
+          </CloseIcon>
+
+          <SuccessBody
+            transition={{ duration: 0.3 }}
+            variants={bodyVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+          >
+            <LottieStyle>
+              <Lottie
+                animationData={sadFaceLottie}
+                loop={true}
+                rendererSettings={{ preserveAspectRatio: 'xMidYMid slice' }}
+              />
+            </LottieStyle>
+
+            <Heading style={{ marginBottom: '10px', marginTop: '16px;' }} dark={dark}>
+              POAP Event Ended
+            </Heading>
+            <SucessDescription marginBottom="24px" dark={dark}>
+              User run out of POAPs or Event ended. The owner of the card can add a new POAP event.{' '}
+            </SucessDescription>
+          </SuccessBody>
+          <Footer>
+            <ClaimPOAPButton
+              text={'Add a POAP'}
+              onClick={() =>
+                window.open(
+                  'https://iyk.notion.site/IYK-Devices-How-to-Upload-POAPs-to-Your-Device-14f83269daea49a5836b80326a6fa761'
+                )
+              }
+            />
+          </Footer>
+        </motion.div>
+      )}
+      {claimStep === ClaimModalState.FUTURE && (
+        <motion.div>
+          <CloseIcon onClick={closeModal}>
+            <CloseSvg />
+          </CloseIcon>
+          <SuccessBody
+            transition={{ duration: 0.3 }}
+            variants={bodyVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+          >
+            <img width={'124px'} height={'124px'} src={poapImageURL} />
+            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
+              POAP Event starts in
+            </Heading>
+            {poapEvent?.end_date && <Countdown dark={dark} targetDate={poapEvent?.start_date} />}
+          </SuccessBody>
+        </motion.div>
+      )}
     </Modal>
   );
 }
@@ -249,7 +309,21 @@ type ModalProps = {
 };
 
 const AutoClaimWrapper = styled.div``;
-
+const LottieStyle = styled.div`
+  width: 94px;
+  height: 94px;
+  margin-bottom: 16px;
+`;
+const ArowDownIcon = styled(motion.div)`
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+`;
 const Modal = styled(motion.div)<ModalProps>`
   width: 348px;
   z-index: 2;
@@ -333,16 +407,15 @@ const Heading = styled.h1<ModalProps>`
   `}
 `;
 
-const CloseIcon = styled(motion.button)`
-  width: 20px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+const CloseIcon = styled.div`
+  width: 25px;
+  height: 25px;
 
+  position: absolute;
+  right: 17px;
+  cursor: pointer;
+  top: 14px;
+  z-index: 100;
   &:hover .svg-path {
     fill: #9ca3afb8;
   }
@@ -360,9 +433,9 @@ const Description = styled.h2<ModalProps>`
   ${({ dark }) => `color: ${dark ? '#C3CAD2' : '#8a97aa'};`}
 `;
 
-const SucessDescription = styled(Description)`
+const SucessDescription = styled(Description)<{ marginBottom?: string }>`
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: ${({ marginBottom }) => (marginBottom ? marginBottom : '10px')};
   line-height: 20px;
 `;
 

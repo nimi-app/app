@@ -31,13 +31,8 @@ export function usePOAPEventQuery(eventId?: string) {
   return useQuery(['fetchPOAPEvent', eventId], getPoapsFromUser, {
     enabled: !!eventId,
     select: (data) => {
-      if (data) {
-        const { image_url } = data;
-
-        return {
-          image_url,
-        };
-      } else return undefined;
+      if (data) return data;
+      else return undefined;
     },
   });
 }
