@@ -43,8 +43,6 @@ export function useInitialtNimiData({
   const data = useEnsAddress({
     name: ensName,
   });
-  console.log('wagmiEns', data);
-  console.log('ensName', data);
 
   const nimiObject = useMemo(() => {
     let nimi: Nimi = {
@@ -55,20 +53,15 @@ export function useInitialtNimiData({
       links: [],
       widgets: [],
     };
-    console.log('isDeployedSuccess', isDeployedSuccess);
-    console.log('deployedNimi', deployedNimi?.nimi);
-    console.log('isLaoding', isDepoyedLoading);
+
     if (isDeployedSuccess && deployedNimi?.nimi && !isDepoyedLoading) {
       nimi = deployedNimi.nimi;
-      console.log('deployed NImi', deployedNimi.nimi);
     } else if (isGeneratedSuccess && generatedNimi && !isGeneratedFetching) {
-      console.log('elleleleelelle');
       if (injectedTheme) generatedNimi.theme = defaultTheme;
       nimi = generatedNimi;
     }
 
     if (!(isDepoyedLoading || isGeneratedFetching)) {
-      console.log('nimi', nimi);
       if (!nimi.theme) nimi.theme = defaultTheme;
       return nimi;
     }
