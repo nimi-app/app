@@ -180,7 +180,6 @@ export function ClaimPOAPModal({
           <CloseIcon onClick={closeModal}>
             <CloseSvg />
           </CloseIcon>
-
           <SuccessBody
             transition={{ duration: 0.3 }}
             variants={bodyVariants}
@@ -408,15 +407,15 @@ const Heading = styled.h1<ModalProps>`
   `}
 `;
 
-const CloseIcon = styled(motion.button)`
-  /* width: 20px;
-  height: 20px; */
-  background: none;
-  border: none;
+const CloseIcon = styled.div`
+  width: 25px;
+  height: 25px;
+
   position: absolute;
   right: 17px;
+  cursor: pointer;
   top: 14px;
-
+  z-index: 100;
   &:hover .svg-path {
     fill: #9ca3afb8;
   }
