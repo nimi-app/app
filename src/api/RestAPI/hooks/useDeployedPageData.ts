@@ -26,13 +26,13 @@ export function useDeployedPageData(ensName: string) {
       ens: ensName,
     };
 
-    const { data } = await getNimiAPIClient().get<{ data: DeployedNimiPageType[] }>(`/nimi/by`, { params });
+    const { data } = await getNimiAPIClient().get<{ data: DeployedNimiPageType }>(`/nimi/by`, { params });
     return data;
   };
 
   return useQuery(['fetchDeployedNimiData', ensName, chainId], getDeployedPageData, {
     select: ({ data }) => {
-      if (data.length) return data[0];
+      if (data.nimi) return data;
       else return undefined;
     },
     retry: false,

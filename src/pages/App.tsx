@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { CreateNimiPage } from './CreateNimiPage/CreateNimiPage';
 import DomainsHomePage from './DomainsHome';
-import { ErrorBoundary } from './ErrorBoundry';
 import { Landing } from './Landing/Landing';
 import NimiPage from './NimiPage';
 import { useRainbow } from '../hooks/useRainbow';
@@ -31,7 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/:nimiUsername',
-    errorElement: <ErrorBoundary />,
+    // errorElement: <ErrorBoundary />,
     element: <NimiPage />,
   },
 ]);

@@ -61,10 +61,10 @@ export const themes: Record<NimiCuratedTheme, ThemeAssets> = {
 
     preview: ethTlvPreview,
   },
-  // [NimiThemeType.INFINITE]: {
-  //   type: NimiThemeType.RAAVE,
-  //   logoImage: raaveLogoImage,
-  //   logoText: raaveLogoText,
-  //   preview: devconPreview,
-  // },
+  [NimiThemeType.DAO_TOKYO_2023]: {
+    type: NimiThemeType.RAAVE,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
+    preview: devconPreview,
+  },
 };
