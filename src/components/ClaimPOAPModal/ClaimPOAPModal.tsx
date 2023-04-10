@@ -1,4 +1,6 @@
+import { POAPEvent } from '@nimi.io/card';
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
+import { Countdown } from 'components/Countdown';
 import { Toggle } from 'components/form/Toggle';
 import { motion } from 'framer-motion';
 import Lottie from 'lottie-react';
@@ -29,7 +31,7 @@ export enum ClaimModalState {
 
 type ClaimPOAPModalProps = {
   dark?: boolean;
-
+  poapEvent?: POAPEvent;
   name?: string;
   onClaimClick: () => void;
   autoClaimPOAP: boolean;
@@ -60,6 +62,7 @@ const bodyVariants = {
 export function ClaimPOAPModal({
   dark = true,
   name = 'mialn',
+  poapEvent,
   closeModal,
   onClaimClick,
   autoClaimPOAP,
@@ -70,6 +73,7 @@ export function ClaimPOAPModal({
   poapImageURL,
   resetAllFields,
 }: ClaimPOAPModalProps) {
+  console.log('poapEvent?.start_date', poapEvent?.start_date);
   const [showBody, setShowBody] = useState(false);
 
   const isRecipientValid = useMemo(() => {
@@ -286,7 +290,29 @@ export function ClaimPOAPModal({
           </Footer>
         </motion.div>
       )}
-      {claimStep === ClaimModalState.FUTURE && <motion.div>Future</motion.div>}
+      {claimStep === ClaimModalState.FUTURE && (
+        <motion.div>
+          <Header>
+            <div></div>
+            <CloseIcon onClick={closeModal}>
+              <CloseSvg />
+            </CloseIcon>
+          </Header>
+          <SuccessBody
+            transition={{ duration: 0.3 }}
+            variants={bodyVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+          >
+            <img width={'124px'} height={'124px'} src={poapImageURL} />
+            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
+              POAP Event starts in
+            </Heading>
+            {poapEvent?.end_date && <Countdown dark={dark} targetDate={poapEvent?.end_date} />}
+          </SuccessBody>
+        </motion.div>
+      )}
     </Modal>
   );
 }

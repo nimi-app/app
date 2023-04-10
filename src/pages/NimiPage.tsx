@@ -18,7 +18,7 @@ import { ClaimModalState, ClaimPOAPModal } from '../components/ClaimPOAPModal';
 import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
 
 const eventUrlToThemeMapping = {
-  ['daotokyo-tokyo-23']: NimiThemeType.RAAVE,
+  ['daotokyo-tokyo-2023']: NimiThemeType.RAAVE,
 };
 
 /**
@@ -169,6 +169,7 @@ export default function NimiPage() {
         <OpacityMotion key="nimi-page-content">
           {isClaimModalOpen && refData?.isValidRef ? (
             <ClaimPOAPModal
+              poapEvent={poapEvent}
               resetAllFields={resetAllFields}
               poapImageURL={poapEvent?.image_url}
               setReciever={setPoapReciever}
@@ -176,7 +177,7 @@ export default function NimiPage() {
               onClaimClick={claimHandler}
               name={ensName}
               claimStep={claimStep}
-              dark={initialNimi.theme.type === NimiThemeType.RAAVE}
+              dark={false}
               closeModal={() => setIsClaimModalOpen(false)}
               autoClaimPOAP={autoClaimPOAP}
               setAutoClaimPOAP={setAutoClaimPOAP}
