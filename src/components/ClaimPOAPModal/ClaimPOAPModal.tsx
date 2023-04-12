@@ -194,19 +194,21 @@ export function ClaimPOAPModal({
             <SucessDescription dark={dark}>
               This POAP was already claimed by <span style={{ fontWeight: '700' }}>{reciever}</span>
             </SucessDescription>
-            <AutoClaimWrapper>
-              <Toggle
-                id="autoClaimPOAP"
-                checked={autoClaimPOAP}
-                onChange={(nextChecked) => {
-                  if (!nextChecked) {
-                    resetAllFields();
-                  }
-                  setAutoClaimPOAP(nextChecked);
-                }}
-                label="Auto Claim"
-              />
-            </AutoClaimWrapper>
+            {autoClaimPOAP && (
+              <AutoClaimWrapper>
+                <Toggle
+                  id="autoClaimPOAP"
+                  checked={autoClaimPOAP}
+                  onChange={(nextChecked) => {
+                    if (!nextChecked) {
+                      resetAllFields();
+                    }
+                    setAutoClaimPOAP(nextChecked);
+                  }}
+                  label="Auto Claim"
+                />
+              </AutoClaimWrapper>
+            )}
           </SuccessBody>
         </motion.div>
       )}
