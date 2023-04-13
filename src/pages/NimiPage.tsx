@@ -169,7 +169,7 @@ export default function NimiPage() {
         </OpacityMotion>
       ) : (
         <OpacityMotion key="nimi-page-content">
-          {isClaimModalOpen && (refData?.isValidRef || refData?.poapEvents?.[0]) ? (
+          {isClaimModalOpen && refData?.isValidRef ? (
             <ClaimPOAPModal
               poapEvent={poapEvent}
               resetAllFields={resetAllFields}
