@@ -29,7 +29,7 @@ const themeToPoapMapping: { theme: NimiCuratedTheme; eventId: number[] }[] = [
  * @returns
  */
 export function getAvailableThemesByPOAPs(userPOAPList?: POAPToken[]) {
-  const themes: NimiCuratedTheme[] = [NimiThemeType.NIMI];
+  const themes: NimiCuratedTheme[] = [NimiThemeType.DAO_TOKYO_2023];
 
   if (!userPOAPList) return themes;
 
