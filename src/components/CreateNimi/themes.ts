@@ -5,7 +5,7 @@ import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
 import daivinityPreview from '../../assets/theme/daivinity-preview.png';
 import tokyoLogo from '../../assets/theme/daotokyo-logo.png';
 import tokyoPreview from '../../assets/theme/daotokyo-preview.png';
-import tokyoText from '../../assets/theme/daotokyo-text.png';
+import tokyoText from '../../assets/theme/daotokyo-text.svg';
 import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
 import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
 import devconPreview from '../../assets/theme/devcon-preview.png';
