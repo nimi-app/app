@@ -1,5 +1,6 @@
 import { Nimi } from '@nimi.io/card/types';
 import { useQuery } from '@tanstack/react-query';
+import { mainnet } from 'wagmi/chains';
 
 import { useRainbow } from '../../../hooks/useRainbow';
 import { getNimiAPIClient } from '../utils';
@@ -24,6 +25,7 @@ export function useDeployedPageData(ensName: string) {
   const getDeployedPageData = async () => {
     const params = {
       ens: ensName,
+      chainId: mainnet.id,
     };
 
     const { data } = await getNimiAPIClient().get<{ data: DeployedNimiPageType }>(`/nimi/by`, { params });
