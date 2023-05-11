@@ -1,6 +1,5 @@
 import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts';
 
-import { encodeContenthash, namehash as ensNameHash } from '@ensdomains/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Nimi, NimiImageType, NimiLinkType, NimiWidget, NimiWidgetType } from '@nimi.io/card/types';
 import { nimiValidator } from '@nimi.io/card/validators';
@@ -14,7 +13,8 @@ import { PoapField } from './partials/PoapField';
 import { BlockchainAddresses, FormItem, InnerWrapper, MainContent, PageSectionTitle } from './styled';
 import { themes } from './themes';
 import { usePublishNimiIPNS, useUpdateNimiIPNS } from '../../api/RestAPI/hooks/usePublishNimiIPNS';
-import { useENSPublicResolverContract } from '../../hooks/useENSPublicResolverContract';
+import { getContentHashStruct, useContenthash } from '../../hooks/useContenthash';
+import { useENSNameResolverContract } from '../../hooks/useENSNameResolverContract';
 import { useRainbow } from '../../hooks/useRainbow';
 import { setENSNameContentHash } from '../../hooks/useSetContentHash';
 import {
@@ -53,7 +53,6 @@ export interface CreateNimiProps {
 
 export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, nimiIPNSKey }: CreateNimiProps) {
   const [stepsCompleted, setStepsCompleted] = useState<PublishNimiPageStep[]>([]);
-
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
   const { modalOpened, ModalTypes, openModal, closeModal, showSpinner, hideSpinner } = useUserInterface();
   const { mutateAsync: publishNimiAsync } = usePublishNimiIPNS();
@@ -67,10 +66,8 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
   const { chainId } = useRainbow();
   const { t } = useTranslation('nimi');
   const { signMessageAsync } = useSignMessage();
-
-  const publicResolverContract = useENSPublicResolverContract();
-
-  debug({ initialNimi });
+  const { data: ensNameResolverContract } = useENSNameResolverContract(ensName, true);
+  const { data: currentContenthashData, refetch: refetchCurrentContenthash } = useContenthash(ensName);
 
   const useFormContext = useForm<Nimi>({
     resolver: yupResolver(nimiValidator),
@@ -117,62 +114,67 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
     setSetContentHashReceipt(undefined);
     openModal(ModalTypes.PUBLISH_NIMI);
 
+    if (!ensNameResolverContract) {
+      setPublishNimiError(new Error('No ENS name resolver contract'));
+      return;
+    }
+
     try {
-      if (!publicResolverContract) {
-        throw new Error('ENS Public Resolver contract is not available.');
-      }
+      const publishOrUpdateResult = {
+        cid: '',
+        ipns: '',
+      };
+
       // Updating a current Nimi IPNS record
       if (nimiIPNSKey) {
         debug(`Updating Nimi IPNS record ${nimiIPNSKey}`);
         const signature = await signMessageAsync({ message: JSON.stringify(nimi) });
-        const updateNimiResponse = await updateNimiAsync({
+        const { cid, ipns } = await updateNimiAsync({
           nimi,
           chainId: 1, // always mainnet
           signature,
         });
-        if (!updateNimiResponse || !updateNimiResponse.cid) {
+        if (!ipns || !cid) {
           throw new Error('No response from updateNimiAsync');
         }
-        setStepsCompleted((stepsCompleted) => [
-          ...stepsCompleted,
-          PublishNimiPageStep.BUNDLE_NIMI_PAGE,
-          PublishNimiPageStep.SET_CONTENT_HASH,
-        ]);
-        setPublishNimiResponseIpfsHash(updateNimiResponse.cid);
+        publishOrUpdateResult.cid = cid;
+        publishOrUpdateResult.ipns = ipns;
+      } else {
+        // Publishing a new Nimi IPNS record
+        const { cid, ipns } = await publishNimiAsync({
+          nimi,
+          chainId: chainId as number,
+        });
+
+        if (!ipns || !cid) {
+          throw new Error('No CID returned from publishNimiViaIPNS');
+        }
+        publishOrUpdateResult.cid = cid;
+        publishOrUpdateResult.ipns = ipns;
+      }
+
+      // At this point, the Nimi Page has been published to IPFS network and we have the IPNS record (or created)
+      setStepsCompleted((stepsCompleted) => [...stepsCompleted, PublishNimiPageStep.BUNDLE_NIMI_PAGE]);
+      setPublishNimiResponseIpfsHash(publishOrUpdateResult.cid);
+
+      // Get the current contenthash data
+      const nextContenthashData = getContentHashStruct(publishOrUpdateResult.ipns, 'ipns');
+      console.log({ currentContenthashData, nextContenthashData });
+
+      // If the current ENS content has is Nimi's IPNS record, we don't need to update it
+      if (currentContenthashData.contenthash === nextContenthashData.contenthash) {
         setSetContentHashReceipt({ status: 1 } as ContractReceipt);
-        setIsNimiPublished(true);
-        setIsPublishingNimi(false);
-        return;
-      }
-
-      // Publishing a new Nimi IPNS record
-      const { cid, ipns } = await publishNimiAsync({
-        nimi,
-        chainId: chainId as number,
-      });
-
-      if (!cid) {
-        throw new Error('No CID returned from publishNimiViaIPNS');
-      }
-
-      // Compare the current content hash with the new one
-      const currentContentHashEncoded = await publicResolverContract.contenthash(ensNameHash(ensName));
-      const contentHash = `ipns://${ipns}`;
-      const newContentHashEncoded = encodeContenthash(contentHash).encoded as unknown as string;
-
-      if (currentContentHashEncoded === newContentHashEncoded) {
+        setStepsCompleted((stepsCompleted) => [...stepsCompleted, PublishNimiPageStep.SET_CONTENT_HASH]);
         setIsNimiPublished(true);
         hideSpinner();
         return;
       }
 
-      setStepsCompleted([PublishNimiPageStep.BUNDLE_NIMI_PAGE]);
-      setPublishNimiResponseIpfsHash(cid);
-
+      // Set the contenthash on the ENS name
       const setContentHashTx = await setENSNameContentHash({
-        contract: publicResolverContract,
+        contract: ensNameResolverContract,
         name: nimi.ensName,
-        contentHash,
+        contentHashURI: nextContenthashData.contenthashURI as string,
       });
       setSetContentHashTransaction(setContentHashTx);
       // Wait for the transaction to be mined
@@ -180,10 +182,12 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
       setSetContentHashReceipt(setContentHashTxReceipt);
       setStepsCompleted((stepsCompleted) => [...stepsCompleted, PublishNimiPageStep.SET_CONTENT_HASH]);
       setIsNimiPublished(true);
-      openModal(ModalTypes.PUBLISH_NIMI);
     } catch (error) {
       debug(error);
       setPublishNimiError(error);
+    } finally {
+      // Always refetch the current contenthash data
+      refetchCurrentContenthash();
     }
   };
 
@@ -199,6 +203,8 @@ export function CreateNimi({ ensAddress, ensName, availableThemes, initialNimi, 
     eventTarget.style.height = 'inherit';
     eventTarget.style.height = `${eventTarget.scrollHeight}px`;
   };
+
+  debug({ publishNimiError, initialNimi, currentContenthashData });
 
   return (
     <FormProvider {...useFormContext}>

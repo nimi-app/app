@@ -65,11 +65,7 @@ export function PublishNimiModal({
   // If there is an error, show it
   // @todo: Improve error handling and show more specific errors in each step
   if (publishError) {
-    const errorMessage = publishError?.message?.includes('user rejected transaction') ? (
-      <>User rejected transaction</>
-    ) : (
-      <p>Unknown error</p>
-    );
+    const errorMessage = getErrorMessage(publishError);
 
     return (
       <Modal handleCloseModal={onClose} title={t('publishNimiModal.title', { ns: 'nimi' })!} maxWidth="560px">
@@ -115,6 +111,22 @@ export function PublishNimiModal({
       </ModalContent>
     </Modal>
   );
+}
+
+function getErrorMessage(error: Error) {
+  const message = error.message;
+
+  if (message) {
+    if (message.toLowerCase().includes('user rejected transaction')) {
+      return 'Transaction rejected';
+    }
+    if (message.toLowerCase().includes('user rejected request')) {
+      return 'Request rejected';
+    }
+    return message;
+  }
+
+  return 'Unknown error';
 }
 
 const ModalContent = styled(ModalContentBase)`
