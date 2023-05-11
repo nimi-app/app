@@ -50,7 +50,6 @@ export default function NimiPage() {
 
   // Retrieve the POAP event data and check if the user has already claimed the POAP
   const { data: poapEvent, isFetching: isPoapEventLoading } = usePOAPEventQuery(poapEventId);
-  console.log('poapEvent', poapEvent);
 
   // Fetch the Nimi data for the ENS name
   const { data: initialNimi, isGenerated } = useInitialtNimiData({

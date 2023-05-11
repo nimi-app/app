@@ -73,7 +73,6 @@ export function ClaimPOAPModal({
   poapImageURL,
   resetAllFields,
 }: ClaimPOAPModalProps) {
-  console.log('poapEvent?.start_date', poapEvent?.start_date);
   const [showBody, setShowBody] = useState(false);
 
   const isRecipientValid = useMemo(() => {
