@@ -113,7 +113,7 @@ export function ClaimPOAPModal({
             </InputGroup> */}
           </Body>
           <InputGroup>
-            <ClaimPOAPButton disabled={!isRecipientValid} onClick={onClaimClick} />
+            <ClaimPOAPButton nimiTheme={theme} disabled={!isRecipientValid} onClick={onClaimClick} />
           </InputGroup>
           <AutoClaimWrapper>
             <Toggle
@@ -238,7 +238,7 @@ export function ClaimPOAPModal({
             <SucessDescription nimiTheme={theme}>POAP couldn’t be claimed. Please try again.</SucessDescription>
           </SuccessBody>
           <Footer>
-            <ClaimPOAPButton text={'Try again'} onClick={() => resetAllFields()} />
+            <ClaimPOAPButton nimiTheme={theme} text={'Try again'} onClick={() => resetAllFields()} />
           </Footer>
         </motion.div>
       )}
@@ -272,6 +272,7 @@ export function ClaimPOAPModal({
           </SuccessBody>
           <Footer>
             <ClaimPOAPButton
+              nimiTheme={theme}
               text={'Add a POAP'}
               onClick={() =>
                 window.open(
@@ -343,6 +344,8 @@ const Modal = styled(motion.div)<ModalProps>`
       ? `
     border: 4px solid #4B5563;
     background-color: #1F2A37;`
+      : nimiTheme === NimiThemeType.ETH_PRAGUE_2023
+      ? `background-color:#F1FFF8;`
       : `
     border: 4px solid white;
     background-color: #f0f3fb;
@@ -399,6 +402,8 @@ const Heading = styled.h1<ModalProps>`
       ? `
     color: white;
     `
+      : nimiTheme === NimiThemeType.ETH_PRAGUE_2023
+      ? `color:#212123;`
       : `
       background: linear-gradient(111.35deg, #4368ea -25.85%, #c490dd 73.38%);
     -webkit-text-fill-color: transparent;
@@ -434,7 +439,11 @@ const Description = styled.h2<ModalProps>`
   margin-bottom: 16px;
   ${({ nimiTheme }) =>
     `color: ${
-      nimiTheme === NimiThemeType.RAAVE || nimiTheme === NimiThemeType.DAO_TOKYO_2023 ? '#C3CAD2' : '#8a97aa'
+      nimiTheme === NimiThemeType.RAAVE || nimiTheme === NimiThemeType.DAO_TOKYO_2023
+        ? '#C3CAD2'
+        : NimiThemeType.ETH_PRAGUE_2023
+        ? '#212123A6'
+        : '#8a97aa'
     };`}
 `;
 
