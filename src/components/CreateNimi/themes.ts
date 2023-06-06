@@ -67,4 +67,10 @@ export const themes: Record<NimiCuratedTheme, ThemeAssets> = {
     logoText: raaveLogoText,
     preview: devconPreview,
   },
+  [NimiThemeType.ETH_PRAGUE_2023]: {
+    type: NimiThemeType.RAAVE,
+    logoImage: raaveLogoImage,
+    logoText: raaveLogoText,
+    preview: devconPreview,
+  },
 };

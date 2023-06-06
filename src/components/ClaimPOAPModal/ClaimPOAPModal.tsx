@@ -1,5 +1,6 @@
 import { POAPEvent } from '@nimi.io/card';
 import { NIMI_CARDS_WIDTH } from '@nimi.io/card/constants';
+import { NimiThemeType } from '@nimi.io/card/types';
 import { Countdown } from 'components/Countdown';
 import { Toggle } from 'components/form/Toggle';
 import { motion } from 'framer-motion';
@@ -30,7 +31,7 @@ export enum ClaimModalState {
 }
 
 type ClaimPOAPModalProps = {
-  dark?: boolean;
+  theme: NimiThemeType | undefined;
   poapEvent?: POAPEvent;
   name?: string;
   onClaimClick: () => void;
@@ -60,7 +61,7 @@ const bodyVariants = {
 };
 
 export function ClaimPOAPModal({
-  dark = true,
+  theme,
   name = 'mialn',
   poapEvent,
   closeModal,
@@ -82,19 +83,19 @@ export function ClaimPOAPModal({
   }, [reciever]);
 
   return (
-    <Modal key="claimModal" dark={dark} onClick={(event) => event.stopPropagation()}>
+    <Modal key="claimModal" nimiTheme={theme} onClick={(event) => event.stopPropagation()}>
       {claimStep === ClaimModalState.INITIAL && (
         <AnimatedSection>
           <Header>
-            <Heading dark={dark}>You have met {name}</Heading>
+            <Heading nimiTheme={theme}>You have met {name}</Heading>
             <ArowDownIcon onClick={closeModal}>
               <CloseSvg />
             </ArowDownIcon>
           </Header>
           <Body>
-            <Description dark={dark}>Claim POAP that proves you met {name}</Description>
+            <Description nimiTheme={theme}>Claim POAP that proves you met {name}</Description>
             <InputGroup>
-              <Input value={reciever} onChange={(e) => setReciever(e.target.value)} dark={dark} />
+              <Input value={reciever} onChange={(e) => setReciever(e.target.value)} nimiTheme={theme} />
               <InputIcons>
                 {isRecipientValid ? (
                   <StyledCheckmark />
@@ -127,7 +128,7 @@ export function ClaimPOAPModal({
       {claimStep === ClaimModalState.CLAIMING && (
         <AnimatedSection>
           <Header>
-            <Heading dark={dark}>Claiming...</Heading>
+            <Heading nimiTheme={theme}>Claiming...</Heading>
             <ArowDownIcon
               variants={iconVariants}
               initial="closed"
@@ -146,9 +147,9 @@ export function ClaimPOAPModal({
               animate="open"
               exit="closed"
             >
-              <Description dark={dark}>POAP is being claimed to</Description>
+              <Description nimiTheme={theme}>POAP is being claimed to</Description>
               <InputGroup>
-                <Input value={reciever} disabled={true} dark={dark} />
+                <Input value={reciever} disabled={true} nimiTheme={theme} />
               </InputGroup>
             </Body>
           )}
@@ -167,10 +168,10 @@ export function ClaimPOAPModal({
             exit="closed"
           >
             <img width={'124px'} height={'124px'} src={poapImageURL} />
-            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
+            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} nimiTheme={theme}>
               Succesfully Claimed
             </Heading>
-            <SucessDescription dark={dark}>POAP was succesfully claimed</SucessDescription>
+            <SucessDescription nimiTheme={theme}>POAP was succesfully claimed</SucessDescription>
           </SuccessBody>
         </motion.div>
       )}
@@ -187,10 +188,10 @@ export function ClaimPOAPModal({
             exit="closed"
           >
             <img width={'124px'} height={'124px'} src={poapImageURL} />
-            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
+            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} nimiTheme={theme}>
               POAP Already Claimed
             </Heading>
-            <SucessDescription dark={dark}>
+            <SucessDescription nimiTheme={theme}>
               This POAP was already claimed by <span style={{ fontWeight: '700' }}>{reciever}</span>
             </SucessDescription>
             {autoClaimPOAP && (
@@ -231,10 +232,10 @@ export function ClaimPOAPModal({
               height={124}
               width={124}
             />
-            <Heading style={{ marginBottom: '10px' }} dark={dark}>
+            <Heading style={{ marginBottom: '10px' }} nimiTheme={theme}>
               Failed to claim
             </Heading>
-            <SucessDescription dark={dark}>POAP couldn’t be claimed. Please try again.</SucessDescription>
+            <SucessDescription nimiTheme={theme}>POAP couldn’t be claimed. Please try again.</SucessDescription>
           </SuccessBody>
           <Footer>
             <ClaimPOAPButton text={'Try again'} onClick={() => resetAllFields()} />
@@ -262,10 +263,10 @@ export function ClaimPOAPModal({
               />
             </LottieStyle>
 
-            <Heading style={{ marginBottom: '10px', marginTop: '16px;' }} dark={dark}>
+            <Heading style={{ marginBottom: '10px', marginTop: '16px;' }} nimiTheme={theme}>
               POAP Event Ended
             </Heading>
-            <SucessDescription marginBottom="24px" dark={dark}>
+            <SucessDescription marginBottom="24px" nimiTheme={theme}>
               User run out of POAPs or Event ended. The owner of the card can add a new POAP event.{' '}
             </SucessDescription>
           </SuccessBody>
@@ -294,10 +295,10 @@ export function ClaimPOAPModal({
             exit="closed"
           >
             <img width={'124px'} height={'124px'} src={poapImageURL} />
-            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} dark={dark}>
+            <Heading style={{ marginTop: '24px', marginBottom: '10px' }} nimiTheme={theme}>
               POAP Event starts in
             </Heading>
-            {poapEvent?.end_date && <Countdown dark={dark} targetDate={poapEvent?.start_date} />}
+            {poapEvent?.end_date && <Countdown theme={theme} targetDate={poapEvent?.start_date} />}
           </SuccessBody>
         </motion.div>
       )}
@@ -306,7 +307,7 @@ export function ClaimPOAPModal({
 }
 
 type ModalProps = {
-  dark: boolean;
+  nimiTheme: NimiThemeType | undefined;
 };
 
 const AutoClaimWrapper = styled.div``;
@@ -337,8 +338,8 @@ const Modal = styled(motion.div)<ModalProps>`
   border-radius: 12px;
   box-shadow: 0px 14px 24px rgba(52, 55, 100, 0.12);
 
-  ${({ dark }) =>
-    dark
+  ${({ nimiTheme }) =>
+    nimiTheme === NimiThemeType.RAAVE || nimiTheme === NimiThemeType.DAO_TOKYO_2023
       ? `
     border: 4px solid #4B5563;
     background-color: #1F2A37;`
@@ -393,8 +394,8 @@ const Heading = styled.h1<ModalProps>`
   line-height: 20px;
   font-size: 18px;
 
-  ${({ dark }) =>
-    dark
+  ${({ nimiTheme }) =>
+    nimiTheme === NimiThemeType.RAAVE || nimiTheme === NimiThemeType.DAO_TOKYO_2023
       ? `
     color: white;
     `
@@ -431,7 +432,10 @@ const Description = styled.h2<ModalProps>`
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 16px;
-  ${({ dark }) => `color: ${dark ? '#C3CAD2' : '#8a97aa'};`}
+  ${({ nimiTheme }) =>
+    `color: ${
+      nimiTheme === NimiThemeType.RAAVE || nimiTheme === NimiThemeType.DAO_TOKYO_2023 ? '#C3CAD2' : '#8a97aa'
+    };`}
 `;
 
 const SucessDescription = styled(Description)<{ marginBottom?: string }>`
@@ -460,8 +464,8 @@ const Input = styled.input.attrs({
   padding-right: 33px;
   outline: none;
 
-  ${({ dark }) =>
-    dark
+  ${({ nimiTheme }) =>
+    nimiTheme === NimiThemeType.RAAVE || nimiTheme === NimiThemeType.DAO_TOKYO_2023
       ? `
     color: #ffffffcf;
     background: #374151;

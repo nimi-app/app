@@ -155,7 +155,11 @@ export const NimiModalStyles = css`
   border-radius: 12px;
   padding: 16px;
 `;
-export const SharedInputStyles = css<{ inputInvalid?: boolean }>`
+
+export interface InputProps {
+  inputInvalid?: boolean;
+}
+export const SharedInputStyles = css<InputProps>`
   width: 100%;
   line-height: 22px;
   font-size: 16px;

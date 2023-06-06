@@ -7,7 +7,7 @@ import { styled } from 'styled-components';
 import { ContentInput, InputFieldWithIcon } from '..';
 import { ReactComponent as XSVG } from '../../../assets/svg/cross.svg';
 import { ReactComponent as PenSVG } from '../../../assets/svg/pen.svg';
-import { SharedInputStyles } from '../../../theme';
+import { InputProps, SharedInputStyles } from '../../../theme';
 import { ReorderItem } from '../../ReorderItem';
 
 type ReorderInputProps = {
@@ -85,7 +85,7 @@ export const StyledError = styled.p`
   margin-top: 5px;
 `;
 
-const TitleInput = styled.input`
+const TitleInput = styled.input<InputProps>`
   height: 38px;
   position: relative;
   padding: 8px 30px 8px 20px;

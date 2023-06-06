@@ -1,3 +1,4 @@
+import { NimiThemeType } from '@nimi.io/card/types';
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { NimiSignatureColor } from 'theme';
@@ -23,12 +24,12 @@ const CountdownValue = styled.div`
   font-stretch: 120;
 `;
 
-const CountdownLabel = styled.div<{ dark: boolean }>`
+const CountdownLabel = styled.div<{ nimiTheme?: NimiThemeType }>`
   font-size: 14px;
   font-weight: 700;
   line-height: 26px;
-  ${({ dark }) =>
-    dark
+  ${({ nimiTheme }) =>
+    nimiTheme === NimiThemeType.RAAVE || nimiTheme === NimiThemeType.DAO_TOKYO_2023
       ? `
     color: white;
     `
@@ -40,9 +41,9 @@ const CountdownLabel = styled.div<{ dark: boolean }>`
 `;
 interface CountdownProps {
   targetDate: string;
-  dark: boolean;
+  theme?: NimiThemeType;
 }
-export const Countdown = ({ targetDate, dark }: CountdownProps) => {
+export const Countdown = ({ targetDate, theme }: CountdownProps) => {
   const [countdown, setCountdown] = useState({
     days: '00',
     hours: '00',
@@ -79,19 +80,19 @@ export const Countdown = ({ targetDate, dark }: CountdownProps) => {
     <CountdownWrapper>
       <CountdownItem>
         <CountdownValue>{countdown.days}</CountdownValue>
-        <CountdownLabel dark={dark}>DAYS</CountdownLabel>
+        <CountdownLabel nimiTheme={theme}>DAYS</CountdownLabel>
       </CountdownItem>
       <CountdownItem>
         <CountdownValue>{countdown.hours}</CountdownValue>
-        <CountdownLabel dark={dark}>HOURS</CountdownLabel>
+        <CountdownLabel nimiTheme={theme}>HOURS</CountdownLabel>
       </CountdownItem>
       <CountdownItem>
         <CountdownValue>{countdown.minutes}</CountdownValue>
-        <CountdownLabel dark={dark}>MIN</CountdownLabel>
+        <CountdownLabel nimiTheme={theme}>MIN</CountdownLabel>
       </CountdownItem>
       <CountdownItem>
         <CountdownValue>{countdown.seconds}</CountdownValue>
-        <CountdownLabel dark={dark}>SEC</CountdownLabel>
+        <CountdownLabel nimiTheme={theme}>SEC</CountdownLabel>
       </CountdownItem>
     </CountdownWrapper>
   );

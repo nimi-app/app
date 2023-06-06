@@ -19,6 +19,7 @@ import { useInitialtNimiData } from '../hooks/useDefaultNimiData';
 
 const eventUrlToThemeMapping = {
   ['daotokyo-tokyo-2023']: NimiThemeType.DAO_TOKYO_2023,
+  ['ethprague2023']: NimiThemeType.ETH_PRAGUE_2023,
 };
 
 /**
@@ -178,10 +179,7 @@ export default function NimiPage() {
               onClaimClick={claimHandler}
               name={ensName}
               claimStep={claimStep}
-              dark={
-                initialNimi.theme.type === NimiThemeType.RAAVE ||
-                initialNimi.theme.type === NimiThemeType.DAO_TOKYO_2023
-              }
+              theme={event && eventUrlToThemeMapping[event]}
               closeModal={() => setIsClaimModalOpen(false)}
               autoClaimPOAP={autoClaimPOAP}
               setAutoClaimPOAP={setAutoClaimPOAP}
