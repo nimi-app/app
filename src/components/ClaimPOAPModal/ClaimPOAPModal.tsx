@@ -325,7 +325,7 @@ const OverlayWrap = styled.div<ModalProps>`
     z-index: 10;
     background: ${({ nimiTheme }) =>
       nimiTheme === NimiThemeType.ETH_PRAGUE_2023
-        ? ' linear-gradient(180deg, rgba(202, 229, 255, 0) 7.16%, #cae4ff 48.22%);'
+        ? ' linear-gradient(rgba(202, 229, 255, 0) -6%, rgb(202, 228, 255) 30%);'
         : ''};
   }
 `;
