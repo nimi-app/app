@@ -1,3 +1,4 @@
+import { NimiThemeType } from '@nimi.io/card/types';
 import { css, styled } from 'styled-components';
 
 type ClaimPOAPButtonProps = {
@@ -6,6 +7,8 @@ type ClaimPOAPButtonProps = {
   onClick?: () => void;
   text?: string;
   disabled?: boolean;
+  style?: any;
+  nimiTheme?: NimiThemeType;
 };
 
 export function ClaimPOAPButton({
@@ -14,9 +17,16 @@ export function ClaimPOAPButton({
   onClick,
   text = 'Claim POAP',
   disabled = false,
+  nimiTheme,
 }: ClaimPOAPButtonProps) {
   return (
-    <StyledButton disabled={disabled} variant={variant} marginBottom={marginBottom} onClick={onClick}>
+    <StyledButton
+      nimiTheme={nimiTheme}
+      disabled={disabled}
+      variant={variant}
+      marginBottom={marginBottom}
+      onClick={onClick}
+    >
       {text}
     </StyledButton>
   );
@@ -25,6 +35,7 @@ export function ClaimPOAPButton({
 type StyledButtonProps = {
   variant: 'medium' | 'big';
   marginBottom?: string;
+  nimiTheme?: NimiThemeType;
 };
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -64,6 +75,10 @@ export const StyledButton = styled.button<StyledButtonProps>`
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 
   &:hover {
-    background: linear-gradient(111.35deg, #4368eacf -25.85%, #c490ddcf 73.38%);
+    ${({ nimiTheme }) =>
+      nimiTheme === NimiThemeType.ETH_PRAGUE_2023
+        ? `background: #FFF491;color:#212123;`
+        : 'background:    background: linear-gradient(111.35deg, #4368eacf -25.85%, #c490ddcf 73.38%);'}
   }
+  ${({ nimiTheme }) => (nimiTheme === NimiThemeType.ETH_PRAGUE_2023 ? `background: #FFF491;color:#212123;` : '')}
 `;

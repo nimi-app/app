@@ -33,14 +33,14 @@ const SharedProps = css<StyledHeadingProps>`
   ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 `;
 
-export const MainHeading = styled.h1`
+export const MainHeading = styled.h1<HeadingProps>`
   line-height: 40px;
   font-size: 36px;
   font-weight: 800;
   ${SharedProps}
 `;
 
-export const SubHeading = styled.h2`
+export const SubHeading = styled.h2<HeadingProps>`
   line-height: 24px;
   font-size: 20px;
   font-weight: 600;
