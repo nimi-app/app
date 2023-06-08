@@ -29,6 +29,7 @@ const eventUrlToThemeMapping = {
 export default function NimiPage() {
   const { nimiUsername: ensName } = useParams();
   const [isMounted, setIsMounted] = useState(false);
+  const [isMinted, setIsMinted] = useState(false);
   // const [autoClaimPOAPLocalStorage, setAutoClaimPOAPLocalStorage] = useAtom(autoClaimPOAPAtom);
   const [autoClaimPOAP, setAutoClaimPOAP] = useAtom(autoClaimPOAPAtom);
   const [autoClaimPOAPRecentReceiver, setAutoClaimPOAPRecentReciever] = useAtom(autoClaimPOAPRecentReceiverAtom);
@@ -47,10 +48,12 @@ export default function NimiPage() {
   const iykRef = searchParams.get('iykRef');
   const event = searchParams.get('event');
   const { data: refData, isFetching: isRefDataLoading } = useIYKRefQuery(iykRef);
+  console.log('refData', refData);
   const poapEventId = refData?.poapEvents?.[0]?.poapEventId;
 
   // Retrieve the POAP event data and check if the user has already claimed the POAP
   const { data: poapEvent, isFetching: isPoapEventLoading } = usePOAPEventQuery(poapEventId);
+  console.log('poapEvent', poapEvent);
 
   // Fetch the Nimi data for the ENS name
   const { data: initialNimi, isGenerated } = useInitialtNimiData({
@@ -68,8 +71,12 @@ export default function NimiPage() {
     account: debouncedPOAPReciever,
     enabled: !!debouncedPOAPReciever,
   });
+
+  const onSuccessfullMint = () => {
+    setIsMinted(true);
+  };
   // Mint the POAP token
-  const { mutateAsync: mintIYKPOAPToken } = useMintIYKPOAPToken();
+  const { mutateAsync: mintIYKPOAPToken } = useMintIYKPOAPToken({ onSuccessfullMint });
 
   // Debugging
   console.log({
@@ -86,28 +93,36 @@ export default function NimiPage() {
       setClaimStep(ClaimModalState.CLAIMED);
       return;
     }
-    try {
-      const mintResponse = await mintIYKPOAPToken({
-        otpCode: refData?.poapEvents[0].otp,
-        recipient: debouncedPOAPReciever,
-        poapEventId: poapEventId!,
-      });
-      console.log({ mintResponse });
 
-      if (mintResponse.success) {
-        setClaimStep(ClaimModalState.SUCCESS);
-        // If the user wants to auto claim the POAP, save the reciever address to local storage
-        setAutoClaimPOAPRecentReciever(debouncedPOAPReciever);
-      } else {
+    if (refData && refData.poapEvents && refData.poapEvents[0] && !isMinted) {
+      // check if these are defined
+      try {
+        const mintResponse = await mintIYKPOAPToken({
+          otpCode: refData.poapEvents[0].otp,
+          recipient: debouncedPOAPReciever,
+          poapEventId: poapEventId!,
+        });
+        console.log({ mintResponse });
+
+        if (mintResponse.success) {
+          setClaimStep(ClaimModalState.SUCCESS);
+          // If the user wants to auto claim the POAP, save the reciever address to local storage
+          setAutoClaimPOAPRecentReciever(debouncedPOAPReciever);
+        } else {
+          setClaimStep(ClaimModalState.ERROR);
+        }
+      } catch (error) {
+        console.error(error);
         setClaimStep(ClaimModalState.ERROR);
       }
-    } catch (error) {
-      console.error(error);
+    } else {
+      console.error('refData or refData.poapEvents[0] is not defined.');
       setClaimStep(ClaimModalState.ERROR);
     }
 
     return;
   };
+
   useEffect(() => {
     // On first render, attempt to claim the POAP if the user has auto claim enabled
     const attemptClaim = async () => {
