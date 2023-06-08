@@ -117,7 +117,7 @@ export default function NimiPage() {
       }
     } else {
       console.error('refData or refData.poapEvents[0] is not defined.');
-      setClaimStep(ClaimModalState.ERROR);
+      return;
     }
 
     return;
