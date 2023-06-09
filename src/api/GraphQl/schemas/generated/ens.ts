@@ -8,12 +8,7 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(
-  client: GraphQLClient,
-  query: string,
-  variables?: TVariables,
-  headers?: RequestInit['headers']
-) {
+function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
   return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
 }
 /** All built-in and custom scalars, mapped to their actual values */
@@ -26,6 +21,7 @@ export type Scalars = {
   BigDecimal: any;
   BigInt: any;
   Bytes: any;
+  Int8: any;
 };
 
 export type AbiChanged = ResolverEvent & {
@@ -40,6 +36,7 @@ export type AbiChanged = ResolverEvent & {
 export type AbiChanged_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<AbiChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -64,6 +61,7 @@ export type AbiChanged_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<AbiChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -102,7 +100,10 @@ export enum AbiChanged_OrderBy {
   ContentType = 'contentType',
   Id = 'id',
   Resolver = 'resolver',
-  TransactionId = 'transactionID',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
+  TransactionId = 'transactionID'
 }
 
 export type Account = {
@@ -113,6 +114,7 @@ export type Account = {
   wrappedDomains?: Maybe<Array<WrappedDomain>>;
 };
 
+
 export type AccountDomainsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Domain_OrderBy>;
@@ -121,6 +123,7 @@ export type AccountDomainsArgs = {
   where?: InputMaybe<Domain_Filter>;
 };
 
+
 export type AccountRegistrationsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Registration_OrderBy>;
@@ -128,6 +131,7 @@ export type AccountRegistrationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Registration_Filter>;
 };
+
 
 export type AccountWrappedDomainsArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -140,6 +144,7 @@ export type AccountWrappedDomainsArgs = {
 export type Account_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Account_Filter>>>;
   domains_?: InputMaybe<Domain_Filter>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
@@ -149,6 +154,7 @@ export type Account_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<Account_Filter>>>;
   registrations_?: InputMaybe<Registration_Filter>;
   wrappedDomains_?: InputMaybe<WrappedDomain_Filter>;
 };
@@ -157,7 +163,7 @@ export enum Account_OrderBy {
   Domains = 'domains',
   Id = 'id',
   Registrations = 'registrations',
-  WrappedDomains = 'wrappedDomains',
+  WrappedDomains = 'wrappedDomains'
 }
 
 export type AddrChanged = ResolverEvent & {
@@ -193,6 +199,7 @@ export type AddrChanged_Filter = {
   addr_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   addr_starts_with?: InputMaybe<Scalars['String']>;
   addr_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  and?: InputMaybe<Array<InputMaybe<AddrChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -209,6 +216,7 @@ export type AddrChanged_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<AddrChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -244,10 +252,14 @@ export type AddrChanged_Filter = {
 
 export enum AddrChanged_OrderBy {
   Addr = 'addr',
+  AddrId = 'addr__id',
   BlockNumber = 'blockNumber',
   Id = 'id',
   Resolver = 'resolver',
-  TransactionId = 'transactionID',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
+  TransactionId = 'transactionID'
 }
 
 export type AuthorisationChanged = ResolverEvent & {
@@ -264,6 +276,7 @@ export type AuthorisationChanged = ResolverEvent & {
 export type AuthorisationChanged_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<AuthorisationChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -284,6 +297,7 @@ export type AuthorisationChanged_Filter = {
   isAuthorized_in?: InputMaybe<Array<Scalars['Boolean']>>;
   isAuthorized_not?: InputMaybe<Scalars['Boolean']>;
   isAuthorized_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  or?: InputMaybe<Array<InputMaybe<AuthorisationChanged_Filter>>>;
   owner?: InputMaybe<Scalars['Bytes']>;
   owner_contains?: InputMaybe<Scalars['Bytes']>;
   owner_gt?: InputMaybe<Scalars['Bytes']>;
@@ -343,8 +357,11 @@ export enum AuthorisationChanged_OrderBy {
   IsAuthorized = 'isAuthorized',
   Owner = 'owner',
   Resolver = 'resolver',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
   Target = 'target',
-  TransactionId = 'transactionID',
+  TransactionId = 'transactionID'
 }
 
 export type BlockChangedFilter = {
@@ -369,6 +386,7 @@ export type ContenthashChanged = ResolverEvent & {
 export type ContenthashChanged_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<ContenthashChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -395,6 +413,7 @@ export type ContenthashChanged_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<ContenthashChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -433,7 +452,10 @@ export enum ContenthashChanged_OrderBy {
   Hash = 'hash',
   Id = 'id',
   Resolver = 'resolver',
-  TransactionId = 'transactionID',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
+  TransactionId = 'transactionID'
 }
 
 export type Domain = {
@@ -456,6 +478,7 @@ export type Domain = {
   wrappedDomain?: Maybe<WrappedDomain>;
 };
 
+
 export type DomainEventsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DomainEvent_OrderBy>;
@@ -463,6 +486,7 @@ export type DomainEventsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<DomainEvent_Filter>;
 };
+
 
 export type DomainSubdomainsArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -482,6 +506,7 @@ export type DomainEvent = {
 export type DomainEvent_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<DomainEvent_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -519,6 +544,7 @@ export type DomainEvent_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<DomainEvent_Filter>>>;
   transactionID?: InputMaybe<Scalars['Bytes']>;
   transactionID_contains?: InputMaybe<Scalars['Bytes']>;
   transactionID_gt?: InputMaybe<Scalars['Bytes']>;
@@ -534,13 +560,22 @@ export type DomainEvent_Filter = {
 export enum DomainEvent_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Id = 'id',
-  TransactionId = 'transactionID',
+  TransactionId = 'transactionID'
 }
 
 export type Domain_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Domain_Filter>>>;
   createdAt?: InputMaybe<Scalars['BigInt']>;
   createdAt_gt?: InputMaybe<Scalars['BigInt']>;
   createdAt_gte?: InputMaybe<Scalars['BigInt']>;
@@ -612,6 +647,7 @@ export type Domain_Filter = {
   name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   name_starts_with?: InputMaybe<Scalars['String']>;
   name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<Domain_Filter>>>;
   owner?: InputMaybe<Scalars['String']>;
   owner_?: InputMaybe<Account_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
@@ -726,29 +762,51 @@ export enum Domain_OrderBy {
   Labelhash = 'labelhash',
   Name = 'name',
   Owner = 'owner',
+  OwnerId = 'owner__id',
   Parent = 'parent',
+  ParentCreatedAt = 'parent__createdAt',
+  ParentId = 'parent__id',
+  ParentIsMigrated = 'parent__isMigrated',
+  ParentLabelName = 'parent__labelName',
+  ParentLabelhash = 'parent__labelhash',
+  ParentName = 'parent__name',
+  ParentSubdomainCount = 'parent__subdomainCount',
+  ParentTtl = 'parent__ttl',
   Registration = 'registration',
+  RegistrationCost = 'registration__cost',
+  RegistrationExpiryDate = 'registration__expiryDate',
+  RegistrationId = 'registration__id',
+  RegistrationLabelName = 'registration__labelName',
+  RegistrationRegistrationDate = 'registration__registrationDate',
   ResolvedAddress = 'resolvedAddress',
+  ResolvedAddressId = 'resolvedAddress__id',
   Resolver = 'resolver',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
   SubdomainCount = 'subdomainCount',
   Subdomains = 'subdomains',
   Ttl = 'ttl',
   WrappedDomain = 'wrappedDomain',
+  WrappedDomainExpiryDate = 'wrappedDomain__expiryDate',
+  WrappedDomainFuses = 'wrappedDomain__fuses',
+  WrappedDomainId = 'wrappedDomain__id',
+  WrappedDomainName = 'wrappedDomain__name'
 }
 
-export type FusesSet = DomainEvent & {
-  __typename?: 'FusesSet';
+export type ExpiryExtended = DomainEvent & {
+  __typename?: 'ExpiryExtended';
   blockNumber: Scalars['Int'];
   domain: Domain;
-  expiry: Scalars['BigInt'];
-  fuses: Scalars['BigInt'];
+  expiryDate: Scalars['BigInt'];
   id: Scalars['ID'];
   transactionID: Scalars['Bytes'];
 };
 
-export type FusesSet_Filter = {
+export type ExpiryExtended_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<ExpiryExtended_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -778,22 +836,14 @@ export type FusesSet_Filter = {
   domain_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   domain_starts_with?: InputMaybe<Scalars['String']>;
   domain_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  expiry?: InputMaybe<Scalars['BigInt']>;
-  expiry_gt?: InputMaybe<Scalars['BigInt']>;
-  expiry_gte?: InputMaybe<Scalars['BigInt']>;
-  expiry_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  expiry_lt?: InputMaybe<Scalars['BigInt']>;
-  expiry_lte?: InputMaybe<Scalars['BigInt']>;
-  expiry_not?: InputMaybe<Scalars['BigInt']>;
-  expiry_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  fuses?: InputMaybe<Scalars['BigInt']>;
-  fuses_gt?: InputMaybe<Scalars['BigInt']>;
-  fuses_gte?: InputMaybe<Scalars['BigInt']>;
-  fuses_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  fuses_lt?: InputMaybe<Scalars['BigInt']>;
-  fuses_lte?: InputMaybe<Scalars['BigInt']>;
-  fuses_not?: InputMaybe<Scalars['BigInt']>;
-  fuses_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  expiryDate?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_gt?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_gte?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  expiryDate_lt?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_lte?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_not?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -802,6 +852,94 @@ export type FusesSet_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<ExpiryExtended_Filter>>>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+};
+
+export enum ExpiryExtended_OrderBy {
+  BlockNumber = 'blockNumber',
+  Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
+  ExpiryDate = 'expiryDate',
+  Id = 'id',
+  TransactionId = 'transactionID'
+}
+
+export type FusesSet = DomainEvent & {
+  __typename?: 'FusesSet';
+  blockNumber: Scalars['Int'];
+  domain: Domain;
+  fuses: Scalars['Int'];
+  id: Scalars['ID'];
+  transactionID: Scalars['Bytes'];
+};
+
+export type FusesSet_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<FusesSet_Filter>>>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  domain?: InputMaybe<Scalars['String']>;
+  domain_?: InputMaybe<Domain_Filter>;
+  domain_contains?: InputMaybe<Scalars['String']>;
+  domain_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_ends_with?: InputMaybe<Scalars['String']>;
+  domain_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_gt?: InputMaybe<Scalars['String']>;
+  domain_gte?: InputMaybe<Scalars['String']>;
+  domain_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_lt?: InputMaybe<Scalars['String']>;
+  domain_lte?: InputMaybe<Scalars['String']>;
+  domain_not?: InputMaybe<Scalars['String']>;
+  domain_not_contains?: InputMaybe<Scalars['String']>;
+  domain_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with?: InputMaybe<Scalars['String']>;
+  domain_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_not_in?: InputMaybe<Array<Scalars['String']>>;
+  domain_not_starts_with?: InputMaybe<Scalars['String']>;
+  domain_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  domain_starts_with?: InputMaybe<Scalars['String']>;
+  domain_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  fuses?: InputMaybe<Scalars['Int']>;
+  fuses_gt?: InputMaybe<Scalars['Int']>;
+  fuses_gte?: InputMaybe<Scalars['Int']>;
+  fuses_in?: InputMaybe<Array<Scalars['Int']>>;
+  fuses_lt?: InputMaybe<Scalars['Int']>;
+  fuses_lte?: InputMaybe<Scalars['Int']>;
+  fuses_not?: InputMaybe<Scalars['Int']>;
+  fuses_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<FusesSet_Filter>>>;
   transactionID?: InputMaybe<Scalars['Bytes']>;
   transactionID_contains?: InputMaybe<Scalars['Bytes']>;
   transactionID_gt?: InputMaybe<Scalars['Bytes']>;
@@ -817,10 +955,17 @@ export type FusesSet_Filter = {
 export enum FusesSet_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
-  Expiry = 'expiry',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Fuses = 'fuses',
   Id = 'id',
-  TransactionId = 'transactionID',
+  TransactionId = 'transactionID'
 }
 
 export type InterfaceChanged = ResolverEvent & {
@@ -836,6 +981,7 @@ export type InterfaceChanged = ResolverEvent & {
 export type InterfaceChanged_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<InterfaceChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -872,6 +1018,7 @@ export type InterfaceChanged_Filter = {
   interfaceID_not?: InputMaybe<Scalars['Bytes']>;
   interfaceID_not_contains?: InputMaybe<Scalars['Bytes']>;
   interfaceID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  or?: InputMaybe<Array<InputMaybe<InterfaceChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -911,7 +1058,10 @@ export enum InterfaceChanged_OrderBy {
   Implementer = 'implementer',
   InterfaceId = 'interfaceID',
   Resolver = 'resolver',
-  TransactionId = 'transactionID',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
+  TransactionId = 'transactionID'
 }
 
 export type MulticoinAddrChanged = ResolverEvent & {
@@ -937,6 +1087,7 @@ export type MulticoinAddrChanged_Filter = {
   addr_not?: InputMaybe<Scalars['Bytes']>;
   addr_not_contains?: InputMaybe<Scalars['Bytes']>;
   addr_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  and?: InputMaybe<Array<InputMaybe<MulticoinAddrChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -961,6 +1112,7 @@ export type MulticoinAddrChanged_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<MulticoinAddrChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -1000,7 +1152,10 @@ export enum MulticoinAddrChanged_OrderBy {
   CoinType = 'coinType',
   Id = 'id',
   Resolver = 'resolver',
-  TransactionId = 'transactionID',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
+  TransactionId = 'transactionID'
 }
 
 export type NameChanged = ResolverEvent & {
@@ -1015,6 +1170,7 @@ export type NameChanged = ResolverEvent & {
 export type NameChanged_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NameChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1051,6 +1207,7 @@ export type NameChanged_Filter = {
   name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   name_starts_with?: InputMaybe<Scalars['String']>;
   name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<NameChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -1089,7 +1246,10 @@ export enum NameChanged_OrderBy {
   Id = 'id',
   Name = 'name',
   Resolver = 'resolver',
-  TransactionId = 'transactionID',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
+  TransactionId = 'transactionID'
 }
 
 export type NameRegistered = RegistrationEvent & {
@@ -1105,6 +1265,7 @@ export type NameRegistered = RegistrationEvent & {
 export type NameRegistered_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NameRegistered_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1129,6 +1290,7 @@ export type NameRegistered_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<NameRegistered_Filter>>>;
   registrant?: InputMaybe<Scalars['String']>;
   registrant_?: InputMaybe<Account_Filter>;
   registrant_contains?: InputMaybe<Scalars['String']>;
@@ -1188,8 +1350,14 @@ export enum NameRegistered_OrderBy {
   ExpiryDate = 'expiryDate',
   Id = 'id',
   Registrant = 'registrant',
+  RegistrantId = 'registrant__id',
   Registration = 'registration',
-  TransactionId = 'transactionID',
+  RegistrationCost = 'registration__cost',
+  RegistrationExpiryDate = 'registration__expiryDate',
+  RegistrationId = 'registration__id',
+  RegistrationLabelName = 'registration__labelName',
+  RegistrationRegistrationDate = 'registration__registrationDate',
+  TransactionId = 'transactionID'
 }
 
 export type NameRenewed = RegistrationEvent & {
@@ -1204,6 +1372,7 @@ export type NameRenewed = RegistrationEvent & {
 export type NameRenewed_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NameRenewed_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1228,6 +1397,7 @@ export type NameRenewed_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<NameRenewed_Filter>>>;
   registration?: InputMaybe<Scalars['String']>;
   registration_?: InputMaybe<Registration_Filter>;
   registration_contains?: InputMaybe<Scalars['String']>;
@@ -1266,7 +1436,12 @@ export enum NameRenewed_OrderBy {
   ExpiryDate = 'expiryDate',
   Id = 'id',
   Registration = 'registration',
-  TransactionId = 'transactionID',
+  RegistrationCost = 'registration__cost',
+  RegistrationExpiryDate = 'registration__expiryDate',
+  RegistrationId = 'registration__id',
+  RegistrationLabelName = 'registration__labelName',
+  RegistrationRegistrationDate = 'registration__registrationDate',
+  TransactionId = 'transactionID'
 }
 
 export type NameTransferred = RegistrationEvent & {
@@ -1281,6 +1456,7 @@ export type NameTransferred = RegistrationEvent & {
 export type NameTransferred_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NameTransferred_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1318,6 +1494,7 @@ export type NameTransferred_Filter = {
   newOwner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   newOwner_starts_with?: InputMaybe<Scalars['String']>;
   newOwner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<NameTransferred_Filter>>>;
   registration?: InputMaybe<Scalars['String']>;
   registration_?: InputMaybe<Registration_Filter>;
   registration_contains?: InputMaybe<Scalars['String']>;
@@ -1355,8 +1532,14 @@ export enum NameTransferred_OrderBy {
   BlockNumber = 'blockNumber',
   Id = 'id',
   NewOwner = 'newOwner',
+  NewOwnerId = 'newOwner__id',
   Registration = 'registration',
-  TransactionId = 'transactionID',
+  RegistrationCost = 'registration__cost',
+  RegistrationExpiryDate = 'registration__expiryDate',
+  RegistrationId = 'registration__id',
+  RegistrationLabelName = 'registration__labelName',
+  RegistrationRegistrationDate = 'registration__registrationDate',
+  TransactionId = 'transactionID'
 }
 
 export type NameUnwrapped = DomainEvent & {
@@ -1371,6 +1554,7 @@ export type NameUnwrapped = DomainEvent & {
 export type NameUnwrapped_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NameUnwrapped_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1408,6 +1592,7 @@ export type NameUnwrapped_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<NameUnwrapped_Filter>>>;
   owner?: InputMaybe<Scalars['String']>;
   owner_?: InputMaybe<Account_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
@@ -1444,19 +1629,28 @@ export type NameUnwrapped_Filter = {
 export enum NameUnwrapped_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Id = 'id',
   Owner = 'owner',
-  TransactionId = 'transactionID',
+  OwnerId = 'owner__id',
+  TransactionId = 'transactionID'
 }
 
 export type NameWrapped = DomainEvent & {
   __typename?: 'NameWrapped';
   blockNumber: Scalars['Int'];
   domain: Domain;
-  expiry: Scalars['BigInt'];
-  fuses: Scalars['BigInt'];
+  expiryDate: Scalars['BigInt'];
+  fuses: Scalars['Int'];
   id: Scalars['ID'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   owner: Account;
   transactionID: Scalars['Bytes'];
 };
@@ -1464,6 +1658,7 @@ export type NameWrapped = DomainEvent & {
 export type NameWrapped_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NameWrapped_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1493,22 +1688,22 @@ export type NameWrapped_Filter = {
   domain_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   domain_starts_with?: InputMaybe<Scalars['String']>;
   domain_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  expiry?: InputMaybe<Scalars['BigInt']>;
-  expiry_gt?: InputMaybe<Scalars['BigInt']>;
-  expiry_gte?: InputMaybe<Scalars['BigInt']>;
-  expiry_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  expiry_lt?: InputMaybe<Scalars['BigInt']>;
-  expiry_lte?: InputMaybe<Scalars['BigInt']>;
-  expiry_not?: InputMaybe<Scalars['BigInt']>;
-  expiry_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  fuses?: InputMaybe<Scalars['BigInt']>;
-  fuses_gt?: InputMaybe<Scalars['BigInt']>;
-  fuses_gte?: InputMaybe<Scalars['BigInt']>;
-  fuses_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  fuses_lt?: InputMaybe<Scalars['BigInt']>;
-  fuses_lte?: InputMaybe<Scalars['BigInt']>;
-  fuses_not?: InputMaybe<Scalars['BigInt']>;
-  fuses_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  expiryDate?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_gt?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_gte?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  expiryDate_lt?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_lte?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_not?: InputMaybe<Scalars['BigInt']>;
+  expiryDate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fuses?: InputMaybe<Scalars['Int']>;
+  fuses_gt?: InputMaybe<Scalars['Int']>;
+  fuses_gte?: InputMaybe<Scalars['Int']>;
+  fuses_in?: InputMaybe<Array<Scalars['Int']>>;
+  fuses_lt?: InputMaybe<Scalars['Int']>;
+  fuses_lte?: InputMaybe<Scalars['Int']>;
+  fuses_not?: InputMaybe<Scalars['Int']>;
+  fuses_not_in?: InputMaybe<Array<Scalars['Int']>>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -1537,6 +1732,7 @@ export type NameWrapped_Filter = {
   name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   name_starts_with?: InputMaybe<Scalars['String']>;
   name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<NameWrapped_Filter>>>;
   owner?: InputMaybe<Scalars['String']>;
   owner_?: InputMaybe<Account_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
@@ -1573,12 +1769,21 @@ export type NameWrapped_Filter = {
 export enum NameWrapped_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
-  Expiry = 'expiry',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
+  ExpiryDate = 'expiryDate',
   Fuses = 'fuses',
   Id = 'id',
   Name = 'name',
   Owner = 'owner',
-  TransactionId = 'transactionID',
+  OwnerId = 'owner__id',
+  TransactionId = 'transactionID'
 }
 
 export type NewOwner = DomainEvent & {
@@ -1594,6 +1799,7 @@ export type NewOwner = DomainEvent & {
 export type NewOwner_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NewOwner_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1631,6 +1837,7 @@ export type NewOwner_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<NewOwner_Filter>>>;
   owner?: InputMaybe<Scalars['String']>;
   owner_?: InputMaybe<Account_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
@@ -1688,10 +1895,27 @@ export type NewOwner_Filter = {
 export enum NewOwner_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Id = 'id',
   Owner = 'owner',
+  OwnerId = 'owner__id',
   ParentDomain = 'parentDomain',
-  TransactionId = 'transactionID',
+  ParentDomainCreatedAt = 'parentDomain__createdAt',
+  ParentDomainId = 'parentDomain__id',
+  ParentDomainIsMigrated = 'parentDomain__isMigrated',
+  ParentDomainLabelName = 'parentDomain__labelName',
+  ParentDomainLabelhash = 'parentDomain__labelhash',
+  ParentDomainName = 'parentDomain__name',
+  ParentDomainSubdomainCount = 'parentDomain__subdomainCount',
+  ParentDomainTtl = 'parentDomain__ttl',
+  TransactionId = 'transactionID'
 }
 
 export type NewResolver = DomainEvent & {
@@ -1706,6 +1930,7 @@ export type NewResolver = DomainEvent & {
 export type NewResolver_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NewResolver_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1743,6 +1968,7 @@ export type NewResolver_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<NewResolver_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -1779,9 +2005,20 @@ export type NewResolver_Filter = {
 export enum NewResolver_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Id = 'id',
   Resolver = 'resolver',
-  TransactionId = 'transactionID',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
+  TransactionId = 'transactionID'
 }
 
 export type NewTtl = DomainEvent & {
@@ -1796,6 +2033,7 @@ export type NewTtl = DomainEvent & {
 export type NewTtl_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<NewTtl_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1833,6 +2071,7 @@ export type NewTtl_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<NewTtl_Filter>>>;
   transactionID?: InputMaybe<Scalars['Bytes']>;
   transactionID_contains?: InputMaybe<Scalars['Bytes']>;
   transactionID_gt?: InputMaybe<Scalars['Bytes']>;
@@ -1856,15 +2095,23 @@ export type NewTtl_Filter = {
 export enum NewTtl_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Id = 'id',
   TransactionId = 'transactionID',
-  Ttl = 'ttl',
+  Ttl = 'ttl'
 }
 
 /** Defines the order direction, either ascending or descending */
 export enum OrderDirection {
   Asc = 'asc',
-  Desc = 'desc',
+  Desc = 'desc'
 }
 
 export type PubkeyChanged = ResolverEvent & {
@@ -1880,6 +2127,7 @@ export type PubkeyChanged = ResolverEvent & {
 export type PubkeyChanged_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<PubkeyChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -1896,6 +2144,7 @@ export type PubkeyChanged_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<PubkeyChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -1953,9 +2202,12 @@ export enum PubkeyChanged_OrderBy {
   BlockNumber = 'blockNumber',
   Id = 'id',
   Resolver = 'resolver',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
   TransactionId = 'transactionID',
   X = 'x',
-  Y = 'y',
+  Y = 'y'
 }
 
 export type Query = {
@@ -1976,6 +2228,8 @@ export type Query = {
   domainEvent?: Maybe<DomainEvent>;
   domainEvents: Array<DomainEvent>;
   domains: Array<Domain>;
+  expiryExtended?: Maybe<ExpiryExtended>;
+  expiryExtendeds: Array<ExpiryExtended>;
   fusesSet?: Maybe<FusesSet>;
   fusesSets: Array<FusesSet>;
   interfaceChanged?: Maybe<InterfaceChanged>;
@@ -2022,15 +2276,18 @@ export type Query = {
   wrappedTransfers: Array<WrappedTransfer>;
 };
 
+
 export type Query_MetaArgs = {
   block?: InputMaybe<Block_Height>;
 };
+
 
 export type QueryAbiChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryAbiChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2042,11 +2299,13 @@ export type QueryAbiChangedsArgs = {
   where?: InputMaybe<AbiChanged_Filter>;
 };
 
+
 export type QueryAccountArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryAccountsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2058,11 +2317,13 @@ export type QueryAccountsArgs = {
   where?: InputMaybe<Account_Filter>;
 };
 
+
 export type QueryAddrChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryAddrChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2074,11 +2335,13 @@ export type QueryAddrChangedsArgs = {
   where?: InputMaybe<AddrChanged_Filter>;
 };
 
+
 export type QueryAuthorisationChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryAuthorisationChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2090,11 +2353,13 @@ export type QueryAuthorisationChangedsArgs = {
   where?: InputMaybe<AuthorisationChanged_Filter>;
 };
 
+
 export type QueryContenthashChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryContenthashChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2106,17 +2371,20 @@ export type QueryContenthashChangedsArgs = {
   where?: InputMaybe<ContenthashChanged_Filter>;
 };
 
+
 export type QueryDomainArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
+
 export type QueryDomainEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryDomainEventsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2128,6 +2396,7 @@ export type QueryDomainEventsArgs = {
   where?: InputMaybe<DomainEvent_Filter>;
 };
 
+
 export type QueryDomainsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2138,11 +2407,31 @@ export type QueryDomainsArgs = {
   where?: InputMaybe<Domain_Filter>;
 };
 
+
+export type QueryExpiryExtendedArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryExpiryExtendedsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ExpiryExtended_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<ExpiryExtended_Filter>;
+};
+
+
 export type QueryFusesSetArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryFusesSetsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2154,11 +2443,13 @@ export type QueryFusesSetsArgs = {
   where?: InputMaybe<FusesSet_Filter>;
 };
 
+
 export type QueryInterfaceChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryInterfaceChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2170,11 +2461,13 @@ export type QueryInterfaceChangedsArgs = {
   where?: InputMaybe<InterfaceChanged_Filter>;
 };
 
+
 export type QueryMulticoinAddrChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryMulticoinAddrChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2186,11 +2479,13 @@ export type QueryMulticoinAddrChangedsArgs = {
   where?: InputMaybe<MulticoinAddrChanged_Filter>;
 };
 
+
 export type QueryNameChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNameChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2202,11 +2497,13 @@ export type QueryNameChangedsArgs = {
   where?: InputMaybe<NameChanged_Filter>;
 };
 
+
 export type QueryNameRegisteredArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNameRegisteredsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2218,11 +2515,13 @@ export type QueryNameRegisteredsArgs = {
   where?: InputMaybe<NameRegistered_Filter>;
 };
 
+
 export type QueryNameRenewedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNameRenewedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2234,11 +2533,13 @@ export type QueryNameRenewedsArgs = {
   where?: InputMaybe<NameRenewed_Filter>;
 };
 
+
 export type QueryNameTransferredArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNameTransferredsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2250,11 +2551,13 @@ export type QueryNameTransferredsArgs = {
   where?: InputMaybe<NameTransferred_Filter>;
 };
 
+
 export type QueryNameUnwrappedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNameUnwrappedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2266,11 +2569,13 @@ export type QueryNameUnwrappedsArgs = {
   where?: InputMaybe<NameUnwrapped_Filter>;
 };
 
+
 export type QueryNameWrappedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNameWrappedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2282,11 +2587,13 @@ export type QueryNameWrappedsArgs = {
   where?: InputMaybe<NameWrapped_Filter>;
 };
 
+
 export type QueryNewOwnerArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNewOwnersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2298,11 +2605,13 @@ export type QueryNewOwnersArgs = {
   where?: InputMaybe<NewOwner_Filter>;
 };
 
+
 export type QueryNewResolverArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNewResolversArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2314,11 +2623,13 @@ export type QueryNewResolversArgs = {
   where?: InputMaybe<NewResolver_Filter>;
 };
 
+
 export type QueryNewTtlArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryNewTtLsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2330,11 +2641,13 @@ export type QueryNewTtLsArgs = {
   where?: InputMaybe<NewTtl_Filter>;
 };
 
+
 export type QueryPubkeyChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryPubkeyChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2346,17 +2659,20 @@ export type QueryPubkeyChangedsArgs = {
   where?: InputMaybe<PubkeyChanged_Filter>;
 };
 
+
 export type QueryRegistrationArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
+
 export type QueryRegistrationEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryRegistrationEventsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2368,6 +2684,7 @@ export type QueryRegistrationEventsArgs = {
   where?: InputMaybe<RegistrationEvent_Filter>;
 };
 
+
 export type QueryRegistrationsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2378,17 +2695,20 @@ export type QueryRegistrationsArgs = {
   where?: InputMaybe<Registration_Filter>;
 };
 
+
 export type QueryResolverArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
+
 export type QueryResolverEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryResolverEventsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2400,6 +2720,7 @@ export type QueryResolverEventsArgs = {
   where?: InputMaybe<ResolverEvent_Filter>;
 };
 
+
 export type QueryResolversArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2410,11 +2731,13 @@ export type QueryResolversArgs = {
   where?: InputMaybe<Resolver_Filter>;
 };
 
+
 export type QueryTextChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryTextChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2426,11 +2749,13 @@ export type QueryTextChangedsArgs = {
   where?: InputMaybe<TextChanged_Filter>;
 };
 
+
 export type QueryTransferArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryTransfersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2442,11 +2767,13 @@ export type QueryTransfersArgs = {
   where?: InputMaybe<Transfer_Filter>;
 };
 
+
 export type QueryVersionChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryVersionChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2458,11 +2785,13 @@ export type QueryVersionChangedsArgs = {
   where?: InputMaybe<VersionChanged_Filter>;
 };
 
+
 export type QueryWrappedDomainArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryWrappedDomainsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2474,11 +2803,13 @@ export type QueryWrappedDomainsArgs = {
   where?: InputMaybe<WrappedDomain_Filter>;
 };
 
+
 export type QueryWrappedTransferArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type QueryWrappedTransfersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2502,6 +2833,7 @@ export type Registration = {
   registrationDate: Scalars['BigInt'];
 };
 
+
 export type RegistrationEventsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RegistrationEvent_OrderBy>;
@@ -2520,6 +2852,7 @@ export type RegistrationEvent = {
 export type RegistrationEvent_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<RegistrationEvent_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -2536,6 +2869,7 @@ export type RegistrationEvent_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<RegistrationEvent_Filter>>>;
   registration?: InputMaybe<Scalars['String']>;
   registration_?: InputMaybe<Registration_Filter>;
   registration_contains?: InputMaybe<Scalars['String']>;
@@ -2573,12 +2907,18 @@ export enum RegistrationEvent_OrderBy {
   BlockNumber = 'blockNumber',
   Id = 'id',
   Registration = 'registration',
-  TransactionId = 'transactionID',
+  RegistrationCost = 'registration__cost',
+  RegistrationExpiryDate = 'registration__expiryDate',
+  RegistrationId = 'registration__id',
+  RegistrationLabelName = 'registration__labelName',
+  RegistrationRegistrationDate = 'registration__registrationDate',
+  TransactionId = 'transactionID'
 }
 
 export type Registration_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Registration_Filter>>>;
   cost?: InputMaybe<Scalars['BigInt']>;
   cost_gt?: InputMaybe<Scalars['BigInt']>;
   cost_gte?: InputMaybe<Scalars['BigInt']>;
@@ -2645,6 +2985,7 @@ export type Registration_Filter = {
   labelName_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   labelName_starts_with?: InputMaybe<Scalars['String']>;
   labelName_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<Registration_Filter>>>;
   registrant?: InputMaybe<Scalars['String']>;
   registrant_?: InputMaybe<Account_Filter>;
   registrant_contains?: InputMaybe<Scalars['String']>;
@@ -2679,12 +3020,21 @@ export type Registration_Filter = {
 export enum Registration_OrderBy {
   Cost = 'cost',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Events = 'events',
   ExpiryDate = 'expiryDate',
   Id = 'id',
   LabelName = 'labelName',
   Registrant = 'registrant',
-  RegistrationDate = 'registrationDate',
+  RegistrantId = 'registrant__id',
+  RegistrationDate = 'registrationDate'
 }
 
 export type Resolver = {
@@ -2698,6 +3048,7 @@ export type Resolver = {
   id: Scalars['ID'];
   texts?: Maybe<Array<Scalars['String']>>;
 };
+
 
 export type ResolverEventsArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -2717,6 +3068,7 @@ export type ResolverEvent = {
 export type ResolverEvent_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<ResolverEvent_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -2733,6 +3085,7 @@ export type ResolverEvent_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<ResolverEvent_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -2770,7 +3123,10 @@ export enum ResolverEvent_OrderBy {
   BlockNumber = 'blockNumber',
   Id = 'id',
   Resolver = 'resolver',
-  TransactionId = 'transactionID',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
+  TransactionId = 'transactionID'
 }
 
 export type Resolver_Filter = {
@@ -2807,6 +3163,7 @@ export type Resolver_Filter = {
   address_not?: InputMaybe<Scalars['Bytes']>;
   address_not_contains?: InputMaybe<Scalars['Bytes']>;
   address_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  and?: InputMaybe<Array<InputMaybe<Resolver_Filter>>>;
   coinTypes?: InputMaybe<Array<Scalars['BigInt']>>;
   coinTypes_contains?: InputMaybe<Array<Scalars['BigInt']>>;
   coinTypes_contains_nocase?: InputMaybe<Array<Scalars['BigInt']>>;
@@ -2853,6 +3210,7 @@ export type Resolver_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<Resolver_Filter>>>;
   texts?: InputMaybe<Array<Scalars['String']>>;
   texts_contains?: InputMaybe<Array<Scalars['String']>>;
   texts_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
@@ -2863,13 +3221,22 @@ export type Resolver_Filter = {
 
 export enum Resolver_OrderBy {
   Addr = 'addr',
+  AddrId = 'addr__id',
   Address = 'address',
   CoinTypes = 'coinTypes',
   ContentHash = 'contentHash',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Events = 'events',
   Id = 'id',
-  Texts = 'texts',
+  Texts = 'texts'
 }
 
 export type Subscription = {
@@ -2890,6 +3257,8 @@ export type Subscription = {
   domainEvent?: Maybe<DomainEvent>;
   domainEvents: Array<DomainEvent>;
   domains: Array<Domain>;
+  expiryExtended?: Maybe<ExpiryExtended>;
+  expiryExtendeds: Array<ExpiryExtended>;
   fusesSet?: Maybe<FusesSet>;
   fusesSets: Array<FusesSet>;
   interfaceChanged?: Maybe<InterfaceChanged>;
@@ -2936,15 +3305,18 @@ export type Subscription = {
   wrappedTransfers: Array<WrappedTransfer>;
 };
 
+
 export type Subscription_MetaArgs = {
   block?: InputMaybe<Block_Height>;
 };
+
 
 export type SubscriptionAbiChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionAbiChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2956,11 +3328,13 @@ export type SubscriptionAbiChangedsArgs = {
   where?: InputMaybe<AbiChanged_Filter>;
 };
 
+
 export type SubscriptionAccountArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionAccountsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2972,11 +3346,13 @@ export type SubscriptionAccountsArgs = {
   where?: InputMaybe<Account_Filter>;
 };
 
+
 export type SubscriptionAddrChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionAddrChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2988,11 +3364,13 @@ export type SubscriptionAddrChangedsArgs = {
   where?: InputMaybe<AddrChanged_Filter>;
 };
 
+
 export type SubscriptionAuthorisationChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionAuthorisationChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3004,11 +3382,13 @@ export type SubscriptionAuthorisationChangedsArgs = {
   where?: InputMaybe<AuthorisationChanged_Filter>;
 };
 
+
 export type SubscriptionContenthashChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionContenthashChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3020,17 +3400,20 @@ export type SubscriptionContenthashChangedsArgs = {
   where?: InputMaybe<ContenthashChanged_Filter>;
 };
 
+
 export type SubscriptionDomainArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
+
 export type SubscriptionDomainEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionDomainEventsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3042,6 +3425,7 @@ export type SubscriptionDomainEventsArgs = {
   where?: InputMaybe<DomainEvent_Filter>;
 };
 
+
 export type SubscriptionDomainsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -3052,11 +3436,31 @@ export type SubscriptionDomainsArgs = {
   where?: InputMaybe<Domain_Filter>;
 };
 
+
+export type SubscriptionExpiryExtendedArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionExpiryExtendedsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ExpiryExtended_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<ExpiryExtended_Filter>;
+};
+
+
 export type SubscriptionFusesSetArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionFusesSetsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3068,11 +3472,13 @@ export type SubscriptionFusesSetsArgs = {
   where?: InputMaybe<FusesSet_Filter>;
 };
 
+
 export type SubscriptionInterfaceChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionInterfaceChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3084,11 +3490,13 @@ export type SubscriptionInterfaceChangedsArgs = {
   where?: InputMaybe<InterfaceChanged_Filter>;
 };
 
+
 export type SubscriptionMulticoinAddrChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionMulticoinAddrChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3100,11 +3508,13 @@ export type SubscriptionMulticoinAddrChangedsArgs = {
   where?: InputMaybe<MulticoinAddrChanged_Filter>;
 };
 
+
 export type SubscriptionNameChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNameChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3116,11 +3526,13 @@ export type SubscriptionNameChangedsArgs = {
   where?: InputMaybe<NameChanged_Filter>;
 };
 
+
 export type SubscriptionNameRegisteredArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNameRegisteredsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3132,11 +3544,13 @@ export type SubscriptionNameRegisteredsArgs = {
   where?: InputMaybe<NameRegistered_Filter>;
 };
 
+
 export type SubscriptionNameRenewedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNameRenewedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3148,11 +3562,13 @@ export type SubscriptionNameRenewedsArgs = {
   where?: InputMaybe<NameRenewed_Filter>;
 };
 
+
 export type SubscriptionNameTransferredArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNameTransferredsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3164,11 +3580,13 @@ export type SubscriptionNameTransferredsArgs = {
   where?: InputMaybe<NameTransferred_Filter>;
 };
 
+
 export type SubscriptionNameUnwrappedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNameUnwrappedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3180,11 +3598,13 @@ export type SubscriptionNameUnwrappedsArgs = {
   where?: InputMaybe<NameUnwrapped_Filter>;
 };
 
+
 export type SubscriptionNameWrappedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNameWrappedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3196,11 +3616,13 @@ export type SubscriptionNameWrappedsArgs = {
   where?: InputMaybe<NameWrapped_Filter>;
 };
 
+
 export type SubscriptionNewOwnerArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNewOwnersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3212,11 +3634,13 @@ export type SubscriptionNewOwnersArgs = {
   where?: InputMaybe<NewOwner_Filter>;
 };
 
+
 export type SubscriptionNewResolverArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNewResolversArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3228,11 +3652,13 @@ export type SubscriptionNewResolversArgs = {
   where?: InputMaybe<NewResolver_Filter>;
 };
 
+
 export type SubscriptionNewTtlArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionNewTtLsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3244,11 +3670,13 @@ export type SubscriptionNewTtLsArgs = {
   where?: InputMaybe<NewTtl_Filter>;
 };
 
+
 export type SubscriptionPubkeyChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionPubkeyChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3260,17 +3688,20 @@ export type SubscriptionPubkeyChangedsArgs = {
   where?: InputMaybe<PubkeyChanged_Filter>;
 };
 
+
 export type SubscriptionRegistrationArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
+
 export type SubscriptionRegistrationEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionRegistrationEventsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3282,6 +3713,7 @@ export type SubscriptionRegistrationEventsArgs = {
   where?: InputMaybe<RegistrationEvent_Filter>;
 };
 
+
 export type SubscriptionRegistrationsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -3292,17 +3724,20 @@ export type SubscriptionRegistrationsArgs = {
   where?: InputMaybe<Registration_Filter>;
 };
 
+
 export type SubscriptionResolverArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
+
 export type SubscriptionResolverEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionResolverEventsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3314,6 +3749,7 @@ export type SubscriptionResolverEventsArgs = {
   where?: InputMaybe<ResolverEvent_Filter>;
 };
 
+
 export type SubscriptionResolversArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -3324,11 +3760,13 @@ export type SubscriptionResolversArgs = {
   where?: InputMaybe<Resolver_Filter>;
 };
 
+
 export type SubscriptionTextChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionTextChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3340,11 +3778,13 @@ export type SubscriptionTextChangedsArgs = {
   where?: InputMaybe<TextChanged_Filter>;
 };
 
+
 export type SubscriptionTransferArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionTransfersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3356,11 +3796,13 @@ export type SubscriptionTransfersArgs = {
   where?: InputMaybe<Transfer_Filter>;
 };
 
+
 export type SubscriptionVersionChangedArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionVersionChangedsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3372,11 +3814,13 @@ export type SubscriptionVersionChangedsArgs = {
   where?: InputMaybe<VersionChanged_Filter>;
 };
 
+
 export type SubscriptionWrappedDomainArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionWrappedDomainsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3388,11 +3832,13 @@ export type SubscriptionWrappedDomainsArgs = {
   where?: InputMaybe<WrappedDomain_Filter>;
 };
 
+
 export type SubscriptionWrappedTransferArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
+
 
 export type SubscriptionWrappedTransfersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -3417,6 +3863,7 @@ export type TextChanged = ResolverEvent & {
 export type TextChanged_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<TextChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -3453,6 +3900,7 @@ export type TextChanged_Filter = {
   key_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   key_starts_with?: InputMaybe<Scalars['String']>;
   key_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<TextChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -3511,8 +3959,11 @@ export enum TextChanged_OrderBy {
   Id = 'id',
   Key = 'key',
   Resolver = 'resolver',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
   TransactionId = 'transactionID',
-  Value = 'value',
+  Value = 'value'
 }
 
 export type Transfer = DomainEvent & {
@@ -3527,6 +3978,7 @@ export type Transfer = DomainEvent & {
 export type Transfer_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Transfer_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -3564,6 +4016,7 @@ export type Transfer_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<Transfer_Filter>>>;
   owner?: InputMaybe<Scalars['String']>;
   owner_?: InputMaybe<Account_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
@@ -3600,9 +4053,18 @@ export type Transfer_Filter = {
 export enum Transfer_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Id = 'id',
   Owner = 'owner',
-  TransactionId = 'transactionID',
+  OwnerId = 'owner__id',
+  TransactionId = 'transactionID'
 }
 
 export type VersionChanged = ResolverEvent & {
@@ -3617,6 +4079,7 @@ export type VersionChanged = ResolverEvent & {
 export type VersionChanged_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<VersionChanged_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -3633,6 +4096,7 @@ export type VersionChanged_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<VersionChanged_Filter>>>;
   resolver?: InputMaybe<Scalars['String']>;
   resolver_?: InputMaybe<Resolver_Filter>;
   resolver_contains?: InputMaybe<Scalars['String']>;
@@ -3678,23 +4142,27 @@ export enum VersionChanged_OrderBy {
   BlockNumber = 'blockNumber',
   Id = 'id',
   Resolver = 'resolver',
+  ResolverAddress = 'resolver__address',
+  ResolverContentHash = 'resolver__contentHash',
+  ResolverId = 'resolver__id',
   TransactionId = 'transactionID',
-  Version = 'version',
+  Version = 'version'
 }
 
 export type WrappedDomain = {
   __typename?: 'WrappedDomain';
   domain: Domain;
   expiryDate: Scalars['BigInt'];
-  fuses: Scalars['BigInt'];
+  fuses: Scalars['Int'];
   id: Scalars['ID'];
-  labelName?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   owner: Account;
 };
 
 export type WrappedDomain_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<WrappedDomain_Filter>>>;
   domain?: InputMaybe<Scalars['String']>;
   domain_?: InputMaybe<Domain_Filter>;
   domain_contains?: InputMaybe<Scalars['String']>;
@@ -3724,14 +4192,14 @@ export type WrappedDomain_Filter = {
   expiryDate_lte?: InputMaybe<Scalars['BigInt']>;
   expiryDate_not?: InputMaybe<Scalars['BigInt']>;
   expiryDate_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  fuses?: InputMaybe<Scalars['BigInt']>;
-  fuses_gt?: InputMaybe<Scalars['BigInt']>;
-  fuses_gte?: InputMaybe<Scalars['BigInt']>;
-  fuses_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  fuses_lt?: InputMaybe<Scalars['BigInt']>;
-  fuses_lte?: InputMaybe<Scalars['BigInt']>;
-  fuses_not?: InputMaybe<Scalars['BigInt']>;
-  fuses_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  fuses?: InputMaybe<Scalars['Int']>;
+  fuses_gt?: InputMaybe<Scalars['Int']>;
+  fuses_gte?: InputMaybe<Scalars['Int']>;
+  fuses_in?: InputMaybe<Array<Scalars['Int']>>;
+  fuses_lt?: InputMaybe<Scalars['Int']>;
+  fuses_lte?: InputMaybe<Scalars['Int']>;
+  fuses_not?: InputMaybe<Scalars['Int']>;
+  fuses_not_in?: InputMaybe<Array<Scalars['Int']>>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -3740,26 +4208,27 @@ export type WrappedDomain_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
-  labelName?: InputMaybe<Scalars['String']>;
-  labelName_contains?: InputMaybe<Scalars['String']>;
-  labelName_contains_nocase?: InputMaybe<Scalars['String']>;
-  labelName_ends_with?: InputMaybe<Scalars['String']>;
-  labelName_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  labelName_gt?: InputMaybe<Scalars['String']>;
-  labelName_gte?: InputMaybe<Scalars['String']>;
-  labelName_in?: InputMaybe<Array<Scalars['String']>>;
-  labelName_lt?: InputMaybe<Scalars['String']>;
-  labelName_lte?: InputMaybe<Scalars['String']>;
-  labelName_not?: InputMaybe<Scalars['String']>;
-  labelName_not_contains?: InputMaybe<Scalars['String']>;
-  labelName_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  labelName_not_ends_with?: InputMaybe<Scalars['String']>;
-  labelName_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  labelName_not_in?: InputMaybe<Array<Scalars['String']>>;
-  labelName_not_starts_with?: InputMaybe<Scalars['String']>;
-  labelName_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  labelName_starts_with?: InputMaybe<Scalars['String']>;
-  labelName_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  name_contains?: InputMaybe<Scalars['String']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']>;
+  name_ends_with?: InputMaybe<Scalars['String']>;
+  name_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  name_gt?: InputMaybe<Scalars['String']>;
+  name_gte?: InputMaybe<Scalars['String']>;
+  name_in?: InputMaybe<Array<Scalars['String']>>;
+  name_lt?: InputMaybe<Scalars['String']>;
+  name_lte?: InputMaybe<Scalars['String']>;
+  name_not?: InputMaybe<Scalars['String']>;
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  name_not_ends_with?: InputMaybe<Scalars['String']>;
+  name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  name_not_in?: InputMaybe<Array<Scalars['String']>>;
+  name_not_starts_with?: InputMaybe<Scalars['String']>;
+  name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  name_starts_with?: InputMaybe<Scalars['String']>;
+  name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<WrappedDomain_Filter>>>;
   owner?: InputMaybe<Scalars['String']>;
   owner_?: InputMaybe<Account_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
@@ -3785,11 +4254,20 @@ export type WrappedDomain_Filter = {
 
 export enum WrappedDomain_OrderBy {
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   ExpiryDate = 'expiryDate',
   Fuses = 'fuses',
   Id = 'id',
-  LabelName = 'labelName',
+  Name = 'name',
   Owner = 'owner',
+  OwnerId = 'owner__id'
 }
 
 export type WrappedTransfer = DomainEvent & {
@@ -3804,6 +4282,7 @@ export type WrappedTransfer = DomainEvent & {
 export type WrappedTransfer_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<WrappedTransfer_Filter>>>;
   blockNumber?: InputMaybe<Scalars['Int']>;
   blockNumber_gt?: InputMaybe<Scalars['Int']>;
   blockNumber_gte?: InputMaybe<Scalars['Int']>;
@@ -3841,6 +4320,7 @@ export type WrappedTransfer_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<WrappedTransfer_Filter>>>;
   owner?: InputMaybe<Scalars['String']>;
   owner_?: InputMaybe<Account_Filter>;
   owner_contains?: InputMaybe<Scalars['String']>;
@@ -3877,9 +4357,18 @@ export type WrappedTransfer_Filter = {
 export enum WrappedTransfer_OrderBy {
   BlockNumber = 'blockNumber',
   Domain = 'domain',
+  DomainCreatedAt = 'domain__createdAt',
+  DomainId = 'domain__id',
+  DomainIsMigrated = 'domain__isMigrated',
+  DomainLabelName = 'domain__labelName',
+  DomainLabelhash = 'domain__labelhash',
+  DomainName = 'domain__name',
+  DomainSubdomainCount = 'domain__subdomainCount',
+  DomainTtl = 'domain__ttl',
   Id = 'id',
   Owner = 'owner',
-  TransactionId = 'transactionID',
+  OwnerId = 'owner__id',
+  TransactionId = 'transactionID'
 }
 
 export type _Block_ = {
@@ -3913,7 +4402,7 @@ export enum _SubgraphErrorPolicy_ {
   /** Data will be returned even if the subgraph has indexing errors */
   Allow = 'allow',
   /** If the subgraph has indexing errors, data will be omitted. The default. */
-  Deny = 'deny',
+  Deny = 'deny'
 }
 
 export type GetDomainsByNamehashQueryVariables = Exact<{
@@ -3921,23 +4410,8 @@ export type GetDomainsByNamehashQueryVariables = Exact<{
   chainId?: InputMaybe<Scalars['Int']>;
 }>;
 
-export type GetDomainsByNamehashQuery = {
-  __typename?: 'Query';
-  domain?: {
-    __typename?: 'Domain';
-    id: string;
-    labelName?: string | null;
-    subdomains: Array<{
-      __typename?: 'Domain';
-      id: string;
-      labelName?: string | null;
-      labelhash?: any | null;
-      isMigrated: boolean;
-      name?: string | null;
-      owner: { __typename?: 'Account'; id: string };
-    }>;
-  } | null;
-};
+
+export type GetDomainsByNamehashQuery = { __typename?: 'Query', domain?: { __typename?: 'Domain', id: string, labelName?: string | null, subdomains: Array<{ __typename?: 'Domain', id: string, labelName?: string | null, labelhash?: any | null, isMigrated: boolean, name?: string | null, owner: { __typename?: 'Account', id: string } }> } | null };
 
 export type GetDomainsOwnedOrControlledByQueryVariables = Exact<{
   addressID: Scalars['ID'];
@@ -3949,46 +4423,44 @@ export type GetDomainsOwnedOrControlledByQueryVariables = Exact<{
   chainId?: InputMaybe<Scalars['Int']>;
 }>;
 
-export type GetDomainsOwnedOrControlledByQuery = {
-  __typename?: 'Query';
-  account?: {
-    __typename?: 'Account';
-    domainsOwned: Array<{
-      __typename?: 'Domain';
-      id: string;
-      labelName?: string | null;
-      labelhash?: any | null;
-      name?: string | null;
-      parent?: { __typename?: 'Domain'; name?: string | null } | null;
-    }>;
-  } | null;
-  domainsControlled: Array<{
-    __typename?: 'Domain';
-    id: string;
-    labelName?: string | null;
-    labelhash?: any | null;
-    name?: string | null;
-    owner: { __typename?: 'Account'; id: string };
-  }>;
-};
+
+export type GetDomainsOwnedOrControlledByQuery = { __typename?: 'Query', account?: { __typename?: 'Account', domainsOwned: Array<{ __typename?: 'Domain', id: string, labelName?: string | null, labelhash?: any | null, name?: string | null, owner: { __typename?: 'Account', id: string } }>, wrappedDomainsOwned?: Array<{ __typename?: 'WrappedDomain', id: string, name?: string | null, domain: { __typename?: 'Domain', id: string, labelName?: string | null, labelhash?: any | null, name?: string | null, owner: { __typename?: 'Account', id: string } }, owner: { __typename?: 'Account', id: string } }> | null } | null, domainsControlled: Array<{ __typename?: 'Domain', id: string, labelName?: string | null, labelhash?: any | null, name?: string | null, owner: { __typename?: 'Account', id: string } }>, wrappedDomainsControlled: Array<{ __typename?: 'WrappedDomain', id: string, name?: string | null, domain: { __typename?: 'Domain', id: string, labelName?: string | null, labelhash?: any | null, name?: string | null, owner: { __typename?: 'Account', id: string } }, owner: { __typename?: 'Account', id: string } }> };
 
 export type GetDomainFromSubgraphQueryVariables = Exact<{
   domainId: Scalars['ID'];
   chainId?: InputMaybe<Scalars['Int']>;
 }>;
 
-export type GetDomainFromSubgraphQuery = {
-  __typename?: 'Query';
-  domain?: {
-    __typename?: 'Domain';
-    id: string;
-    name?: string | null;
-    labelName?: string | null;
-    labelhash?: any | null;
-    owner: { __typename?: 'Account'; id: string };
-  } | null;
-};
 
+export type GetDomainFromSubgraphQuery = { __typename?: 'Query', domain?: { __typename?: 'Domain', id: string, name?: string | null, labelName?: string | null, labelhash?: any | null, owner: { __typename?: 'Account', id: string } } | null };
+
+export type DomainFieldsFragment = { __typename?: 'Domain', id: string, labelName?: string | null, labelhash?: any | null, name?: string | null, owner: { __typename?: 'Account', id: string } };
+
+export type WrappedDomainFieldsFragment = { __typename?: 'WrappedDomain', id: string, name?: string | null, domain: { __typename?: 'Domain', id: string, labelName?: string | null, labelhash?: any | null, name?: string | null, owner: { __typename?: 'Account', id: string } }, owner: { __typename?: 'Account', id: string } };
+
+export const DomainFieldsFragmentDoc = `
+    fragment domainFields on Domain {
+  id
+  labelName
+  labelhash
+  name
+  owner {
+    id
+  }
+}
+    `;
+export const WrappedDomainFieldsFragmentDoc = `
+    fragment wrappedDomainFields on WrappedDomain {
+  id
+  name
+  domain {
+    ...domainFields
+  }
+  owner {
+    id
+  }
+}
+    ${DomainFieldsFragmentDoc}`;
 export const GetDomainsByNamehashDocument = `
     query getDomainsByNamehash($domainId: ID!, $chainId: Int) {
   domain(id: $domainId) {
@@ -4007,61 +4479,45 @@ export const GetDomainsByNamehashDocument = `
   }
 }
     `;
-export const useGetDomainsByNamehashQuery = <TData = GetDomainsByNamehashQuery, TError = unknown>(
-  client: GraphQLClient,
-  variables: GetDomainsByNamehashQueryVariables,
-  options?: UseQueryOptions<GetDomainsByNamehashQuery, TError, TData>,
-  headers?: RequestInit['headers']
-) =>
-  useQuery<GetDomainsByNamehashQuery, TError, TData>(
-    ['getDomainsByNamehash', variables],
-    fetcher<GetDomainsByNamehashQuery, GetDomainsByNamehashQueryVariables>(
-      client,
-      GetDomainsByNamehashDocument,
-      variables,
-      headers
-    ),
-    options
-  );
+export const useGetDomainsByNamehashQuery = <
+      TData = GetDomainsByNamehashQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetDomainsByNamehashQueryVariables,
+      options?: UseQueryOptions<GetDomainsByNamehashQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetDomainsByNamehashQuery, TError, TData>(
+      ['getDomainsByNamehash', variables],
+      fetcher<GetDomainsByNamehashQuery, GetDomainsByNamehashQueryVariables>(client, GetDomainsByNamehashDocument, variables, headers),
+      options
+    );
 
-useGetDomainsByNamehashQuery.getKey = (variables: GetDomainsByNamehashQueryVariables) => [
-  'getDomainsByNamehash',
-  variables,
-];
-export const useInfiniteGetDomainsByNamehashQuery = <TData = GetDomainsByNamehashQuery, TError = unknown>(
-  pageParamKey: keyof GetDomainsByNamehashQueryVariables,
-  client: GraphQLClient,
-  variables: GetDomainsByNamehashQueryVariables,
-  options?: UseInfiniteQueryOptions<GetDomainsByNamehashQuery, TError, TData>,
-  headers?: RequestInit['headers']
-) =>
-  useInfiniteQuery<GetDomainsByNamehashQuery, TError, TData>(
-    ['getDomainsByNamehash.infinite', variables],
-    (metaData) =>
-      fetcher<GetDomainsByNamehashQuery, GetDomainsByNamehashQueryVariables>(
-        client,
-        GetDomainsByNamehashDocument,
-        { ...variables, ...(metaData.pageParam ? { [pageParamKey]: metaData.pageParam } : {}) },
-        headers
-      )(),
-    options
-  );
+useGetDomainsByNamehashQuery.getKey = (variables: GetDomainsByNamehashQueryVariables) => ['getDomainsByNamehash', variables];
+;
 
-useInfiniteGetDomainsByNamehashQuery.getKey = (variables: GetDomainsByNamehashQueryVariables) => [
-  'getDomainsByNamehash.infinite',
-  variables,
-];
-useGetDomainsByNamehashQuery.fetcher = (
-  client: GraphQLClient,
-  variables: GetDomainsByNamehashQueryVariables,
-  headers?: RequestInit['headers']
-) =>
-  fetcher<GetDomainsByNamehashQuery, GetDomainsByNamehashQueryVariables>(
-    client,
-    GetDomainsByNamehashDocument,
-    variables,
-    headers
-  );
+export const useInfiniteGetDomainsByNamehashQuery = <
+      TData = GetDomainsByNamehashQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof GetDomainsByNamehashQueryVariables,
+      client: GraphQLClient,
+      variables: GetDomainsByNamehashQueryVariables,
+      options?: UseInfiniteQueryOptions<GetDomainsByNamehashQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useInfiniteQuery<GetDomainsByNamehashQuery, TError, TData>(
+      ['getDomainsByNamehash.infinite', variables],
+      (metaData) => fetcher<GetDomainsByNamehashQuery, GetDomainsByNamehashQueryVariables>(client, GetDomainsByNamehashDocument, {...variables, ...(metaData.pageParam ? {[pageParamKey]: metaData.pageParam} : {})}, headers)(),
+      options
+    );
+
+
+useInfiniteGetDomainsByNamehashQuery.getKey = (variables: GetDomainsByNamehashQueryVariables) => ['getDomainsByNamehash.infinite', variables];
+;
+
+useGetDomainsByNamehashQuery.fetcher = (client: GraphQLClient, variables: GetDomainsByNamehashQueryVariables, headers?: RequestInit['headers']) => fetcher<GetDomainsByNamehashQuery, GetDomainsByNamehashQueryVariables>(client, GetDomainsByNamehashDocument, variables, headers);
 export const GetDomainsOwnedOrControlledByDocument = `
     query getDomainsOwnedOrControlledBy($addressID: ID!, $addressString: String!, $searchString: String, $first: Int, $skip: Int, $orderBy: Domain_orderBy, $chainId: Int) {
   account(id: $addressID) {
@@ -4071,13 +4527,7 @@ export const GetDomainsOwnedOrControlledByDocument = `
       orderBy: $orderBy
       where: {name_contains_nocase: $searchString}
     ) {
-      id
-      labelName
-      labelhash
-      name
-      parent {
-        name
-      }
+      ...domainFields
     }
   }
   domainsControlled: domains(
@@ -4086,74 +4536,66 @@ export const GetDomainsOwnedOrControlledByDocument = `
     orderBy: $orderBy
     where: {name_contains_nocase: $searchString, owner: $addressString}
   ) {
-    id
-    labelName
-    labelhash
-    name
-    owner {
-      id
+    ...domainFields
+  }
+  account(id: $addressID) {
+    wrappedDomainsOwned: wrappedDomains(
+      first: $first
+      skip: $skip
+      where: {name_contains_nocase: $searchString}
+    ) {
+      ...wrappedDomainFields
     }
   }
+  wrappedDomainsControlled: wrappedDomains(
+    first: $first
+    skip: $skip
+    where: {name_contains_nocase: $searchString, owner: $addressString}
+  ) {
+    ...wrappedDomainFields
+  }
 }
-    `;
-export const useGetDomainsOwnedOrControlledByQuery = <TData = GetDomainsOwnedOrControlledByQuery, TError = unknown>(
-  client: GraphQLClient,
-  variables: GetDomainsOwnedOrControlledByQueryVariables,
-  options?: UseQueryOptions<GetDomainsOwnedOrControlledByQuery, TError, TData>,
-  headers?: RequestInit['headers']
-) =>
-  useQuery<GetDomainsOwnedOrControlledByQuery, TError, TData>(
-    ['getDomainsOwnedOrControlledBy', variables],
-    fetcher<GetDomainsOwnedOrControlledByQuery, GetDomainsOwnedOrControlledByQueryVariables>(
-      client,
-      GetDomainsOwnedOrControlledByDocument,
-      variables,
-      headers
-    ),
-    options
-  );
+    ${DomainFieldsFragmentDoc}
+${WrappedDomainFieldsFragmentDoc}`;
+export const useGetDomainsOwnedOrControlledByQuery = <
+      TData = GetDomainsOwnedOrControlledByQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetDomainsOwnedOrControlledByQueryVariables,
+      options?: UseQueryOptions<GetDomainsOwnedOrControlledByQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetDomainsOwnedOrControlledByQuery, TError, TData>(
+      ['getDomainsOwnedOrControlledBy', variables],
+      fetcher<GetDomainsOwnedOrControlledByQuery, GetDomainsOwnedOrControlledByQueryVariables>(client, GetDomainsOwnedOrControlledByDocument, variables, headers),
+      options
+    );
 
-useGetDomainsOwnedOrControlledByQuery.getKey = (variables: GetDomainsOwnedOrControlledByQueryVariables) => [
-  'getDomainsOwnedOrControlledBy',
-  variables,
-];
+useGetDomainsOwnedOrControlledByQuery.getKey = (variables: GetDomainsOwnedOrControlledByQueryVariables) => ['getDomainsOwnedOrControlledBy', variables];
+;
+
 export const useInfiniteGetDomainsOwnedOrControlledByQuery = <
-  TData = GetDomainsOwnedOrControlledByQuery,
-  TError = unknown
->(
-  pageParamKey: keyof GetDomainsOwnedOrControlledByQueryVariables,
-  client: GraphQLClient,
-  variables: GetDomainsOwnedOrControlledByQueryVariables,
-  options?: UseInfiniteQueryOptions<GetDomainsOwnedOrControlledByQuery, TError, TData>,
-  headers?: RequestInit['headers']
-) =>
-  useInfiniteQuery<GetDomainsOwnedOrControlledByQuery, TError, TData>(
-    ['getDomainsOwnedOrControlledBy.infinite', variables],
-    (metaData) =>
-      fetcher<GetDomainsOwnedOrControlledByQuery, GetDomainsOwnedOrControlledByQueryVariables>(
-        client,
-        GetDomainsOwnedOrControlledByDocument,
-        { ...variables, ...(metaData.pageParam ? { [pageParamKey]: metaData.pageParam } : {}) },
-        headers
-      )(),
-    options
-  );
+      TData = GetDomainsOwnedOrControlledByQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof GetDomainsOwnedOrControlledByQueryVariables,
+      client: GraphQLClient,
+      variables: GetDomainsOwnedOrControlledByQueryVariables,
+      options?: UseInfiniteQueryOptions<GetDomainsOwnedOrControlledByQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useInfiniteQuery<GetDomainsOwnedOrControlledByQuery, TError, TData>(
+      ['getDomainsOwnedOrControlledBy.infinite', variables],
+      (metaData) => fetcher<GetDomainsOwnedOrControlledByQuery, GetDomainsOwnedOrControlledByQueryVariables>(client, GetDomainsOwnedOrControlledByDocument, {...variables, ...(metaData.pageParam ? {[pageParamKey]: metaData.pageParam} : {})}, headers)(),
+      options
+    );
 
-useInfiniteGetDomainsOwnedOrControlledByQuery.getKey = (variables: GetDomainsOwnedOrControlledByQueryVariables) => [
-  'getDomainsOwnedOrControlledBy.infinite',
-  variables,
-];
-useGetDomainsOwnedOrControlledByQuery.fetcher = (
-  client: GraphQLClient,
-  variables: GetDomainsOwnedOrControlledByQueryVariables,
-  headers?: RequestInit['headers']
-) =>
-  fetcher<GetDomainsOwnedOrControlledByQuery, GetDomainsOwnedOrControlledByQueryVariables>(
-    client,
-    GetDomainsOwnedOrControlledByDocument,
-    variables,
-    headers
-  );
+
+useInfiniteGetDomainsOwnedOrControlledByQuery.getKey = (variables: GetDomainsOwnedOrControlledByQueryVariables) => ['getDomainsOwnedOrControlledBy.infinite', variables];
+;
+
+useGetDomainsOwnedOrControlledByQuery.fetcher = (client: GraphQLClient, variables: GetDomainsOwnedOrControlledByQueryVariables, headers?: RequestInit['headers']) => fetcher<GetDomainsOwnedOrControlledByQuery, GetDomainsOwnedOrControlledByQueryVariables>(client, GetDomainsOwnedOrControlledByDocument, variables, headers);
 export const GetDomainFromSubgraphDocument = `
     query getDomainFromSubgraph($domainId: ID!, $chainId: Int) {
   domain(id: $domainId) {
@@ -4167,58 +4609,42 @@ export const GetDomainFromSubgraphDocument = `
   }
 }
     `;
-export const useGetDomainFromSubgraphQuery = <TData = GetDomainFromSubgraphQuery, TError = unknown>(
-  client: GraphQLClient,
-  variables: GetDomainFromSubgraphQueryVariables,
-  options?: UseQueryOptions<GetDomainFromSubgraphQuery, TError, TData>,
-  headers?: RequestInit['headers']
-) =>
-  useQuery<GetDomainFromSubgraphQuery, TError, TData>(
-    ['getDomainFromSubgraph', variables],
-    fetcher<GetDomainFromSubgraphQuery, GetDomainFromSubgraphQueryVariables>(
-      client,
-      GetDomainFromSubgraphDocument,
-      variables,
-      headers
-    ),
-    options
-  );
+export const useGetDomainFromSubgraphQuery = <
+      TData = GetDomainFromSubgraphQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetDomainFromSubgraphQueryVariables,
+      options?: UseQueryOptions<GetDomainFromSubgraphQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetDomainFromSubgraphQuery, TError, TData>(
+      ['getDomainFromSubgraph', variables],
+      fetcher<GetDomainFromSubgraphQuery, GetDomainFromSubgraphQueryVariables>(client, GetDomainFromSubgraphDocument, variables, headers),
+      options
+    );
 
-useGetDomainFromSubgraphQuery.getKey = (variables: GetDomainFromSubgraphQueryVariables) => [
-  'getDomainFromSubgraph',
-  variables,
-];
-export const useInfiniteGetDomainFromSubgraphQuery = <TData = GetDomainFromSubgraphQuery, TError = unknown>(
-  pageParamKey: keyof GetDomainFromSubgraphQueryVariables,
-  client: GraphQLClient,
-  variables: GetDomainFromSubgraphQueryVariables,
-  options?: UseInfiniteQueryOptions<GetDomainFromSubgraphQuery, TError, TData>,
-  headers?: RequestInit['headers']
-) =>
-  useInfiniteQuery<GetDomainFromSubgraphQuery, TError, TData>(
-    ['getDomainFromSubgraph.infinite', variables],
-    (metaData) =>
-      fetcher<GetDomainFromSubgraphQuery, GetDomainFromSubgraphQueryVariables>(
-        client,
-        GetDomainFromSubgraphDocument,
-        { ...variables, ...(metaData.pageParam ? { [pageParamKey]: metaData.pageParam } : {}) },
-        headers
-      )(),
-    options
-  );
+useGetDomainFromSubgraphQuery.getKey = (variables: GetDomainFromSubgraphQueryVariables) => ['getDomainFromSubgraph', variables];
+;
 
-useInfiniteGetDomainFromSubgraphQuery.getKey = (variables: GetDomainFromSubgraphQueryVariables) => [
-  'getDomainFromSubgraph.infinite',
-  variables,
-];
-useGetDomainFromSubgraphQuery.fetcher = (
-  client: GraphQLClient,
-  variables: GetDomainFromSubgraphQueryVariables,
-  headers?: RequestInit['headers']
-) =>
-  fetcher<GetDomainFromSubgraphQuery, GetDomainFromSubgraphQueryVariables>(
-    client,
-    GetDomainFromSubgraphDocument,
-    variables,
-    headers
-  );
+export const useInfiniteGetDomainFromSubgraphQuery = <
+      TData = GetDomainFromSubgraphQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof GetDomainFromSubgraphQueryVariables,
+      client: GraphQLClient,
+      variables: GetDomainFromSubgraphQueryVariables,
+      options?: UseInfiniteQueryOptions<GetDomainFromSubgraphQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useInfiniteQuery<GetDomainFromSubgraphQuery, TError, TData>(
+      ['getDomainFromSubgraph.infinite', variables],
+      (metaData) => fetcher<GetDomainFromSubgraphQuery, GetDomainFromSubgraphQueryVariables>(client, GetDomainFromSubgraphDocument, {...variables, ...(metaData.pageParam ? {[pageParamKey]: metaData.pageParam} : {})}, headers)(),
+      options
+    );
+
+
+useInfiniteGetDomainFromSubgraphQuery.getKey = (variables: GetDomainFromSubgraphQueryVariables) => ['getDomainFromSubgraph.infinite', variables];
+;
+
+useGetDomainFromSubgraphQuery.fetcher = (client: GraphQLClient, variables: GetDomainFromSubgraphQueryVariables, headers?: RequestInit['headers']) => fetcher<GetDomainFromSubgraphQuery, GetDomainFromSubgraphQueryVariables>(client, GetDomainFromSubgraphDocument, variables, headers);
