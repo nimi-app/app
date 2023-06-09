@@ -3,18 +3,19 @@ import { useMemo } from 'react';
 import { useRainbow } from './useRainbow';
 import { getGraphQLClient, GRAPH_ENDPOINT } from '../api/GraphQl/graphClient';
 import {
+  GetAccountNamesQuery,
   GetDomainsOwnedOrControlledByQuery,
-  useGetDomainsOwnedOrControlledByQuery,
+  useGetAccountNamesQuery,
 } from '../api/GraphQl/schemas/generated/ens';
 import { ENSDomain } from '../models';
 
-export interface UserENSDomains {
+interface UserENSDomains {
   data: ENSDomain[];
-  loading: boolean;
+  isLoading: boolean;
   hasNextPage?: boolean;
 }
 
-const numberOfItemsPerPage = 8;
+const ITEMS_PER_PAGE = 8;
 
 /**
  * Fetches all **valid** ENS domains owned or controlled by the given address.
@@ -26,80 +27,124 @@ const numberOfItemsPerPage = 8;
  * @param address
  * @returns {UserENSDomains} data and loading state
  */
-export function useGetENSDomainsByAddress(address: string, page = 0, searchString?: string): UserENSDomains {
+export function useGetENSDomainsByAddress({
+  address,
+  page = 1,
+  searchQuery,
+}: {
+  address: string;
+  page?: number;
+  searchQuery?: string;
+}): UserENSDomains {
+  if (page < 1) throw new Error('useGetENSDomainsByAddress: page must be greater than 0');
+
   const { chainId } = useRainbow();
 
-  function domainOrdering(data) {
-    const domainsOwned = data?.account?.domainsOwned ?? [];
-    const domainsControlled = data?.domainsControlled ?? [];
+  const {
+    data: useGetAccountNamesQueryData,
+    isLoading: isLoadingUseGetAccountNamesQuery,
+    isFetching: isFetchingUseGetAccountNamesQuery,
+  } = useGetAccountNamesQuery(getGraphQLClient(GRAPH_ENDPOINT.ENS, chainId), {
+    id: address?.toLowerCase(),
+    chainId,
+  });
 
-    // We need to merge the two arrays and remove duplicates
-    const allUserDomains = [...domainsOwned, ...domainsControlled];
+  // Combine fetching and revalidating states
+  const isLoading = isLoadingUseGetAccountNamesQuery || isFetchingUseGetAccountNamesQuery;
 
-    const uniqueDomains = allUserDomains.reduce((acc, domain) => {
-      // If the domain is already in the array, we don't want to add it again
-      const isDomainDuplicate = acc.find((d: any) => d?.id === domain?.id);
-      if (isDomainDuplicate) return acc;
+  // This is a list of all the domains that the user owns or controls
+  const parsedDomainsList = useMemo(() => {
+    if (isLoading || !useGetAccountNamesQueryData) {
+      return [];
+    }
 
-      const isNameEncrypted = domain?.name?.includes('[');
+    return parseAccountDomains(useGetAccountNamesQueryData);
+  }, [useGetAccountNamesQueryData, isLoading]);
 
-      if (isNameEncrypted) {
-        // If the name is encrypted, we need to decrypt it
-        // The following helps finding subdomains that are encrypted at <name>.sismo.eth
-        const foundDomainFromAllUserDomains = allUserDomains.find(
-          ({ labelhash }) => labelhash?.toLowerCase() == domain.labelhash?.toLowerCase()
-        );
+  // Data is the actual list of domains that we want to display depending on the search string and the page
+  const data = useMemo(() => {
+    // First we filter the array depending on the search string
+    const filteredDomainsList = parsedDomainsList.filter((domain) => {
+      if (!searchQuery || searchQuery?.trim() === '') return true;
 
-        // Luckily, we can find the domain in the array, so we can use it to get the labelName
-        if (
-          foundDomainFromAllUserDomains &&
-          foundDomainFromAllUserDomains.labelName !== null &&
-          foundDomainFromAllUserDomains.labelName !== undefined
-        ) {
-          // Breakdown the domain into: subdomain, domain, tld (eth/xyz/etc)
-          const domainNameParts = domain?.name?.split('.') as string[];
-          // Repllce the subdomain with the decrypted name
-          domainNameParts[0] = foundDomainFromAllUserDomains.labelName;
+      const domainName = domain?.name?.toLowerCase();
+      const searchStringLowerCase = searchQuery?.toLowerCase();
 
-          domain = {
-            ...domain,
-            name: domainNameParts.join('.'),
-          };
-        }
-      }
+      return domainName?.includes(searchStringLowerCase);
+    });
 
-      if (!domain.name?.includes('[')) {
-        acc.push(domain as any);
-      }
+    // slice the array depending on the page
+    const slicedDomainsList = filteredDomainsList.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
-      return acc;
-    }, [] as GetDomainsOwnedOrControlledByQuery['domainsControlled']);
+    console.log({ filteredDomainsList, slicedDomainsList });
 
-    return uniqueDomains;
-  }
-
-  const { isLoading, data, isError, isSuccess, isFetching } = useGetDomainsOwnedOrControlledByQuery(
-    getGraphQLClient(GRAPH_ENDPOINT.ENS, chainId),
-    {
-      addressID: address?.toLowerCase(),
-      searchString: searchString,
-      addressString: address?.toLowerCase(),
-      skip: page * numberOfItemsPerPage,
-      first: numberOfItemsPerPage + 1,
-      chainId,
-    },
-    { keepPreviousData: true, select: domainOrdering }
-  );
-
-  const waitedForData: ENSDomain[] = useMemo(() => {
-    if (data && !isError && isSuccess && !isFetching && !isLoading) return data;
-    return [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isSuccess, isError, isFetching]);
+    return slicedDomainsList;
+  }, [parsedDomainsList, searchQuery, page]);
 
   return {
-    data: waitedForData && waitedForData.slice(0, numberOfItemsPerPage),
-    loading: isLoading || isFetching,
-    hasNextPage: waitedForData && waitedForData.length > numberOfItemsPerPage && (!isLoading || !isFetching),
+    data: data as ENSDomain[],
+    isLoading,
+    hasNextPage: data?.length > 0 && data?.length % ITEMS_PER_PAGE === 0,
   };
+}
+
+function parseAccountDomains(data: GetAccountNamesQuery) {
+  if (!data || !data?.account) return [];
+
+  const domainsRegisterations = data?.account?.registrations ?? [];
+  const domainsControlled = data?.account.domainsControlled ?? [];
+  const wrappedDomainsOwned = data?.account?.wrappedDomainsControlled ?? [];
+
+  // Flatten the domain objects
+  const domainsOwned = domainsRegisterations.map(({ domain }) => domain);
+
+  // Flatten the array of arrays
+  const allWrappedDomains = wrappedDomainsOwned.map(({ domain, owner }) => ({
+    ...domain,
+    owner,
+  }));
+
+  // We need to merge the two arrays and remove duplicates
+  const allUserDomains = [...domainsOwned, ...domainsControlled, ...allWrappedDomains];
+
+  const uniqueDomains = allUserDomains.reduce((acc, domain) => {
+    // If the domain is already in the array, we don't want to add it again
+    const isDomainDuplicate = acc.find((d: any) => d?.id === domain?.id);
+    if (isDomainDuplicate) return acc;
+
+    const isNameEncrypted = domain?.name?.includes('[');
+
+    if (isNameEncrypted) {
+      // If the name is encrypted, we need to decrypt it
+      // The following helps finding subdomains that are encrypted at <name>.sismo.eth
+      const foundDomainFromAllUserDomains = allUserDomains.find(
+        ({ labelhash }) => labelhash?.toLowerCase() == domain.labelhash?.toLowerCase()
+      );
+
+      // Luckily, we can find the domain in the array, so we can use it to get the labelName
+      if (
+        foundDomainFromAllUserDomains &&
+        foundDomainFromAllUserDomains.labelName !== null &&
+        foundDomainFromAllUserDomains.labelName !== undefined
+      ) {
+        // Breakdown the domain into: subdomain, domain, tld (eth/xyz/etc)
+        const domainNameParts = domain?.name?.split('.') as string[];
+        // Repllce the subdomain with the decrypted name
+        domainNameParts[0] = foundDomainFromAllUserDomains.labelName;
+
+        domain = {
+          ...domain,
+          name: domainNameParts.join('.'),
+        };
+      }
+    }
+
+    if (!domain.name?.includes('[')) {
+      acc.push(domain as any);
+    }
+
+    return acc;
+  }, [] as GetDomainsOwnedOrControlledByQuery['domainsControlled']);
+
+  return uniqueDomains;
 }

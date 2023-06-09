@@ -3,7 +3,7 @@ export type ENSDomain = {
   labelName: string;
   labelhash: string;
   name: string;
-  parent: {
-    name: string;
-  };
+  // parent: {
+  //   name: string;
+  // };
 };

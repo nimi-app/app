@@ -31,13 +31,7 @@ query getDomainsOwnedOrControlledBy(
       orderBy: $orderBy
       where: { name_contains_nocase: $searchString }
     ) {
-      id
-      labelName
-      labelhash
-      name
-      parent {
-        name
-      }
+      ...domainFields
     }
   }
   domainsControlled: domains(
@@ -46,13 +40,19 @@ query getDomainsOwnedOrControlledBy(
     orderBy: $orderBy
     where: { name_contains_nocase: $searchString, owner: $addressString }
   ) {
-    id
-    labelName
-    labelhash
-    name
-    owner {
-      id
+    ...domainFields
+  }
+  account(id: $addressID) {
+    wrappedDomainsOwned: wrappedDomains(first: $first, skip: $skip, where: { name_contains_nocase: $searchString }) {
+      ...wrappedDomainFields
     }
+  }
+  wrappedDomainsControlled: wrappedDomains(
+    first: $first
+    skip: $skip
+    where: { name_contains_nocase: $searchString, owner: $addressString }
+  ) {
+    ...wrappedDomainFields
   }
 }
 
@@ -64,6 +64,44 @@ query getDomainFromSubgraph($domainId: ID!, $chainId: Int) {
     labelhash
     owner {
       id
+    }
+  }
+}
+
+fragment domainFields on Domain {
+  id
+  labelName
+  labelhash
+  name
+  isMigrated
+  parent {
+    name
+    id
+  }
+}
+fragment wrappedDomainFields on WrappedDomain {
+  id
+  name
+  domain {
+    ...domainFields
+  }
+  owner {
+    id
+  }
+}
+
+query getAccountNames($id: ID!, $chainId: Int) {
+  account(id: $id) {
+    registrations(first: 1000) {
+      domain {
+        ...domainFields
+      }
+    }
+    domainsControlled: domains(first: 1000) {
+      ...domainFields
+    }
+    wrappedDomainsControlled: wrappedDomains(first: 1000) {
+      ...wrappedDomainFields
     }
   }
 }

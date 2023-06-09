@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 import { DottedBorder } from '../../components/Button/styled';
@@ -12,21 +12,37 @@ import { useGetENSDomainsByAddress } from '../../hooks/useGetENSDomainsByAddress
 import { useRainbow } from '../../hooks/useRainbow';
 
 export default function DomainsHomePage() {
-  const [searchText, setSearchText] = useState('');
-  const [page, setPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
 
   const { account } = useRainbow();
 
-  const { data: domainList, loading, hasNextPage } = useGetENSDomainsByAddress(account as string, page, searchText);
+  const {
+    data: domainList,
+    isLoading,
+    hasNextPage,
+  } = useGetENSDomainsByAddress({
+    address: account as string,
+    page,
+    searchQuery,
+  });
+
+  useEffect(() => {
+    setPage(1);
+  }, [account]);
 
   const openENSWebsiteHandler = () => window.open('https://app.ens.domains/', '_blank')?.focus();
-  const searchTextChangedHandler = (event: ChangeEvent<HTMLInputElement>) => setSearchText(event.target.value);
+  const searchTextChangedHandler = (event: ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value);
+
+  console.log({
+    domainList,
+  });
 
   return (
     <Container>
-      <ControlBar value={searchText} searchTextChangedHandler={searchTextChangedHandler} />
+      <ControlBar value={searchQuery} searchTextChangedHandler={searchTextChangedHandler} />
       {(() => {
-        if (loading)
+        if (isLoading)
           return (
             <LoaderWrapper>
               <Loader />
@@ -43,7 +59,7 @@ export default function DomainsHomePage() {
           </DomainsContainer>
         );
       })()}
-      <Pagination loading={loading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
+      <Pagination loading={isLoading} page={page} setPage={setPage} hasNextPage={hasNextPage} />
     </Container>
   );
 }

@@ -14,17 +14,3 @@ generates:
       addInfiniteQuery: true
       exposeQueryKeys: true
       exposeFetcher: true
-  ./src/api/GraphQl/schemas/generated/lens.tsx:
-    schema: 'https://api.lens.dev'
-    documents: 'src/api/GraphQl/schemas/lens.graphql'
-    plugins:
-      - add
-      - typescript
-      - typescript-operations
-      - typescript-react-query
-    config:
-      content:
-        - // @ts-nocheck
-      fetcher: 'graphql-request'
-      exposeQueryKeys: true
-      exposeFetcher: true
