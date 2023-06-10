@@ -59,6 +59,10 @@ export default function NimiPage() {
     injectedTheme: event && eventUrlToThemeMapping[event],
   });
 
+  // The theme modal is always the Nimi theme, unless the Nimi is generated
+  const theme =
+    isGenerated && event && eventUrlToThemeMapping[event] ? eventUrlToThemeMapping[event] : initialNimi?.theme.type;
+
   const {
     isFetching: isUserHasPOAPLoading,
     error: userHasPOAPError,
@@ -169,7 +173,7 @@ export default function NimiPage() {
         </OpacityMotion>
       ) : (
         <OpacityMotion key="nimi-page-content">
-          {(isClaimModalOpen && refData?.isValidRef) || true ? (
+          {isClaimModalOpen && refData?.isValidRef ? (
             <ClaimPOAPModal
               poapEvent={poapEvent}
               resetAllFields={resetAllFields}
@@ -179,7 +183,7 @@ export default function NimiPage() {
               onClaimClick={claimHandler}
               name={ensName}
               claimStep={claimStep}
-              theme={event && eventUrlToThemeMapping[event]}
+              theme={theme}
               closeModal={() => setIsClaimModalOpen(false)}
               autoClaimPOAP={autoClaimPOAP}
               setAutoClaimPOAP={setAutoClaimPOAP}
