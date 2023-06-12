@@ -8,6 +8,7 @@ import Lottie from 'lottie-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { isAddressOrEns } from 'utils';
+import isEmail from 'validator/es/lib/isEmail';
 
 import claimErrorLottie from './claimErrorLottie.json';
 import { ClaimPOAPButton } from './ClaimPOAPButton';
@@ -76,10 +77,10 @@ export function ClaimPOAPModal({
 }: ClaimPOAPModalProps) {
   const [showBody, setShowBody] = useState(false);
 
+  // a valid EVM address, ENS name or email
   const isRecipientValid = useMemo(() => {
     if (!reciever) return false;
-
-    return isAddressOrEns(reciever);
+    return isAddressOrEns(reciever) || isEmail(reciever);
   }, [reciever]);
 
   return (
