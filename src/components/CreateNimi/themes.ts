@@ -3,6 +3,9 @@ import { NimiThemeType } from '@nimi.io/card/types';
 import daivinityLogoImage from '../../assets/theme/daivinity-logo-image.png';
 import daivinityLogoText from '../../assets/theme/daivinity-logo-text.svg';
 import daivinityPreview from '../../assets/theme/daivinity-preview.png';
+import tokyoLogo from '../../assets/theme/daotokyo-logo.png';
+import tokyoPreview from '../../assets/theme/daotokyo-preview.png';
+import tokyoText from '../../assets/theme/daotokyo-text.svg';
 import devconLogoImage from '../../assets/theme/devcon-logo-image.svg';
 import devconLogoText from '../../assets/theme/devcon-logo-text.svg';
 import devconPreview from '../../assets/theme/devcon-preview.png';
@@ -58,14 +61,13 @@ export const themes: Record<NimiCuratedTheme, ThemeAssets> = {
     type: NimiThemeType.ETH_DENVER_2023,
     logoImage: ethTLVImage,
     logoText: ethTlVText,
-
     preview: ethTlvPreview,
   },
   [NimiThemeType.DAO_TOKYO_2023]: {
-    type: NimiThemeType.RAAVE,
-    logoImage: raaveLogoImage,
-    logoText: raaveLogoText,
-    preview: devconPreview,
+    type: NimiThemeType.DAO_TOKYO_2023,
+    logoImage: tokyoLogo,
+    logoText: tokyoText,
+    preview: tokyoPreview,
   },
   [NimiThemeType.ETH_PRAGUE_2023]: {
     type: NimiThemeType.RAAVE,
