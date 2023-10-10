@@ -11,14 +11,16 @@ interface IYKRefStruct {
   uid: string;
   isValidRef: boolean;
   linkedToken: LinkedToken | undefined;
-  poapEvents: [
-    {
-      id: number;
-      otp: string;
-      poapEventId: string;
-      status: 'active' | 'expired' | 'pending-approval' | 'future' | 'rejected';
-    }
-  ];
+  poapEvents:
+    | [
+        {
+          id: number;
+          otp: string;
+          poapEventId: string;
+          status: 'active' | 'expired' | 'pending-approval' | 'future' | 'rejected';
+        }
+      ]
+    | [];
 }
 
 const httpClient = getCustomClient(`https://api.iyk.app/`, {});
@@ -37,6 +39,7 @@ export function useIYKRefQuery(ref: string | null) {
     select: (data) => {
       if (data) {
         const { isValidRef, linkedToken, poapEvents } = data;
+
         return { isValidRef, linkedToken, poapEvents };
       } else return undefined;
     },
@@ -51,7 +54,11 @@ interface MintIykPoapTokenProps {
   deviceId?: string | null;
 }
 
-export function useMintIYKPOAPToken() {
+interface mintIykParams {
+  onSuccessfullMint?: (data: any) => void;
+}
+
+export function useMintIYKPOAPToken({ onSuccessfullMint }: mintIykParams) {
   const getIykData = async ({ otpCode, recipient, deviceId, poapEventId }: MintIykPoapTokenProps) => {
     if (!otpCode || !recipient || !poapEventId) return undefined;
 
@@ -71,5 +78,5 @@ export function useMintIYKPOAPToken() {
     return data;
   };
 
-  return useMutation(['fetchIykData'], getIykData);
+  return useMutation(['fetchIykData'], getIykData, { onSuccess: onSuccessfullMint });
 }
